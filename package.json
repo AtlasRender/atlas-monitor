@@ -25,12 +25,14 @@
     "@types/node": "^12.12.47",
     "@types/react": "^16.9.41",
     "@types/react-dom": "^16.9.8",
+    "@types/superagent": "^4.1.10",
     "moment": "^2.27.0",
     "rc-dock": "^2.6.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.1",
     "routing-manager": "^2.0.1",
+    "superagent": "^6.1.0",
     "typescript": "^3.7.5"
   },
   "scripts": {
