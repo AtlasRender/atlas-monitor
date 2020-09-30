@@ -2,10 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import * as serviceWorker from './serviceWorker';
+import MonitorLayout from "./Layout/MonitorLayout";
 
 ReactDOM.render(
     <React.StrictMode>
-
+        <MonitorLayout  />
     </React.StrictMode>,
     document.getElementById('root')
 );
