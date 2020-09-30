@@ -44,6 +44,7 @@
     "rc-dock": "^2.6.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
     "routing-manager": "^2.0.4",
     "superagent": "^6.1.0"
