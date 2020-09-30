@@ -1,23 +1,54 @@
 {
   "name": "pathfinder-monitor",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
+  "description": "Pathfinder Monitor - a part of Pathfinder system, designed to submit jobs, view render reports and control jobs.",
+  "keywords": [
+    "rendering",
+    "manager-system",
+    "manager",
+    "3d-graphics",
+    "visualization",
+    "automation",
+    "monitoring"
+  ],
   "author": {
     "name": "Andrieiev Danil",
     "url": "https://github.com/DanilAndreev",
     "email": "danssg08@gmail.com"
   },
+  "contributors": [
+    {
+      "name": "Andrey Demchyshin",
+      "email": "zaykanya1999@gmail.com",
+      "url": "https://github.com/ZaykaNya"
+    },
+    {
+      "name": "Nesterov Nikita",
+      "email": "goodplayer322@gmail.com",
+      "url": "https://github.com/Who1sthatdude"
+    }
+  ],
   "bugs": {
-    "type": "git",
+    "email": "danssg08@gmail.com",
     "url": "https://github.com/DanilAndreev/pathfinder-monitor/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/DanilAndreev/pathfinder-monitor"
+    "url": "https://github.com/DanilAndreev/pathfinder-monitor.git"
   },
   "dependencies": {
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
+    "moment": "^2.27.0",
+    "rc-dock": "^2.6.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-scripts": "3.4.1",
+    "routing-manager": "^2.0.4",
+    "superagent": "^6.1.0"
+  },
+  "devDependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
@@ -26,13 +57,8 @@
     "@types/react": "^16.9.41",
     "@types/react-dom": "^16.9.8",
     "@types/superagent": "^4.1.10",
-    "moment": "^2.27.0",
-    "rc-dock": "^2.6.0",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "react-scripts": "3.4.1",
-    "routing-manager": "^2.0.1",
-    "superagent": "^6.1.0",
+    "craco": "^0.0.3",
+    "craco-raw-loader": "^1.0.1",
     "typescript": "^3.7.5"
   },
   "scripts": {
