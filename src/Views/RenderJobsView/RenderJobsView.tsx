@@ -7,16 +7,22 @@
  * All rights reserved.
  */
 
-import React, {Ref} from 'react'
+import React, {Ref} from 'react';
+import {withStyles} from "@material-ui/core";
 
-/*interface RenderJobsPropsStyled {
+
+interface RenderJobsPropsStyled {
     classes?: any;
     style?: any;
     className?: string;
 }
 
-const RenderJobs =React.forwardRef((props: RenderJobsPropsStyled, ref: Ref<any>) => {
-
+const RenderJobsView =React.forwardRef((props: RenderJobsPropsStyled, ref: Ref<any>) => {
+    return (
+        <div>
+            Hello world
+        </div>
+    );
 });
 
-export default withstyles(styles)(RenderJobs);*/
+export default (RenderJobsView);
