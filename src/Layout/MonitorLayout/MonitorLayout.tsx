@@ -22,7 +22,8 @@ import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
 import styles from "./styles";
 import {withStyles} from "@material-ui/core";
-import {Switch, BrowserRouter} from "react-router-dom";
+import {Switch, BrowserRouter, Route} from "react-router-dom";
+import RenderJobsView from "../../Views/RenderJobsView/RenderJobsView";
 
 interface MonitorLayoutPropsStyled {
     classes?: any;
@@ -76,7 +77,9 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutPropsStyled, ref: Re
             <main className={classes.content}>
                 <Toolbar />
                 <Switch>
-
+                    <Route path="/pages/jobs">
+                        <RenderJobsView />
+                    </Route>
                 </Switch>
             </main>
         </div>
