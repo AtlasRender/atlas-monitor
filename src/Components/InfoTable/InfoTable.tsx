@@ -16,11 +16,9 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
-import VisibilityIcon from '@material-ui/icons/Visibility';
 import {Box, Typography, withStyles} from "@material-ui/core";
 import styles from "./styles";
 import clsx from "clsx";
-import Progress from "../Progress";
 
 interface Column {
     id: 'cellName' | 'cellContent';
@@ -98,7 +96,7 @@ const InfoTable = React.forwardRef((props: InfoTablePropsStyled, ref: Ref<any>) 
     return (
         <Box>
             <Typography variant="h5" className={clsx(classes.textMain, className)}>
-                Tasks
+                Info
             </Typography>
             <Paper className={classes.root}>
                 <TableContainer className={classes.container}>

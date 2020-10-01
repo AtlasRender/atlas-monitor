@@ -17,6 +17,7 @@ import CustomTabsPanel from "../../Components/CustomTabsPanel";
 import {useTheme} from "@material-ui/core/styles";
 import TasksTable from "../../Components/TasksTable";
 import InfoTable from "../../Components/InfoTable";
+import DataTextField from "../../Components/DataTextField";
 
 interface RenderJobsDetailsViewPropsStyled {
     classes?: any;
@@ -56,14 +57,7 @@ const RenderJobsDetailsView = React.forwardRef((props: RenderJobsDetailsViewProp
             <Divider className={clsx(classes.dividerMargin, className)}/>
             <Grid container spacing={2}>
                 <Grid item xs={3}>
-                    <Box className={clsx(classes.boxContainer, className)}>
-                        <Typography className={clsx(classes.boxContainerTitle, className)}>
-                            Name
-                        </Typography>
-                        <Typography className={clsx(classes.boxContainerText, className)}>
-                            Pathfinder Logo
-                        </Typography>
-                    </Box>
+                    <DataTextField label="Name" children="Pathfinder Logo"/>
                 </Grid>
                 <Grid item xs={3}>
                     <Box className={clsx(classes.boxContainer, className)}>

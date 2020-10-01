@@ -44,24 +44,24 @@ const columns: Column[] = [
     },
     {
         id: 'frame',
-        label: 'Name',
+        label: 'Frame',
         minWidth: 150
     },
     {
         id: 'startTime',
-        label: 'Submitor',
+        label: 'Start Time',
         minWidth: 150,
         align: 'left',
     },
     {
         id: 'slave',
-        label: 'Organisation',
+        label: 'Slave',
         minWidth: 150,
         align: 'left',
     },
     {
         id: 'elapsedTime',
-        label: 'Date',
+        label: 'Elapsed Time',
         minWidth: 150,
         align: 'left',
     },
