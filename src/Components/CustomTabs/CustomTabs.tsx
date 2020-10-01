@@ -10,7 +10,7 @@
 import React, {Ref} from 'react';
 import SwipeableViews from 'react-swipeable-views';
 import {useTheme, withStyles} from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Box from '@material-ui/core/Box';
@@ -48,8 +48,9 @@ const CustomTabs = React.forwardRef((props: CustomTabsPropsStyled, ref: Ref<any>
 
     return (
         <Box className={clsx(classes.root, className)}>
-            <AppBar position="static" color="default">
+            <Toolbar>
                 <Tabs
+                    className={clsx(classes.fullWidth, className)}
                     value={value}
                     onChange={onChange}
                     indicatorColor="primary"
@@ -61,7 +62,7 @@ const CustomTabs = React.forwardRef((props: CustomTabsPropsStyled, ref: Ref<any>
                     <Tab label="INFO" {...a11yProps(1)} />
                     <Tab label="STATISTICS" {...a11yProps(2)} />
                 </Tabs>
-            </AppBar>
+            </Toolbar>
             <SwipeableViews
                 axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
                 index={value}

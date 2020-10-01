@@ -15,6 +15,8 @@ import Progress from "../../Components/Progress";
 import CustomTabs from "../../Components/CustomTabs";
 import CustomTabsPanel from "../../Components/CustomTabsPanel";
 import {useTheme} from "@material-ui/core/styles";
+import TasksTable from "../../Components/TasksTable";
+import InfoTable from "../../Components/InfoTable";
 
 interface RenderJobsDetailsViewPropsStyled {
     classes?: any;
@@ -202,10 +204,10 @@ const RenderJobsDetailsView = React.forwardRef((props: RenderJobsDetailsViewProp
                 className={clsx(classes.customTabsMargin, className)}
             >
                 <CustomTabsPanel value={value} index={0} dir={theme.direction}>
-                    Table 1
+                    <TasksTable />
                 </CustomTabsPanel>
                 <CustomTabsPanel value={value} index={1} dir={theme.direction}>
-                    Table 2
+                    <InfoTable />
                 </CustomTabsPanel>
                 <CustomTabsPanel value={value} index={2} dir={theme.direction}>
                     Table 3
