@@ -9,8 +9,10 @@
 import React, {Ref} from "react";
 import {withStyles} from "@material-ui/core";
 import styles from "./styles";
-import {Avatar, TextField, Grid, Box, Typography} from "@material-ui/core";
+import {Avatar, Grid, Box, Typography, Divider} from "@material-ui/core";
 import githubAvatar from "./githubAvatar.jpg";
+import DataTextField from "../../Components/DataTextField";
+import OrganizationsFieldsRow from "./LocalComponents/OrganizationsFieldsRow";
 import clsx from "clsx";
 
 
@@ -27,30 +29,27 @@ const UserPageView = React.forwardRef((props: UserPageViewPropsStyled, ref: Ref<
     return (
         <Box>
             <Grid container spacing={2} className={clsx(classes.container, className)}>
-                    <Grid item xs={1}/>
-                    <Grid item xs={4}>
-                        <TextField
-                            id="outlined-multiline-flexible"
-                            label="Name"
-                            value="Nikita NeNesterov"
-                            variant="outlined"
-                            InputProps={{readOnly:true}}
-                            className={clsx(classes.textField, className)}
-                        />
-                    </Grid>
-                    <Grid item xs={4}>
-                        <TextField
-                            id="outlined-multiline-flexible"
-                            label="Organization"
-                            value="Pathfinder entertainment"
-                            variant="outlined"
-                            className={clsx(classes.textField, className)}
-                        />
-                    </Grid>
-                    <Grid item xs={2}>
-                        <Avatar alt="Who1sthat" src={githubAvatar} className={clsx(classes.avatar, className)}/>
-                    </Grid>
+
+                <Grid item xs={4}>
+                    <DataTextField label="Name" children="Nikita Nesterov"/>
+                </Grid>
+                <Grid item xs={4}>
+                    <DataTextField label="Department" children="Pathfinder team crew"/>
+                </Grid>
+                <Grid item xs={2}>
+                    <Avatar alt="Who1sthat" src={githubAvatar} className={clsx(classes.avatar, className)}/>
+                </Grid>
+
+                <Grid item xs = {10} className={clsx(classes.topic, className)}>
+                    <Typography variant="h6">Organizations</Typography>
+                    <Divider/>
+                </Grid>
             </Grid>
+
+            <OrganizationsFieldsRow organization="Reveille" role="admin" status="working"/>
+            <OrganizationsFieldsRow organization="Maya3D" role="user" status="training"/>
+            <OrganizationsFieldsRow organization="Microsoft" role="Bill Gates" status="on vacation"/>
+
         </Box>
     );
 });
