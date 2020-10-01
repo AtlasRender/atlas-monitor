@@ -22,7 +22,7 @@ interface CustomTabsPanelProps {
     value: any;
 }
 
-const CustomTabsPanel = React.forwardRef((props: CustomTabsPanelProps, ref: Ref<any>) => {
+const TabsPanel = React.forwardRef((props: CustomTabsPanelProps, ref: Ref<any>) => {
     const {
         classes,
         className,
@@ -49,4 +49,4 @@ const CustomTabsPanel = React.forwardRef((props: CustomTabsPanelProps, ref: Ref<
     );
 });
 
-export default withStyles(styles)(CustomTabsPanel)
+export default withStyles(styles)(TabsPanel)

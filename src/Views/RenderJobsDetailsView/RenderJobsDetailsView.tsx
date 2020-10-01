@@ -12,12 +12,13 @@ import {Box, Typography, Divider, withStyles, Grid} from "@material-ui/core";
 import styles from "./styles";
 import clsx from "clsx";
 import Progress from "../../Components/Progress";
-import CustomTabs from "../../Components/CustomTabs";
-import CustomTabsPanel from "../../Components/CustomTabsPanel";
+import Tabs from "../../Components/Tabs";
+import TabsPanel from "../../Components/TabsPanel";
 import {useTheme} from "@material-ui/core/styles";
-import TasksTable from "../../Components/TasksTable";
-import InfoTable from "../../Components/InfoTable";
+import TasksTab from "./Tabs/TasksTab";
+import InfoTable from "./Tabs/InfoTab";
 import DataTextField from "../../Components/DataTextField";
+import StatisticsTab from "./Tabs/StatisticsTab";
 
 interface RenderJobsDetailsViewPropsStyled {
     classes?: any;
@@ -60,97 +61,37 @@ const RenderJobsDetailsView = React.forwardRef((props: RenderJobsDetailsViewProp
                     <DataTextField label="Name" children="Pathfinder Logo"/>
                 </Grid>
                 <Grid item xs={3}>
-                    <Box className={clsx(classes.boxContainer, className)}>
-                        <Typography className={clsx(classes.boxContainerTitle, className)}>
-                            Submiter
-                        </Typography>
-                        <Typography className={clsx(classes.boxContainerText, className)}>
-                            Danil Andreev
-                        </Typography>
-                    </Box>
+                    <DataTextField label="Submitter" children="Danil Andreev"/>
                 </Grid>
                 <Grid item xs={3}>
-                    <Box className={clsx(classes.boxContainer, className)}>
-                        <Typography className={clsx(classes.boxContainerTitle, className)}>
-                            Organisation
-                        </Typography>
-                        <Typography className={clsx(classes.boxContainerText, className)}>
-                            Blizzard Entertainment
-                        </Typography>
-                    </Box>
+                    <DataTextField label="Organisation" children="Blizzard Entertainment"/>
                 </Grid>
                 <Grid item xs={1}>
-                    <Box className={clsx(classes.boxContainer, className)}>
-                        <Typography className={clsx(classes.boxContainerTitle, className)}>
-                            Priority
-                        </Typography>
-                        <Typography className={clsx(classes.boxContainerText, className)}>
-                            1
-                        </Typography>
-                    </Box>
+                    <DataTextField label="Priority" children="1"/>
                 </Grid>
                 <Grid item xs={2}>
-                    <Box className={clsx(classes.boxContainer, className)}>
-                        <Typography className={clsx(classes.boxContainerTitle, className)}>
-                            Submission date
-                        </Typography>
-                        <Typography className={clsx(classes.boxContainerText, className)}>
-                            25.09.2020 12.59.20
-                        </Typography>
-                    </Box>
+                    <DataTextField label="Submission date" children="25.09.2020 12.59.20"/>
                 </Grid>
                 <Grid item xs={3}>
-                    <Box className={clsx(classes.boxContainer, className)}>
-                        <Typography className={clsx(classes.boxContainerTitle, className)}>
-                            Status
-                        </Typography>
-                        <Typography className={clsx(classes.boxContainerText, className)}>
-                            Done
-                        </Typography>
-                    </Box>
+                    <DataTextField label="Status" children="Done"/>
                 </Grid>
                 <Grid item xs={3}>
-                    <Box className={clsx(classes.boxContainer, className)}>
-                        <Typography className={clsx(classes.boxContainerTitle, className)}>
-                            Frames
-                        </Typography>
-                        <Typography className={clsx(classes.boxContainerText, className)}>
-                            400 - 800
-                        </Typography>
-                    </Box>
+                    <DataTextField label="Frames" children="400 - 800"/>
                 </Grid>
                 <Grid item xs={3}/>
                 <Grid item xs={1}>
-                    <Box className={clsx(classes.boxContainer, className)}>
-                        <Typography className={clsx(classes.boxContainerTitle, className)}>
-                            Competing tasks
-                        </Typography>
-                        <Typography className={clsx(classes.boxContainerText, className)}>
-                            2
-                        </Typography>
-                    </Box>
+                    <DataTextField label="Competing tasks" children="2"/>
                 </Grid>
                 <Grid item xs={2}>
-                    <Box className={clsx(classes.boxContainer, className)}>
-                        <Typography className={clsx(classes.boxContainerTitle, className)}>
-                            Finish date
-                        </Typography>
-                        <Typography className={clsx(classes.boxContainerText, className)}>
-                            29.09.2020 12.59.20
-                        </Typography>
-                    </Box>
+                    <DataTextField label="Finish date" children="29.09.2020 12.59.20"/>
                 </Grid>
                 <Grid item xs={12}>
-                    <Box className={clsx(classes.boxContainer, className)}>
-                        <Typography className={clsx(classes.boxContainerTitle, className)}>
-                            Description
-                        </Typography>
-                        <Typography className={clsx(classes.boxContainerText, className)}>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed rutrum sodales risus vitae
+                    <DataTextField
+                        label="Description"
+                        children="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed rutrum sodales risus vitae
                             fermentum. Pellentesque hendrerit ultricies libero et lacinia. Integer sed ultricies velit.
-                            Sed dui orci, lacinia fermentum lacus vitae, maximus pretium ante.
-                        </Typography>
-                    </Box>
+                            Sed dui orci, lacinia fermentum lacus vitae, maximus pretium ante."
+                    />
                 </Grid>
             </Grid>
             <Typography variant="h6" className={clsx(classes.pluginMargin, className)}>
@@ -159,54 +100,36 @@ const RenderJobsDetailsView = React.forwardRef((props: RenderJobsDetailsViewProp
             <Divider className={clsx(classes.dividerMargin, className)}/>
             <Grid container spacing={2}>
                 <Grid item xs={3}>
-                    <Box className={clsx(classes.boxContainer, className)}>
-                        <Typography className={clsx(classes.boxContainerTitle, className)}>
-                            Name
-                        </Typography>
-                        <Typography className={clsx(classes.boxContainerText, className)}>
-                            Plug in Name
-                        </Typography>
-                    </Box>
+                    <DataTextField label="Name" children="Plug in Name"/>
                 </Grid>
                 <Grid item xs={2}>
-                    <Box className={clsx(classes.boxContainer, className)}>
-                        <Typography className={clsx(classes.boxContainerTitle, className)}>
-                            Version
-                        </Typography>
-                        <Typography className={clsx(classes.boxContainerText, className)}>
-                            ver.1.22474487139...
-                        </Typography>
-                    </Box>
+                    <DataTextField label="Version" children="ver.1.22474487139..."/>
                 </Grid>
                 <Grid item xs={12}>
-                    <Box className={clsx(classes.boxContainer, className)}>
-                        <Typography className={clsx(classes.boxContainerTitle, className)}>
-                            Description
-                        </Typography>
-                        <Typography className={clsx(classes.boxContainerText, className)}>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed rutrum sodales risus vitae
+                    <DataTextField
+                        label="Description"
+                        children="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed rutrum sodales risus vitae
                             fermentum. Pellentesque hendrerit ultricies libero et lacinia. Integer sed ultricies velit.
-                            Sed dui orci, lacinia fermentum lacus vitae, maximus pretium ante.
-                        </Typography>
-                    </Box>
+                            Sed dui orci, lacinia fermentum lacus vitae, maximus pretium ante."
+                    />
                 </Grid>
             </Grid>
-            <CustomTabs
+            <Tabs
                 value={value}
                 onChange={handleChange}
                 onChangeIndex={handleChangeIndex}
                 className={clsx(classes.customTabsMargin, className)}
             >
-                <CustomTabsPanel value={value} index={0} dir={theme.direction}>
-                    <TasksTable />
-                </CustomTabsPanel>
-                <CustomTabsPanel value={value} index={1} dir={theme.direction}>
+                <TabsPanel value={value} index={0} dir={theme.direction}>
+                    <TasksTab />
+                </TabsPanel>
+                <TabsPanel value={value} index={1} dir={theme.direction}>
                     <InfoTable />
-                </CustomTabsPanel>
-                <CustomTabsPanel value={value} index={2} dir={theme.direction}>
-                    Table 3
-                </CustomTabsPanel>
-            </CustomTabs>
+                </TabsPanel>
+                <TabsPanel value={value} index={2} dir={theme.direction}>
+                    <StatisticsTab />
+                </TabsPanel>
+            </Tabs>
         </Box>
     );
 });

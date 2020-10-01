@@ -28,7 +28,7 @@ interface Column {
     format?: (value: number) => string;
 }
 
-interface InfoTablePropsStyled {
+interface InfoTabPropsStyled {
     classes?: any;
     style?: any;
     className?: string;
@@ -75,7 +75,7 @@ const rows = [
  * @function
  * @author Andrii Demchyshyn
  */
-const InfoTable = React.forwardRef((props: InfoTablePropsStyled, ref: Ref<any>) => {
+const InfoTab = React.forwardRef((props: InfoTabPropsStyled, ref: Ref<any>) => {
     const {
         classes,
         className,
@@ -139,7 +139,7 @@ const InfoTable = React.forwardRef((props: InfoTablePropsStyled, ref: Ref<any>) 
         </Box>
     );
 });
-InfoTable.displayName = "TasksTable";
-InfoTable.propTypes = {}
+InfoTab.displayName = "TasksTable";
+InfoTab.propTypes = {}
 
-export default withStyles(styles)(InfoTable);
+export default withStyles(styles)(InfoTab);
