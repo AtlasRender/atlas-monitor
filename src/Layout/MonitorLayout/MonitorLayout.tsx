@@ -26,6 +26,7 @@ import {Switch, BrowserRouter, Route} from "react-router-dom";
 import RenderJobsView from "../../Views/RenderJobsView/RenderJobsView";
 import clsx from "clsx";
 import RenderJobsDetailsView from "../../Views/RenderJobsDetailsView";
+import UserPageView from "../../Views/UserPageView";
 
 interface MonitorLayoutPropsStyled {
     classes?: any;
@@ -80,7 +81,7 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutPropsStyled, ref: Re
                 <Toolbar/>
                 <Switch>
                     <Route path="/pages/jobs">
-                        <RenderJobsDetailsView/>
+                        <UserPageView/>
                     </Route>
                 </Switch>
             </main>

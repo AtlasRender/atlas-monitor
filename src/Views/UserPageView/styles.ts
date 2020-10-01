@@ -10,24 +10,29 @@
 import {createStyles, Theme} from "@material-ui/core";
 
 const styles = (theme: Theme) => createStyles({
-    root:{
-        display: 'flex',
+    root: {
+        display: "flex",
         flexDirection: "row",
     },
-    firstLine:{
-      justifyContent: "space-around",
-      alignItems: "center",
+    firstLine: {
+        justifyContent: "space-around",
+        alignItems: "center",
 
     },
-    avatar:{
-        variant: 'circle',
+    avatar: {
+        variant: "circle",
         height: theme.spacing(25),
         width: theme.spacing(25),
     },
-    textField:{
-        variant: 'outlined',
-        size: 'medium',
+    textField: {
+        variant: "outlined",
+        size: "medium",
         rowsMax: 1,
+        width: "100%",
+    },
+    container:{
+        alignItems: "center",
+
     }
 });
 
