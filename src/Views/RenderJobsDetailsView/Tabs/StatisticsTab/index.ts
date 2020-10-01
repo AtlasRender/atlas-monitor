@@ -3,8 +3,8 @@
  * Owner and project architect: Danil Andreev | danssg08@gmail.com |  https://github.com/DanilAndreev
  * File creator: Andrii Demchyshyn
  * Project: pathfinder-monitor
- * File last modified: 01.10.2020, 18:22
+ * File last modified: 01.10.2020, 20:04
  * All rights reserved.
  */
 
-export {default} from "./TasksTable";
+export {default} from "./StatisticsTab";

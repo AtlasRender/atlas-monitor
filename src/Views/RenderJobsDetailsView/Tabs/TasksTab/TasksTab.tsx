@@ -20,7 +20,7 @@ import VisibilityIcon from '@material-ui/icons/Visibility';
 import {Box, Typography, withStyles} from "@material-ui/core";
 import styles from "./styles";
 import clsx from "clsx";
-import Progress from "../Progress";
+import Progress from "../../../../Components/Progress";
 
 interface Column {
     id: 'idTable' | 'frame' | 'startTime' | 'slave' | 'elapsedTime' | 'progress' | 'icon';
@@ -30,7 +30,7 @@ interface Column {
     format?: (value: number) => string;
 }
 
-interface TasksTablePropsStyled {
+interface TasksTabPropsStyled {
     classes?: any;
     style?: any;
     className?: string;
@@ -119,7 +119,7 @@ const rows = [
  * @function
  * @author Andrii Demchyshyn
  */
-const TasksTable = React.forwardRef((props: TasksTablePropsStyled, ref: Ref<any>) => {
+const TasksTab = React.forwardRef((props: TasksTabPropsStyled, ref: Ref<any>) => {
     const {
         classes,
         className,
@@ -192,7 +192,7 @@ const TasksTable = React.forwardRef((props: TasksTablePropsStyled, ref: Ref<any>
         </Box>
     );
 });
-TasksTable.displayName = "TasksTable";
-TasksTable.propTypes = {}
+TasksTab.displayName = "TasksTable";
+TasksTab.propTypes = {}
 
-export default withStyles(styles)(TasksTable);
+export default withStyles(styles)(TasksTab);
