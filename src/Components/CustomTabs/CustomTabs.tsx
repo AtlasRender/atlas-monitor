@@ -9,11 +9,10 @@
 
 import React, {Ref} from 'react';
 import SwipeableViews from 'react-swipeable-views';
-import {makeStyles, Theme, useTheme, withStyles} from '@material-ui/core/styles';
+import {useTheme, withStyles} from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import styles from "./styles";
 import clsx from "clsx";
@@ -23,33 +22,9 @@ interface CustomTabsPropsStyled {
     style?: any;
     className?: string;
     children?: React.ReactNode;
-}
-
-interface TabPanelProps {
-    children?: React.ReactNode;
-    dir?: string;
-    index: any;
-    value: any;
-}
-
-function TabPanel(props: TabPanelProps) {
-    const { children, value, index, ...other } = props;
-
-    return (
-        <div
-            role="tabpanel"
-            hidden={value !== index}
-            id={`full-width-tabpanel-${index}`}
-            aria-labelledby={`full-width-tab-${index}`}
-            {...other}
-        >
-            {value === index && (
-                <Box p={3}>
-                    {children}
-                </Box>
-            )}
-        </div>
-    );
+    value?: any,
+    onChange?: any,
+    onChangeIndex?: any,
 }
 
 function a11yProps(index: any) {
@@ -64,25 +39,19 @@ const CustomTabs = React.forwardRef((props: CustomTabsPropsStyled, ref: Ref<any>
         classes,
         className,
         children,
+        onChange,
+        value,
+        onChangeIndex
     } = props;
 
     const theme = useTheme();
-    const [value, setValue] = React.useState(0);
-
-    const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
-        setValue(newValue);
-    };
-
-    const handleChangeIndex = (index: number) => {
-        setValue(index);
-    };
 
     return (
         <Box className={clsx(classes.root, className)}>
             <AppBar position="static" color="default">
                 <Tabs
                     value={value}
-                    onChange={handleChange}
+                    onChange={onChange}
                     indicatorColor="primary"
                     textColor="primary"
                     variant="fullWidth"
@@ -96,17 +65,9 @@ const CustomTabs = React.forwardRef((props: CustomTabsPropsStyled, ref: Ref<any>
             <SwipeableViews
                 axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
                 index={value}
-                onChangeIndex={handleChangeIndex}
+                onChangeIndex={onChangeIndex}
             >
-                <TabPanel value={value} index={0} dir={theme.direction}>
-                    {children}
-                </TabPanel>
-                <TabPanel value={value} index={1} dir={theme.direction}>
-                    {children}
-                </TabPanel>
-                <TabPanel value={value} index={2} dir={theme.direction}>
-                    {children}
-                </TabPanel>
+                {children}
             </SwipeableViews>
         </Box>
     );

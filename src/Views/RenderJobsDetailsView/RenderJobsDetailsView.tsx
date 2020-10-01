@@ -13,6 +13,8 @@ import styles from "./styles";
 import clsx from "clsx";
 import Progress from "../../Components/Progress";
 import CustomTabs from "../../Components/CustomTabs";
+import CustomTabsPanel from "../../Components/CustomTabsPanel";
+import {useTheme} from "@material-ui/core/styles";
 
 interface RenderJobsDetailsViewPropsStyled {
     classes?: any;
@@ -25,6 +27,18 @@ const RenderJobsDetailsView = React.forwardRef((props: RenderJobsDetailsViewProp
         classes,
         className,
     } = props;
+
+    const theme = useTheme();
+    const [value, setValue] = React.useState(0);
+
+    const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
+        setValue(newValue);
+    };
+
+    const handleChangeIndex = (index: number) => {
+        setValue(index);
+    };
+
     return (
         <Box>
             <Typography variant="subtitle2" className={clsx(classes.pathText, className)}>
@@ -136,9 +150,11 @@ const RenderJobsDetailsView = React.forwardRef((props: RenderJobsDetailsViewProp
                             Description
                         </Typography>
                         <Typography className={clsx(classes.boxContainerText, className)}>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed rutrum sodales risus vitae fermentum. Pellentesque hendrerit ultricies libero et lacinia. Integer sed ultricies velit. Sed dui orci, lacinia fermentum lacus vitae, maximus pretium ante.
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed rutrum sodales risus vitae
+                            fermentum. Pellentesque hendrerit ultricies libero et lacinia. Integer sed ultricies velit.
+                            Sed dui orci, lacinia fermentum lacus vitae, maximus pretium ante.
                         </Typography>
-                        </Box>
+                    </Box>
                 </Grid>
             </Grid>
             <Typography variant="h6" className={clsx(classes.pluginMargin, className)}>
@@ -172,13 +188,28 @@ const RenderJobsDetailsView = React.forwardRef((props: RenderJobsDetailsViewProp
                             Description
                         </Typography>
                         <Typography className={clsx(classes.boxContainerText, className)}>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed rutrum sodales risus vitae fermentum. Pellentesque hendrerit ultricies libero et lacinia. Integer sed ultricies velit. Sed dui orci, lacinia fermentum lacus vitae, maximus pretium ante.
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed rutrum sodales risus vitae
+                            fermentum. Pellentesque hendrerit ultricies libero et lacinia. Integer sed ultricies velit.
+                            Sed dui orci, lacinia fermentum lacus vitae, maximus pretium ante.
                         </Typography>
                     </Box>
                 </Grid>
             </Grid>
-            <CustomTabs className={clsx(classes.customTabsMargin, className)}>
-                hello
+            <CustomTabs
+                value={value}
+                onChange={handleChange}
+                onChangeIndex={handleChangeIndex}
+                className={clsx(classes.customTabsMargin, className)}
+            >
+                <CustomTabsPanel value={value} index={0} dir={theme.direction}>
+                    Table 1
+                </CustomTabsPanel>
+                <CustomTabsPanel value={value} index={1} dir={theme.direction}>
+                    Table 2
+                </CustomTabsPanel>
+                <CustomTabsPanel value={value} index={2} dir={theme.direction}>
+                    Table 3
+                </CustomTabsPanel>
             </CustomTabs>
         </Box>
     );
