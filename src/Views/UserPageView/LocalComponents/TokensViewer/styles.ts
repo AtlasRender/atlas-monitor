@@ -15,11 +15,15 @@ const styles = (theme: Theme) => createStyles({
         alignItems:"center",
         marginTop: theme.spacing(2),
         marginBottom: theme.spacing(2),
+
     },
     box:{
         display: "flex",
         justifyContent: "flex-end",
         alignItems:"center"
+    },
+    accordionLayout:{
+
     }
 });
 
