@@ -3,31 +3,28 @@
  * Owner and project architect: Danil Andreev | danssg08@gmail.com |  https://github.com/DanilAndreev
  * File creator: Nikita Nesterov
  * Project: pathfinder-monitor
- * File last modified: 02.10.2020, 17:32
+ * File last modified: 02.10.2020, 20:10
  * All rights reserved.
  */
 
 import {createStyles, Theme} from "@material-ui/core";
-import { grey } from '@material-ui/core/colors'
 
 const styles =(theme: Theme) => createStyles({
-    firstLine:{
+    container: {
         justifyContent: "center",
+        alignItems: "center",
+        marginTop: theme.spacing(2),
+        marginBottom: theme.spacing(2),
+
+    },
+    box: {
+        display: "flex",
+        justifyContent: "flex-end",
+        alignItems: "center"
+    },
+    childAlign:{
         alignItems:"center",
-        listStyleType:"none",
-    },
-    nameDescription:{
-        justifyContent:"flex-begin",
-    },
-    avatar: {
-        variant: "circle",
-        height: theme.spacing(25),
-        width: theme.spacing(25),
-    },
-    itemsRowBackground:{
-        display:"flex",
-        backgroundColor: grey[200],
-        borderRadius: "5px",
     }
 })
+
 export default styles;

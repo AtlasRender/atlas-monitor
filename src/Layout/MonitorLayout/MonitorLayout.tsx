@@ -29,6 +29,7 @@ import RenderJobsDetailsView from "../../Views/RenderJobsDetailsView";
 import UserPageView from "../../Views/UserPageView";
 import OrganizationPageView from "../../Views/OrganizationPageView";
 
+
 interface MonitorLayoutPropsStyled {
     classes?: any;
     style?: any;
