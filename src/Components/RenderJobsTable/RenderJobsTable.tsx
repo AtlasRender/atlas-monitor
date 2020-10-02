@@ -21,6 +21,7 @@ import withWidth, {isWidthUp} from '@material-ui/core/withWidth';
 import styles from "./styles";
 import clsx from "clsx";
 import Progress from "../Progress";
+import {useChangeRoute} from "routing-manager";
 
 interface Column {
     id: 'idTable' | 'name' | 'submitter' | 'organisation' | 'date' | 'progress';
@@ -121,6 +122,8 @@ const RenderJobsTable = React.forwardRef((props: RenderJobsTablePropsStyled, ref
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
+    const {changeRoute} = useChangeRoute();
+
     const handleChangePage = (event: unknown, newPage: number) => {
         setPage(newPage);
     };
@@ -151,7 +154,13 @@ const RenderJobsTable = React.forwardRef((props: RenderJobsTablePropsStyled, ref
                         <TableBody>
                             {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, key) => {
                                 return (
-                                    <TableRow hover role="checkbox" tabIndex={-1} key={key}>
+                                    <TableRow
+                                        hover
+                                        role="checkbox"
+                                        tabIndex={-1}
+                                        key={key}
+                                        onClick={() => changeRoute({panel: "jobDetails"})}
+                                    >
                                         <TableCell component="th" scope="row">{row.idTable}</TableCell>
                                         <TableCell align="left">{row.name}</TableCell>
                                         <TableCell align="left">{row.submitter}</TableCell>

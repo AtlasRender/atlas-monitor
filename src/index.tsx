@@ -9,9 +9,9 @@ import {ChangeRouteProvider} from "routing-manager";
 ReactDOM.render(
     <React.StrictMode>
         <BrowserRouter>
-            {/*<ChangeRouteProvider>*/}
+            <ChangeRouteProvider routeMask="/pages/:page(/:panel)">
                 <MonitorLayout/>
-            {/*</ChangeRouteProvider>*/}
+            </ChangeRouteProvider>
 
         </BrowserRouter>
     </React.StrictMode>,

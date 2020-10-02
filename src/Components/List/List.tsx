@@ -15,11 +15,10 @@ import { FixedSizeList, ListChildComponentProps } from 'react-window';
 import {withStyles} from '@material-ui/core/styles';
 import clsx from "clsx";
 import styles from "./styles";
+import Stylable from "../../Interfaces/Stylable";
 
-interface ListPropsStyled {
-    classes?: any;
-    style?: any;
-    className?: string;
+interface ListProps extends Stylable{
+
 }
 
 function renderRow(props: ListChildComponentProps) {
@@ -32,7 +31,7 @@ function renderRow(props: ListChildComponentProps) {
     );
 }
 
-const List = React.forwardRef((props: ListPropsStyled, ref: Ref<any>) => {
+const List = React.forwardRef((props: ListProps, ref: Ref<any>) => {
     const {
         classes,
         className,

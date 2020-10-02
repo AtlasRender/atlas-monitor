@@ -18,7 +18,7 @@ const styles = (theme: Theme) => createStyles({
         maxHeight: "74vh",
     },
     textMain: {
-        marginBottom: theme.spacing(2),
+        margin: theme.spacing(2),
         fontWeight: 500,
     }
 });

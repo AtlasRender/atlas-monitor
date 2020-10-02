@@ -8,11 +8,12 @@
  */
 
 import React, {Ref} from 'react';
-import {Box, useMediaQuery, useTheme, withStyles} from "@material-ui/core";
+import {Box, Typography, useMediaQuery, useTheme, withStyles} from "@material-ui/core";
 import styles from "./styles";
 import RenderJobsTable from "../../Components/RenderJobsTable";
 import List from "../../Components/List";
 import SimpleList from "../../Components/SimpleList";
+import clsx from "clsx";
 
 
 interface RenderJobsViewPropsStyled {
@@ -35,10 +36,17 @@ const RenderJobsView = React.forwardRef((props: RenderJobsViewPropsStyled, ref: 
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up('md'));
     let tableList;
-    if(matches) {
-        tableList = (<RenderJobsTable />);
+    if (matches) {
+        tableList = (<RenderJobsTable/>);
     } else {
-        tableList = (<SimpleList />);
+        tableList = (
+            <React.Fragment>
+                <Typography variant="h5" className={clsx(classes.textMain)}>
+                    Render Jobs
+                </Typography>
+                <SimpleList/>
+            </React.Fragment>
+        );
     }
 
     return (

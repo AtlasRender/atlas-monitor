@@ -11,20 +11,17 @@ import React, {Ref} from 'react';
 import List from '@material-ui/core/List';
 import ListItem, { ListItemProps } from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import {Box, withStyles} from "@material-ui/core";
+import {Box, Typography, withStyles} from "@material-ui/core";
 import styles from "./styles";
 import clsx from "clsx";
 import DataTextField from "../DataTextField";
 import Progress from "../Progress";
+import ListItemProgress from "../ListItemProgress";
 
 interface SimpleListPropsStyled {
     classes?: any;
     style?: any;
     className?: string;
-}
-
-function ListItemLink(props: ListItemProps<'a', { button?: true }>) {
-    return <ListItem button component="a" {...props} />;
 }
 
 const SimpleList =  React.forwardRef((props: SimpleListPropsStyled, ref: Ref<any>) => {
@@ -35,22 +32,25 @@ const SimpleList =  React.forwardRef((props: SimpleListPropsStyled, ref: Ref<any
 
     return (
         <Box className={clsx(classes.root, className)}>
-            <List component="nav" aria-label="secondary mailbox folders" >
-                <ListItem button>
-                    <ListItemText primary={<React.Fragment><DataTextField label="Name" children="Pathfinder Logo"/><Progress/></React.Fragment>} />
-                </ListItem>
-                <ListItem button>
-                    <ListItemText primary={<React.Fragment><DataTextField label="Name" children="Pathfinder Logo"/><Progress/></React.Fragment>} />
-                </ListItem>
-                <ListItem button>
-                    <ListItemText primary={<React.Fragment><DataTextField label="Name" children="Pathfinder Logo"/><Progress/></React.Fragment>} />
-                </ListItem>
-                <ListItem button>
-                    <ListItemText primary={<React.Fragment><DataTextField label="Name" children="Pathfinder Logo"/><Progress/></React.Fragment>} />
-                </ListItem>
-                <ListItem button>
-                    <ListItemText primary={<React.Fragment><DataTextField label="Name" children="Pathfinder Logo"/><Progress/></React.Fragment>} />
-                </ListItem>
+            <List component="nav" aria-label="secondary mailbox folders" className={classes.paddingNone}>
+                <ListItemProgress progress="60%" button>
+                    <ListItemText primary="Pathfinder Logo" secondary="Danil Andreev"/>
+                </ListItemProgress>
+                <ListItemProgress progress="60%" button>
+                    <ListItemText primary="Pathfinder Logo" secondary="Danil Andreev"/>
+                </ListItemProgress>
+                <ListItemProgress progress="60%" button>
+                    <ListItemText primary="Pathfinder Logo" secondary="Danil Andreev"/>
+                </ListItemProgress>
+                <ListItemProgress progress="60%" button>
+                    <ListItemText primary="Pathfinder Logo" secondary="Danil Andreev"/>
+                </ListItemProgress>
+                <ListItemProgress progress="60%" button>
+                    <ListItemText primary="Pathfinder Logo" secondary="Danil Andreev"/>
+                </ListItemProgress>
+                <ListItemProgress progress="60%" button>
+                    <ListItemText primary="Pathfinder Logo" secondary="Danil Andreev"/>
+                </ListItemProgress>
             </List>
         </Box>
     );
