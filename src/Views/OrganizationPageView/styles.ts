@@ -25,7 +25,7 @@ const styles =(theme: Theme) => createStyles({
         width: theme.spacing(25),
     },
     itemsRowBackground:{
-        display:"flex",
+        marginBottom: theme.spacing(1),
         backgroundColor: grey[200],
         borderRadius: "5px",
     }

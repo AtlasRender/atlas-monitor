@@ -13,13 +13,10 @@ import {IconButton,
     Avatar,
     Grid,
     Box,
-    Typography,
-    Divider,
-    List,
+    Select,
     ListItem,
     ListItemIcon,
     ListItemText,
-    GridList,
     ListItemSecondaryAction,
 }
 from "@material-ui/core";
@@ -65,16 +62,49 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewPropsS
                         </Grid>
                 </Grid>
             </Box>
+
             <TopicWithButton children="Slaves"/>
             <Grid container className={classes.firstLine}>
                 <Grid item xs={10}>
-                    <ListItem>
+                    <ListItem className={classes.itemsRowBackground}>
                         <ListItemIcon>
                             <BuildIcon/>
                         </ListItemIcon>
                         <ListItemText primary="Kiev slave"/>
                         <ListItemSecondaryAction>
                             <IconButton><SettingsIcon/></IconButton>
+                        </ListItemSecondaryAction>
+                    </ListItem>
+                    <ListItem className={classes.itemsRowBackground}>
+                        <ListItemIcon>
+                            <BuildIcon/>
+                        </ListItemIcon>
+                        <ListItemText primary="Harkov slave"/>
+                        <ListItemSecondaryAction>
+                            <IconButton><SettingsIcon/></IconButton>
+                        </ListItemSecondaryAction>
+                    </ListItem>
+                    <ListItem className={classes.itemsRowBackground}>
+                        <ListItemIcon>
+                            <BuildIcon/>
+                        </ListItemIcon>
+                        <ListItemText primary="Lvov slave"/>
+                        <ListItemSecondaryAction>
+                            <IconButton><SettingsIcon/></IconButton>
+                        </ListItemSecondaryAction>
+                    </ListItem>
+                </Grid>
+            </Grid>
+
+            <TopicWithButton children="Members"/>
+            <Grid container className={classes.firstLine}>
+                <Grid item xs={10}>
+                    <ListItem className={classes.itemsRowBackground}>
+                        <ListItemText primary="Danil Andreev"/>
+                        <ListItemSecondaryAction>
+                            {/*<Select>*/}
+                            {/*    */}
+                            {/*</Select>*/}
                         </ListItemSecondaryAction>
                     </ListItem>
                 </Grid>
