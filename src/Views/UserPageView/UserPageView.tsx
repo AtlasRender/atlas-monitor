@@ -14,6 +14,7 @@ import githubAvatar from "./githubAvatar.jpg";
 import DataTextField from "../../Components/DataTextField";
 import OrganizationsFieldsRow from "./LocalComponents/OrganizationsFieldsRow";
 import clsx from "clsx";
+import TokensViewer from "./LocalComponents/TokensViewer";
 
 
 interface UserPageViewPropsStyled {
@@ -49,7 +50,7 @@ const UserPageView = React.forwardRef((props: UserPageViewPropsStyled, ref: Ref<
             <OrganizationsFieldsRow organization="Reveille" role="admin" status="working"/>
             <OrganizationsFieldsRow organization="Maya3D" role="user" status="training"/>
             <OrganizationsFieldsRow organization="Microsoft" role="Bill Gates" status="on vacation"/>
-
+            <TokensViewer/>
         </Box>
     );
 });
