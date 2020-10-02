@@ -46,8 +46,8 @@ const Progress = React.forwardRef((props: ProgressPropsStyled, ref: Ref<any>) =>
 
     React.useEffect(() => {
         const timer = setInterval(() => {
-            setProgress((prevProgress) => (prevProgress >= 100 ? 10 : prevProgress + 10));
-        }, 800);
+            setProgress((prevProgress) => (prevProgress >= 100 ? 1 : prevProgress + 1));
+        }, 100);
         return () => {
             clearInterval(timer);
         };

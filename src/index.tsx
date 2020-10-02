@@ -4,13 +4,16 @@ import './index.css';
 import * as serviceWorker from './serviceWorker';
 import MonitorLayout from "./Layout/MonitorLayout";
 import {BrowserRouter} from "react-router-dom";
-//import {ChangeRouteProvider} from "routing-manager";
+// @ts-ignore
+import {ChangeRouteProvider} from "routing-manager";
 
 ReactDOM.render(
     <React.StrictMode>
         <BrowserRouter>
-            {/*<ChangeRouteProvider />*/}
-            <MonitorLayout  />
+            <ChangeRouteProvider>
+                <MonitorLayout/>
+            </ChangeRouteProvider>
+
         </BrowserRouter>
     </React.StrictMode>,
     document.getElementById('root')

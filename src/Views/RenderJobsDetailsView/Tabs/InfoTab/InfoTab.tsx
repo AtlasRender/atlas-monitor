@@ -100,7 +100,7 @@ const InfoTab = React.forwardRef((props: InfoTabPropsStyled, ref: Ref<any>) => {
 
     if(matches) {
         table = (
-            <>
+            <React.Fragment>
                 <Typography variant="h5" className={clsx(classes.textMain, className)}>
                     Info
                 </Typography>
@@ -142,11 +142,11 @@ const InfoTab = React.forwardRef((props: InfoTabPropsStyled, ref: Ref<any>) => {
                         onChangeRowsPerPage={handleChangeRowsPerPage}
                     />
                 </Paper>
-            </>
+            </React.Fragment>
         );
     } else {
         table = (
-            <>
+            <React.Fragment>
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
                         <DataTextField label="Name" children="Pathfinder Logo"/>
@@ -189,7 +189,7 @@ const InfoTab = React.forwardRef((props: InfoTabPropsStyled, ref: Ref<any>) => {
                         <DataTextField label="Plugin" children="Plug In Name"/>
                     </Grid>
                 </Grid>
-            </>
+            </React.Fragment>
         );
     }
 

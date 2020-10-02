@@ -46,7 +46,7 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutPropsStyled, ref: Re
     let drawer;
     if (matches) {
         drawer = (
-            <>
+            <React.Fragment>
                 <CssBaseline/>
                 <AppBar position="fixed" className={classes.appBar}>
                     <Toolbar>
@@ -83,11 +83,11 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutPropsStyled, ref: Re
                         </List>
                     </div>
                 </Drawer>
-            </>
+            </React.Fragment>
         );
     } else {
         drawer = (
-            <>
+            <React.Fragment>
                 <AppBar position="fixed" className={classes.appBar}>
                     <Toolbar>
                         <Typography variant="h6" noWrap>
@@ -95,7 +95,7 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutPropsStyled, ref: Re
                         </Typography>
                     </Toolbar>
                 </AppBar>
-            </>
+            </React.Fragment>
         );
     }
 

@@ -8,9 +8,10 @@
  */
 
 import React, {Ref} from 'react';
-import {Box, withStyles} from "@material-ui/core";
+import {Box, useMediaQuery, useTheme, withStyles} from "@material-ui/core";
 import styles from "./styles";
 import RenderJobsTable from "../../Components/RenderJobsTable";
+import List from "../../Components/List";
 
 
 interface RenderJobsViewPropsStyled {
@@ -30,9 +31,18 @@ const RenderJobsView = React.forwardRef((props: RenderJobsViewPropsStyled, ref: 
         className,
     } = props;
 
+    const theme = useTheme();
+    const matches = useMediaQuery(theme.breakpoints.up('md'));
+    let tableList;
+    if(matches) {
+        tableList = (<RenderJobsTable />);
+    } else {
+        tableList = (<List />);
+    }
+
     return (
         <Box>
-            <RenderJobsTable />
+            {tableList}
         </Box>
     );
 });
