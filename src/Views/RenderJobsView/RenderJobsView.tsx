@@ -12,6 +12,7 @@ import {Box, useMediaQuery, useTheme, withStyles} from "@material-ui/core";
 import styles from "./styles";
 import RenderJobsTable from "../../Components/RenderJobsTable";
 import List from "../../Components/List";
+import SimpleList from "../../Components/SimpleList";
 
 
 interface RenderJobsViewPropsStyled {
@@ -37,7 +38,7 @@ const RenderJobsView = React.forwardRef((props: RenderJobsViewPropsStyled, ref: 
     if(matches) {
         tableList = (<RenderJobsTable />);
     } else {
-        tableList = (<List />);
+        tableList = (<SimpleList />);
     }
 
     return (

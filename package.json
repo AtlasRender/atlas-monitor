@@ -52,7 +52,7 @@
     "react-scripts": "3.4.1",
     "react-swipeable-views": "^0.13.9",
     "react-window": "^1.8.5",
-    "routing-manager": "^2.0.4",
+    "routing-manager": "^2.1.0",
     "superagent": "^6.1.0"
   },
   "devDependencies": {
