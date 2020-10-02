@@ -27,7 +27,7 @@ interface Column {
     id: 'idTable' | 'name' | 'submitter' | 'organisation' | 'date' | 'progress';
     label: string;
     minWidth?: number;
-    align?: 'right' | 'left' | 'center';
+    align?: 'right' | 'left';
     format?: (value: number) => string;
     class?: string;
 }

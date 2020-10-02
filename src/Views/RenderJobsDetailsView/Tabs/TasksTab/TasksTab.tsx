@@ -17,10 +17,11 @@ import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import VisibilityIcon from '@material-ui/icons/Visibility';
-import {Box, Typography, withStyles} from "@material-ui/core";
+import {Box, Typography, useMediaQuery, useTheme, withStyles} from "@material-ui/core";
 import styles from "./styles";
 import clsx from "clsx";
 import Progress from "../../../../Components/Progress";
+import withWidth, {isWidthUp} from "@material-ui/core/withWidth";
 
 interface Column {
     id: 'idTable' | 'frame' | 'startTime' | 'slave' | 'elapsedTime' | 'progress' | 'icon';
@@ -28,54 +29,56 @@ interface Column {
     minWidth?: number;
     align?: 'right' | 'left';
     format?: (value: number) => string;
+    class?: string;
 }
 
 interface TasksTabPropsStyled {
     classes?: any;
     style?: any;
     className?: string;
+    width: "xs" | "sm" | "md" | "lg" | "xl";
 }
 
 const columns: Column[] = [
     {
         id: 'idTable',
         label: 'id',
-        minWidth: 40
+        class: 'id',
     },
     {
         id: 'frame',
         label: 'Frame',
-        minWidth: 150
+        class: 'frame',
     },
     {
         id: 'startTime',
         label: 'Start Time',
-        minWidth: 150,
+        class: 'startTime',
         align: 'left',
     },
     {
         id: 'slave',
         label: 'Slave',
-        minWidth: 150,
+        class: 'slave',
         align: 'left',
     },
     {
         id: 'elapsedTime',
         label: 'Elapsed Time',
-        minWidth: 150,
+        class: 'elapsedTime',
         align: 'left',
     },
     {
         id: 'progress',
         label: 'Progress',
-        minWidth: 150,
+        class: 'class',
         align: 'left',
         format: (value: number) => value.toFixed(2),
     },
     {
         id: 'icon',
         label: '',
-        minWidth: 50,
+        class: 'icon',
         align: 'left'
     },
 ];
@@ -115,7 +118,7 @@ const rows = [
 ];
 
 /**
- * RenderJobsTable - render jobs table
+ * RenderJobsTable - render tasks table
  * @function
  * @author Andrii Demchyshyn
  */
@@ -147,28 +150,31 @@ const TasksTab = React.forwardRef((props: TasksTabPropsStyled, ref: Ref<any>) =>
                     <Table stickyHeader aria-label="sticky table">
                         <TableHead>
                             <TableRow>
-                                {columns.map((column) => (
-                                    <TableCell
-                                        key={column.id}
-                                        align={column.align}
-                                        style={{minWidth: column.minWidth}}
-                                    >
-                                        {column.label}
-                                    </TableCell>
-                                ))}
+                                <TableCell align="left">Id</TableCell>
+                                <TableCell align="left">Frame</TableCell>
+                                <TableCell align="left">Start Time</TableCell>
+                                <TableCell align="left">Slave</TableCell>
+                                <TableCell align="left">Elapsed Time</TableCell>
+                                <TableCell align="left" className={classes.progress}>Progress</TableCell>
+                                <TableCell align="left"> </TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+                            {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, key) => {
                                 return (
-                                    <TableRow hover role="checkbox" tabIndex={-1} key={row.idTable}>
+                                    <TableRow
+                                        hover
+                                        role="checkbox"
+                                        tabIndex={-1}
+                                        key={key}
+                                    >
                                         <TableCell component="th" scope="row">{row.idTable}</TableCell>
                                         <TableCell align="left">{row.frame}</TableCell>
                                         <TableCell align="left">{row.startTime}</TableCell>
                                         <TableCell align="left">{row.slave}</TableCell>
                                         <TableCell align="left">{row.elapsedTime}</TableCell>
                                         <TableCell align="left">
-                                            <Progress/>
+                                            {isWidthUp('md', props.width) ? (<Progress />) : ("10%")}
                                         </TableCell>
                                         <TableCell align="left">
                                             <VisibilityIcon />
@@ -195,4 +201,4 @@ const TasksTab = React.forwardRef((props: TasksTabPropsStyled, ref: Ref<any>) =>
 TasksTab.displayName = "TasksTable";
 TasksTab.propTypes = {}
 
-export default withStyles(styles)(TasksTab);
+export default withWidth()(withStyles(styles)(TasksTab));

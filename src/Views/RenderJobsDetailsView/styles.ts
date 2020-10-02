@@ -42,6 +42,11 @@ const styles = (theme: Theme) => createStyles({
     },
     customTabsMargin: {
         marginTop: theme.spacing(2),
+    },
+    normalContent: {
+        [theme.breakpoints.down('sm')]: {
+            padding: theme.spacing(2),
+        },
     }
 });
 
