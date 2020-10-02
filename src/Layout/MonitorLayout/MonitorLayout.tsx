@@ -27,6 +27,7 @@ import RenderJobsView from "../../Views/RenderJobsView/RenderJobsView";
 import clsx from "clsx";
 import RenderJobsDetailsView from "../../Views/RenderJobsDetailsView";
 import UserPageView from "../../Views/UserPageView";
+import OrganizationPageView from "../../Views/OrganizationPageView";
 
 interface MonitorLayoutPropsStyled {
     classes?: any;
@@ -81,7 +82,7 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutPropsStyled, ref: Re
                 <Toolbar/>
                 <Switch>
                     <Route path="/pages/jobs">
-                        <UserPageView/>
+                        <OrganizationPageView/>
                     </Route>
                 </Switch>
             </main>
