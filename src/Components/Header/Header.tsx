@@ -183,6 +183,7 @@ const Header = React.forwardRef((props: HeaderPropsStyled, ref: Ref<any>) => {
             </AppBar>
             {renderMobileMenu}
             {renderMenu}
+
         </div>
     );
 });

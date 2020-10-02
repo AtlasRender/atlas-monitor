@@ -57,34 +57,35 @@ const RenderJobsDetailsView = React.forwardRef((props: RenderJobsDetailsViewProp
             </Typography>
             <Divider className={clsx(classes.dividerMargin, className)}/>
             <Grid container spacing={2}>
-                <Grid item xs={3}>
+                <Grid item xs={12} sm={6} md={4}>
                     <DataTextField label="Name" children="Pathfinder Logo"/>
                 </Grid>
-                <Grid item xs={3}>
+                <Grid item xs={12} sm={6} md={4}>
                     <DataTextField label="Submitter" children="Danil Andreev"/>
                 </Grid>
-                <Grid item xs={3}>
+                <Grid item xs={12} sm={6} md={4}>
                     <DataTextField label="Organisation" children="Blizzard Entertainment"/>
                 </Grid>
-                <Grid item xs={1}>
+                <Grid item xs={6} sm={3} md={2}>
                     <DataTextField label="Priority" children="1"/>
                 </Grid>
-                <Grid item xs={2}>
-                    <DataTextField label="Submission date" children="25.09.2020 12.59.20"/>
-                </Grid>
-                <Grid item xs={3}>
+
+                <Grid item xs={6} sm={3} md={2}>
                     <DataTextField label="Status" children="Done"/>
                 </Grid>
-                <Grid item xs={3}>
-                    <DataTextField label="Frames" children="400 - 800"/>
+                <Grid item xs={6} md={4}>
+                    <DataTextField label="Submission date" children="25.09.2020 12.59.20"/>
                 </Grid>
-                <Grid item xs={3}/>
-                <Grid item xs={1}>
-                    <DataTextField label="Competing tasks" children="2"/>
-                </Grid>
-                <Grid item xs={2}>
+                <Grid item xs={6} md={4}>
                     <DataTextField label="Finish date" children="29.09.2020 12.59.20"/>
                 </Grid>
+                <Grid item xs={6} md={4}>
+                    <DataTextField label="Frames" children="400 - 800"/>
+                </Grid>
+                <Grid item xs={6} md={2}>
+                    <DataTextField label="Competing tasks" children="2"/>
+                </Grid>
+
                 <Grid item xs={12}>
                     <DataTextField
                         label="Description"
@@ -99,10 +100,10 @@ const RenderJobsDetailsView = React.forwardRef((props: RenderJobsDetailsViewProp
             </Typography>
             <Divider className={clsx(classes.dividerMargin, className)}/>
             <Grid container spacing={2}>
-                <Grid item xs={3}>
+                <Grid item xs={12} sm={6} md={4}>
                     <DataTextField label="Name" children="Plug in Name"/>
                 </Grid>
-                <Grid item xs={2}>
+                <Grid item xs={12} sm={6} md={4}>
                     <DataTextField label="Version" children="ver.1.22474487139..."/>
                 </Grid>
                 <Grid item xs={12}>

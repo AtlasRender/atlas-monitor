@@ -44,24 +44,24 @@ const columns: Column[] = [
     {
         id: 'name',
         label: 'Name',
-        minWidth: 150
+        minWidth: 100
     },
     {
         id: 'submitor',
         label: 'Submitor',
-        minWidth: 150,
+        minWidth: 100,
         align: 'left',
     },
     {
         id: 'organisation',
         label: 'Organisation',
-        minWidth: 150,
+        minWidth: 100,
         align: 'left',
     },
     {
         id: 'date',
         label: 'Date',
-        minWidth: 150,
+        minWidth: 100,
         align: 'left',
     },
     {

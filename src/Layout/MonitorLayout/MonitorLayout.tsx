@@ -21,12 +21,13 @@ import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
 import styles from "./styles";
-import {Box, withStyles} from "@material-ui/core";
+import {Box, useMediaQuery, useTheme, withStyles} from "@material-ui/core";
 import {Switch, BrowserRouter, Route} from "react-router-dom";
 import RenderJobsView from "../../Views/RenderJobsView/RenderJobsView";
 import clsx from "clsx";
 import RenderJobsDetailsView from "../../Views/RenderJobsDetailsView";
 import UserPageView from "../../Views/UserPageView";
+import Header from "../../Components/Header";
 
 interface MonitorLayoutPropsStyled {
     classes?: any;
@@ -39,52 +40,85 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutPropsStyled, ref: Re
         classes,
         className,
     } = props;
+
+    const theme = useTheme();
+    const matches = useMediaQuery(theme.breakpoints.up('md'));
+    let drawer;
+    if (matches) {
+        drawer = (
+            <>
+                <CssBaseline/>
+                <AppBar position="fixed" className={classes.appBar}>
+                    <Toolbar>
+                        <Typography variant="h6" noWrap>
+                            Clipped drawer
+                        </Typography>
+                    </Toolbar>
+                </AppBar>
+                <Drawer
+                    className={classes.drawer}
+                    variant="permanent"
+                    classes={{
+                        paper: classes.drawerPaper,
+                    }}
+                >
+                    <Toolbar/>
+                    <div className={classes.drawerContainer}>
+                        <List>
+                            {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
+                                <ListItem button key={text}>
+                                    <ListItemIcon>{index % 2 === 0 ? <InboxIcon/> : <MailIcon/>}</ListItemIcon>
+                                    <ListItemText primary={text}/>
+                                </ListItem>
+                            ))}
+                        </List>
+                        <Divider/>
+                        <List>
+                            {['All mail', 'Trash', 'Spam'].map((text, index) => (
+                                <ListItem button key={text}>
+                                    <ListItemIcon>{index % 2 === 0 ? <InboxIcon/> : <MailIcon/>}</ListItemIcon>
+                                    <ListItemText primary={text}/>
+                                </ListItem>
+                            ))}
+                        </List>
+                    </div>
+                </Drawer>
+            </>
+        );
+    } else {
+        drawer = (
+            <>
+                <AppBar position="fixed" className={classes.appBar}>
+                    <Toolbar>
+                        <Typography variant="h6" noWrap>
+                            Clipped drawer
+                        </Typography>
+                    </Toolbar>
+                </AppBar>
+            </>
+        );
+    }
+
     return (
         <Box className={classes.root}>
-            <CssBaseline/>
-            <AppBar position="fixed" className={classes.appBar}>
-                <Toolbar>
-                    <Typography variant="h6" noWrap>
-                        Clipped drawer
-                    </Typography>
-                </Toolbar>
-            </AppBar>
-            <Drawer
-                className={classes.drawer}
-                variant="permanent"
-                classes={{
-                    paper: classes.drawerPaper,
-                }}
-            >
-                <Toolbar/>
-                <div className={classes.drawerContainer}>
-                    <List>
-                        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-                            <ListItem button key={text}>
-                                <ListItemIcon>{index % 2 === 0 ? <InboxIcon/> : <MailIcon/>}</ListItemIcon>
-                                <ListItemText primary={text}/>
-                            </ListItem>
-                        ))}
-                    </List>
-                    <Divider/>
-                    <List>
-                        {['All mail', 'Trash', 'Spam'].map((text, index) => (
-                            <ListItem button key={text}>
-                                <ListItemIcon>{index % 2 === 0 ? <InboxIcon/> : <MailIcon/>}</ListItemIcon>
-                                <ListItemText primary={text}/>
-                            </ListItem>
-                        ))}
-                    </List>
-                </div>
-            </Drawer>
+
+            {drawer}
+
             <main className={classes.content}>
                 <Toolbar/>
                 <Switch>
                     <Route path="/pages/jobs">
+                        <RenderJobsView/>
+                    </Route>
+                    <Route path="/pages/jobsDetails">
+                        <RenderJobsDetailsView/>
+                    </Route>
+                    <Route path="/pages/user">
                         <UserPageView/>
                     </Route>
                 </Switch>
             </main>
+
         </Box>
     );
 });
