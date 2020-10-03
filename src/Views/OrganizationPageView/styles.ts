@@ -28,6 +28,9 @@ const styles =(theme: Theme) => createStyles({
         marginBottom: theme.spacing(1),
         backgroundColor: grey[200],
         borderRadius: "5px",
+    },
+    selectFieldStyle: {
+        borderRadius: "5px",
     }
 })
 export default styles;

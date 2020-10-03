@@ -40,6 +40,20 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewPropsS
         className,
     } = props;
 
+    const [state, setState] = React.useState<{ role: string; }>({
+        role: '',
+    });
+
+    const handleChange = (event: React.ChangeEvent<{ role?: string; value: any }>) => {
+        const role = event.target.role as keyof typeof state;
+        setState({
+            ...state,
+            [role]: event.target.value,
+        });
+    };
+
+
+
     return(
         <Box>
             <Box className={classes.container}>
@@ -102,21 +116,27 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewPropsS
                     <ListItem className={classes.itemsRowBackground}>
                         <ListItemText primary="Danil Andreev"/>
                         <ListItemSecondaryAction>
-                            {/*<Select>*/}
-                            {/*    */}
-                            {/*</Select>*/}
+                            <Select
+                                native
+                                value={state.role}
+                                onChange={handleChange}
+                                inputProps={{
+                                    role: 'member',
+                                    id: 'role-native-simple',
+                                }}
+                                className={classes.selectFieldStyle}
+                            >
+                                <option value={"Admin"}>Admin</option>
+                                <option value={"Member"}>Member</option>
+                                <option value={"Moderator"}>Moderator</option>
+                            </Select>
                         </ListItemSecondaryAction>
                     </ListItem>
                 </Grid>
             </Grid>
-            {/*<Grid container className={classes.firstLine}>*/}
-            {/*    <Grid item xs={10} className={classes.itemsRowBackground}>*/}
-            {/*        <IconButton><BuildIcon/></IconButton>*/}
-            {/*        <DataTextField label="Slave name" children="Kiev slave"/>*/}
 
-            {/*    </Grid>*/}
-            {/*</Grid>*/}
-
+            <TopicWithButton children="Plugins"/>
+            
         </Box>
     );
 })
