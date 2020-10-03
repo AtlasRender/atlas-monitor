@@ -104,7 +104,11 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewPropsS
                                 <ListItemIcon>
                                     <BuildIcon/>
                                 </ListItemIcon>
-                                <ListItemText primary={slave}/>
+                                <ListItemText
+                                    primary={slave}
+                                    secondary="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur, rerum?"
+                                />
+
                                 <ListItemSecondaryAction>
                                     <IconButton><SettingsIcon/></IconButton>
                                 </ListItemSecondaryAction>
@@ -119,7 +123,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewPropsS
                 {users.map((user:any)=>{
                     console.log(user);
                     return(
-                        <Grid item xs={10}>
+                        <Grid item xs={10} spacing={0}>
                             <ListItem>
                                 <ListItemAvatar>
                                     <Avatar src="https://cdn.sportclub.ru/assets/2019-09-20/n97c311rvb.jpg"/>

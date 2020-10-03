@@ -8,7 +8,7 @@
  */
 
 import React, {Ref} from "react";
-import {withStyles, Box, Grid, Select, MenuItem, IconButton} from "@material-ui/core";
+import {withStyles, Box, Grid, Select, MenuItem, IconButton, ListItem} from "@material-ui/core";
 import styles from "./styles";
 import DataTextField from "../../../../Components/DataTextField";
 import clsx from "clsx";
@@ -32,10 +32,10 @@ const PluginComponent = React.forwardRef((props: PluginComponentPropsStyled, ref
     } = props;
 
     return (
-        <Box>
+        <ListItem>
             <Grid container spacing={0} className={classes.container}>
                 <Grid item xs={10} className={classes.containerItem}>
-                    <Grid item xs={2}>
+                    <Grid item xs={2} style={{padding:0}}>
                         <DataTextField label="Plugin name" children={plugin} className={classes.dataTextFieldFix}/>
                     </Grid>
                     <Grid item xs={2} className={clsx(classes.container, classes.selectAlignment, className)}>
@@ -58,7 +58,7 @@ const PluginComponent = React.forwardRef((props: PluginComponentPropsStyled, ref
                     </Grid>
                 </Grid>
             </Grid>
-        </Box>
+        </ListItem>
     );
 });
 

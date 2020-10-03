@@ -28,7 +28,7 @@ const styles =(theme: Theme) => createStyles({
     },
     dataTextFieldFix:{
         padding: 0,
-        paddingLeft:theme.spacing(1),
+        //paddingLeft:theme.spacing(1),
         backgroundColor:"inherit",
     },
     selectAlignment:{
