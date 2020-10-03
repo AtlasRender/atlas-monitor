@@ -21,6 +21,11 @@ const styles = (theme: Theme) => createStyles({
         margin: theme.spacing(2),
         fontWeight: 500,
     },
+    box:{
+        display: "flex",
+        justifyContent: "center",
+        alignItems:"center"
+    },
 });
 
 export default styles;

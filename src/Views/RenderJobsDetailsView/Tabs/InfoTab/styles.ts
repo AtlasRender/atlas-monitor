@@ -21,7 +21,15 @@ const styles = (theme: Theme) => createStyles({
     textMain: {
         marginBottom: theme.spacing(2),
         fontWeight: 500,
-    }
+    },
+    box:{
+        display: "flex",
+        justifyContent: "flex-end",
+        alignItems:"center"
+    },
+    iconButton: {
+        top: -8,
+    },
 });
 
 export default styles;

@@ -9,7 +9,7 @@
 
 import React, {Ref} from 'react';
 import styles from "./styles";
-import {Box, Divider, Grid, Typography, useMediaQuery, useTheme, withStyles} from "@material-ui/core";
+import {Box, Divider, Grid, IconButton, Typography, useMediaQuery, useTheme, withStyles} from "@material-ui/core";
 import clsx from "clsx";
 import {
     Chart,
@@ -22,6 +22,7 @@ import {
 } from '@devexpress/dx-react-chart-material-ui';
 import {Animation} from '@devexpress/dx-react-chart';
 import Stylable from "../../../../Interfaces/Stylable";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 const data = [
     {time: '1', slaves: 10},
@@ -102,9 +103,18 @@ const StatisticsTab = React.forwardRef((props: StatisticsTabProps, ref: Ref<any>
                     </Chart>
                 </Grid>
             </Grid>
-            <Typography variant="h6" className={clsx(classes.pluginMargin, className)}>
-                Slaves
-            </Typography>
+            <Grid container>
+                <Grid item xs={11}>
+                    <Typography variant="h6" className={clsx(classes.pluginMargin, className)}>
+                        Slaves
+                    </Typography>
+                </Grid>
+                <Grid item xs={1} className={clsx(classes.box, className)}>
+                    <IconButton className={clsx(classes.iconButton, className)}>
+                        <ExpandMoreIcon/>
+                    </IconButton>
+                </Grid>
+            </Grid>
             <Divider className={clsx(classes.dividerMargin, className)}/>
             <Grid container spacing={2}>
                 <Grid item xs={12} sm={6} md={4}>

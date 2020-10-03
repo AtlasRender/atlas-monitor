@@ -16,11 +16,13 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
-import {Box, Grid, Typography, useMediaQuery, useTheme, withStyles} from "@material-ui/core";
+import {Box, Grid, IconButton, Typography, useMediaQuery, useTheme, withStyles} from "@material-ui/core";
 import styles from "./styles";
 import clsx from "clsx";
 import DataTextField from "../../../../Components/DataTextField/DataTextField";
 import Stylable from "../../../../Interfaces/Stylable";
+import FilterListIcon from "@material-ui/icons/FilterList";
+import MoreVertIcon from "@material-ui/icons/MoreVert";
 
 /**
  * InfoTabProps
@@ -108,9 +110,21 @@ const InfoTab = React.forwardRef((props: InfoTabProps, ref: Ref<any>) => {
     if(matches) {
         table = (
             <React.Fragment>
-                <Typography variant="h5" className={clsx(classes.textMain, className)}>
-                    Info
-                </Typography>
+                <Grid container>
+                    <Grid item xs={10}>
+                        <Typography variant="h5" className={clsx(classes.textMain, className)}>
+                            Detailed Information
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={2} className={clsx(classes.box, className)}>
+                        <IconButton className={clsx(classes.iconButton, className)}>
+                            <FilterListIcon/>
+                        </IconButton>
+                        <IconButton className={clsx(classes.iconButton, className)}>
+                            <MoreVertIcon/>
+                        </IconButton>
+                    </Grid>
+                </Grid>
                 <Paper className={classes.root}>
                     <TableContainer className={classes.container}>
                         <Table stickyHeader aria-label="sticky table">

@@ -37,6 +37,14 @@ const styles = (theme: Theme) => createStyles({
             minWidth: 0,
         },
     },
+    box:{
+        display: "flex",
+        justifyContent: "flex-end",
+        alignItems:"center"
+    },
+    iconButton: {
+        top: -8,
+    },
 });
 
 export default styles;

@@ -22,6 +22,14 @@ const styles = (theme: Theme) => createStyles({
     chartHeight: {
       height: 300
     },
+    box:{
+        display: "flex",
+        justifyContent: "flex-end",
+        alignItems:"center"
+    },
+    iconButton: {
+        top: 8,
+    },
 });
 
 export default styles;

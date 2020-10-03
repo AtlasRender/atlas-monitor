@@ -8,12 +8,13 @@
  */
 
 import React, {Ref} from 'react';
-import {Box, IconButton, Typography, useMediaQuery, useTheme, withStyles} from "@material-ui/core";
+import {Box, Grid, IconButton, Typography, useMediaQuery, useTheme, withStyles} from "@material-ui/core";
 import styles from "./styles";
 import RenderJobsTable from "../../Components/RenderJobsTable";
 import SimpleList from "../../Components/SimpleList";
 import clsx from "clsx";
 import Stylable from "../../Interfaces/Stylable";
+import SearchIcon from '@material-ui/icons/Search';
 
 /**
  * RenderJobsViewProps - interface for RenderJobsView component
@@ -43,9 +44,18 @@ const RenderJobsView = React.forwardRef((props: RenderJobsViewProps, ref: Ref<an
     } else {
         tableList = (
             <React.Fragment>
-                <Typography variant="h5" className={clsx(classes.textMain)}>
-                    Render Jobs
-                </Typography>
+                <Grid container>
+                    <Grid item xs={10}>
+                        <Typography variant="h5" className={clsx(classes.textMain)}>
+                            Render Jobs
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={2} className={clsx(classes.box, className)}>
+                        <IconButton>
+                            <SearchIcon/>
+                        </IconButton>
+                    </Grid>
+                </Grid>
                 <SimpleList/>
             </React.Fragment>
         );

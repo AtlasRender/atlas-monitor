@@ -17,12 +17,15 @@ import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import VisibilityIcon from '@material-ui/icons/Visibility';
-import {Box, IconButton, Typography, useMediaQuery, useTheme, withStyles} from "@material-ui/core";
+import {Box, Grid, IconButton, Typography, useMediaQuery, useTheme, withStyles} from "@material-ui/core";
 import styles from "./styles";
 import clsx from "clsx";
 import Progress from "../../../../Components/Progress";
 import withWidth, {isWidthUp} from "@material-ui/core/withWidth";
 import Stylable from "../../../../Interfaces/Stylable";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import FilterListIcon from "@material-ui/icons/FilterList";
+import MoreVertIcon from "@material-ui/icons/MoreVert";
 
 /**
  * TasksTabProps - interface for TasksTab component
@@ -146,9 +149,21 @@ const TasksTab = React.forwardRef((props: TasksTabProps, ref: Ref<any>) => {
 
     return (
         <Box>
-            <Typography variant="h5" className={clsx(classes.textMain, className)}>
-                Tasks
-            </Typography>
+            <Grid container>
+                <Grid item xs={10}>
+                    <Typography variant="h5" className={clsx(classes.textMain, className)}>
+                        Tasks
+                    </Typography>
+                </Grid>
+                <Grid item xs={2} className={clsx(classes.box, className)}>
+                    <IconButton className={clsx(classes.iconButton, className)}>
+                        <FilterListIcon/>
+                    </IconButton>
+                    <IconButton className={clsx(classes.iconButton, className)}>
+                        <MoreVertIcon/>
+                    </IconButton>
+                </Grid>
+            </Grid>
             <Paper className={classes.root}>
                 <TableContainer className={classes.container}>
                     <Table stickyHeader aria-label="sticky table">
