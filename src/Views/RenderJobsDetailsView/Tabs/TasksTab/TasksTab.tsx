@@ -22,81 +22,85 @@ import styles from "./styles";
 import clsx from "clsx";
 import Progress from "../../../../Components/Progress";
 import withWidth, {isWidthUp} from "@material-ui/core/withWidth";
+import Stylable from "../../../../Interfaces/Stylable";
 
-interface Column {
-    id: 'idTable' | 'frame' | 'startTime' | 'slave' | 'elapsedTime' | 'progress' | 'icon';
-    label: string;
-    minWidth?: number;
-    align?: 'right' | 'left';
-    format?: (value: number) => string;
-    class?: string;
-}
-
-interface TasksTabPropsStyled {
-    classes?: any;
-    style?: any;
-    className?: string;
+/**
+ * TasksTabProps - interface for TasksTab component
+ * @interface
+ * @author Andrii Demchyshyn
+ */
+interface TasksTabProps extends  Stylable{
+    /**
+     * width - screen width
+     * @type "xs" | "sm" | "md" | "lg" | "xl"
+     */
     width: "xs" | "sm" | "md" | "lg" | "xl";
 }
 
-const columns: Column[] = [
-    {
-        id: 'idTable',
-        label: 'id',
-        class: 'id',
-    },
-    {
-        id: 'frame',
-        label: 'Frame',
-        class: 'frame',
-    },
-    {
-        id: 'startTime',
-        label: 'Start Time',
-        class: 'startTime',
-        align: 'left',
-    },
-    {
-        id: 'slave',
-        label: 'Slave',
-        class: 'slave',
-        align: 'left',
-    },
-    {
-        id: 'elapsedTime',
-        label: 'Elapsed Time',
-        class: 'elapsedTime',
-        align: 'left',
-    },
-    {
-        id: 'progress',
-        label: 'Progress',
-        class: 'class',
-        align: 'left',
-        format: (value: number) => value.toFixed(2),
-    },
-    {
-        id: 'icon',
-        label: '',
-        class: 'icon',
-        align: 'left'
-    },
-];
-
+/**
+ * Data - interface for createData function
+ * @interface
+ * @author Andrii Demchyshyn
+ */
 interface Data {
+    /**
+     * idTable - id of table component
+     * @type number
+     */
     idTable: number
+    /**
+     * frame - frame of table component
+     * @type string
+     */
     frame: string;
+    /**
+     * startTime - time when frame begin render
+     * @type string
+     */
     startTime: string;
+    /**
+     * slave - name of slave
+     * @type string
+     */
     slave: string;
+    /**
+     * elapsedTime - time from starting of render
+     * @type string
+     */
     elapsedTime: string;
+    /**
+     * progress - implementation progress of table component
+     * @type number
+     */
     progress: number;
+    /**
+     * icon - icon for more details
+     * @type any
+     */
     icon: any;
 }
 
+/**
+ * createData - creates table row
+ * @param idTable
+ * @param frame
+ * @param startTime
+ * @param slave
+ * @param elapsedTime
+ * @param progress
+ * @param icon
+ * @function
+ * @author Andrii Demchyshyn
+ */
 function createData(idTable: number, frame: string, startTime: string, slave: string, elapsedTime: string, progress: number, icon: any): Data {
     return {idTable, frame, startTime, slave, elapsedTime, progress, icon};
 }
 
+/**
+ * rows - array of table rows
+ * @type string
+ * @type number
+ */
 const rows = [
     createData(1, '1001', '24.09.2020 12:59:59', "kievHosting", "1:59:59", 0.6, 'eye'),
     createData(2, '1002', '24.09.2020 12:59:59', "kievHosting", "1:59:59", 0.6, 'eye'),
@@ -118,11 +122,11 @@ const rows = [
 ];
 
 /**
- * RenderJobsTable - render tasks table
+ * TasksTab - creates table with current render job details
  * @function
  * @author Andrii Demchyshyn
  */
-const TasksTab = React.forwardRef((props: TasksTabPropsStyled, ref: Ref<any>) => {
+const TasksTab = React.forwardRef((props: TasksTabProps, ref: Ref<any>) => {
     const {
         classes,
         className,

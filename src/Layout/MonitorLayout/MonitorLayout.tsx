@@ -20,20 +20,28 @@ import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import styles from "./styles";
 import {Box, useMediaQuery, useTheme, withStyles} from "@material-ui/core";
-import {Switch, BrowserRouter, Route} from "react-router-dom";
+import {Route, Switch} from "react-router-dom";
 import RenderJobsView from "../../Views/RenderJobsView/RenderJobsView";
-import clsx from "clsx";
 import RenderJobsDetailsView from "../../Views/RenderJobsDetailsView";
 import UserPageView from "../../Views/UserPageView";
 import {useChangeRoute} from "routing-manager";
+import Stylable from "../../Interfaces/Stylable";
 
-interface MonitorLayoutPropsStyled {
-    classes?: any;
-    style?: any;
-    className?: string;
+/**
+ * MonitorLayoutProps - interface for MonitorLayout component
+ * @interface
+ * @author Andrii Demchyshyn
+ */
+interface MonitorLayoutProps extends Stylable {
+
 }
 
-const MonitorLayout = React.forwardRef((props: MonitorLayoutPropsStyled, ref: Ref<any>) => {
+/**
+ * MonitorLayout - creates main static part of page (header and leftside menu)
+ * @function
+ * @author Andrii Demchyshyn
+ */
+const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>) => {
     const {
         classes,
         className,

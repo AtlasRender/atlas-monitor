@@ -20,43 +20,42 @@ import {Box, Grid, Typography, useMediaQuery, useTheme, withStyles} from "@mater
 import styles from "./styles";
 import clsx from "clsx";
 import DataTextField from "../../../../Components/DataTextField/DataTextField";
+import Stylable from "../../../../Interfaces/Stylable";
 
-interface Column {
-    id: 'cellName' | 'cellContent';
-    label: string;
-    minWidth?: number;
-    align?: 'right' | 'left';
-    format?: (value: number) => string;
+/**
+ * InfoTabProps
+ * @interface
+ * @author Andrii Demchyshyn
+ */
+interface InfoTabProps extends Stylable{
 }
 
-interface InfoTabPropsStyled {
-    classes?: any;
-    style?: any;
-    className?: string;
-}
-
-const columns: Column[] = [
-    {
-        id: 'cellName',
-        label: '',
-        minWidth: 0
-    },
-    {
-        id: 'cellContent',
-        label: '',
-        minWidth: 0,
-    },
-];
-
+/**
+ * Data - interface for createData function
+ * @interface
+ * @author Andrii Demchyshyn
+ */
 interface Data {
     cellName: string
     cellContent: string;
 }
 
+/**
+ * createData - creates table row
+ * @param cellName
+ * @param cellContent
+ * @function
+ * @author Andrii Demchyshyn
+ */
 function createData(cellName: string, cellContent: string): Data {
     return {cellName, cellContent};
 }
 
+/**
+ * rows - array of table rows
+ * @type string
+ * @type number
+ */
 const rows = [
     createData('Name', 'Pathfinder Logo'),
     createData('Submitter', 'Danil Andreev'),
@@ -72,11 +71,11 @@ const rows = [
 ];
 
 /**
- * RenderJobsTable - render jobs table
+ * InfoTab -  creates table with detailed information about render job
  * @function
  * @author Andrii Demchyshyn
  */
-const InfoTab = React.forwardRef((props: InfoTabPropsStyled, ref: Ref<any>) => {
+const InfoTab = React.forwardRef((props: InfoTabProps, ref: Ref<any>) => {
     const {
         classes,
         className,
@@ -107,19 +106,6 @@ const InfoTab = React.forwardRef((props: InfoTabPropsStyled, ref: Ref<any>) => {
                 <Paper className={classes.root}>
                     <TableContainer className={classes.container}>
                         <Table stickyHeader aria-label="sticky table">
-                            <TableHead>
-                                <TableRow>
-                                    {columns.map((column) => (
-                                        <TableCell
-                                            key={column.id}
-                                            align={column.align}
-                                            style={{minWidth: column.minWidth}}
-                                        >
-                                            {column.label}
-                                        </TableCell>
-                                    ))}
-                                </TableRow>
-                            </TableHead>
                             <TableBody>
                                 {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
                                     return (

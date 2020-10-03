@@ -20,14 +20,22 @@ import InfoTable from "./Tabs/InfoTab";
 import DataTextField from "../../Components/DataTextField";
 import StatisticsTab from "./Tabs/StatisticsTab";
 import SimpleList from "../../Components/SimpleList";
+import Stylable from "../../Interfaces/Stylable";
 
-interface RenderJobsDetailsViewPropsStyled {
-    classes?: any;
-    style?: any;
-    className?: string;
+/**
+ * RenderJobsDetailsViewProps - interface for RenderJobsDetailsView component
+ * @interface
+ * @author Andrii Demchyshyn
+ */
+interface RenderJobsDetailsViewProps extends Stylable{
 }
 
-const RenderJobsDetailsView = React.forwardRef((props: RenderJobsDetailsViewPropsStyled, ref: Ref<any>) => {
+/**
+ * RenderJobsDetailsView - creates view with render job details
+ * @function
+ * @author Andrii Demchyshyn
+ */
+const RenderJobsDetailsView = React.forwardRef((props: RenderJobsDetailsViewProps, ref: Ref<any>) => {
     const {
         classes,
         className,

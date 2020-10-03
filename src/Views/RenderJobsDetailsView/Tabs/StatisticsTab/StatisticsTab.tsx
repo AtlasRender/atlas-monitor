@@ -20,25 +20,33 @@ import {
     ArgumentAxis,
     ValueAxis,
 } from '@devexpress/dx-react-chart-material-ui';
-import { Animation } from '@devexpress/dx-react-chart';
+import {Animation} from '@devexpress/dx-react-chart';
+import Stylable from "../../../../Interfaces/Stylable";
 
 const data = [
-    { time: '1', slaves: 10 },
-    { time: '2', slaves: 30 },
-    { time: '3', slaves: 20 },
-    { time: '4', slaves: 56 },
-    { time: '5', slaves: 0 },
-    { time: '6', slaves: 101 },
-    { time: '7', slaves: 32 },
+    {time: '1', slaves: 10},
+    {time: '2', slaves: 30},
+    {time: '3', slaves: 20},
+    {time: '4', slaves: 56},
+    {time: '5', slaves: 0},
+    {time: '6', slaves: 101},
+    {time: '7', slaves: 32},
 ];
 
-interface StatisticsTabPropsStyled {
-    classes?: any;
-    style?: any;
-    className?: string;
+/**
+ * StatisticsTabProps - interface for StatisticsTab component
+ * @interface
+ * @author Andrii Demchyshyn
+ */
+interface StatisticsTabProps extends Stylable {
 }
 
-const StatisticsTab = React.forwardRef((props: StatisticsTabPropsStyled, ref: Ref<any>) => {
+/**
+ * StatisticsTab - creates tab page with statistics graphics
+ * @function
+ * @author Andrii Demchyshyn
+ */
+const StatisticsTab = React.forwardRef((props: StatisticsTabProps, ref: Ref<any>) => {
     const {
         classes,
         className,
@@ -48,7 +56,7 @@ const StatisticsTab = React.forwardRef((props: StatisticsTabPropsStyled, ref: Re
     const matches = useMediaQuery(theme.breakpoints.up('sm'));
     let height;
 
-    if(matches) {
+    if (matches) {
         height = 400
     } else {
         height = 300
@@ -66,15 +74,15 @@ const StatisticsTab = React.forwardRef((props: StatisticsTabPropsStyled, ref: Re
                         data={data}
                         height={height}
                     >
-                        <ArgumentAxis />
-                        <ValueAxis />
+                        <ArgumentAxis/>
+                        <ValueAxis/>
 
                         <BarSeries
                             valueField="slaves"
                             argumentField="time"
                         />
-                        <Title text="Slaves at current time" />
-                        <Animation />
+                        <Title text="Slaves at current time"/>
+                        <Animation/>
                     </Chart>
                 </Grid>
                 <Grid item xs={12} md={6}>
@@ -82,15 +90,15 @@ const StatisticsTab = React.forwardRef((props: StatisticsTabPropsStyled, ref: Re
                         data={data}
                         height={height}
                     >
-                        <ArgumentAxis />
-                        <ValueAxis />
+                        <ArgumentAxis/>
+                        <ValueAxis/>
 
                         <LineSeries
                             valueField="slaves"
                             argumentField="time"
                         />
-                        <Title text="Render speed" />
-                        <Animation />
+                        <Title text="Render speed"/>
+                        <Animation/>
                     </Chart>
                 </Grid>
             </Grid>
@@ -104,15 +112,15 @@ const StatisticsTab = React.forwardRef((props: StatisticsTabPropsStyled, ref: Re
                         data={data}
                         height={300}
                     >
-                        <ArgumentAxis />
-                        <ValueAxis />
+                        <ArgumentAxis/>
+                        <ValueAxis/>
 
                         <AreaSeries
                             valueField="slaves"
                             argumentField="time"
                         />
-                        <Title text="Slave 1" />
-                        <Animation />
+                        <Title text="Slave 1"/>
+                        <Animation/>
                     </Chart>
                 </Grid>
                 <Grid item xs={12} sm={6} md={4}>
@@ -120,15 +128,15 @@ const StatisticsTab = React.forwardRef((props: StatisticsTabPropsStyled, ref: Re
                         data={data}
                         height={300}
                     >
-                        <ArgumentAxis />
-                        <ValueAxis />
+                        <ArgumentAxis/>
+                        <ValueAxis/>
 
                         <AreaSeries
                             valueField="slaves"
                             argumentField="time"
                         />
-                        <Title text="Slave 2" />
-                        <Animation />
+                        <Title text="Slave 2"/>
+                        <Animation/>
                     </Chart>
                 </Grid>
                 <Grid item xs={12} sm={6} md={4}>
@@ -136,15 +144,15 @@ const StatisticsTab = React.forwardRef((props: StatisticsTabPropsStyled, ref: Re
                         data={data}
                         height={300}
                     >
-                        <ArgumentAxis />
-                        <ValueAxis />
+                        <ArgumentAxis/>
+                        <ValueAxis/>
 
                         <AreaSeries
                             valueField="slaves"
                             argumentField="time"
                         />
-                        <Title text="Slave 3" />
-                        <Animation />
+                        <Title text="Slave 3"/>
+                        <Animation/>
                     </Chart>
                 </Grid>
                 <Grid item xs={12} sm={6} md={4}>
@@ -152,15 +160,15 @@ const StatisticsTab = React.forwardRef((props: StatisticsTabPropsStyled, ref: Re
                         data={data}
                         height={300}
                     >
-                        <ArgumentAxis />
-                        <ValueAxis />
+                        <ArgumentAxis/>
+                        <ValueAxis/>
 
                         <AreaSeries
                             valueField="slaves"
                             argumentField="time"
                         />
-                        <Title text="Slave 4" />
-                        <Animation />
+                        <Title text="Slave 4"/>
+                        <Animation/>
                     </Chart>
                 </Grid>
                 <Grid item xs={12} sm={6} md={4}>
@@ -168,15 +176,15 @@ const StatisticsTab = React.forwardRef((props: StatisticsTabPropsStyled, ref: Re
                         data={data}
                         height={300}
                     >
-                        <ArgumentAxis />
-                        <ValueAxis />
+                        <ArgumentAxis/>
+                        <ValueAxis/>
 
                         <AreaSeries
                             valueField="slaves"
                             argumentField="time"
                         />
-                        <Title text="Slave 5" />
-                        <Animation />
+                        <Title text="Slave 5"/>
+                        <Animation/>
                     </Chart>
                 </Grid>
             </Grid>
