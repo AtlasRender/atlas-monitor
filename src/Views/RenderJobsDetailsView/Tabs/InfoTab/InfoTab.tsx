@@ -36,7 +36,15 @@ interface InfoTabProps extends Stylable{
  * @author Andrii Demchyshyn
  */
 interface Data {
+    /**
+     * cellName - name of cell
+     * @type string
+     */
     cellName: string
+    /**
+     * cellContent - content of cell
+     * @type string
+     */
     cellContent: string;
 }
 

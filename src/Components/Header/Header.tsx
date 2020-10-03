@@ -8,17 +8,7 @@
  */
 
 import React, {Ref} from "react";
-import {
-    AppBar,
-    Badge,
-    IconButton,
-    InputBase,
-    Menu,
-    MenuItem,
-    Toolbar,
-    Typography,
-    withStyles
-} from "@material-ui/core";
+import {AppBar, Badge, IconButton, InputBase, Menu, MenuItem, Toolbar, Typography, withStyles} from "@material-ui/core";
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
@@ -34,7 +24,7 @@ import Stylable from "../../Interfaces/Stylable";
  * @interface
  * @author Andrii Demchyshyn
  */
-interface HeaderProps extends Stylable{
+interface HeaderProps extends Stylable {
 
 }
 

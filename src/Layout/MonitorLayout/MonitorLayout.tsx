@@ -24,6 +24,8 @@ import {Route, Switch} from "react-router-dom";
 import RenderJobsView from "../../Views/RenderJobsView/RenderJobsView";
 import RenderJobsDetailsView from "../../Views/RenderJobsDetailsView";
 import UserPageView from "../../Views/UserPageView";
+import OrganizationPageView from "../../Views/OrganizationPageView";
+
 import {useChangeRoute} from "routing-manager";
 import Stylable from "../../Interfaces/Stylable";
 
@@ -93,7 +95,7 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>
                                 <ListItemIcon>
                                     <InboxIcon/>
                                 </ListItemIcon>
-                                <ListItemText primary="Jobs"/>
+                                <ListItemText primary="Organization Page"/>
                             </ListItem>
                         </List>
                     </div>
@@ -130,6 +132,9 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>
                     </Route>
                     <Route path="/pages/user">
                         <UserPageView/>
+                    </Route>
+                    <Route path="/pages/Organization">
+                        <OrganizationPageView/>
                     </Route>
                 </Switch>
             </main>
