@@ -9,22 +9,28 @@
 
 import React, {Ref} from 'react';
 import List from '@material-ui/core/List';
-import ListItem, { ListItemProps } from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import {Box, Typography, withStyles} from "@material-ui/core";
+import {Box, withStyles} from "@material-ui/core";
 import styles from "./styles";
 import clsx from "clsx";
-import DataTextField from "../DataTextField";
-import Progress from "../Progress";
 import ListItemProgress from "../ListItemProgress";
+import Stylable from "../../Interfaces/Stylable";
 
-interface SimpleListPropsStyled {
-    classes?: any;
-    style?: any;
-    className?: string;
+/**
+ * SimpleListProps - interface for RenderJobsTable component
+ * @interface
+ * @author Andrii Demchyshyn
+ */
+interface SimpleListProps extends Stylable {
+
 }
 
-const SimpleList =  React.forwardRef((props: SimpleListPropsStyled, ref: Ref<any>) => {
+/**
+ * SimpleList - creates list with several components
+ * @function
+ * @author Andrii Demchyshyn
+ */
+const SimpleList = React.forwardRef((props: SimpleListProps, ref: Ref<any>) => {
     const {
         classes,
         className,

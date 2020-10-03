@@ -14,13 +14,22 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import clsx from "clsx";
 import styles from "./styles";
+import Stylable from "../../Interfaces/Stylable";
 
-interface ProgressPropsStyled {
-    classes?: any;
-    style?: any;
-    className?: string;
+/**
+ * ProgressProps - interface for Progress component
+ * @interface
+ * @author Andrii Demchyshyn
+ */
+interface ProgressProps extends Stylable {
 }
 
+/**
+ * LinearProgressWithLabel -
+ * @param props
+ * @function
+ * @author Andrii Demchyshyn
+ */
 function LinearProgressWithLabel(props: LinearProgressProps & { value: number }) {
     return (
         <Box display="flex" alignItems="center">
@@ -36,7 +45,12 @@ function LinearProgressWithLabel(props: LinearProgressProps & { value: number })
     );
 }
 
-const Progress = React.forwardRef((props: ProgressPropsStyled, ref: Ref<any>) => {
+/**
+ * Progress - creates progress bar component with % count
+ * @function
+ * @author Andrii Demchyshyn
+ */
+const Progress = React.forwardRef((props: ProgressProps, ref: Ref<any>) => {
     const {
         classes,
         className,
@@ -44,6 +58,11 @@ const Progress = React.forwardRef((props: ProgressPropsStyled, ref: Ref<any>) =>
 
     const [progress, setProgress] = React.useState(10);
 
+    /**
+     * React.useEffect - forces progress bar to move
+     * @function
+     * @author Andrii Demchyshyn
+     */
     React.useEffect(() => {
         const timer = setInterval(() => {
             setProgress((prevProgress) => (prevProgress >= 100 ? 1 : prevProgress + 1));

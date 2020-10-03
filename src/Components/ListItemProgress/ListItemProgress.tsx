@@ -9,14 +9,24 @@
 
 import React, {Ref} from 'react';
 import {useTheme, withStyles} from '@material-ui/core/styles';
-import clsx from "clsx";
 import styles from "./styles";
 import {ListItem, ListItemProps} from "@material-ui/core";
 import lightBlue from '@material-ui/core/colors/lightBlue';
 
-interface ListItemProgressProps extends ListItemProps{
+/**
+ * ListItemProgressProps - interface for List component
+ * @interface
+ * @author Andrii Demchyshyn
+ */
+interface ListItemProgressProps extends ListItemProps {
+    progress: string;
 }
 
+/**
+ * ListItemProgress - creates List item with progress bar
+ * @function
+ * @author Andrii Demchyshyn
+ */
 const ListItemProgress = React.forwardRef((props: any, ref: Ref<any>) => {
     const {
         classes,

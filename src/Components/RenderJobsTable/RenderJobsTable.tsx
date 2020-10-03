@@ -22,74 +22,79 @@ import styles from "./styles";
 import clsx from "clsx";
 import Progress from "../Progress";
 import {useChangeRoute} from "routing-manager";
+import Stylable from "../../Interfaces/Stylable";
 
-interface Column {
-    id: 'idTable' | 'name' | 'submitter' | 'organisation' | 'date' | 'progress';
-    label: string;
-    minWidth?: number;
-    align?: 'right' | 'left';
-    format?: (value: number) => string;
-    class?: string;
-}
-
-interface RenderJobsTablePropsStyled {
-    classes?: any;
-    style?: any;
-    className?: string;
+/**
+ * RenderJobsTableProps - interface for RenderJobsTable component
+ * @interface
+ * @author Andrii Demchyshyn
+ */
+interface RenderJobsTableProps extends Stylable{
+    /**
+     * width - screen width
+     * @type "xs" | "sm" | "md" | "lg" | "xl"
+     */
     width: "xs" | "sm" | "md" | "lg" | "xl";
 }
 
-const columns: Column[] = [
-    {
-        id: 'idTable',
-        label: 'id',
-        class: 'id',
-    },
-    {
-        id: 'name',
-        label: 'Name',
-        class: 'name',
-    },
-    {
-        id: 'submitter',
-        label: 'Submitter',
-        align: 'left',
-        class: 'submitter',
-    },
-    {
-        id: 'organisation',
-        label: 'Organisation',
-        align: 'left',
-        class: 'organisation',
-    },
-    {
-        id: 'date',
-        label: 'Date',
-        align: 'left',
-        class: 'date',
-    },
-    {
-        id: 'progress',
-        label: 'Progress',
-        align: 'left',
-        class: 'classes.progress',
-        format: (value: number) => value.toFixed(2),
-    },
-];
-
+/**
+ * Data - interface for createData function
+ * @interface
+ * @author Andrii Demchyshyn
+ */
 interface Data {
+    /**
+     * idTable - id of table component
+     * @type number
+     */
     idTable: number
+    /**
+     * name - name of table component
+     * @type string
+     */
     name: string;
+    /**
+     * submitter - table component submitters name
+     * @type string
+     */
     submitter: string;
+    /**
+     * organisation - organisation name of table component
+     * @type string
+     */
     organisation: string;
+    /**
+     * date - submission date and time of table component
+     * @type string
+     */
     date: string;
+    /**
+     * progress - implementation progress of table component
+     * @type number
+     */
     progress: number;
 }
 
+/**
+ * createData - creates table row
+ * @param idTable
+ * @param name
+ * @param submitter
+ * @param organisation
+ * @param date
+ * @param progress
+ * @function
+ * @author Andrii Demchyshyn
+ */
 function createData(idTable: number, name: string, submitter: string, organisation: string, date: string, progress: number): Data {
     return {idTable, name, submitter, organisation, date, progress};
 }
 
+/**
+ * rows - array of table rows
+ * @type string
+ * @type number
+ */
 const rows = [
     createData(1, 'Pathfinder Logo', 'Danil Andreev', "Blizzard Entertainment", "24.09.2020 12:59:59", 0.6),
     createData(2, 'Pathfinder Logo', 'Danil Andreev', "Blizzard Entertainment", "24.09.2020 12:59:59", 0.6),
@@ -109,11 +114,11 @@ const rows = [
 ];
 
 /**
- * RenderJobsTable - render jobs table
+ * RenderJobsTable - creates table with render jobs
  * @function
  * @author Andrii Demchyshyn
  */
-const RenderJobsTable = React.forwardRef((props: RenderJobsTablePropsStyled, ref: Ref<any>) => {
+const RenderJobsTable = React.forwardRef((props: RenderJobsTableProps, ref: Ref<any>) => {
     const {
         classes,
         className,
@@ -124,10 +129,23 @@ const RenderJobsTable = React.forwardRef((props: RenderJobsTablePropsStyled, ref
 
     const {changeRoute} = useChangeRoute();
 
+    /**
+     * handleChangePage - let go to next page
+     * @param event
+     * @param newPage
+     * @function
+     * @author Andrii Demchyshyn
+     */
     const handleChangePage = (event: unknown, newPage: number) => {
         setPage(newPage);
     };
 
+    /**
+     * handleChangeRowsPerPage - sets number of table rows per page
+     * @param event
+     * @function
+     * @author Andrii Demchyshyn
+     */
     const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
         setRowsPerPage(+event.target.value);
         setPage(0);

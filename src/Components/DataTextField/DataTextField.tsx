@@ -11,16 +11,33 @@ import React from "react";
 import {Box, Typography, withStyles} from "@material-ui/core";
 import styles from "./styles";
 import clsx from "clsx";
+import Stylable from "../../Interfaces/Stylable";
+import Containerable from "../../Interfaces/Containerable";
 
-interface DataTextFieldPropsStyled {
-    classes?: any;
-    style?: any;
-    className?: string;
+/**
+ * DataTextFieldProps - interface for DataTextField component
+ * @interface
+ * @author Andrii Demchyshyn
+ */
+interface DataTextFieldProps extends Stylable, Containerable{
+    /**
+     * label - small text of element
+     * @type string
+     */
     label?: string;
+    /**
+     * children - main text of element
+     * @type string
+     */
     children?: string;
 }
 
-const DataTextField = React.forwardRef( (props: DataTextFieldPropsStyled) => {
+/**
+ * DataTextField - creates styled text component with label and main text
+ * @function
+ * @author Andrii Demchyshyn
+ */
+const DataTextField = React.forwardRef( (props: DataTextFieldProps) => {
     const {
         classes,
         className,

@@ -11,17 +11,25 @@ import React, {Ref} from "react";
 import {Box,} from "@material-ui/core"
 import {withStyles} from '@material-ui/core/styles';
 import styles from "./styles";
+import Stylable from "../../Interfaces/Stylable";
+import Containerable from "../../Interfaces/Containerable";
 
-interface CustomTabsPanelProps {
-    classes?: any;
-    style?: any;
-    className?: string;
-    children?: React.ReactNode;
+/**
+ * CustomTabsPanelProps - interface for TabsPanel component
+ * @interface
+ * @author Andrii Demchyshyn
+ */
+interface CustomTabsPanelProps extends Stylable, Containerable{
     dir?: string;
     index: any;
     value: any;
 }
 
+/**
+ * TabsPanel - creates one tab panel
+ * @function
+ * @author Andrii Demchyshyn
+ */
 const TabsPanel = React.forwardRef((props: CustomTabsPanelProps, ref: Ref<any>) => {
     const {
         classes,

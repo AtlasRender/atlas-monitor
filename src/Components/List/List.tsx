@@ -11,26 +11,42 @@ import React, {Ref} from 'react';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Box from '@material-ui/core/Box';
-import { FixedSizeList, ListChildComponentProps } from 'react-window';
+import {FixedSizeList, ListChildComponentProps} from 'react-window';
 import {withStyles} from '@material-ui/core/styles';
 import clsx from "clsx";
 import styles from "./styles";
 import Stylable from "../../Interfaces/Stylable";
 
-interface ListProps extends Stylable{
+/**
+ * ListProps - interface for List component
+ * @interface
+ * @author Andrii Demchyshyn
+ */
+interface ListProps extends Stylable {
 
 }
 
+/**
+ * renderRow - returns list item with component
+ * @function
+ * @param props
+ * @author Andrii Demchyshyn
+ */
 function renderRow(props: ListChildComponentProps) {
-    const { index, style } = props;
+    const {index, style} = props;
 
     return (
         <ListItem button style={style} key={index}>
-            <ListItemText primary={`Item ${index + 1}`} />
+            <ListItemText primary={`Item ${index + 1}`}/>
         </ListItem>
     );
 }
 
+/**
+ * List - creates List component with fixed size for large amount of components
+ * @function
+ * @author Andrii Demchyshyn
+ */
 const List = React.forwardRef((props: ListProps, ref: Ref<any>) => {
     const {
         classes,

@@ -27,14 +27,23 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import styles from "./styles";
 import clsx from "clsx";
+import Stylable from "../../Interfaces/Stylable";
 
-interface HeaderPropsStyled {
-    classes?: any;
-    style?: any;
-    className?: string;
+/**
+ * HeaderProps - interface for Header component
+ * @interface
+ * @author Andrii Demchyshyn
+ */
+interface HeaderProps extends Stylable{
+
 }
 
-const Header = React.forwardRef((props: HeaderPropsStyled, ref: Ref<any>) => {
+/**
+ * DataTextField - returns Header component
+ * @function
+ * @author Andrii Demchyshyn
+ */
+const Header = React.forwardRef((props: HeaderProps, ref: Ref<any>) => {
     const {
         classes,
         className,

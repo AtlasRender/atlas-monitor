@@ -16,25 +16,39 @@ import Tab from '@material-ui/core/Tab';
 import Box from '@material-ui/core/Box';
 import styles from "./styles";
 import clsx from "clsx";
+import Stylable from "../../Interfaces/Stylable";
+import Containerable from "../../Interfaces/Containerable";
 
-interface CustomTabsPropsStyled {
-    classes?: any;
-    style?: any;
-    className?: string;
-    children?: React.ReactNode;
-    value?: any,
+/**
+ * CustomTabsProps - interface for RenderJobsTable component
+ * @interface
+ * @author Andrii Demchyshyn
+ */
+interface CustomTabsProps extends Stylable, Containerable{
+    value?: number,
     onChange?: any,
     onChangeIndex?: any,
 }
 
-function a11yProps(index: any) {
+/**
+ * a11yProps -
+ * @param index
+ * @function
+ * @author Andrii Demchyshyn
+ */
+function a11yProps(index: number) {
     return {
         id: `full-width-tab-${index}`,
         'aria-controls': `full-width-tabpanel-${index}`,
     };
 }
 
-const CustomTabs = React.forwardRef((props: CustomTabsPropsStyled, ref: Ref<any>) => {
+/**
+ * CustomTabs - creates field for tabs panels
+ * @function
+ * @author Andrii Demchyshyn
+ */
+const CustomTabs = React.forwardRef((props: CustomTabsProps, ref: Ref<any>) => {
     const {
         classes,
         className,

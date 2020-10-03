@@ -73,7 +73,7 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutPropsStyled, ref: Re
                             </ListItem>
                         </List>
                         <List>
-                            <ListItem button>
+                            <ListItem button onClick={() => changeRoute({page: "user", panel: null})}>
                                 <ListItemIcon>
                                     <InboxIcon/>
                                 </ListItemIcon>
