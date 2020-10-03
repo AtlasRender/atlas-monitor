@@ -31,7 +31,7 @@ interface RenderJobsDetailsViewProps extends Stylable{
 }
 
 /**
- * RenderJobsDetailsView - creates view with render job details
+ * RenderJobsDetailsView - display page with render job details
  * @function
  * @author Andrii Demchyshyn
  */

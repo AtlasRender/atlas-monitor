@@ -11,15 +11,17 @@ import React, {Ref} from 'react';
 import {Box, Typography, useMediaQuery, useTheme, withStyles} from "@material-ui/core";
 import styles from "./styles";
 import RenderJobsTable from "../../Components/RenderJobsTable";
-import List from "../../Components/List";
 import SimpleList from "../../Components/SimpleList";
 import clsx from "clsx";
+import Stylable from "../../Interfaces/Stylable";
 
+/**
+ * RenderJobsViewProps - interface for RenderJobsView component
+ * @interface
+ * @author Andrii Demchyshyn
+ */
+interface RenderJobsViewProps extends Stylable{
 
-interface RenderJobsViewPropsStyled {
-    classes?: any;
-    style?: any;
-    className?: string;
 }
 
 /**
@@ -27,7 +29,7 @@ interface RenderJobsViewPropsStyled {
  * @function
  * @author Andrii Demchyshyn
  */
-const RenderJobsView = React.forwardRef((props: RenderJobsViewPropsStyled, ref: Ref<any>) => {
+const RenderJobsView = React.forwardRef((props: RenderJobsViewProps, ref: Ref<any>) => {
     const {
         classes,
         className,
