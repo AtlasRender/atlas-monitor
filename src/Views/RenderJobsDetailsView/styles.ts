@@ -47,7 +47,15 @@ const styles = (theme: Theme) => createStyles({
         [theme.breakpoints.down('sm')]: {
             padding: theme.spacing(2),
         },
-    }
+    },
+    box:{
+        display: "flex",
+        justifyContent: "flex-end",
+        alignItems:"center"
+    },
+    iconButton: {
+        top: 8,
+    },
 });
 
 export default styles;

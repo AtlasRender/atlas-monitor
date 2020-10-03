@@ -17,7 +17,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import VisibilityIcon from '@material-ui/icons/Visibility';
-import {Box, Typography, useMediaQuery, useTheme, withStyles} from "@material-ui/core";
+import {Box, IconButton, Typography, useMediaQuery, useTheme, withStyles} from "@material-ui/core";
 import styles from "./styles";
 import clsx from "clsx";
 import Progress from "../../../../Components/Progress";
@@ -181,7 +181,9 @@ const TasksTab = React.forwardRef((props: TasksTabProps, ref: Ref<any>) => {
                                             {isWidthUp('md', props.width) ? (<Progress />) : ("10%")}
                                         </TableCell>
                                         <TableCell align="left">
-                                            <VisibilityIcon />
+                                            <IconButton>
+                                                <VisibilityIcon />
+                                            </IconButton>
                                         </TableCell>
                                     </TableRow>
                                 );

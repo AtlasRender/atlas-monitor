@@ -8,7 +8,7 @@
  */
 
 import React, {Ref} from 'react';
-import {Box, Typography, useMediaQuery, useTheme, withStyles} from "@material-ui/core";
+import {Box, IconButton, Typography, useMediaQuery, useTheme, withStyles} from "@material-ui/core";
 import styles from "./styles";
 import RenderJobsTable from "../../Components/RenderJobsTable";
 import SimpleList from "../../Components/SimpleList";

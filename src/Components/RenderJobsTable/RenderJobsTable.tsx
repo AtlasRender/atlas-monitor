@@ -16,13 +16,15 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow'
-import {Box, Typography, withStyles} from "@material-ui/core";
+import {Box, Grid, IconButton, Typography, withStyles} from "@material-ui/core";
 import withWidth, {isWidthUp} from '@material-ui/core/withWidth';
 import styles from "./styles";
 import clsx from "clsx";
 import Progress from "../Progress";
 import {useChangeRoute} from "routing-manager";
 import Stylable from "../../Interfaces/Stylable";
+import FilterListIcon from "@material-ui/icons/FilterList";
+import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 /**
  * RenderJobsTableProps - interface for RenderJobsTable component
@@ -153,9 +155,21 @@ const RenderJobsTable = React.forwardRef((props: RenderJobsTableProps, ref: Ref<
 
     return (
         <Box className={className}>
-            <Typography variant="h5" className={clsx(classes.textMain)}>
-                Render Jobs
-            </Typography>
+                <Grid container>
+                    <Grid item xs={11}>
+                        <Typography variant="h5" className={clsx(classes.textMain)}>
+                            Render Jobs
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={1} className={clsx(classes.box, className)}>
+                        <IconButton className={clsx(classes.iconButton, className)}>
+                            <FilterListIcon/>
+                        </IconButton>
+                        <IconButton className={clsx(classes.iconButton, className)}>
+                            <MoreVertIcon/>
+                        </IconButton>
+                    </Grid>
+                </Grid>
             <Paper className={classes.root}>
                 <TableContainer className={classes.container}>
                     <Table stickyHeader aria-label="sticky table">

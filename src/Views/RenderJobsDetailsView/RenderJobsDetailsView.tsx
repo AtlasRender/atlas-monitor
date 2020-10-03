@@ -8,7 +8,7 @@
  */
 
 import React, {Ref} from 'react';
-import {Box, Typography, Divider, withStyles, Grid, useMediaQuery} from "@material-ui/core";
+import {Box, Typography, Divider, withStyles, Grid, useMediaQuery, IconButton} from "@material-ui/core";
 import styles from "./styles";
 import clsx from "clsx";
 import Progress from "../../Components/Progress";
@@ -21,13 +21,14 @@ import DataTextField from "../../Components/DataTextField";
 import StatisticsTab from "./Tabs/StatisticsTab";
 import SimpleList from "../../Components/SimpleList";
 import Stylable from "../../Interfaces/Stylable";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 /**
  * RenderJobsDetailsViewProps - interface for RenderJobsDetailsView component
  * @interface
  * @author Andrii Demchyshyn
  */
-interface RenderJobsDetailsViewProps extends Stylable{
+interface RenderJobsDetailsViewProps extends Stylable {
 }
 
 /**
@@ -43,6 +44,11 @@ const RenderJobsDetailsView = React.forwardRef((props: RenderJobsDetailsViewProp
 
     const theme = useTheme();
     const [value, setValue] = React.useState(0);
+    const [isOpen, setIsOpen] = React.useState(false);
+
+    const handleClick = () => {
+        setIsOpen(!isOpen);
+    }
 
     const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
         setValue(newValue);
@@ -113,9 +119,18 @@ const RenderJobsDetailsView = React.forwardRef((props: RenderJobsDetailsViewProp
                         />
                     </Grid>
                 </Grid>
-                <Typography variant="h6" className={clsx(classes.pluginMargin, className)}>
-                    Plugin
-                </Typography>
+                <Grid container>
+                    <Grid item xs={11}>
+                        <Typography variant="h6" className={clsx(classes.pluginMargin, className)}>
+                            Plugin
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={1} className={clsx(classes.box, className)}>
+                        <IconButton onClick={handleClick} className={clsx(classes.iconButton, className)}>
+                            <ExpandMoreIcon/>
+                        </IconButton>
+                    </Grid>
+                </Grid>
                 <Divider className={clsx(classes.dividerMargin, className)}/>
                 <Grid container spacing={2}>
                     <Grid item xs={12} sm={6} md={4}>

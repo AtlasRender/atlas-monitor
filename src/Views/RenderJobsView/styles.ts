@@ -20,7 +20,7 @@ const styles = (theme: Theme) => createStyles({
     textMain: {
         margin: theme.spacing(2),
         fontWeight: 500,
-    }
+    },
 });
 
 export default styles;

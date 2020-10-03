@@ -27,6 +27,14 @@ const styles = (theme: Theme) => createStyles({
             minWidth: 0,
         },
     },
+    box:{
+        display: "flex",
+        justifyContent: "space-around",
+        alignItems:"center"
+    },
+    iconButton: {
+        top: -8,
+    },
 });
 
 export default styles;
