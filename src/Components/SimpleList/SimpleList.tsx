@@ -15,6 +15,7 @@ import styles from "./styles";
 import clsx from "clsx";
 import ListItemProgress from "../ListItemProgress";
 import Stylable from "../../Interfaces/Stylable";
+import {useChangeRoute} from "routing-manager";
 
 /**
  * SimpleListProps - interface for RenderJobsTable component
@@ -36,25 +37,27 @@ const SimpleList = React.forwardRef((props: SimpleListProps, ref: Ref<any>) => {
         className,
     } = props;
 
+    const {changeRoute} = useChangeRoute();
+
     return (
         <Box className={clsx(classes.root, className)}>
             <List component="nav" aria-label="secondary mailbox folders" className={classes.paddingNone}>
-                <ListItemProgress progress="60%" button>
+                <ListItemProgress progress="60%" button onClick={() => changeRoute({panel: "jobDetails"})}>
                     <ListItemText primary="Pathfinder Logo" secondary="Danil Andreev"/>
                 </ListItemProgress>
-                <ListItemProgress progress="60%" button>
+                <ListItemProgress progress="60%" button onClick={() => changeRoute({panel: "jobDetails"})}>
                     <ListItemText primary="Pathfinder Logo" secondary="Danil Andreev"/>
                 </ListItemProgress>
-                <ListItemProgress progress="60%" button>
+                <ListItemProgress progress="60%" button onClick={() => changeRoute({panel: "jobDetails"})}>
                     <ListItemText primary="Pathfinder Logo" secondary="Danil Andreev"/>
                 </ListItemProgress>
-                <ListItemProgress progress="60%" button>
+                <ListItemProgress progress="60%" button onClick={() => changeRoute({panel: "jobDetails"})}>
                     <ListItemText primary="Pathfinder Logo" secondary="Danil Andreev"/>
                 </ListItemProgress>
-                <ListItemProgress progress="60%" button>
+                <ListItemProgress progress="60%" button onClick={() => changeRoute({panel: "jobDetails"})}>
                     <ListItemText primary="Pathfinder Logo" secondary="Danil Andreev"/>
                 </ListItemProgress>
-                <ListItemProgress progress="60%" button>
+                <ListItemProgress progress="60%" button onClick={() => changeRoute({panel: "jobDetails"})}>
                     <ListItemText primary="Pathfinder Logo" secondary="Danil Andreev"/>
                 </ListItemProgress>
             </List>
