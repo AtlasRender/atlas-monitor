@@ -30,7 +30,13 @@ const styles = (theme: Theme) => createStyles({
     textMain: {
         marginBottom: theme.spacing(2),
         fontWeight: 500,
-    }
+    },
+    progress: {
+        minWidth: 150,
+        [theme.breakpoints.down('sm')]: {
+            minWidth: 0,
+        },
+    },
 });
 
 export default styles;

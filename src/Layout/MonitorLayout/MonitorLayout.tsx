@@ -14,14 +14,12 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
 import styles from "./styles";
-import {Box, withStyles} from "@material-ui/core";
+import {Box, useMediaQuery, useTheme, withStyles} from "@material-ui/core";
 import {Switch, BrowserRouter, Route} from "react-router-dom";
 import RenderJobsView from "../../Views/RenderJobsView/RenderJobsView";
 import clsx from "clsx";
@@ -29,6 +27,7 @@ import RenderJobsDetailsView from "../../Views/RenderJobsDetailsView";
 import UserPageView from "../../Views/UserPageView";
 import OrganizationPageView from "../../Views/OrganizationPageView";
 
+import {useChangeRoute} from "routing-manager";
 
 interface MonitorLayoutPropsStyled {
     classes?: any;
@@ -41,52 +40,97 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutPropsStyled, ref: Re
         classes,
         className,
     } = props;
+
+    const {changeRoute} = useChangeRoute();
+
+    const theme = useTheme();
+    const matches = useMediaQuery(theme.breakpoints.up('md'));
+    let drawer;
+    if (matches) {
+        drawer = (
+            <React.Fragment>
+                <CssBaseline/>
+                <AppBar position="fixed" className={classes.appBar}>
+                    <Toolbar>
+                        <Typography variant="h6" noWrap>
+                            Clipped drawer
+                        </Typography>
+                    </Toolbar>
+                </AppBar>
+                <Drawer
+                    className={classes.drawer}
+                    variant="permanent"
+                    classes={{
+                        paper: classes.drawerPaper,
+                    }}
+                >
+                    <Toolbar/>
+                    <div className={classes.drawerContainer}>
+                        <List>
+                            <ListItem button onClick={() => changeRoute({page: "jobs", panel: null})}>
+                                <ListItemIcon>
+                                    <InboxIcon/>
+                                </ListItemIcon>
+                                <ListItemText primary="Render Jobs"/>
+                            </ListItem>
+                        </List>
+                        <List>
+                            <ListItem button>
+                                <ListItemIcon>
+                                    <InboxIcon/>
+                                </ListItemIcon>
+                                <ListItemText primary="User Page"/>
+                            </ListItem>
+                        </List>
+                        <List>
+                            <ListItem button>
+                                <ListItemIcon>
+                                    <InboxIcon/>
+                                </ListItemIcon>
+                                <ListItemText primary="Jobs"/>
+                            </ListItem>
+                        </List>
+                    </div>
+                </Drawer>
+            </React.Fragment>
+        );
+    } else {
+        drawer = (
+            <React.Fragment>
+                <AppBar position="fixed" className={classes.appBar}>
+                    <Toolbar>
+                        <Typography variant="h6" noWrap>
+                            Clipped drawer
+                        </Typography>
+                    </Toolbar>
+                </AppBar>
+            </React.Fragment>
+        );
+    }
+
     return (
         <Box className={classes.root}>
-            <CssBaseline/>
-            <AppBar position="fixed" className={classes.appBar}>
-                <Toolbar>
-                    <Typography variant="h6" noWrap>
-                        Clipped drawer
-                    </Typography>
-                </Toolbar>
-            </AppBar>
-            <Drawer
-                className={classes.drawer}
-                variant="permanent"
-                classes={{
-                    paper: classes.drawerPaper,
-                }}
-            >
-                <Toolbar/>
-                <div className={classes.drawerContainer}>
-                    <List>
-                        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-                            <ListItem button key={text}>
-                                <ListItemIcon>{index % 2 === 0 ? <InboxIcon/> : <MailIcon/>}</ListItemIcon>
-                                <ListItemText primary={text}/>
-                            </ListItem>
-                        ))}
-                    </List>
-                    <Divider/>
-                    <List>
-                        {['All mail', 'Trash', 'Spam'].map((text, index) => (
-                            <ListItem button key={text}>
-                                <ListItemIcon>{index % 2 === 0 ? <InboxIcon/> : <MailIcon/>}</ListItemIcon>
-                                <ListItemText primary={text}/>
-                            </ListItem>
-                        ))}
-                    </List>
-                </div>
-            </Drawer>
+
+            {drawer}
+
             <main className={classes.content}>
                 <Toolbar/>
                 <Switch>
-                    <Route path="/pages/jobs">
+                    <Route exact path="/pages/jobs">
+                        <RenderJobsView/>
+                    </Route>
+                    <Route path="/pages/jobs/jobDetails">
+                        <RenderJobsDetailsView/>
+                    </Route>
+                    <Route path="/pages/user">
+                        <UserPageView/>
+                    </Route>
+                    <Route path="/pages/Organization">
                         <OrganizationPageView/>
                     </Route>
                 </Switch>
             </main>
+
         </Box>
     );
 });

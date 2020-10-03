@@ -3,24 +3,20 @@
  * Owner and project architect: Danil Andreev | danssg08@gmail.com |  https://github.com/DanilAndreev
  * File creator: Andrii Demchyshyn
  * Project: pathfinder-monitor
- * File last modified: 30.09.2020, 20:09
+ * File last modified: 02.10.2020, 18:10
  * All rights reserved.
  */
 
 import {createStyles, Theme} from "@material-ui/core";
-import grey from '@material-ui/core/colors/grey';
+
 
 const styles = (theme: Theme) => createStyles({
     root: {
         width: '100%',
+        height: 400,
+        maxWidth: 300,
+        backgroundColor: theme.palette.background.paper,
     },
-    container: {
-        maxHeight: "74vh",
-    },
-    textMain: {
-        margin: theme.spacing(2),
-        fontWeight: 500,
-    }
 });
 
 export default styles;

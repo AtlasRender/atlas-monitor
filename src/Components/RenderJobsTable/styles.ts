@@ -8,7 +8,6 @@
  */
 
 import {createStyles, Theme} from "@material-ui/core";
-import grey from '@material-ui/core/colors/grey';
 
 
 const styles = (theme: Theme) => createStyles({
@@ -21,7 +20,13 @@ const styles = (theme: Theme) => createStyles({
     textMain: {
         marginBottom: theme.spacing(2),
         fontWeight: 500,
-    }
+    },
+    progress: {
+        minWidth: 150,
+        [theme.breakpoints.down('sm')]: {
+            minWidth: 0,
+        },
+    },
 });
 
 export default styles;

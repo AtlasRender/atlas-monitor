@@ -17,58 +17,62 @@ import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow'
 import {Box, Typography, withStyles} from "@material-ui/core";
+import withWidth, {isWidthUp} from '@material-ui/core/withWidth';
 import styles from "./styles";
 import clsx from "clsx";
 import Progress from "../Progress";
+import {useChangeRoute} from "routing-manager";
 
 interface Column {
-    id: 'idTable' | 'name' | 'submitor' | 'organisation' | 'date' | 'progress';
+    id: 'idTable' | 'name' | 'submitter' | 'organisation' | 'date' | 'progress';
     label: string;
     minWidth?: number;
     align?: 'right' | 'left';
     format?: (value: number) => string;
+    class?: string;
 }
 
 interface RenderJobsTablePropsStyled {
     classes?: any;
     style?: any;
     className?: string;
+    width: "xs" | "sm" | "md" | "lg" | "xl";
 }
 
 const columns: Column[] = [
     {
         id: 'idTable',
         label: 'id',
-        minWidth: 40
+        class: 'id',
     },
     {
         id: 'name',
         label: 'Name',
-        minWidth: 150
+        class: 'name',
     },
     {
-        id: 'submitor',
-        label: 'Submitor',
-        minWidth: 150,
+        id: 'submitter',
+        label: 'Submitter',
         align: 'left',
+        class: 'submitter',
     },
     {
         id: 'organisation',
         label: 'Organisation',
-        minWidth: 150,
         align: 'left',
+        class: 'organisation',
     },
     {
         id: 'date',
         label: 'Date',
-        minWidth: 150,
         align: 'left',
+        class: 'date',
     },
     {
         id: 'progress',
         label: 'Progress',
-        minWidth: 150,
         align: 'left',
+        class: 'classes.progress',
         format: (value: number) => value.toFixed(2),
     },
 ];
@@ -76,14 +80,14 @@ const columns: Column[] = [
 interface Data {
     idTable: number
     name: string;
-    submitor: string;
+    submitter: string;
     organisation: string;
     date: string;
     progress: number;
 }
 
-function createData(idTable: number, name: string, submitor: string, organisation: string, date: string, progress: number): Data {
-    return {idTable, name, submitor, organisation, date, progress};
+function createData(idTable: number, name: string, submitter: string, organisation: string, date: string, progress: number): Data {
+    return {idTable, name, submitter, organisation, date, progress};
 }
 
 const rows = [
@@ -118,6 +122,8 @@ const RenderJobsTable = React.forwardRef((props: RenderJobsTablePropsStyled, ref
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
+    const {changeRoute} = useChangeRoute();
+
     const handleChangePage = (event: unknown, newPage: number) => {
         setPage(newPage);
     };
@@ -128,8 +134,8 @@ const RenderJobsTable = React.forwardRef((props: RenderJobsTablePropsStyled, ref
     };
 
     return (
-        <Box>
-            <Typography variant="h5" className={clsx(classes.textMain, className)}>
+        <Box className={className}>
+            <Typography variant="h5" className={clsx(classes.textMain)}>
                 Render Jobs
             </Typography>
             <Paper className={classes.root}>
@@ -137,28 +143,31 @@ const RenderJobsTable = React.forwardRef((props: RenderJobsTablePropsStyled, ref
                     <Table stickyHeader aria-label="sticky table">
                         <TableHead>
                             <TableRow>
-                                {columns.map((column) => (
-                                    <TableCell
-                                        key={column.id}
-                                        align={column.align}
-                                        style={{minWidth: column.minWidth}}
-                                    >
-                                        {column.label}
-                                    </TableCell>
-                                ))}
+                                <TableCell align="left">Id</TableCell>
+                                <TableCell align="left">Name</TableCell>
+                                <TableCell align="left">Submitter</TableCell>
+                                <TableCell align="left">Organisation</TableCell>
+                                <TableCell align="left">Date</TableCell>
+                                <TableCell align="left" className={classes.progress}>Progress</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+                            {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, key) => {
                                 return (
-                                    <TableRow hover role="checkbox" tabIndex={-1} key={row.name}>
+                                    <TableRow
+                                        hover
+                                        role="checkbox"
+                                        tabIndex={-1}
+                                        key={key}
+                                        onClick={() => changeRoute({panel: "jobDetails"})}
+                                    >
                                         <TableCell component="th" scope="row">{row.idTable}</TableCell>
                                         <TableCell align="left">{row.name}</TableCell>
-                                        <TableCell align="left">{row.submitor}</TableCell>
+                                        <TableCell align="left">{row.submitter}</TableCell>
                                         <TableCell align="left">{row.organisation}</TableCell>
                                         <TableCell align="left">{row.date}</TableCell>
-                                        <TableCell align="left">
-                                            <Progress/>
+                                        <TableCell align="left" >
+                                            {isWidthUp('md', props.width) ? (<Progress />) : ("10%")}
                                         </TableCell>
                                     </TableRow>
                                 );
@@ -182,4 +191,4 @@ const RenderJobsTable = React.forwardRef((props: RenderJobsTablePropsStyled, ref
 RenderJobsTable.displayName = "RenderJobsTable";
 RenderJobsTable.propTypes = {}
 
-export default withStyles(styles)(RenderJobsTable);
+export default withWidth()(withStyles(styles)(RenderJobsTable));

@@ -9,7 +9,7 @@
 
 import React, {Ref} from 'react';
 import styles from "./styles";
-import {Box, Divider, Grid, Typography, withStyles} from "@material-ui/core";
+import {Box, Divider, Grid, Typography, useMediaQuery, useTheme, withStyles} from "@material-ui/core";
 import clsx from "clsx";
 import {
     Chart,
@@ -44,6 +44,16 @@ const StatisticsTab = React.forwardRef((props: StatisticsTabPropsStyled, ref: Re
         className,
     } = props;
 
+    const theme = useTheme();
+    const matches = useMediaQuery(theme.breakpoints.up('sm'));
+    let height;
+
+    if(matches) {
+        height = 400
+    } else {
+        height = 300
+    }
+
     return (
         <Box className={classes.root}>
             <Typography variant="h5" className={clsx(classes.textMain, className)}>
@@ -51,10 +61,10 @@ const StatisticsTab = React.forwardRef((props: StatisticsTabPropsStyled, ref: Re
             </Typography>
             <Divider className={clsx(classes.dividerMargin, className)}/>
             <Grid container spacing={2}>
-                <Grid item xs={6}>
+                <Grid item xs={12} md={6}>
                     <Chart
                         data={data}
-                        height={400}
+                        height={height}
                     >
                         <ArgumentAxis />
                         <ValueAxis />
@@ -67,10 +77,10 @@ const StatisticsTab = React.forwardRef((props: StatisticsTabPropsStyled, ref: Re
                         <Animation />
                     </Chart>
                 </Grid>
-                <Grid item xs={6}>
+                <Grid item xs={12} md={6}>
                     <Chart
                         data={data}
-                        height={400}
+                        height={height}
                     >
                         <ArgumentAxis />
                         <ValueAxis />
@@ -89,7 +99,7 @@ const StatisticsTab = React.forwardRef((props: StatisticsTabPropsStyled, ref: Re
             </Typography>
             <Divider className={clsx(classes.dividerMargin, className)}/>
             <Grid container spacing={2}>
-                <Grid item xs={4}>
+                <Grid item xs={12} sm={6} md={4}>
                     <Chart
                         data={data}
                         height={300}
@@ -105,7 +115,7 @@ const StatisticsTab = React.forwardRef((props: StatisticsTabPropsStyled, ref: Re
                         <Animation />
                     </Chart>
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item xs={12} sm={6} md={4}>
                     <Chart
                         data={data}
                         height={300}
@@ -121,7 +131,7 @@ const StatisticsTab = React.forwardRef((props: StatisticsTabPropsStyled, ref: Re
                         <Animation />
                     </Chart>
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item xs={12} sm={6} md={4}>
                     <Chart
                         data={data}
                         height={300}
@@ -137,7 +147,7 @@ const StatisticsTab = React.forwardRef((props: StatisticsTabPropsStyled, ref: Re
                         <Animation />
                     </Chart>
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item xs={12} sm={6} md={4}>
                     <Chart
                         data={data}
                         height={300}
@@ -153,8 +163,21 @@ const StatisticsTab = React.forwardRef((props: StatisticsTabPropsStyled, ref: Re
                         <Animation />
                     </Chart>
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item xs={12} sm={6} md={4}>
+                    <Chart
+                        data={data}
+                        height={300}
+                    >
+                        <ArgumentAxis />
+                        <ValueAxis />
 
+                        <AreaSeries
+                            valueField="slaves"
+                            argumentField="time"
+                        />
+                        <Title text="Slave 5" />
+                        <Animation />
+                    </Chart>
                 </Grid>
             </Grid>
         </Box>
