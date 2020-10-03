@@ -15,7 +15,7 @@ import {FixedSizeList, ListChildComponentProps} from 'react-window';
 import {withStyles} from '@material-ui/core/styles';
 import clsx from "clsx";
 import styles from "./styles";
-import Stylable from "../../Interfaces/Stylable";
+import Stylable from "../../interfaces/Stylable";
 
 /**
  * ListProps - interface for List component

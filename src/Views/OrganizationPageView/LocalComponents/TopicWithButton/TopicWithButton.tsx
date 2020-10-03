@@ -12,7 +12,7 @@ import {IconButton, withStyles} from "@material-ui/core";
 import {Avatar, Grid, Box, Typography, Divider} from "@material-ui/core";
 import clsx from "clsx";
 import styles from "./styles";
-import AddCircleIcon from '@material-ui/icons/AddCircle';
+import AddIcon from '@material-ui/icons/Add';
 
 
 interface TopicWithButtonPropsStyled{
@@ -37,7 +37,7 @@ const TopicWithButton = React.forwardRef((props:TopicWithButtonPropsStyled)=>{
                         <Typography variant="h6">{children}</Typography>
                     </Grid>
                     <Grid item xs={1} className={classes.box}>
-                        <IconButton><AddCircleIcon/></IconButton>
+                        <IconButton><AddIcon/></IconButton>
                     </Grid>
                 </Grid>
             </Grid>
