@@ -19,6 +19,10 @@ const styles =(theme: Theme) => createStyles({
     nameDescription:{
         justifyContent:"flex-begin",
     },
+    settingButtongAlign:{
+        display:"flex",
+        flexAlignment:"flex-end",
+    },
     avatar: {
         variant: "circle",
         height: theme.spacing(25),

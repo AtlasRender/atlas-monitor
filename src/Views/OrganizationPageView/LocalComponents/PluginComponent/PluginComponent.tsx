@@ -8,15 +8,18 @@
  */
 
 import React, {Ref} from "react";
-import {withStyles, Box, Grid, Select} from "@material-ui/core";
+import {withStyles, Box, Grid, Select, MenuItem, IconButton} from "@material-ui/core";
 import styles from "./styles";
 import DataTextField from "../../../../Components/DataTextField";
+import clsx from "clsx";
+import CloseIcon from "@material-ui/icons/Close";
 
 interface PluginComponentPropsStyled {
     classes?: any;
     style?: any;
     className?: string;
-    children?: string;
+    plugin?: string;
+    description?: string;
 }
 
 const PluginComponent = React.forwardRef((props: PluginComponentPropsStyled, ref: Ref<any>) => {
@@ -24,26 +27,34 @@ const PluginComponent = React.forwardRef((props: PluginComponentPropsStyled, ref
         classes,
         style,
         className,
-        children,
+        plugin,
+        description,
     } = props;
 
     return (
         <Box>
-            <Grid container spacing={2} className={classes.container}>
-                <Grid item xs = {10} className={classes.containerItem}>
+            <Grid container spacing={0} className={classes.container}>
+                <Grid item xs={10} className={classes.containerItem}>
                     <Grid item xs={2}>
-                        <DataTextField label="Plugin name" children={children}/>
+                        <DataTextField label="Plugin name" children={plugin} className={classes.dataTextFieldFix}/>
                     </Grid>
-                    <Grid item xs={2}>
+                    <Grid item xs={2} className={clsx(classes.container, classes.selectAlignment, className)}>
                         <Select
-                            native
-                            value="version"
+                            value="v.1.0.1"
+                            className={classes.container}
                         >
-                            <option value={"v.1.0.1"}>v.1.0.1</option>
-                            <option value={"v.1.0.2"}>v.1.0.2</option>
-                            <option value={"v.1.0.3"}>v.1.0.3</option>
+                            <MenuItem value={"v.1.0.1"}>v.1.0.1</MenuItem>
+                            <MenuItem value={"v.1.0.2"}>v.1.0.2</MenuItem>
+                            <MenuItem value={"v.1.0.3"}>v.1.0.3</MenuItem>
                         </Select>
-
+                    </Grid>
+                    <Grid item xs={5} className={classes.dataTextFieldFix}>
+                        <DataTextField label="Description" children={description} className={classes.dataTextFieldFix}/>
+                    </Grid>
+                    <Grid item xs={1} className={classes.selectAlignment}>
+                        <IconButton>
+                            <CloseIcon/>
+                        </IconButton>
                     </Grid>
                 </Grid>
             </Grid>
