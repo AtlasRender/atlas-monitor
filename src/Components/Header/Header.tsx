@@ -8,17 +8,7 @@
  */
 
 import React, {Ref} from "react";
-import {
-    AppBar,
-    Badge,
-    IconButton,
-    InputBase,
-    Menu,
-    MenuItem,
-    Toolbar,
-    Typography,
-    withStyles
-} from "@material-ui/core";
+import {AppBar, Badge, IconButton, InputBase, Menu, MenuItem, Toolbar, Typography, withStyles} from "@material-ui/core";
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
@@ -27,14 +17,23 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import styles from "./styles";
 import clsx from "clsx";
+import Stylable from "../../Interfaces/Stylable";
 
-interface HeaderPropsStyled {
-    classes?: any;
-    style?: any;
-    className?: string;
+/**
+ * HeaderProps - interface for Header component
+ * @interface
+ * @author Andrii Demchyshyn
+ */
+interface HeaderProps extends Stylable {
+
 }
 
-const Header = React.forwardRef((props: HeaderPropsStyled, ref: Ref<any>) => {
+/**
+ * DataTextField - returns Header component
+ * @function
+ * @author Andrii Demchyshyn
+ */
+const Header = React.forwardRef((props: HeaderProps, ref: Ref<any>) => {
     const {
         classes,
         className,

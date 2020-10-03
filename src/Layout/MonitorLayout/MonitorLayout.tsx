@@ -87,7 +87,7 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutPropsStyled, ref: Re
                                 <ListItemIcon>
                                     <InboxIcon/>
                                 </ListItemIcon>
-                                <ListItemText primary="Jobs"/>
+                                <ListItemText primary="Organization Page"/>
                             </ListItem>
                         </List>
                     </div>
