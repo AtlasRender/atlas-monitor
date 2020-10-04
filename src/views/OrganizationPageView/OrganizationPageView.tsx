@@ -29,12 +29,14 @@ import TopicWithButton from "./LocalComponents/TopicWithButton";
 import BuildIcon from '@material-ui/icons/Build';
 import SettingsIcon from '@material-ui/icons/Settings';
 import PluginComponent from "./LocalComponents/PluginComponent";
+import Stylable from "../../interfaces/Stylable";
 
-
-interface OrganizationPageViewPropsStyled {
-    classes?: any;
-    style?: any;
-    className?: string;
+/**
+ * OrganizationPageViewPropsStyled - interface for OrganizationPageView function
+ * @interface
+ * @author Nikita Nesterov
+ */
+interface OrganizationPageViewPropsStyled extends Stylable{
 
 }
 
@@ -59,7 +61,12 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewPropsS
         "Harkov slave",
         "Lvov slave",
     ]
-
+    /**
+     * handleChange - function that handles changes in select field in members list
+     * @function
+     * @param event
+     * @author Nikita Nesterov
+     */
     const handleChange = (event: any) => {
         const newUsers=[...users];
         const user = newUsers.find(user=>user.id===event.target.name)
