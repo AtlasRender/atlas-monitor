@@ -8,12 +8,30 @@
  */
 
 import {createStyles, Theme} from "@material-ui/core";
+import {blue, grey} from "@material-ui/core/colors";
 
-const styles =(theme: Theme) => createStyles({
-    container:{
-        justifyContent:"center",
+
+const styles = (theme: Theme) => createStyles({
+    container: {
+        justifyContent: "center",
+        alignItems: "flex-end",
+    },
+    flexItem:{
+        display: "flex",
+        justifyContent: "space-between",
         alignItems:"center",
+        listStyleType: "none",
+    },
+    buttonAdd:{
+        backgroundColor:grey[200],
+    },
+    fullWidth:{
+        width:"100%",
+    },
+    submitButton:{
+        backgroundColor: blue[500],
     }
+
 });
 
 export default styles;
