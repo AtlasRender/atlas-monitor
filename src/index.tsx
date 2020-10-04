@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import * as serviceWorker from './serviceWorker';
-import MonitorLayout from "./Layout/MonitorLayout";
+import MonitorLayout from "./layout/MonitorLayout";
 import {BrowserRouter} from "react-router-dom";
 import {ChangeRouteProvider} from "routing-manager";
 
