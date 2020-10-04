@@ -39,27 +39,28 @@ const SimpleList = React.forwardRef((props: SimpleListProps, ref: Ref<any>) => {
 
     const {changeRoute} = useChangeRoute();
 
+    const jobs = [
+        {id: 1, name: "Pathfinder Logo", submitter: "Danil Andreev", progress: 10},
+        {id: 2, name: "Pathfinder Logo", submitter: "Andrii Demchyshyn", progress: 50},
+        {id: 3, name: "Pathfinder Logo", submitter: "Danil Andreev", progress: 60},
+        {id: 4, name: "Pathfinder Logo", submitter: "Danil Andreev", progress: 20},
+        {id: 5, name: "Pathfinder Logo", submitter: "Danil Andreev", progress: 30},
+        {id: 6, name: "Pathfinder Logo", submitter: "Danil Andreev", progress: 100},
+    ];
+
     return (
         <Box className={clsx(classes.root, className)}>
             <List component="nav" aria-label="secondary mailbox folders" className={classes.paddingNone}>
-                <ListItemProgress progress="60%" button onClick={() => changeRoute({panel: "jobDetails"})}>
-                    <ListItemText primary="Pathfinder Logo" secondary="Danil Andreev"/>
-                </ListItemProgress>
-                <ListItemProgress progress="60%" button onClick={() => changeRoute({panel: "jobDetails"})}>
-                    <ListItemText primary="Pathfinder Logo" secondary="Danil Andreev"/>
-                </ListItemProgress>
-                <ListItemProgress progress="60%" button onClick={() => changeRoute({panel: "jobDetails"})}>
-                    <ListItemText primary="Pathfinder Logo" secondary="Danil Andreev"/>
-                </ListItemProgress>
-                <ListItemProgress progress="60%" button onClick={() => changeRoute({panel: "jobDetails"})}>
-                    <ListItemText primary="Pathfinder Logo" secondary="Danil Andreev"/>
-                </ListItemProgress>
-                <ListItemProgress progress="60%" button onClick={() => changeRoute({panel: "jobDetails"})}>
-                    <ListItemText primary="Pathfinder Logo" secondary="Danil Andreev"/>
-                </ListItemProgress>
-                <ListItemProgress progress="60%" button onClick={() => changeRoute({panel: "jobDetails"})}>
-                    <ListItemText primary="Pathfinder Logo" secondary="Danil Andreev"/>
-                </ListItemProgress>
+                {jobs.map((job) =>
+                    <ListItemProgress
+                        key={`render-job-${job.id}`}
+                        progress={job.progress}
+                        button
+                        onClick={() => changeRoute({panel: "jobDetails"})}
+                    >
+                        <ListItemText primary={job.name} secondary={job.submitter}/>
+                    </ListItemProgress>
+                )};
             </List>
         </Box>
     );

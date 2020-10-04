@@ -19,7 +19,7 @@ import lightBlue from '@material-ui/core/colors/lightBlue';
  * @author Andrii Demchyshyn
  */
 interface ListItemProgressProps extends ListItemProps {
-    progress: string;
+    progress: number;
 }
 
 /**
@@ -42,7 +42,7 @@ const ListItemProgress = React.forwardRef((props: any, ref: Ref<any>) => {
         <ListItem
             classes={classes}
             {...other}
-            style={{background: `linear-gradient(90deg, ${lightBlue[200]} ${progress}, ${theme.palette.common.white} 30%)`}}
+            style={{background: `linear-gradient(90deg, ${lightBlue[200]} ${progress}%, ${theme.palette.common.white} 0%)`}}
             className={classes.itemListMargin}
 
         >
