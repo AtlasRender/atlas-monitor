@@ -13,16 +13,24 @@ import {Grid, withStyles} from "@material-ui/core";
 import styles from "../../styles";
 import clsx from "clsx";
 import DataTextField from "../../../../components/DataTextField";
+import Stylable from "../../../../interfaces/Stylable";
 
-interface OrganizationsFieldsRowPropsStyled{
-    classes?: any,
-    style?:any,
-    className?: string,
+/**
+ * OrganizationsFieldsRowPropsStyled - interface for OrganizationsFieldsRow function in component
+ * @interface
+ * @author Nikita Nesterov
+ */
+interface OrganizationsFieldsRowPropsStyled extends Stylable{
     organization?: string,
     role?: string,
     status?: string,
 }
 
+/**
+ * OrganizationsFieldsRow - function that returns a row of organizations info for user in UserPageView
+ * @function
+ * @author Nikita Nesterov
+ */
 const OrganizationsFieldsRow = React.forwardRef((props:OrganizationsFieldsRowPropsStyled) =>{
     const{
         classes,

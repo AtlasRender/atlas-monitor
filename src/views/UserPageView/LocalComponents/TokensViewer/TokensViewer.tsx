@@ -21,17 +21,24 @@ import {
 } from "@material-ui/core";
 import clsx from "clsx";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-
-
 import styles from "./styles";
 import DataTextField from "../../../../components/DataTextField/DataTextField";
+import Stylable from "../../../../interfaces/Stylable";
 
-interface TokensViewerPropsStyled {
-    classes?: any,
-    style?: any,
-    className?: string,
+/**
+ * TokensViewerPropsStyled - interface for TokensViewer function
+ * @interface
+ * @author Nikita Nesterov
+ */
+interface TokensViewerPropsStyled extends Stylable{
+
 }
 
+/**
+ * TokensViewer - function for UserPageView component used for fast output(creation) of tokens and their description
+ * @function
+ * @author Nikita Nesterov
+ */
 const TokensViewer = React.forwardRef((props: TokensViewerPropsStyled) => {
     const {
         classes,

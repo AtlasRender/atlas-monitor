@@ -15,14 +15,22 @@ import DataTextField from "../../components/DataTextField";
 import OrganizationsFieldsRow from "./LocalComponents/OrganizationsFieldsRow";
 import clsx from "clsx";
 import TokensViewer from "./LocalComponents/TokensViewer";
+import Stylable from "../../interfaces/Stylable";
 
+/**
+ * UserPageViewPropsStyled - interface for UserPageView
+ * @interface
+ * @author Nikita Nesterov
+ */
+interface UserPageViewPropsStyled extends Stylable{
 
-interface UserPageViewPropsStyled {
-    classes?: any;
-    style?: any;
-    className?: string;
 }
 
+/**
+ * UserPageView - function for showing user page
+ * @function
+ * @author NikitaNesterov
+ */
 const UserPageView = React.forwardRef((props: UserPageViewPropsStyled, ref: Ref<any>) => {
     const {
         classes, className,

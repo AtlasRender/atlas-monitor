@@ -10,18 +10,26 @@
 import React, {Ref} from "react";
 import {withStyles, Box, Grid, Select, MenuItem, IconButton, ListItem} from "@material-ui/core";
 import styles from "./styles";
-import DataTextField from "../../../../Components/DataTextField";
+import DataTextField from "../../../../components/DataTextField";
 import clsx from "clsx";
 import CloseIcon from "@material-ui/icons/Close";
+import Stylable from "../../../../interfaces/Stylable";
 
-interface PluginComponentPropsStyled {
-    classes?: any;
-    style?: any;
-    className?: string;
+/**
+ * PluginComponentPropsStyled - interface for PluginComponent function
+ * @interface
+ * @author Nikita Nesterov
+ */
+interface PluginComponentPropsStyled extends Stylable{
     plugin?: string;
     description?: string;
 }
 
+/**
+ * PluginComponent - function that returns one row for plugins list in OrganizationPage
+ * @function
+ * @author Nikita Nesterov
+ */
 const PluginComponent = React.forwardRef((props: PluginComponentPropsStyled, ref: Ref<any>) => {
     const {
         classes,
