@@ -18,6 +18,8 @@ import {IconButton,
     ListItemIcon,
     ListItemText,
     ListItemSecondaryAction,
+    MenuItem,
+    ListItemAvatar,
 }
 from "@material-ui/core";
 import styles from "./styles";
@@ -26,12 +28,16 @@ import clsx from "clsx";
 import TopicWithButton from "./LocalComponents/TopicWithButton";
 import BuildIcon from '@material-ui/icons/Build';
 import SettingsIcon from '@material-ui/icons/Settings';
+import PluginComponent from "./LocalComponents/PluginComponent";
+import Stylable from "../../interfaces/Stylable";
 
+/**
+ * OrganizationPageViewPropsStyled - interface for OrganizationPageView function
+ * @interface
+ * @author Nikita Nesterov
+ */
+interface OrganizationPageViewPropsStyled extends Stylable{
 
-interface OrganizationPageViewPropsStyled {
-    classes?: any;
-    style?: any;
-    className?: string;
 }
 
 const OrganizationPageView = React.forwardRef((props: OrganizationPageViewPropsStyled, ref: Ref<any>) => {
@@ -39,6 +45,36 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewPropsS
         classes,
         className,
     } = props;
+
+    const [users, setUsers] = React.useState <any>([
+        {name:"Danil", role:"admin", id:1,department:"Pathfinder"},
+        {name:"Andriy", role:"moderator", id:2, department:"Gachi"},
+        {name:"Nikita", role:"member", id:3, department:"Gutsul"},
+    ]);
+
+    // const users =[
+    //
+    // ]
+
+    const slaves=[
+        "Kiev slave",
+        "Harkov slave",
+        "Lvov slave",
+    ]
+    /**
+     * handleChange - function that handles changes in select field in members list
+     * @function
+     * @param event
+     * @author Nikita Nesterov
+     */
+    const handleChange = (event: any) => {
+        const newUsers=[...users];
+        const user = newUsers.find(user=>user.id===event.target.name)
+        user.role = event.target.value;
+        setUsers(newUsers);
+    };
+
+
 
     return(
         <Box>
@@ -58,7 +94,10 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewPropsS
                         </Box>
                     </Grid>
                         <Grid item xs={2}>
-                            <Avatar className={classes.avatar}/>
+                            <Avatar
+                                src="https://cdn.sportclub.ru/assets/2019-09-20/n97c311rvb.jpg"
+                                className={classes.avatar}
+                            />
                         </Grid>
                 </Grid>
             </Box>
@@ -66,57 +105,67 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewPropsS
             <TopicWithButton children="Slaves"/>
             <Grid container className={classes.firstLine}>
                 <Grid item xs={10}>
-                    <ListItem className={classes.itemsRowBackground}>
-                        <ListItemIcon>
-                            <BuildIcon/>
-                        </ListItemIcon>
-                        <ListItemText primary="Kiev slave"/>
-                        <ListItemSecondaryAction>
-                            <IconButton><SettingsIcon/></IconButton>
-                        </ListItemSecondaryAction>
-                    </ListItem>
-                    <ListItem className={classes.itemsRowBackground}>
-                        <ListItemIcon>
-                            <BuildIcon/>
-                        </ListItemIcon>
-                        <ListItemText primary="Harkov slave"/>
-                        <ListItemSecondaryAction>
-                            <IconButton><SettingsIcon/></IconButton>
-                        </ListItemSecondaryAction>
-                    </ListItem>
-                    <ListItem className={classes.itemsRowBackground}>
-                        <ListItemIcon>
-                            <BuildIcon/>
-                        </ListItemIcon>
-                        <ListItemText primary="Lvov slave"/>
-                        <ListItemSecondaryAction>
-                            <IconButton><SettingsIcon/></IconButton>
-                        </ListItemSecondaryAction>
-                    </ListItem>
+                    {slaves.map((slave)=>{
+                        return(
+                            <ListItem>
+                                <ListItemIcon>
+                                    <BuildIcon/>
+                                </ListItemIcon>
+                                <ListItemText
+                                    primary={slave}
+                                    secondary="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur, rerum?"
+                                />
+
+                                <ListItemSecondaryAction>
+                                    <IconButton><SettingsIcon/></IconButton>
+                                </ListItemSecondaryAction>
+                            </ListItem>
+                        )
+                    })}
                 </Grid>
             </Grid>
 
             <TopicWithButton children="Members"/>
             <Grid container className={classes.firstLine}>
-                <Grid item xs={10}>
-                    <ListItem className={classes.itemsRowBackground}>
-                        <ListItemText primary="Danil Andreev"/>
-                        <ListItemSecondaryAction>
-                            {/*<Select>*/}
-                            {/*    */}
-                            {/*</Select>*/}
-                        </ListItemSecondaryAction>
-                    </ListItem>
-                </Grid>
+                {users.map((user:any)=>{
+                    console.log(user);
+                    return(
+                        <Grid item xs={10} spacing={0}>
+                            <ListItem>
+                                <ListItemAvatar>
+                                    <Avatar src="https://cdn.sportclub.ru/assets/2019-09-20/n97c311rvb.jpg"/>
+                                </ListItemAvatar>
+                                <ListItemText primary={user.name} secondary={user.department}/>
+                                <ListItemSecondaryAction>
+                                    <Select
+                                        // value={state.role}
+                                        style={{width:100}}
+                                        onChange={handleChange}
+                                        name={user.id}
+                                        // inputProps={{
+                                        //     role: 'member',
+                                        //     id: 'role-native-simple',
+                                        // }}
+                                        value={user.role}
+                                        label="Admin"
+                                        className={classes.selectFieldStyle}
+                                    >
+                                        <MenuItem value={"admin"}>Admin</MenuItem>
+                                        <MenuItem value={"member"}>Member</MenuItem>
+                                        <MenuItem value={"moderator"}>Moderator</MenuItem>
+                                    </Select>
+                                    <IconButton>
+                                        <SettingsIcon/>
+                                    </IconButton>
+                                </ListItemSecondaryAction>
+                            </ListItem>
+                        </Grid>
+                    )
+                })}
             </Grid>
-            {/*<Grid container className={classes.firstLine}>*/}
-            {/*    <Grid item xs={10} className={classes.itemsRowBackground}>*/}
-            {/*        <IconButton><BuildIcon/></IconButton>*/}
-            {/*        <DataTextField label="Slave name" children="Kiev slave"/>*/}
 
-            {/*    </Grid>*/}
-            {/*</Grid>*/}
-
+            <TopicWithButton children="Plugins"/>
+            <PluginComponent plugin="GachiWork" description="best remixes of all time"/>
         </Box>
     );
 })

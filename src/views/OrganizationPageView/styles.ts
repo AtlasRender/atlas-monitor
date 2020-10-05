@@ -19,6 +19,10 @@ const styles =(theme: Theme) => createStyles({
     nameDescription:{
         justifyContent:"flex-begin",
     },
+    settingButtongAlign:{
+        display:"flex",
+        flexAlignment:"flex-end",
+    },
     avatar: {
         variant: "circle",
         height: theme.spacing(25),
@@ -27,6 +31,9 @@ const styles =(theme: Theme) => createStyles({
     itemsRowBackground:{
         marginBottom: theme.spacing(1),
         backgroundColor: grey[200],
+        borderRadius: "5px",
+    },
+    selectFieldStyle: {
         borderRadius: "5px",
     }
 })

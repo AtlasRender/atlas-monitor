@@ -12,16 +12,23 @@ import {IconButton, withStyles} from "@material-ui/core";
 import {Avatar, Grid, Box, Typography, Divider} from "@material-ui/core";
 import clsx from "clsx";
 import styles from "./styles";
-import AddCircleIcon from '@material-ui/icons/AddCircle';
+import AddIcon from '@material-ui/icons/Add';
+import Stylable from "../../../../interfaces/Stylable";
 
-
-interface TopicWithButtonPropsStyled{
-    classes?: any;
-    style?: any;
-    className?: string;
+/**
+ * TopicWithButtonPropsStyled - interface for TopicWithButton function
+ * @interface
+ * @author Nikita Nesterov
+ */
+interface TopicWithButtonPropsStyled extends Stylable{
     children?:string,
 }
 
+/**
+ * TopicWithButton - function that is used in OrganizationPageView component for fast creating topic with AddIcon
+ * @function
+ * @author Nikita Nesterov
+ */
 const TopicWithButton = React.forwardRef((props:TopicWithButtonPropsStyled)=>{
     const{
         classes,
@@ -37,7 +44,7 @@ const TopicWithButton = React.forwardRef((props:TopicWithButtonPropsStyled)=>{
                         <Typography variant="h6">{children}</Typography>
                     </Grid>
                     <Grid item xs={1} className={classes.box}>
-                        <IconButton><AddCircleIcon/></IconButton>
+                        <IconButton><AddIcon/></IconButton>
                     </Grid>
                 </Grid>
             </Grid>
