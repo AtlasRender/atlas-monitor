@@ -37,12 +37,9 @@ const ListItemProgress = React.forwardRef((props: any, ref: Ref<any>) => {
     } = props;
 
     const theme = useTheme();
-    //Todo console.error node_modules/@material-ui/styles/mergeClasses/mergeClasses.js:36
-    //     Material-UI: The key `itemListMargin` provided to the classes prop is not implemented in ForwardRef(ListItem).
-    //     You can only override one of the following: root,container,focusVisible,dense,alignItemsFlexStart,disabled,divider,gutters,button,secondaryAction,selected.
+
     return (
         <ListItem
-            classes={classes}
             {...other}
             style={{background: `linear-gradient(90deg, ${lightBlue[200]} ${progress}%, ${theme.palette.common.white} 0%)`}}
             className={classes.itemListMargin}

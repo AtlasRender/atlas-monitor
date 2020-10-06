@@ -8,39 +8,27 @@
  */
 
 import React from "react";
-import {render, unmountComponentAtNode} from "react-dom";
-import {act} from "react-dom/test-utils";
+import ReactDOM from "react-dom";
+import {render, cleanup} from '@testing-library/react';
 import DataTextField from "./DataTextField";
 
-let container: any = null;
-beforeEach(() => {
-    container = document.createElement("div");
-    document.body.appendChild(container);
-});
-
-afterEach(() => {
-    unmountComponentAtNode(container);
-    container.remove();
-    container = null;
-});
+afterEach(cleanup);
 
 describe("DataTextField", () => {
-    test("renders with or without a name", () => {
-        const input = {label: "label", children: "name"};
+    test("Render without crashing", () => {
+        const container = document.createElement("div");
+        ReactDOM.render(<DataTextField/>, container);
+    });
 
-        const output = "labelname"
-
-        act(() => {
-            render(<DataTextField/>, container);
-        });
+    test("Render without input", () => {
+        const container:any = document.createElement("div");
+        render(<DataTextField />, container);
         expect(container.textContent).toBe("");
+    });
 
-        act(() => {
-            render(<DataTextField label={input.label}>{input.children}</DataTextField>, container);
-        });
-        expect(container.textContent).toBe(output);
-
+    test("Render with input", () => {
+        const { getByText } = render(<DataTextField label="Name" children="Pathfinder Logo"/>);
+        expect(getByText("Name")).not.toBe(null);
+        expect(getByText("Pathfinder Logo")).not.toBe(null);
     });
 });
-
-

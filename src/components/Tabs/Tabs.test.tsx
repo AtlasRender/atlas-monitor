@@ -8,47 +8,29 @@
  */
 
 import React from "react";
-import {render, unmountComponentAtNode} from "react-dom";
-import {act} from "react-dom/test-utils";
-import Tabs from "./Tabs";
-import TabsPanel from "../TabsPanel";
+import ReactDOM from "react-dom";
+import {render, cleanup} from '@testing-library/react';
+import MyTabs from "./Tabs";
+import {Box, Tabs} from "@material-ui/core";
+import ListItemProgress from "../ListItemProgress/ListItemProgress";
+import TabsPanel from "../TabsPanel/TabsPanel";
 
-let container: any = null;
-beforeEach(() => {
-    container = document.createElement("div");
-    document.body.appendChild(container);
-});
+afterEach(cleanup);
 
-afterEach(() => {
-    unmountComponentAtNode(container);
-    container.remove();
-    container = null;
-});
+describe("ListItemProgress", () => {
+    test("Render without crashing", () => {
+        const container = document.createElement("div");
+        ReactDOM.render(<MyTabs value={0}><Box/></MyTabs>, container);
+    });
 
-describe("Tabs", () => {
-    test("renders with or without a name or another component", () => {
-        act(() => {
-            render(
-                <Tabs/>, container);
-        });
-        expect(container.textContent).toBe("TASKSINFOSTATISTICS");
+    test("Render without input", () => {
+        const container:any = document.createElement("div");
+        render(<MyTabs value={0}><TabsPanel value={0} index={0} /></MyTabs>, container);
+        expect(container.textContent).toBe("");
+    });
 
-        act(() => {
-            render(
-                <Tabs>
-                    some text
-                </Tabs>, container);
-        });
-        expect(container.textContent).toBe("TASKSINFOSTATISTICSsome text");
-
-        act(() => {
-            render(
-                <Tabs>
-                    <TabsPanel value={0} index={0}>
-                        some text
-                    </TabsPanel>
-                </Tabs>, container);
-        });
-        expect(container.textContent).toBe("TASKSINFOSTATISTICSsome text");
+    test("Render with input", () => {
+        const { getByText } = render(<MyTabs value={0}><TabsPanel value={0} index={0}>Hello</TabsPanel></MyTabs>);
+        expect(getByText("Hello")).not.toBe(null);
     });
 });

@@ -48,7 +48,7 @@ const DataTextField = React.forwardRef((props: DataTextFieldProps, ref: React.Re
     } = props;
 
     const ref1 = React.useRef<any>();
-    console.log(ref1.current);
+    //console.log(ref1.current);
 
     return (
         <Box className={clsx(classes.boxContainer, className)}>

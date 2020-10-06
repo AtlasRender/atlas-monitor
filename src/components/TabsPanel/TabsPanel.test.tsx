@@ -8,36 +8,26 @@
  */
 
 import React from "react";
-import {render, unmountComponentAtNode} from "react-dom";
-import {act} from "react-dom/test-utils";
-import TabsPanel from "../TabsPanel";
+import ReactDOM from "react-dom";
+import {render, cleanup} from '@testing-library/react';
+import TabsPanel from "../TabsPanel/TabsPanel";
 
-let container: any = null;
-beforeEach(() => {
-    container = document.createElement("div");
-    document.body.appendChild(container);
-});
+afterEach(cleanup);
 
-afterEach(() => {
-    unmountComponentAtNode(container);
-    container.remove();
-    container = null;
-});
+describe("ListItemProgress", () => {
+    test("Render without crashing", () => {
+        const container = document.createElement("div");
+        ReactDOM.render(<TabsPanel value={0} index={0}/>, container);
+    });
 
-describe("TabsPanel", () => {
-    test("renders with or without a name", () => {
-        act(() => {
-            render(
-                <TabsPanel value={0} index={0}/>, container);
-        });
+    test("Render without input", () => {
+        const container:any = document.createElement("div");
+        render(<TabsPanel value={0} index={0}/>, container);
         expect(container.textContent).toBe("");
+    });
 
-        act(() => {
-            render(
-                <TabsPanel value={0} index={0}>
-                    some text
-                </TabsPanel>, container);
-        });
-        expect(container.textContent).toBe("some text");
+    test("Render with input", () => {
+        const { getByText } = render(<TabsPanel value={0} index={0}>Hello</TabsPanel>);
+        expect(getByText("Hello")).not.toBe(null);
     });
 });
