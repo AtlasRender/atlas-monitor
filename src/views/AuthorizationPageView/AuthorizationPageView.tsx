@@ -7,7 +7,7 @@
  * All rights reserved.
  */
 
-import React, {Ref} from "react";
+import React, {Ref, useState} from "react";
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -25,32 +25,61 @@ import {withStyles} from "@material-ui/core";
 import styles from "./style"
 import useCoreRequest from "../../hooks/useCoreRequest";
 import useAuth from "../../hooks/useAuth";
+import {useChangeRoute} from "routing-manager";
 
-interface AuthorizationPageViewPropsStyled extends Stylable{
+interface AuthorizationPageViewPropsStyled extends Stylable {
 
 }
 
-const AuthorizationPageView = React.forwardRef((props: AuthorizationPageViewPropsStyled, ref: Ref<any>)=>{
-    const{
+interface Credentials {
+    username: string;
+    password: string;
+}
+
+const AuthorizationPageView = React.forwardRef((props: AuthorizationPageViewPropsStyled, ref: Ref<any>) => {
+    const {
         classes,
         className,
         style,
     } = props;
 
-    // const {getUser, isLogged, login} = useAuth();
+    const {changeRoute} = useChangeRoute();
 
-    const coreRequest = useCoreRequest("https://pathfinder-core.herokuapp.com");
+    const {getUser, isLogged, login} = useAuth();
 
-    coreRequest().get("users").then((res) => {
-       console.log(res.body);
-    });
+    const coreRequest = useCoreRequest();
 
-    return(
+    const [credentials, setCredentials] = useState<Credentials>({username: "", password: ""});
+
+    // TODO event type
+    function handleInput(event: React.ChangeEvent<HTMLInputElement>) {
+        event.persist();
+        setCredentials(prev => ({ ...prev, [event.target.name] : event.target.value}));
+    }
+
+    function handleLogin(event: React.ChangeEvent<any>) {
+        coreRequest()
+            .post("login")
+            .send(credentials)
+            .then(res => {
+                console.log(res.body);
+                const user = res.body;
+                // if(!user) {
+                //     // TODO
+                // }
+
+                login(user);
+                changeRoute({page: "user"});
+            })
+            .catch();
+    }
+
+    return (
         <Container component="main" maxWidth="xs">
-            <CssBaseline />
+            <CssBaseline/>
             <Box className={classes.paper}>
                 <Avatar className={classes.avatar}>
-                    <LockOutlinedIcon />
+                    <LockOutlinedIcon/>
                 </Avatar>
                 <Typography component="h1" variant="h5">
                     Sign in
@@ -61,11 +90,12 @@ const AuthorizationPageView = React.forwardRef((props: AuthorizationPageViewProp
                         margin="normal"
                         required
                         fullWidth
-                        id="email"
-                        label="Email Address"
-                        name="email"
-                        autoComplete="email"
+                        id="username"
+                        label="Username"
+                        name="username"
+                        autoComplete="username"
                         autoFocus
+                        onChange={handleInput}
                     />
                     <TextField
                         variant="outlined"
@@ -77,17 +107,18 @@ const AuthorizationPageView = React.forwardRef((props: AuthorizationPageViewProp
                         type="password"
                         id="password"
                         autoComplete="current-password"
+                        onChange={handleInput}
                     />
                     <FormControlLabel
-                        control={<Checkbox value="remember" color="primary" />}
+                        control={<Checkbox value="remember" color="primary"/>}
                         label="Remember me"
                     />
                     <Button
-                        type="submit"
                         fullWidth
                         variant="contained"
                         color="primary"
                         className={classes.submit}
+                        onClick={handleLogin}
                     >
                         Sign In
                     </Button>
