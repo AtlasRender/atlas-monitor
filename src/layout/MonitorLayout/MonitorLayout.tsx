@@ -109,6 +109,22 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>
                                 <ListItemText primary="Submit Page"/>
                             </ListItem>
                         </List>
+                        <List>
+                            <ListItem button onClick={() => changeRoute({page: "authorization", panel: null})}>
+                                <ListItemIcon>
+                                    <InboxIcon/>
+                                </ListItemIcon>
+                                <ListItemText primary="Login Page"/>
+                            </ListItem>
+                        </List>
+                        <List>
+                            <ListItem button onClick={() => changeRoute({page: "signUp", panel: null})}>
+                                <ListItemIcon>
+                                    <InboxIcon/>
+                                </ListItemIcon>
+                                <ListItemText primary="Register Page"/>
+                            </ListItem>
+                        </List>
                     </div>
                 </Drawer>
             </React.Fragment>
@@ -150,10 +166,10 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>
                     <Route path="/pages/submit">
                         <SubmitPageView/>
                     </Route>
-                    <Route path="/pages/Authorization">
+                    <Route path="/pages/authorization">
                         <AuthorizationPageView/>
                     </Route>
-                    <Route path="/pages/SignUp">
+                    <Route path="/pages/signUp">
                         <SignUpPage/>
                     </Route>
                 </Switch>

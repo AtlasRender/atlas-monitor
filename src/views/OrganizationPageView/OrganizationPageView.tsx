@@ -124,11 +124,11 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewPropsS
             </Grid>
 
             <TopicWithButton children="Members"/>
-            <Grid container className={classes.firstLine}>
+            <Grid container className={classes.firstLine} spacing={0}>
                 {users.map((user: any, key: number) => {
-                    console.log(user);
+                    //console.log(user);
                     return (
-                        <Grid item xs={10} spacing={0} key={key}>
+                        <Grid item xs={10} key={key}>
                             <ListItem>
                                 <ListItemAvatar>
                                     <Avatar src="https://cdn.sportclub.ru/assets/2019-09-20/n97c311rvb.jpg"/>
@@ -139,7 +139,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewPropsS
                                         // value={state.role}
                                         style={{width: 100}}
                                         onChange={handleChange}
-                                        name={user.id}
+                                        name={user.name} // why id?
                                         // inputProps={{
                                         //     role: 'member',
                                         //     id: 'role-native-simple',
