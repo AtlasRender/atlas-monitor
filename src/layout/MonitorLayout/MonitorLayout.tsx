@@ -29,6 +29,7 @@ import OrganizationPageView from "../../views/OrganizationPageView";
 import {useChangeRoute} from "routing-manager";
 import Stylable from "../../interfaces/Stylable";
 import SubmitPageView from "../../views/SubmitPageView";
+import AuthorizationPageView from "../../views/AuthorizationPageView";
 
 /**
  * MonitorLayoutProps - interface for MonitorLayout component
@@ -139,6 +140,9 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>
                     </Route>
                     <Route path="/pages/Submit">
                         <SubmitPageView/>
+                    </Route>
+                    <Route path="/pages/Authorization">
+                        <AuthorizationPageView/>
                     </Route>
                 </Switch>
             </main>
