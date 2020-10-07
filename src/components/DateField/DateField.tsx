@@ -29,6 +29,10 @@ interface DateFieldProps extends Stylable {
  * @author Andrii Demchyshyn
  */
 const DateField = React.forwardRef((props: DateFieldProps, ref: React.Ref<any>) => {
+    const {
+        classes,
+        className
+    } = props;
 
     const [selectedDate, setSelectedDate] = React.useState<Date | null>(
         new Date('2014-08-18T21:11:54'),
