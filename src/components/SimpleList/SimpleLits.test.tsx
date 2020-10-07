@@ -3,16 +3,17 @@
  * Owner and project architect: Danil Andreev | danssg08@gmail.com |  https://github.com/DanilAndreev
  * File creator: Andrii Demchyshyn
  * Project: pathfinder-monitor
- * File last modified: 02.10.2020, 22:23
+ * File last modified: 06.10.2020, 21:07
  * All rights reserved.
  */
 
-import {createStyles, Theme} from "@material-ui/core";
+import React from "react";
+import ReactDOM from "react-dom";
+import {render, cleanup} from '@testing-library/react';
+import SimpleList from "./SimpleList";
 
-const styles = (theme: Theme) => createStyles({
-    itemListMargin: {
-        marginBottom: 2,
-    }
+afterEach(cleanup);
+
+describe("ListItemProgress", () => {
+
 });
-
-export default styles;

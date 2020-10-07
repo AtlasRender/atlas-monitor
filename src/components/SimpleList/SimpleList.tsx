@@ -60,7 +60,7 @@ const SimpleList = React.forwardRef((props: SimpleListProps, ref: Ref<any>) => {
                     >
                         <ListItemText primary={job.name} secondary={job.submitter}/>
                     </ListItemProgress>
-                )};
+                )}
             </List>
         </Box>
     );

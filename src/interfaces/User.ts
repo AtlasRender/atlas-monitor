@@ -3,21 +3,23 @@
  * Owner and project architect: Danil Andreev | danssg08@gmail.com |  https://github.com/DanilAndreev
  * File creator: Danil Andreev
  * Project: pathfinder-monitor
- * File last modified: 02.10.2020, 19:18
+ * File last modified: 10/7/20, 2:37 PM
  * All rights reserved.
  */
 
-import {ReactNode} from "react";
+import {Moment} from "moment";
 
 /**
- * Containerable - interface for components, which has children.
+ * User - interface for user data. You can get it from Origin.
  * @interface
- * @export default
  * @author Danil Andreev
  */
-export default interface Containerable<T = ReactNode> {
-    /**
-     * Children of element.
-     */
-    children?: T;
+export default interface User {
+    id: number;
+    username: string;
+    email?: string;
+    deleted: boolean;
+    createdAt: Moment;
+    updatedAt: Moment;
+    bearer: string;
 }

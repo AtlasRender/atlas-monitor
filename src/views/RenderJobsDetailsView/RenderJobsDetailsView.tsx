@@ -82,7 +82,9 @@ const RenderJobsDetailsView = React.forwardRef((props: RenderJobsDetailsViewProp
                 <Divider className={clsx(classes.dividerMargin, className)}/>
                 <Grid container spacing={2}>
                     <Grid item xs={12} sm={6} md={4}>
-                        <DataTextField label="Name" children="Pathfinder Logo"/>
+                        <DataTextField label="Name">
+                            Pathfinder Logo
+                        </DataTextField>
                     </Grid>
                     <Grid item xs={12} sm={6} md={4}>
                         <DataTextField label="Submitter" children="Danil Andreev"/>

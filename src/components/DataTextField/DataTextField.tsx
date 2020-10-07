@@ -7,7 +7,7 @@
  * All rights reserved.
  */
 
-import React from "react";
+import React, {createRef} from "react";
 import {Box, Typography, withStyles} from "@material-ui/core";
 import styles from "./styles";
 import clsx from "clsx";
@@ -21,7 +21,7 @@ import Containerable from "../../interfaces/Containerable";
  * @interface
  * @author Andrii Demchyshyn
  */
-interface DataTextFieldProps extends Stylable, Containerable{
+interface DataTextFieldProps extends Stylable, Containerable {
     /**
      * label - small text of element
      * @type string
@@ -39,7 +39,7 @@ interface DataTextFieldProps extends Stylable, Containerable{
  * @function
  * @author Andrii Demchyshyn
  */
-const DataTextField = React.forwardRef( (props: DataTextFieldProps) => {
+const DataTextField = React.forwardRef((props: DataTextFieldProps, ref: React.Ref<any>) => {
     const {
         classes,
         className,
@@ -47,17 +47,19 @@ const DataTextField = React.forwardRef( (props: DataTextFieldProps) => {
         children,
     } = props;
 
+    const ref1 = React.useRef<any>();
+    //console.log(ref1.current);
 
-   return(
-       <Box className={clsx(classes.boxContainer, className)}>
-           <Typography className={clsx(classes.boxContainerTitle, className)}>
-               {label}
-           </Typography>
-           <Typography className={clsx(classes.boxContainerText, className)}>
-               {children}
-           </Typography>
-       </Box>
-   );
+    return (
+        <Box className={clsx(classes.boxContainer, className)}>
+            <Typography className={clsx(classes.boxContainerTitle, className)} ref={ref1}>
+                {label}
+            </Typography>
+            <Typography className={clsx(classes.boxContainerText, className)}>
+                {children}
+            </Typography>
+        </Box>
+    );
 });
 
 export default withStyles(styles)(DataTextField);
