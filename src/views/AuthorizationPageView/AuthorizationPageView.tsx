@@ -38,7 +38,7 @@ const AuthorizationPageView = React.forwardRef((props: AuthorizationPageViewProp
     return(
         <Container component="main" maxWidth="xs">
             <CssBaseline />
-            <div className={classes.paper}>
+            <Box className={classes.paper}>
                 <Avatar className={classes.avatar}>
                     <LockOutlinedIcon />
                 </Avatar>
@@ -94,7 +94,7 @@ const AuthorizationPageView = React.forwardRef((props: AuthorizationPageViewProp
                         </Grid>
                     </Grid>
                 </form>
-            </div>
+            </Box>
             <Box mt={8}>
                 {/*<Copyright />*/}
             </Box>
