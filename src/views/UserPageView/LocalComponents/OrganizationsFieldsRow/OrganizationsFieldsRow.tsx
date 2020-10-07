@@ -7,7 +7,7 @@
  * All rights reserved.
  */
 
-import React from "react";
+import React, {Ref} from "react";
 import {Grid, withStyles} from "@material-ui/core";
 
 import styles from "../../styles";
@@ -20,7 +20,7 @@ import Stylable from "../../../../interfaces/Stylable";
  * @interface
  * @author Nikita Nesterov
  */
-interface OrganizationsFieldsRowPropsStyled extends Stylable{
+interface OrganizationsFieldsRowPropsStyled extends Stylable {
     organization?: string,
     role?: string,
     status?: string,
@@ -31,8 +31,8 @@ interface OrganizationsFieldsRowPropsStyled extends Stylable{
  * @function
  * @author Nikita Nesterov
  */
-const OrganizationsFieldsRow = React.forwardRef((props:OrganizationsFieldsRowPropsStyled) =>{
-    const{
+const OrganizationsFieldsRow = React.forwardRef((props: OrganizationsFieldsRowPropsStyled, ref: Ref<any>) => {
+    const {
         classes,
         className,
         organization,
@@ -40,8 +40,8 @@ const OrganizationsFieldsRow = React.forwardRef((props:OrganizationsFieldsRowPro
         status
     } = props;
 
-    return(
-        <Grid container spacing ={2} className={clsx(classes.container, className)}>
+    return (
+        <Grid container spacing={2} className={clsx(classes.container, className)}>
             <Grid item xs={6}>
                 <DataTextField label="Organization" children={organization}/>
             </Grid>
@@ -53,6 +53,6 @@ const OrganizationsFieldsRow = React.forwardRef((props:OrganizationsFieldsRowPro
             </Grid>
         </Grid>
     );
-} );
+});
 
 export default withStyles(styles)(OrganizationsFieldsRow);

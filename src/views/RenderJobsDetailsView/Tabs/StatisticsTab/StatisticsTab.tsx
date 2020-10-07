@@ -12,12 +12,12 @@ import styles from "./styles";
 import {Box, Divider, Grid, IconButton, Typography, useMediaQuery, useTheme, withStyles} from "@material-ui/core";
 import clsx from "clsx";
 import {
-    Chart,
-    BarSeries,
-    LineSeries,
     AreaSeries,
-    Title,
     ArgumentAxis,
+    BarSeries,
+    Chart,
+    LineSeries,
+    Title,
     ValueAxis,
 } from '@devexpress/dx-react-chart-material-ui';
 import {Animation} from '@devexpress/dx-react-chart';
@@ -69,7 +69,7 @@ const StatisticsTab = React.forwardRef((props: StatisticsTabProps, ref: Ref<any>
                 Statistics
             </Typography>
             <Divider className={clsx(classes.dividerMargin, className)}/>
-            <Grid container spacing={2}>
+            <Grid container spacing={2} ref={ref}>
                 <Grid item xs={12} md={6}>
                     <Chart
                         data={data}

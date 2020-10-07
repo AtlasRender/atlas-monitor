@@ -21,7 +21,7 @@ import SearchIcon from '@material-ui/icons/Search';
  * @interface
  * @author Andrii Demchyshyn
  */
-interface RenderJobsViewProps extends Stylable{
+interface RenderJobsViewProps extends Stylable {
 
 }
 
