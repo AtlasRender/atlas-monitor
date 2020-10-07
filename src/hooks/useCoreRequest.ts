@@ -31,6 +31,7 @@ export default function useCoreRequest(defaultPath?: string): CoreRequestHooked 
     const user = getUser();
     const middleware: RequestMiddleware = (request: SuperAgentRequest): SuperAgentRequest => {
         request.set('accept', 'application/json');
+        request.set('Content-Type', 'application/json');
         if (isLogged && user && user.bearer) request.set("token", user.bearer);
         return request;
     }

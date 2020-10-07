@@ -39,16 +39,24 @@ interface OrganizationPageViewPropsStyled extends Stylable {
 
 }
 
+interface Users {
+    name: string;
+    role: string;
+    id: number;
+    department: string;
+}
+
 const OrganizationPageView = React.forwardRef((props: OrganizationPageViewPropsStyled, ref: Ref<any>) => {
     const {
         classes,
         className,
     } = props;
 
-    const [users, setUsers] = React.useState <any>([
+    const [users, setUsers] = React.useState <Users[]>([
         {name: "Danil", role: "admin", id: 1, department: "Pathfinder"},
         {name: "Andriy", role: "moderator", id: 2, department: "Gachi"},
         {name: "Nikita", role: "member", id: 3, department: "Gutsul"},
+        {name: "Nikita1", role: "member", id: 4, department: "Gutsul"},
     ]);
 
     // const users =[
@@ -67,9 +75,13 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewPropsS
      * @author Nikita Nesterov
      */
     const handleChange = (event: any) => {
+        console.log(event.target);
         const newUsers = [...users];
         const user = newUsers.find(user => user.id === event.target.name)
-        user.role = event.target.value;
+        console.log(user);
+        if (user) {
+            user.role = event.target.value;
+        }
         setUsers(newUsers);
     };
 
@@ -138,19 +150,19 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewPropsS
                                     <Select
                                         // value={state.role}
                                         style={{width: 100}}
-                                        onChange={handleChange}
-                                        name={user.name} // why id?
+                                        name={user.id} // why id?
                                         // inputProps={{
                                         //     role: 'member',
                                         //     id: 'role-native-simple',
                                         // }}
                                         value={user.role}
                                         label="Admin"
+                                        onChange={handleChange}
                                         className={classes.selectFieldStyle}
                                     >
-                                        <MenuItem value={"admin"}>Admin</MenuItem>
-                                        <MenuItem value={"member"}>Member</MenuItem>
-                                        <MenuItem value={"moderator"}>Moderator</MenuItem>
+                                        <MenuItem value="admin">Admin</MenuItem>
+                                        <MenuItem value="member">Member</MenuItem>
+                                        <MenuItem value="moderator">Moderator</MenuItem>
                                     </Select>
                                     <IconButton>
                                         <SettingsIcon/>

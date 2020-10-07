@@ -23,6 +23,7 @@ import {withStyles} from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Stylable from "../../interfaces/Stylable";
 import styles from "./styles";
+import useAuth from "../../hooks/useAuth";
 
 interface SignUpPagePropsStyled extends Stylable{
 

@@ -23,6 +23,8 @@ import Container from '@material-ui/core/Container';
 import Stylable from "../../interfaces/Stylable";
 import {withStyles} from "@material-ui/core";
 import styles from "./style"
+import useCoreRequest from "../../hooks/useCoreRequest";
+import useAuth from "../../hooks/useAuth";
 
 interface AuthorizationPageViewPropsStyled extends Stylable{
 
@@ -34,6 +36,14 @@ const AuthorizationPageView = React.forwardRef((props: AuthorizationPageViewProp
         className,
         style,
     } = props;
+
+    // const {getUser, isLogged, login} = useAuth();
+
+    const coreRequest = useCoreRequest("https://pathfinder-core.herokuapp.com");
+
+    coreRequest().get("users").then((res) => {
+       console.log(res.body);
+    });
 
     return(
         <Container component="main" maxWidth="xs">
