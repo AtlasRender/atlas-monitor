@@ -8,7 +8,7 @@
  */
 
 import React, {Ref} from "react";
-import {withStyles, Box, Grid, Select, MenuItem, IconButton, ListItem} from "@material-ui/core";
+import {Grid, IconButton, ListItem, MenuItem, Select, withStyles} from "@material-ui/core";
 import styles from "./styles";
 import DataTextField from "../../../../components/DataTextField";
 import clsx from "clsx";
@@ -20,7 +20,7 @@ import Stylable from "../../../../interfaces/Stylable";
  * @interface
  * @author Nikita Nesterov
  */
-interface PluginComponentPropsStyled extends Stylable{
+interface PluginComponentPropsStyled extends Stylable {
     plugin?: string;
     description?: string;
 }
@@ -43,7 +43,7 @@ const PluginComponent = React.forwardRef((props: PluginComponentPropsStyled, ref
         <ListItem>
             <Grid container spacing={0} className={classes.container}>
                 <Grid item xs={10} className={classes.containerItem}>
-                    <Grid item xs={2} style={{padding:0}}>
+                    <Grid item xs={2} style={{padding: 0}}>
                         <DataTextField label="Plugin name" children={plugin} className={classes.dataTextFieldFix}/>
                     </Grid>
                     <Grid item xs={2} className={clsx(classes.container, classes.selectAlignment, className)}>

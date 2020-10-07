@@ -58,10 +58,10 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
                     <Typography variant="h6">Submit info</Typography>
                 </Grid>
                 <Grid item xs={4}>
-                    <TextField fullWidth id="standard-basic" label="Work title"/>
+                    <TextField fullWidth label="Work title"/>
                 </Grid>
                 <Grid item xs={3}>
-                    <TextField fullWidth id="standard-basic" label="Submitter"/>
+                    <TextField fullWidth label="Submitter"/>
                 </Grid>
                 <Grid item xs={3}>
                     <Select value="pathfinder monitor" fullWidth>
@@ -84,19 +84,19 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
                 </Grid>
                 <Grid item xs={10} className={classes.flexItem}>
                     <Grid item xs={2}>
-                        <TextField fullWidth id="standard-basic" label="Frame start"/>
+                        <TextField fullWidth label="Frame start"/>
                     </Grid>
                     <Grid item xs={2}>
-                        <TextField fullWidth id="standard-basic" label="Frame end"/>
+                        <TextField fullWidth label="Frame end"/>
                     </Grid>
                     <Grid item xs={2}>
-                        <TextField fullWidth id="standard-basic" label="Step"/>
+                        <TextField fullWidth label="Step"/>
                     </Grid>
                     <Grid item xs={2}>
-                        <TextField fullWidth id="standard-basic" label="Save frame as"/>
+                        <TextField fullWidth label="Save frame as"/>
                     </Grid>
                     <Grid item xs={1}>
-                        <TextField fullWidth id="standard-basic" label="Priority"/>
+                        <TextField fullWidth label="Priority"/>
                     </Grid>
                     <Grid item xs={1}>
                         <Button variant="contained" className={classes.buttonAdd}>ADD</Button>
@@ -114,30 +114,30 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
                 </Grid>
                 <Grid item xs={10} className={classes.flexItem}>
                     <Grid item xs={2}>
-                        <TextField fullWidth id="standard-basic" label="Samples"/>
+                        <TextField fullWidth label="Samples"/>
                     </Grid>
                     <Grid item xs={2}>
-                        <TextField fullWidth id="standard-basic" label="Samples"/>
+                        <TextField fullWidth label="Samples"/>
                     </Grid>
                     <Grid item xs={2}>
-                        <TextField fullWidth id="standard-basic" label="Samples"/>
+                        <TextField fullWidth label="Samples"/>
                     </Grid>
                     <Grid item xs={2}>
-                        <TextField fullWidth id="standard-basic" label="Samples"/>
+                        <TextField fullWidth label="Samples"/>
                     </Grid>
                     <Grid item xs={2}>
-                        <TextField fullWidth id="standard-basic" label="Samples"/>
+                        <TextField fullWidth label="Samples"/>
                     </Grid>
                 </Grid>
                 <Grid item xs={10} className={classes.flexItem}>
                     <Grid item xs={4}>
-                        <TextField fullWidth id="standard-basic" label="Verification"/>
+                        <TextField fullWidth label="Verification"/>
                     </Grid>
                     <Grid item xs={4}>
-                        <TextField fullWidth id="standard-basic" label="Description"/>
+                        <TextField fullWidth label="Description"/>
                     </Grid>
                     <Grid item xs={2}>
-                        <TextField fullWidth id="standard-basic" label="Samples"/>
+                        <TextField fullWidth label="Samples"/>
                     </Grid>
                 </Grid>
                 <Grid item xs={10} className={classes.flexItem}>

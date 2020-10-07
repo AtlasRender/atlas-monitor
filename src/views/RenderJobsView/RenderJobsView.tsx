@@ -15,14 +15,13 @@ import SimpleList from "../../components/SimpleList";
 import clsx from "clsx";
 import Stylable from "../../interfaces/Stylable";
 import SearchIcon from '@material-ui/icons/Search';
-import FileField from "../../components/FileField";
 
 /**
  * RenderJobsViewProps - interface for RenderJobsView component
  * @interface
  * @author Andrii Demchyshyn
  */
-interface RenderJobsViewProps extends Stylable{
+interface RenderJobsViewProps extends Stylable {
 
 }
 

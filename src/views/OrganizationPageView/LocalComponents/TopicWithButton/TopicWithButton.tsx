@@ -8,9 +8,7 @@
  */
 
 import React, {Ref} from "react";
-import {IconButton, withStyles} from "@material-ui/core";
-import {Avatar, Grid, Box, Typography, Divider} from "@material-ui/core";
-import clsx from "clsx";
+import {Divider, Grid, IconButton, Typography, withStyles} from "@material-ui/core";
 import styles from "./styles";
 import AddIcon from '@material-ui/icons/Add';
 import Stylable from "../../../../interfaces/Stylable";
@@ -20,8 +18,8 @@ import Stylable from "../../../../interfaces/Stylable";
  * @interface
  * @author Nikita Nesterov
  */
-interface TopicWithButtonPropsStyled extends Stylable{
-    children?:string,
+interface TopicWithButtonPropsStyled extends Stylable {
+    children?: string,
 }
 
 /**
@@ -29,14 +27,14 @@ interface TopicWithButtonPropsStyled extends Stylable{
  * @function
  * @author Nikita Nesterov
  */
-const TopicWithButton = React.forwardRef((props:TopicWithButtonPropsStyled)=>{
-    const{
+const TopicWithButton = React.forwardRef((props: TopicWithButtonPropsStyled, ref: Ref<any>) => {
+    const {
         classes,
         style,
         className,
         children
     } = props;
-    return(
+    return (
         <Grid container className={classes.container}>
             <Grid item xs={10}>
                 <Grid container className={classes.childAlign}>
@@ -48,7 +46,7 @@ const TopicWithButton = React.forwardRef((props:TopicWithButtonPropsStyled)=>{
                     </Grid>
                 </Grid>
             </Grid>
-            <Grid item xs ={10}>
+            <Grid item xs={10}>
                 <Divider/>
             </Grid>
         </Grid>

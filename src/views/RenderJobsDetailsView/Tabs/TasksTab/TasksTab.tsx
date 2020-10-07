@@ -17,13 +17,12 @@ import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import VisibilityIcon from '@material-ui/icons/Visibility';
-import {Box, Grid, IconButton, Typography, useMediaQuery, useTheme, withStyles} from "@material-ui/core";
+import {Box, Grid, IconButton, Typography, withStyles} from "@material-ui/core";
 import styles from "./styles";
 import clsx from "clsx";
 import Progress from "../../../../components/Progress";
 import withWidth, {isWidthUp} from "@material-ui/core/withWidth";
 import Stylable from "../../../../interfaces/Stylable";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 

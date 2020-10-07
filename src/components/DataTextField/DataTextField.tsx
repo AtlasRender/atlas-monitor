@@ -7,13 +7,12 @@
  * All rights reserved.
  */
 
-import React, {createRef} from "react";
+import React from "react";
 import {Box, Typography, withStyles} from "@material-ui/core";
 import styles from "./styles";
 import clsx from "clsx";
 import Stylable from "../../interfaces/Stylable";
 import Containerable from "../../interfaces/Containerable";
-
 
 
 /**
@@ -48,7 +47,6 @@ const DataTextField = React.forwardRef((props: DataTextFieldProps, ref: React.Re
     } = props;
 
     const ref1 = React.useRef<any>();
-    //console.log(ref1.current);
 
     return (
         <Box className={clsx(classes.boxContainer, className)}>

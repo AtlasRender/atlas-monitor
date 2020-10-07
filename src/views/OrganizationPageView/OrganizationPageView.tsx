@@ -8,23 +8,22 @@
  */
 
 import React, {Ref} from "react";
-import {withStyles} from "@material-ui/core";
-import {IconButton,
+import {
     Avatar,
-    Grid,
     Box,
-    Select,
+    Grid,
+    IconButton,
     ListItem,
-    ListItemIcon,
-    ListItemText,
-    ListItemSecondaryAction,
-    MenuItem,
     ListItemAvatar,
-}
-from "@material-ui/core";
+    ListItemIcon,
+    ListItemSecondaryAction,
+    ListItemText,
+    MenuItem,
+    Select,
+    withStyles
+} from "@material-ui/core";
 import styles from "./styles";
 import DataTextField from "../../components/DataTextField";
-import clsx from "clsx";
 import TopicWithButton from "./LocalComponents/TopicWithButton";
 import BuildIcon from '@material-ui/icons/Build';
 import SettingsIcon from '@material-ui/icons/Settings';
@@ -36,7 +35,7 @@ import Stylable from "../../interfaces/Stylable";
  * @interface
  * @author Nikita Nesterov
  */
-interface OrganizationPageViewPropsStyled extends Stylable{
+interface OrganizationPageViewPropsStyled extends Stylable {
 
 }
 
@@ -47,16 +46,16 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewPropsS
     } = props;
 
     const [users, setUsers] = React.useState <any>([
-        {name:"Danil", role:"admin", id:1,department:"Pathfinder"},
-        {name:"Andriy", role:"moderator", id:2, department:"Gachi"},
-        {name:"Nikita", role:"member", id:3, department:"Gutsul"},
+        {name: "Danil", role: "admin", id: 1, department: "Pathfinder"},
+        {name: "Andriy", role: "moderator", id: 2, department: "Gachi"},
+        {name: "Nikita", role: "member", id: 3, department: "Gutsul"},
     ]);
 
     // const users =[
     //
     // ]
 
-    const slaves=[
+    const slaves = [
         "Kiev slave",
         "Harkov slave",
         "Lvov slave",
@@ -68,15 +67,14 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewPropsS
      * @author Nikita Nesterov
      */
     const handleChange = (event: any) => {
-        const newUsers=[...users];
-        const user = newUsers.find(user=>user.id===event.target.name)
+        const newUsers = [...users];
+        const user = newUsers.find(user => user.id === event.target.name)
         user.role = event.target.value;
         setUsers(newUsers);
     };
 
 
-
-    return(
+    return (
         <Box>
             <Box className={classes.container}>
                 <Grid container className={classes.firstLine}>
@@ -93,21 +91,21 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewPropsS
                             </Grid>
                         </Box>
                     </Grid>
-                        <Grid item xs={2}>
-                            <Avatar
-                                src="https://cdn.sportclub.ru/assets/2019-09-20/n97c311rvb.jpg"
-                                className={classes.avatar}
-                            />
-                        </Grid>
+                    <Grid item xs={2}>
+                        <Avatar
+                            src="https://cdn.sportclub.ru/assets/2019-09-20/n97c311rvb.jpg"
+                            className={classes.avatar}
+                        />
+                    </Grid>
                 </Grid>
             </Box>
 
             <TopicWithButton children="Slaves"/>
             <Grid container className={classes.firstLine}>
                 <Grid item xs={10}>
-                    {slaves.map((slave)=>{
-                        return(
-                            <ListItem>
+                    {slaves.map((slave, key) => {
+                        return (
+                            <ListItem key={key}>
                                 <ListItemIcon>
                                     <BuildIcon/>
                                 </ListItemIcon>
@@ -127,10 +125,10 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewPropsS
 
             <TopicWithButton children="Members"/>
             <Grid container className={classes.firstLine}>
-                {users.map((user:any)=>{
+                {users.map((user: any, key: number) => {
                     console.log(user);
-                    return(
-                        <Grid item xs={10} spacing={0}>
+                    return (
+                        <Grid item xs={10} spacing={0} key={key}>
                             <ListItem>
                                 <ListItemAvatar>
                                     <Avatar src="https://cdn.sportclub.ru/assets/2019-09-20/n97c311rvb.jpg"/>
@@ -139,7 +137,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewPropsS
                                 <ListItemSecondaryAction>
                                     <Select
                                         // value={state.role}
-                                        style={{width:100}}
+                                        style={{width: 100}}
                                         onChange={handleChange}
                                         name={user.id}
                                         // inputProps={{

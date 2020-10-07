@@ -7,18 +7,8 @@
  * All rights reserved.
  */
 
-import React from "react";
-import {
-    Grid,
-    IconButton,
-    Accordion,
-    AccordionDetails,
-    Divider,
-    Typography,
-    AccordionSummary,
-    withStyles,
-    Box
-} from "@material-ui/core";
+import React, {Ref} from "react";
+import {Box, Divider, Grid, IconButton, Typography, withStyles} from "@material-ui/core";
 import clsx from "clsx";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import styles from "./styles";
@@ -30,7 +20,7 @@ import Stylable from "../../../../interfaces/Stylable";
  * @interface
  * @author Nikita Nesterov
  */
-interface TokensViewerPropsStyled extends Stylable{
+interface TokensViewerPropsStyled extends Stylable {
 
 }
 
@@ -39,7 +29,7 @@ interface TokensViewerPropsStyled extends Stylable{
  * @function
  * @author Nikita Nesterov
  */
-const TokensViewer = React.forwardRef((props: TokensViewerPropsStyled) => {
+const TokensViewer = React.forwardRef((props: TokensViewerPropsStyled, ref: Ref<any>) => {
     const {
         classes,
         style,
@@ -48,7 +38,7 @@ const TokensViewer = React.forwardRef((props: TokensViewerPropsStyled) => {
 
     const [isOpen, setIsOpen] = React.useState(false);
 
-    const handleClick=()=>{
+    const handleClick = () => {
         setIsOpen(!isOpen);
     }
 
@@ -56,21 +46,21 @@ const TokensViewer = React.forwardRef((props: TokensViewerPropsStyled) => {
         <Box>
             <Grid container className={clsx(classes.container, className)}>
                 <Grid item xs={10}>
-                        <Grid container>
-                            <Grid item xs={11}>
-                                <Typography variant="h6">Tokens</Typography>
-                            </Grid>
-                            <Grid item xs={1} className={clsx(classes.box, className)}>
-                                <IconButton onClick={handleClick} ><ExpandMoreIcon/></IconButton>
-                            </Grid>
+                    <Grid container>
+                        <Grid item xs={11}>
+                            <Typography variant="h6">Tokens</Typography>
                         </Grid>
+                        <Grid item xs={1} className={clsx(classes.box, className)}>
+                            <IconButton onClick={handleClick}><ExpandMoreIcon/></IconButton>
+                        </Grid>
+                    </Grid>
                 </Grid>
-                <Grid item xs ={10}>
+                <Grid item xs={10}>
                     <Divider/>
                 </Grid>
             </Grid>
             <Grid container spacing={2} className={clsx(classes.container, className)}>
-                <Grid item xs ={6}>
+                <Grid item xs={6}>
                     <DataTextField label="Description" children="token"/>
                 </Grid>
                 <Grid item xs={4}>
