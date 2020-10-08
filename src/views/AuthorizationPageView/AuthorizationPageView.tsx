@@ -58,15 +58,26 @@ const AuthorizationPageView = React.forwardRef((props: AuthorizationPageViewProp
     }
 
     function handleLogin(event: React.ChangeEvent<any>) {
+        event.preventDefault();
         coreRequest()
             .post("login")
             .send(credentials)
             .then(res => {
                 console.log(res.body);
                 const user = res.body;
-                // if(!user) {
-                //     // TODO
-                // }
+                if(!user) {
+                    console.error("No user");
+                    throw new Error("No user");
+                }
+                if((typeof user.id !== "number") ||
+                    (typeof user.name !== "string") ||
+                    (typeof user.email !== "string") ||
+                    (typeof user.bearer !== "string") ||
+                    (typeof user.createdAt !== "string") ||
+                    (typeof user.updatedAt !== "string") ||
+                    (typeof user.deleted !== "boolean")) {
+
+                }
 
                 login(user);
                 changeRoute({page: "user"});
@@ -84,7 +95,7 @@ const AuthorizationPageView = React.forwardRef((props: AuthorizationPageViewProp
                 <Typography component="h1" variant="h5">
                     Sign in
                 </Typography>
-                <form className={classes.form} noValidate>
+                <form className={classes.form} noValidate onSubmit={handleLogin}>
                     <TextField
                         variant="outlined"
                         margin="normal"
@@ -114,11 +125,11 @@ const AuthorizationPageView = React.forwardRef((props: AuthorizationPageViewProp
                         label="Remember me"
                     />
                     <Button
+                        type="submit"
                         fullWidth
                         variant="contained"
                         color="primary"
                         className={classes.submit}
-                        onClick={handleLogin}
                     >
                         Sign In
                     </Button>

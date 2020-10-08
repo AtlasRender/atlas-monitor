@@ -7,7 +7,7 @@
  * All rights reserved.
  */
 
-import React, {Ref} from "react";
+import React, {Ref, useState} from "react";
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -24,9 +24,20 @@ import Container from '@material-ui/core/Container';
 import Stylable from "../../interfaces/Stylable";
 import styles from "./styles";
 import useAuth from "../../hooks/useAuth";
+import {func} from "prop-types";
+import useCoreRequest from "../../hooks/useCoreRequest";
+import {register} from "../../serviceWorker";
+import {useChangeRoute} from "routing-manager";
+import {PropTypes} from "@material-ui/core";
 
 interface SignUpPagePropsStyled extends Stylable{
 
+}
+
+interface Credentials {
+    username: string;
+    password: string;
+    email: string;
 }
 
 const SignUpPage = React.forwardRef((props: SignUpPagePropsStyled, ref: Ref<any>) =>{
@@ -35,6 +46,45 @@ const SignUpPage = React.forwardRef((props: SignUpPagePropsStyled, ref: Ref<any>
         className,
         style,
     } = props;
+
+    const {getUser, isLogged, login} = useAuth();
+    const [credentials, setCredentials] = useState<Credentials>({username: "", password: "", email: ""});
+    const {changeRoute} = useChangeRoute();
+    const coreRequest = useCoreRequest();
+
+    function handleInput(event: React.ChangeEvent<HTMLInputElement>) {
+        event.persist();
+        setCredentials( prev => ({...prev, [event.target.name]: event.target.value}));
+    }
+
+    function handleRegister(event: React.ChangeEvent<any>) {
+        event.preventDefault();
+        coreRequest()
+            .post("users")
+            .send(credentials)
+            .then(res => {
+                const user = res.body;
+                console.log(user);
+                if(!user) {
+                    console.error("No user");
+                    throw new Error("No user");
+                }
+                if((typeof user.id !== "number") ||
+                    (typeof user.name !== "string") ||
+                    (typeof user.email !== "string") ||
+                    (typeof user.bearer !== "string") ||
+                    (typeof user.createdAt !== "string") ||
+                    (typeof user.updatedAt !== "string") ||
+                    (typeof user.deleted !== "boolean")) {
+                    throw new Error("One of parameters has wrong type");
+                }
+                login(user);
+                changeRoute({page: "user"});
+            })
+            .catch(err => {
+                console.error(err);
+            });
+    }
 
     return(
         <Container component="main" maxWidth="xs">
@@ -46,29 +96,18 @@ const SignUpPage = React.forwardRef((props: SignUpPagePropsStyled, ref: Ref<any>
                 <Typography component="h1" variant="h5">
                     Sign up
                 </Typography>
-                <form className={classes.form} noValidate>
+                <form className={classes.form} noValidate onSubmit={handleRegister}>
                     <Grid container spacing={2}>
-                        <Grid item xs={12} sm={6}>
+                        <Grid item xs={12}>
                             <TextField
-                                autoComplete="fname"
-                                name="firstName"
+                                autoComplete="username"
                                 variant="outlined"
                                 required
                                 fullWidth
-                                id="firstName"
-                                label="First Name"
+                                name="username"
+                                label="Username"
                                 autoFocus
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <TextField
-                                variant="outlined"
-                                required
-                                fullWidth
-                                id="lastName"
-                                label="Last Name"
-                                name="lastName"
-                                autoComplete="lname"
+                                onChange={handleInput}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -76,10 +115,10 @@ const SignUpPage = React.forwardRef((props: SignUpPagePropsStyled, ref: Ref<any>
                                 variant="outlined"
                                 required
                                 fullWidth
-                                id="email"
                                 label="Email Address"
                                 name="email"
                                 autoComplete="email"
+                                onChange={handleInput}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -90,7 +129,6 @@ const SignUpPage = React.forwardRef((props: SignUpPagePropsStyled, ref: Ref<any>
                                 name="password"
                                 label="Password"
                                 type="password"
-                                id="password"
                                 autoComplete="current-password"
                             />
                         </Grid>
@@ -125,5 +163,9 @@ const SignUpPage = React.forwardRef((props: SignUpPagePropsStyled, ref: Ref<any>
         </Container>
     );
 });
+SignUpPage.displayName = "SignUpPage";
+SignUpPage.propTypes = {
+
+}
 
 export default withStyles(styles)(SignUpPage);
