@@ -26,6 +26,7 @@ import styles from "./style"
 import useCoreRequest from "../../hooks/useCoreRequest";
 import useAuth from "../../hooks/useAuth";
 import {useChangeRoute} from "routing-manager";
+import { useSnackbar } from 'notistack';
 
 interface AuthorizationPageViewPropsStyled extends Stylable {
 
@@ -44,11 +45,9 @@ const AuthorizationPageView = React.forwardRef((props: AuthorizationPageViewProp
     } = props;
 
     const {changeRoute} = useChangeRoute();
-
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
     const {getUser, isLogged, login} = useAuth();
-
     const coreRequest = useCoreRequest();
-
     const [credentials, setCredentials] = useState<Credentials>({username: "", password: ""});
 
     // TODO event type
@@ -58,6 +57,7 @@ const AuthorizationPageView = React.forwardRef((props: AuthorizationPageViewProp
     }
 
     function handleLogin(event: React.ChangeEvent<any>) {
+
         event.preventDefault();
         coreRequest()
             .post("login")
@@ -67,22 +67,23 @@ const AuthorizationPageView = React.forwardRef((props: AuthorizationPageViewProp
                 const user = res.body;
                 if(!user) {
                     console.error("No user");
-                    throw new Error("No user");
+                    enqueueSnackbar("No such user", {variant: "error"});
                 }
                 if((typeof user.id !== "number") ||
-                    (typeof user.name !== "string") ||
+                    (typeof user.username !== "string") ||
                     (typeof user.email !== "string") ||
                     (typeof user.bearer !== "string") ||
                     (typeof user.createdAt !== "string") ||
-                    (typeof user.updatedAt !== "string") ||
                     (typeof user.deleted !== "boolean")) {
-
+                    enqueueSnackbar("One of parameters has wrong type", {variant: "error"});
                 }
 
                 login(user);
                 changeRoute({page: "user"});
             })
-            .catch();
+            .catch(err => {
+                enqueueSnackbar("Authorization Error", {variant: "error"});
+            });
     }
 
     return (

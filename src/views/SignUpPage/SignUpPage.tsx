@@ -24,13 +24,13 @@ import Container from '@material-ui/core/Container';
 import Stylable from "../../interfaces/Stylable";
 import styles from "./styles";
 import useAuth from "../../hooks/useAuth";
-import {func} from "prop-types";
 import useCoreRequest from "../../hooks/useCoreRequest";
-import {register} from "../../serviceWorker";
 import {useChangeRoute} from "routing-manager";
-import {PropTypes} from "@material-ui/core";
+import {useSnackbar} from "notistack";
+import enqueueErrorSnackbar from "../../utils/enqueueErrorSnackbar";
+import useEnqueueErrorSnackbar from "../../utils/enqueueErrorSnackbar";
 
-interface SignUpPagePropsStyled extends Stylable{
+interface SignUpPagePropsStyled extends Stylable {
 
 }
 
@@ -40,21 +40,23 @@ interface Credentials {
     email: string;
 }
 
-const SignUpPage = React.forwardRef((props: SignUpPagePropsStyled, ref: Ref<any>) =>{
-    const{
+const SignUpPage = React.forwardRef((props: SignUpPagePropsStyled, ref: Ref<any>) => {
+    const {
         classes,
         className,
         style,
     } = props;
 
     const {getUser, isLogged, login} = useAuth();
+    const {closeSnackbar} = useSnackbar();
+    const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
     const [credentials, setCredentials] = useState<Credentials>({username: "", password: "", email: ""});
     const {changeRoute} = useChangeRoute();
     const coreRequest = useCoreRequest();
 
     function handleInput(event: React.ChangeEvent<HTMLInputElement>) {
         event.persist();
-        setCredentials( prev => ({...prev, [event.target.name]: event.target.value}));
+        setCredentials(prev => ({...prev, [event.target.name]: event.target.value}));
     }
 
     function handleRegister(event: React.ChangeEvent<any>) {
@@ -65,33 +67,33 @@ const SignUpPage = React.forwardRef((props: SignUpPagePropsStyled, ref: Ref<any>
             .then(res => {
                 const user = res.body;
                 console.log(user);
-                if(!user) {
-                    console.error("No user");
-                    throw new Error("No user");
+                if (!user) {
+                    //console.error("No such user");
+                    enqueueErrorSnackbar("No such user");
                 }
-                if((typeof user.id !== "number") ||
-                    (typeof user.name !== "string") ||
+                if ((typeof user.id !== "number") ||
+                    (typeof user.username !== "string") ||
                     (typeof user.email !== "string") ||
                     (typeof user.bearer !== "string") ||
                     (typeof user.createdAt !== "string") ||
                     (typeof user.updatedAt !== "string") ||
                     (typeof user.deleted !== "boolean")) {
-                    throw new Error("One of parameters has wrong type");
+                    enqueueErrorSnackbar("One of parameters has wrong type");
                 }
                 login(user);
                 changeRoute({page: "user"});
             })
             .catch(err => {
-                console.error(err);
+                enqueueErrorSnackbar("Register Error");
             });
     }
 
-    return(
+    return (
         <Container component="main" maxWidth="xs">
-            <CssBaseline />
+            <CssBaseline/>
             <Box className={classes.paper}>
                 <Avatar className={classes.avatar}>
-                    <LockOutlinedIcon />
+                    <LockOutlinedIcon/>
                 </Avatar>
                 <Typography component="h1" variant="h5">
                     Sign up
@@ -134,7 +136,7 @@ const SignUpPage = React.forwardRef((props: SignUpPagePropsStyled, ref: Ref<any>
                         </Grid>
                         <Grid item xs={12}>
                             <FormControlLabel
-                                control={<Checkbox value="allowExtraEmails" color="primary" />}
+                                control={<Checkbox value="allowExtraEmails" color="primary"/>}
                                 label="I want to receive inspiration, marketing promotions and updates via email."
                             />
                         </Grid>
@@ -164,8 +166,6 @@ const SignUpPage = React.forwardRef((props: SignUpPagePropsStyled, ref: Ref<any>
     );
 });
 SignUpPage.displayName = "SignUpPage";
-SignUpPage.propTypes = {
-
-}
+SignUpPage.propTypes = {}
 
 export default withStyles(styles)(SignUpPage);
