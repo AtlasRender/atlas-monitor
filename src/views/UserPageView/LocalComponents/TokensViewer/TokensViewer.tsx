@@ -8,7 +8,7 @@
  */
 
 import React, {Ref} from "react";
-import {Box, Divider, Grid, IconButton, Typography, withStyles} from "@material-ui/core";
+import {Box, Divider, Grid, IconButton, Typography, withStyles, useTheme, useMediaQuery} from "@material-ui/core";
 import clsx from "clsx";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import styles from "./styles";
@@ -42,6 +42,32 @@ const TokensViewer = React.forwardRef((props: TokensViewerPropsStyled, ref: Ref<
         setIsOpen(!isOpen);
     }
 
+    const theme = useTheme();
+    const matches = useMediaQuery(theme.breakpoints.up("md"));
+
+    let token;
+    if(matches){
+        token=(
+            <Grid container spacing={2} className={clsx(classes.container, className)}>
+                <Grid item xs={6}>
+                    <DataTextField label="Description" children="token"/>
+                </Grid>
+                <Grid item xs={4}>
+                    <DataTextField label="Token" children="1232123125321423124"/>
+                </Grid>
+            </Grid>
+        )
+    }
+    else{
+        token=(
+        <Grid container spacing={2} className={clsx(classes.container, className)}>
+            <Grid item xs={10}>
+                <DataTextField label="Gachi forever" children="12414%423&*1jfwof"/>
+            </Grid>
+        </Grid>
+        )
+    }
+
     return (
         <Box>
             <Grid container className={clsx(classes.container, className)}>
@@ -59,14 +85,7 @@ const TokensViewer = React.forwardRef((props: TokensViewerPropsStyled, ref: Ref<
                     <Divider/>
                 </Grid>
             </Grid>
-            <Grid container spacing={2} className={clsx(classes.container, className)}>
-                <Grid item xs={6}>
-                    <DataTextField label="Description" children="token"/>
-                </Grid>
-                <Grid item xs={4}>
-                    <DataTextField label="Token" children="1232123125321423124"/>
-                </Grid>
-            </Grid>
+            {token}
         </Box>
     );
 })

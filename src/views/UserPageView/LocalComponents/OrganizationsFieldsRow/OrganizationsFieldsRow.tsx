@@ -8,9 +8,9 @@
  */
 
 import React, {Ref} from "react";
-import {Grid, withStyles} from "@material-ui/core";
+import {Grid, useMediaQuery, withStyles, useTheme} from "@material-ui/core";
 
-import styles from "../../styles";
+import styles from "./styles"
 import clsx from "clsx";
 import DataTextField from "../../../../components/DataTextField";
 import Stylable from "../../../../interfaces/Stylable";
@@ -40,18 +40,44 @@ const OrganizationsFieldsRow = React.forwardRef((props: OrganizationsFieldsRowPr
         status
     } = props;
 
+    const theme = useTheme();
+    const matches = useMediaQuery(theme.breakpoints.up("md"));
+    let Row;
+
+    if(matches){
+        Row = (
+            <Grid container spacing={1} className={classes.container}>
+                <Grid item xs={6}>
+                    <DataTextField label="Organization" children={organization}/>
+                </Grid>
+                <Grid item xs={2}>
+                    <DataTextField label="Role" children={role}/>
+                </Grid>
+                <Grid item xs={2}>
+                    <DataTextField label="Status" children={status}/>
+                </Grid>
+            </Grid>
+        )
+    }else{
+        Row=(
+            <Grid container spacing={1} className={clsx(classes.container,classes.margins)}>
+                <Grid item xs={10}>
+                    <DataTextField label="Organization" children={organization}/>
+                </Grid>
+                <Grid item xs={5}>
+                    <DataTextField label="Role" children={role}/>
+                </Grid>
+                <Grid item xs={5}>
+                    <DataTextField label="Status" children={status}/>
+                </Grid>
+            </Grid>
+        );
+    }
+
     return (
-        <Grid container spacing={2} className={clsx(classes.container, className)}>
-            <Grid item xs={6}>
-                <DataTextField label="Organization" children={organization}/>
-            </Grid>
-            <Grid item xs={2}>
-                <DataTextField label="Role" children={role}/>
-            </Grid>
-            <Grid item xs={2}>
-                <DataTextField label="Status" children={status}/>
-            </Grid>
-        </Grid>
+        <React.Fragment>
+            {Row}
+        </React.Fragment>
     );
 });
 

@@ -9,7 +9,7 @@
 import React, {Ref} from "react";
 import {withStyles} from "@material-ui/core";
 import styles from "./styles";
-import {Avatar, Grid, Box, Typography, Divider} from "@material-ui/core";
+import {Avatar, Grid, Box, Typography, Divider,useTheme, useMediaQuery} from "@material-ui/core";
 import githubAvatar from "./githubAvatar.jpg";
 import DataTextField from "../../components/DataTextField";
 import OrganizationsFieldsRow from "./LocalComponents/OrganizationsFieldsRow";
@@ -33,12 +33,15 @@ interface UserPageViewPropsStyled extends Stylable{
  */
 const UserPageView = React.forwardRef((props: UserPageViewPropsStyled, ref: Ref<any>) => {
     const {
-        classes, className,
+        classes, className, style
     } = props;
-    return (
-        <Box>
-            <Grid container spacing={2} className={clsx(classes.container, className)}>
 
+    const theme = useTheme();
+    const matches = useMediaQuery(theme.breakpoints.up("md"));
+    let mainInfo;
+    if(matches){
+        mainInfo=(
+            <Grid container spacing={2} className={clsx(classes.container, className)}>
                 <Grid item xs={4}>
                     <DataTextField label="Name" children="Nikita Nesterov"/>
                 </Grid>
@@ -48,13 +51,34 @@ const UserPageView = React.forwardRef((props: UserPageViewPropsStyled, ref: Ref<
                 <Grid item xs={2}>
                     <Avatar alt="Who1sthat" src={githubAvatar} className={clsx(classes.avatar, className)}/>
                 </Grid>
+            </Grid>
+        );
+    }
+    else{
+        mainInfo=(
+            <Grid container spacing={2} className={clsx(classes.container, className)}>
+                <Grid item xs={12} className={clsx(classes.container, classes.root, className)}>
+                    <Avatar src={githubAvatar} className={clsx(classes.avatar)}/>
+                </Grid>
+                <Grid item xs={10}>
+                    <DataTextField label="Name" children="Nikita Nesterov"/>
+                </Grid>
+                <Grid item xs={10}>
+                    <DataTextField label="Department" children="Pathfinder team crew"/>
+                </Grid>
+            </Grid>
+        )
+    }
 
+    return (
+        <Box>
+            {mainInfo}
+            <Grid container spacing={2} className={clsx(classes.container, className)}>
                 <Grid item xs = {10} className={clsx(classes.topic, className)}>
                     <Typography variant="h6">Organizations</Typography>
                     <Divider/>
                 </Grid>
             </Grid>
-
             <OrganizationsFieldsRow organization="Reveille" role="admin" status="working"/>
             <OrganizationsFieldsRow organization="Maya3D" role="user" status="training"/>
             <OrganizationsFieldsRow organization="Microsoft" role="Bill Gates" status="on vacation"/>
