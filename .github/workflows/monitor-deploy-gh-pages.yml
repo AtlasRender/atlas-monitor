@@ -1,5 +1,5 @@
 
-name: monitor-deploy-gh-pages
+name: Deploy Pathfidner monitor to GitHub Pages
 
 on:
   push:
@@ -19,15 +19,25 @@ jobs:
           node-version: 12
       # local changes
       - run: yarn --frozen-lockfile
-      - run: yarn install
-      - run: yarn run build
+      - name: Install dependencies 
+        run: yarn install
+      - name: Create new build
+        run: yarn run build
+      - name: Remove legacy build
+        run: rm -rf docs
+      - name: Copy new build to target library
+        run: cp -rf build docs
         env:
           CI: false
-      - run: git add --all
+      - name: Add files to git
+        run: git add --all
       # setting up git
-      - run: git config --local user.email "action@github.com"
-      - run: git config --local user.name "GitHub Action"
-      - run: git commit -a -m "docs-deploy-gh-pages deployed docs."
+      - name: Config user email
+        run: git config --local user.email "action@github.com"
+      - name: Config user name
+        run: git config --local user.name "GitHub Action"
+      - name: Commit changes
+        run: git commit -a -m "docs-deploy-gh-pages deployed docs."
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
