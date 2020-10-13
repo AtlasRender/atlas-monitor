@@ -146,6 +146,7 @@ const SignUpPage = React.forwardRef((props: SignUpPageProps, ref: Ref<any>) => {
                     variant="contained"
                     color="primary"
                     className={classes.submit}
+                    onClick={handleRegister}
                 >
                     Sign Up
                 </Button>
