@@ -65,9 +65,7 @@ const SignUpPage = React.forwardRef((props: SignUpPageProps, ref: Ref<any>) => {
             .send(credentials)
             .then(res => {
                 const user = res.body;
-                console.log(user);
                 if (!user) {
-                    //console.error("No such user");
                     enqueueErrorSnackbar("No such user");
                 }
                 if ((typeof user.id !== "number") ||
