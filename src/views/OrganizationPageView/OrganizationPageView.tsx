@@ -37,7 +37,7 @@ import Stylable from "../../interfaces/Stylable";
  * @interface
  * @author Nikita Nesterov
  */
-interface OrganizationPageViewPropsStyled extends Stylable {
+interface OrganizationPageViewProps extends Stylable {
 
 }
 
@@ -48,7 +48,7 @@ interface Users {
     department: string;
 }
 
-const OrganizationPageView = React.forwardRef((props: OrganizationPageViewPropsStyled, ref: Ref<any>) => {
+const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps, ref: Ref<any>) => {
     const {
         classes,
         className,

@@ -22,7 +22,7 @@ import Stylable from "../../interfaces/Stylable";
  * @interface
  * @author Nikita Nesterov
  */
-interface UserPageViewPropsStyled extends Stylable{
+interface UserPageViewProps extends Stylable{
 
 }
 
@@ -31,7 +31,7 @@ interface UserPageViewPropsStyled extends Stylable{
  * @function
  * @author NikitaNesterov
  */
-const UserPageView = React.forwardRef((props: UserPageViewPropsStyled, ref: Ref<any>) => {
+const UserPageView = React.forwardRef((props: UserPageViewProps, ref: Ref<any>) => {
     const {
         classes, className, style
     } = props;

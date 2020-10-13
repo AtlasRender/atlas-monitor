@@ -28,7 +28,7 @@ import useAuth from "../../hooks/useAuth";
 import {useChangeRoute} from "routing-manager";
 import { useSnackbar } from 'notistack';
 
-interface AuthorizationPageViewPropsStyled extends Stylable {
+interface AuthorizationPageViewProps extends Stylable {
 
 }
 
@@ -37,7 +37,7 @@ interface Credentials {
     password: string;
 }
 
-const AuthorizationPageView = React.forwardRef((props: AuthorizationPageViewPropsStyled, ref: Ref<any>) => {
+const AuthorizationPageView = React.forwardRef((props: AuthorizationPageViewProps, ref: Ref<any>) => {
     const {
         classes,
         className,

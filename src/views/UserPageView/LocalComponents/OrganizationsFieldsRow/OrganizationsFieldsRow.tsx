@@ -20,7 +20,7 @@ import Stylable from "../../../../interfaces/Stylable";
  * @interface
  * @author Nikita Nesterov
  */
-interface OrganizationsFieldsRowPropsStyled extends Stylable {
+interface OrganizationsFieldsRowProps extends Stylable {
     organization?: string,
     role?: string,
     status?: string,
@@ -31,7 +31,7 @@ interface OrganizationsFieldsRowPropsStyled extends Stylable {
  * @function
  * @author Nikita Nesterov
  */
-const OrganizationsFieldsRow = React.forwardRef((props: OrganizationsFieldsRowPropsStyled, ref: Ref<any>) => {
+const OrganizationsFieldsRow = React.forwardRef((props: OrganizationsFieldsRowProps, ref: Ref<any>) => {
     const {
         classes,
         className,

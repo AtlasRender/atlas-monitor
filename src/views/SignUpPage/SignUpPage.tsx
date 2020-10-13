@@ -27,10 +27,9 @@ import useAuth from "../../hooks/useAuth";
 import useCoreRequest from "../../hooks/useCoreRequest";
 import {useChangeRoute} from "routing-manager";
 import {useSnackbar} from "notistack";
-import enqueueErrorSnackbar from "../../utils/enqueueErrorSnackbar";
 import useEnqueueErrorSnackbar from "../../utils/enqueueErrorSnackbar";
 
-interface SignUpPagePropsStyled extends Stylable {
+interface SignUpPageProps extends Stylable {
 
 }
 
@@ -40,7 +39,7 @@ interface Credentials {
     email: string;
 }
 
-const SignUpPage = React.forwardRef((props: SignUpPagePropsStyled, ref: Ref<any>) => {
+const SignUpPage = React.forwardRef((props: SignUpPageProps, ref: Ref<any>) => {
     const {
         classes,
         className,

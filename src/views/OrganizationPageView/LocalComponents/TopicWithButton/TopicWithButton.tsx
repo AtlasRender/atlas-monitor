@@ -18,7 +18,7 @@ import Stylable from "../../../../interfaces/Stylable";
  * @interface
  * @author Nikita Nesterov
  */
-interface TopicWithButtonPropsStyled extends Stylable {
+interface TopicWithButtonProps extends Stylable {
     children?: string,
 }
 
@@ -27,7 +27,7 @@ interface TopicWithButtonPropsStyled extends Stylable {
  * @function
  * @author Nikita Nesterov
  */
-const TopicWithButton = React.forwardRef((props: TopicWithButtonPropsStyled, ref: Ref<any>) => {
+const TopicWithButton = React.forwardRef((props: TopicWithButtonProps, ref: Ref<any>) => {
     const {
         classes,
         style,
