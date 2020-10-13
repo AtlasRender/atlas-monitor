@@ -9,7 +9,6 @@
 
 import React from "react";
 import User from "../interfaces/User";
-import moment from "moment";
 import Containerable from "../interfaces/Containerable";
 import PropTypes from "prop-types";
 
@@ -78,8 +77,8 @@ export function AuthProvider(props: AuthProviderProps) {
                 username: String(credentials.username),
                 email: String(credentials.email),
                 deleted: !!credentials.deleted,
-                createdAt: moment(credentials.createdAt),
-                updatedAt: moment(credentials.updatedAt),
+                createdAt: new Date(credentials.createdAt),
+                updatedAt: new Date(credentials.updatedAt),
                 bearer: String(credentials.bearer),
             } : null;
             if (user && !user.id) {

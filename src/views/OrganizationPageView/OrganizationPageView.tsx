@@ -175,7 +175,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewPropsS
                                     <Select
                                         // value={state.role}
                                         style={{width: 100}}
-                                        name={user.id} // why id?
+                                        name={"" + user.id} // why id?
                                         // inputProps={{
                                         //     role: 'member',
                                         //     id: 'role-native-simple',

@@ -9,16 +9,15 @@
 
 import React from 'react';
 import Stylable from "../../interfaces/Stylable";
-import {Box, Button, Grid, Typography, withStyles} from "@material-ui/core";
+import {Box, Button, FormLabel, InputBase, withStyles} from "@material-ui/core";
 import styles from "./styles";
-import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 
 /**
  * FileFieldProps - interface for FileField component
  * @interface
  * @author Andrii Demchyshyn
  */
-interface FileFieldProps extends Stylable{
+interface FileFieldProps extends Stylable {
 }
 
 /**
@@ -32,20 +31,18 @@ const FileField = React.forwardRef((props: FileFieldProps, ref: React.Ref<any>) 
         className
     } = props;
 
-    return(
+    return (
         <Box className={classes.root}>
-            <input
-                accept="image/*"
+            <InputBase
                 className={classes.displayNone}
                 id="contained-button-file"
-                multiple
                 type="file"
             />
-            <label htmlFor="contained-button-file">
+            <FormLabel htmlFor="contained-button-file">
                 <Button variant="contained" color="primary" component="span">
                     Upload
                 </Button>
-            </label>
+            </FormLabel>
         </Box>
     );
 });

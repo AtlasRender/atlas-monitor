@@ -131,6 +131,7 @@ const SignUpPage = React.forwardRef((props: SignUpPagePropsStyled, ref: Ref<any>
                             label="Password"
                             type="password"
                             autoComplete="current-password"
+                            onChange={handleInput}
                         />
                     </Grid>
                     <Grid item xs={12}>
