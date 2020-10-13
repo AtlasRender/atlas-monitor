@@ -8,27 +8,27 @@
  */
 
 import React, {Ref, useState} from "react";
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Typography from '@material-ui/core/Typography';
-import Container from '@material-ui/core/Container';
+import Avatar from "@material-ui/core/Avatar";
+import Button from "@material-ui/core/Button";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import TextField from "@material-ui/core/TextField";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
+import Link from "@material-ui/core/Link";
+import Grid from "@material-ui/core/Grid";
+import Box from "@material-ui/core/Box";
+import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import Typography from "@material-ui/core/Typography";
+import Container from "@material-ui/core/Container";
 import Stylable from "../../interfaces/Stylable";
-import {withStyles} from "@material-ui/core";
+import {FormControl, withStyles} from "@material-ui/core";
 import styles from "./style"
 import useCoreRequest from "../../hooks/useCoreRequest";
 import useAuth from "../../hooks/useAuth";
 import {useChangeRoute} from "routing-manager";
-import { useSnackbar } from 'notistack';
+import {useSnackbar} from "notistack";
 
-interface AuthorizationPageViewPropsStyled extends Stylable {
+interface AuthorizationPageViewProps extends Stylable {
 
 }
 
@@ -37,7 +37,7 @@ interface Credentials {
     password: string;
 }
 
-const AuthorizationPageView = React.forwardRef((props: AuthorizationPageViewPropsStyled, ref: Ref<any>) => {
+const AuthorizationPageView = React.forwardRef((props: AuthorizationPageViewProps, ref: Ref<any>) => {
     const {
         classes,
         className,
@@ -45,7 +45,7 @@ const AuthorizationPageView = React.forwardRef((props: AuthorizationPageViewProp
     } = props;
 
     const {changeRoute} = useChangeRoute();
-    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+    const {enqueueSnackbar, closeSnackbar} = useSnackbar();
     const {getUser, isLogged, login} = useAuth();
     const coreRequest = useCoreRequest();
     const [credentials, setCredentials] = useState<Credentials>({username: "", password: ""});
@@ -53,7 +53,7 @@ const AuthorizationPageView = React.forwardRef((props: AuthorizationPageViewProp
     // TODO event type
     function handleInput(event: React.ChangeEvent<HTMLInputElement>) {
         event.persist();
-        setCredentials(prev => ({ ...prev, [event.target.name] : event.target.value}));
+        setCredentials(prev => ({...prev, [event.target.name]: event.target.value}));
     }
 
     function handleLogin(event: React.ChangeEvent<any>) {
@@ -65,11 +65,11 @@ const AuthorizationPageView = React.forwardRef((props: AuthorizationPageViewProp
             .then(res => {
                 console.log(res.body);
                 const user = res.body;
-                if(!user) {
+                if (!user) {
                     console.error("No user");
                     enqueueSnackbar("No such user", {variant: "error"});
                 }
-                if((typeof user.id !== "number") ||
+                if ((typeof user.id !== "number") ||
                     (typeof user.username !== "string") ||
                     (typeof user.email !== "string") ||
                     (typeof user.bearer !== "string") ||
@@ -96,61 +96,57 @@ const AuthorizationPageView = React.forwardRef((props: AuthorizationPageViewProp
                 <Typography component="h1" variant="h5">
                     Sign in
                 </Typography>
-                <form className={classes.form} noValidate onSubmit={handleLogin}>
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        required
-                        fullWidth
-                        id="username"
-                        label="Username"
-                        name="username"
-                        autoComplete="username"
-                        autoFocus
-                        onChange={handleInput}
-                    />
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        required
-                        fullWidth
-                        name="password"
-                        label="Password"
-                        type="password"
-                        id="password"
-                        autoComplete="current-password"
-                        onChange={handleInput}
-                    />
-                    <FormControlLabel
-                        control={<Checkbox value="remember" color="primary"/>}
-                        label="Remember me"
-                    />
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        color="primary"
-                        className={classes.submit}
-                    >
-                        Sign In
-                    </Button>
-                    <Grid container>
-                        <Grid item xs>
-                            <Link href="#" variant="body2">
-                                Forgot password?
-                            </Link>
-                        </Grid>
-                        <Grid item>
-                            <Link href="#" variant="body2">
-                                {"Don't have an account? Sign Up"}
-                            </Link>
-                        </Grid>
+                <TextField
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="username"
+                    label="Username"
+                    name="username"
+                    autoComplete="username"
+                    autoFocus
+                    onChange={handleInput}
+                />
+                <TextField
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    name="password"
+                    label="Password"
+                    type="password"
+                    id="password"
+                    autoComplete="current-password"
+                    onChange={handleInput}
+                />
+                <FormControlLabel
+                    control={<Checkbox value="remember" color="primary"/>}
+                    label="Remember me"
+                />
+                <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                    className={classes.submit}
+                >
+                    Sign In
+                </Button>
+                <Grid container>
+                    <Grid item xs>
+                        <Link href="#" variant="body2">
+                            Forgot password?
+                        </Link>
                     </Grid>
-                </form>
+                    <Grid item>
+                        <Link href="#" variant="body2">
+                            {"Don't have an account? Sign Up"}
+                        </Link>
+                    </Grid>
+                </Grid>
             </Box>
-            <Box mt={8}>
-                {/*<Copyright />*/}
-            </Box>
+
         </Container>
     );
 });
