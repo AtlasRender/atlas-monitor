@@ -44,7 +44,7 @@ const OrganizationsFieldsRow = React.forwardRef((props: OrganizationsFieldsRowPr
     const matches = useMediaQuery(theme.breakpoints.up("md"));
     let Row;
 
-    if(matches){
+    if (matches) {
         Row = (
             <Grid container spacing={1} className={classes.container}>
                 <Grid item xs={6}>
@@ -58,9 +58,9 @@ const OrganizationsFieldsRow = React.forwardRef((props: OrganizationsFieldsRowPr
                 </Grid>
             </Grid>
         )
-    }else{
-        Row=(
-            <Grid container spacing={1} className={clsx(classes.container,classes.margins)}>
+    } else {
+        Row = (
+            <Grid container spacing={1} className={clsx(classes.container, classes.margins)}>
                 <Grid item xs={10}>
                     <DataTextField label="Organization" children={organization}/>
                 </Grid>

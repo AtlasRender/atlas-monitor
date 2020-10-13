@@ -38,16 +38,14 @@ const TokensViewer = React.forwardRef((props: TokensViewerPropsStyled, ref: Ref<
 
     const [isOpen, setIsOpen] = React.useState(false);
 
-    const handleClick = () => {
-        setIsOpen(!isOpen);
-    }
+    const handleClick = () => {setIsOpen(!isOpen);}
 
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up("md"));
 
     let token;
-    if(matches){
-        token=(
+    if (matches) {
+        token = (
             <Grid container spacing={2} className={clsx(classes.container, className)}>
                 <Grid item xs={6}>
                     <DataTextField label="Description" children="token"/>
@@ -57,14 +55,13 @@ const TokensViewer = React.forwardRef((props: TokensViewerPropsStyled, ref: Ref<
                 </Grid>
             </Grid>
         )
-    }
-    else{
-        token=(
-        <Grid container spacing={2} className={clsx(classes.container, className)}>
-            <Grid item xs={10}>
-                <DataTextField label="Gachi forever" children="12414%423&*1jfwof"/>
+    } else {
+        token = (
+            <Grid container spacing={2} className={clsx(classes.container, className)}>
+                <Grid item xs={10}>
+                    <DataTextField label="Gachi forever" children="12414%423&*1jfwof"/>
+                </Grid>
             </Grid>
-        </Grid>
         )
     }
 
