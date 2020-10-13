@@ -52,8 +52,8 @@ const PluginComponent = React.forwardRef((props: PluginComponentProps, ref: Ref<
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up("md"));
     let item;
-    if(matches){
-        item=(
+    if (matches) {
+        item = (
             <Grid container spacing={0} className={classes.container}>
                 <Grid item xs={10} className={classes.containerItem}>
                     <Grid item xs={2} style={{padding: 0}}>
@@ -81,9 +81,8 @@ const PluginComponent = React.forwardRef((props: PluginComponentProps, ref: Ref<
                 </Grid>
             </Grid>
         )
-    }
-    else{
-        item=(
+    } else {
+        item = (
             <Grid container spacing={0} className={classes.container}>
                 <Grid item xs={10} className={classes.containerItem}>
                     <Grid item xs={6} style={{padding: 0}}>
