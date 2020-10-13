@@ -42,10 +42,10 @@ const OrganizationsFieldsRow = React.forwardRef((props: OrganizationsFieldsRowPr
 
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up("md"));
-    let Row;
+    let row;
 
-    if(matches){
-        Row = (
+    if (matches) {
+        row = (
             <Grid container spacing={1} className={classes.container}>
                 <Grid item xs={6}>
                     <DataTextField label="Organization" children={organization}/>
@@ -58,9 +58,9 @@ const OrganizationsFieldsRow = React.forwardRef((props: OrganizationsFieldsRowPr
                 </Grid>
             </Grid>
         )
-    }else{
-        Row=(
-            <Grid container spacing={1} className={clsx(classes.container,classes.margins)}>
+    } else {
+        row = (
+            <Grid container spacing={1} className={clsx(classes.container, classes.margins)}>
                 <Grid item xs={10}>
                     <DataTextField label="Organization" children={organization}/>
                 </Grid>
@@ -76,7 +76,7 @@ const OrganizationsFieldsRow = React.forwardRef((props: OrganizationsFieldsRowPr
 
     return (
         <React.Fragment>
-            {Row}
+            {row}
         </React.Fragment>
     );
 });
