@@ -46,11 +46,9 @@ const DataTextField = React.forwardRef((props: DataTextFieldProps, ref: React.Re
         children,
     } = props;
 
-    const ref1 = React.useRef<any>();
-
     return (
         <Box className={clsx(classes.boxContainer, className)}>
-            <Typography className={clsx(classes.boxContainerTitle, className)} ref={ref1}>
+            <Typography className={clsx(classes.boxContainerTitle, className)}>
                 {label}
             </Typography>
             <Typography className={clsx(classes.boxContainerText, className)}>

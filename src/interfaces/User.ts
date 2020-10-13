@@ -7,8 +7,6 @@
  * All rights reserved.
  */
 
-import {Moment} from "moment";
-
 /**
  * User - interface for user data. You can get it from Origin.
  * @interface
@@ -19,7 +17,7 @@ export default interface User {
     username: string;
     email?: string;
     deleted: boolean;
-    createdAt: Moment;
-    updatedAt: Moment;
+    createdAt: Date;
+    updatedAt: Date;
     bearer: string;
 }
