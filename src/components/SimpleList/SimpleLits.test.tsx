@@ -14,6 +14,9 @@ import SimpleList from "./SimpleList";
 
 afterEach(cleanup);
 
+//TODO make normal test (routing-manager compile error)
 describe("ListItemProgress", () => {
-
+    test("empty test", () => {
+       expect(1).toBe(1);
+    });
 });
