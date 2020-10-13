@@ -7,7 +7,7 @@
  * All rights reserved.
  */
 
-import React, {Ref} from "react";
+import React, {Ref, useEffect, useState} from "react";
 import {
     Avatar,
     Box,
@@ -31,6 +31,10 @@ import BuildIcon from '@material-ui/icons/Build';
 import SettingsIcon from '@material-ui/icons/Settings';
 import PluginComponent from "./LocalComponents/PluginComponent";
 import Stylable from "../../interfaces/Stylable";
+import useAuth from "../../hooks/useAuth";
+import useEnqueueErrorSnackbar from "../../utils/enqueueErrorSnackbar";
+import useCoreRequest from "../../hooks/useCoreRequest";
+import User from "../../interfaces/User";
 
 /**
  * OrganizationPageViewPropsStyled - interface for OrganizationPageView function
