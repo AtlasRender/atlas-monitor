@@ -20,7 +20,9 @@ import {
     ListItemText,
     MenuItem,
     Select,
-    withStyles
+    withStyles,
+    useMediaQuery,
+    useTheme,
 } from "@material-ui/core";
 import styles from "./styles";
 import DataTextField from "../../components/DataTextField";
@@ -85,9 +87,11 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewPropsS
         setUsers(newUsers);
     };
 
-
-    return (
-        <Box>
+    const theme = useTheme();
+    const matches = useMediaQuery(theme.breakpoints.up("md"));
+    let mainInfo;
+    if(matches){
+        mainInfo=(
             <Box className={classes.container}>
                 <Grid container className={classes.firstLine}>
                     <Grid item xs={8}>
@@ -111,7 +115,28 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewPropsS
                     </Grid>
                 </Grid>
             </Box>
+        )
+    }
+    else{
+        mainInfo=(
+            <Grid container spacing={2} className={classes.firstLine}>
+                <Box className={classes.avatarBox}>
+                    <Avatar src="https://cdn.sportclub.ru/assets/2019-09-20/n97c311rvb.jpg" className={classes.avatar}/>
+                </Box>
+                <Grid item xs={10}>
+                    <DataTextField label="Organization name" children="Blizzard entertainment"/>
+                </Grid>
+                <Grid item xs={10}>
+                    <DataTextField label="description" children="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dicta dolorem, dolorum nam quidem sint sunt!"/>
+                </Grid>
+            </Grid>
+        )
+    }
 
+
+    return (
+        <Box>
+            {mainInfo}
             <TopicWithButton children="Slaves"/>
             <Grid container className={classes.firstLine}>
                 <Grid item xs={10}>
