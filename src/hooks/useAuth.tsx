@@ -18,12 +18,28 @@ import PropTypes from "prop-types";
  * @author Danil Adnreev
  */
 export interface AuthContext {
+    /**
+     * getUser - returns current logged in user data.
+     * @function
+     * @author Danil Adnreev
+     */
     getUser(): User | null;
-
+    /**
+     * isLogged - true, when user is logged and false if not.
+     */
     isLogged: boolean,
-
+    /**
+     * login - locally saves user credentials.
+     * @function
+     * @param user User data for login
+     * @author Danil Andreev
+     */
     login(user: User): void;
-
+    /**
+     * logout - clears locally seved user credentials.
+     * @function
+     * @author Danil Andreev
+     */
     logout(): void;
 }
 
@@ -72,7 +88,7 @@ export function AuthProvider(props: AuthProviderProps) {
     function getUser(): User | null {
         try {
             const credentials: any = JSON.parse(localStorage.auth);
-            const user: User | null = credentials.user ? {
+            const user: User | null = credentials ? {
                 id: +credentials.id,
                 username: String(credentials.username),
                 email: String(credentials.email),
