@@ -40,7 +40,6 @@ const ListItemProgress = React.forwardRef((props: any, ref: Ref<any>) => {
 
     return (
         <ListItem
-            classes={classes}
             {...other}
             style={{background: `linear-gradient(90deg, ${lightBlue[200]} ${progress}%, ${theme.palette.common.white} 0%)`}}
             className={classes.itemListMargin}

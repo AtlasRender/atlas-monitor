@@ -35,6 +35,12 @@ const styles =(theme: Theme) => createStyles({
     },
     selectFieldStyle: {
         borderRadius: "5px",
+    },
+    avatarBox:{
+        display: "flex",
+        justifyContent:"center",
+        marginTop: theme.spacing(2),
+        width:"inherit",
     }
 })
 export default styles;

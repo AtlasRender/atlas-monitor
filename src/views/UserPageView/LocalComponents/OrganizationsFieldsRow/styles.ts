@@ -13,6 +13,10 @@ const styles = (theme: Theme) => createStyles({
     container:{
         justifyContent: "center",
         alignItems: "center",
+
+    },
+    margins:{
+        marginBottom: theme.spacing(2),
     }
 });
 

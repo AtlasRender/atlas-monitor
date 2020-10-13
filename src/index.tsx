@@ -5,15 +5,20 @@ import * as serviceWorker from './serviceWorker';
 import MonitorLayout from "./layout/MonitorLayout";
 import {BrowserRouter} from "react-router-dom";
 import {ChangeRouteProvider} from "routing-manager";
+import {AuthProvider} from "./hooks/useAuth";
+import {SnackbarProvider} from "notistack";
 
 ReactDOM.render(
     <React.StrictMode>
-        <BrowserRouter>
-            <ChangeRouteProvider routeMask="/pages/:page(/:panel)">
-                <MonitorLayout/>
-            </ChangeRouteProvider>
-
-        </BrowserRouter>
+        <AuthProvider>
+            <BrowserRouter>
+                <ChangeRouteProvider routeMask="/pages/:page(/:panel)">
+                    <SnackbarProvider maxSnack={3} >
+                        <MonitorLayout/>
+                    </SnackbarProvider>
+                </ChangeRouteProvider>
+            </BrowserRouter>
+        </AuthProvider>
     </React.StrictMode>,
     document.getElementById('root')
 );

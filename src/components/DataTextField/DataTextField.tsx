@@ -15,13 +15,12 @@ import Stylable from "../../interfaces/Stylable";
 import Containerable from "../../interfaces/Containerable";
 
 
-
 /**
  * DataTextFieldProps - interface for DataTextField component
  * @interface
  * @author Andrii Demchyshyn
  */
-interface DataTextFieldProps extends Stylable, Containerable{
+interface DataTextFieldProps extends Stylable, Containerable {
     /**
      * label - small text of element
      * @type string
@@ -39,7 +38,7 @@ interface DataTextFieldProps extends Stylable, Containerable{
  * @function
  * @author Andrii Demchyshyn
  */
-const DataTextField = React.forwardRef( (props: DataTextFieldProps) => {
+const DataTextField = React.forwardRef((props: DataTextFieldProps, ref: React.Ref<any>) => {
     const {
         classes,
         className,
@@ -47,17 +46,16 @@ const DataTextField = React.forwardRef( (props: DataTextFieldProps) => {
         children,
     } = props;
 
-
-   return(
-       <Box className={clsx(classes.boxContainer, className)}>
-           <Typography className={clsx(classes.boxContainerTitle, className)}>
-               {label}
-           </Typography>
-           <Typography className={clsx(classes.boxContainerText, className)}>
-               {children}
-           </Typography>
-       </Box>
-   );
+    return (
+        <Box className={clsx(classes.boxContainer, className)}>
+            <Typography className={clsx(classes.boxContainerTitle, className)}>
+                {label}
+            </Typography>
+            <Typography className={clsx(classes.boxContainerText, className)}>
+                {children}
+            </Typography>
+        </Box>
+    );
 });
 
 export default withStyles(styles)(DataTextField);

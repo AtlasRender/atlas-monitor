@@ -29,6 +29,8 @@ import OrganizationPageView from "../../views/OrganizationPageView";
 import {useChangeRoute} from "routing-manager";
 import Stylable from "../../interfaces/Stylable";
 import SubmitPageView from "../../views/SubmitPageView";
+import AuthorizationPageView from "../../views/AuthorizationPageView";
+import SignUpPage from "../../views/SignUpPage";
 
 /**
  * MonitorLayoutProps - interface for MonitorLayout component
@@ -99,6 +101,30 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>
                                 <ListItemText primary="Organization Page"/>
                             </ListItem>
                         </List>
+                        <List>
+                            <ListItem button onClick={() => changeRoute({page: "submit", panel: null})}>
+                                <ListItemIcon>
+                                    <InboxIcon/>
+                                </ListItemIcon>
+                                <ListItemText primary="Submit Page"/>
+                            </ListItem>
+                        </List>
+                        <List>
+                            <ListItem button onClick={() => changeRoute({page: "authorization", panel: null})}>
+                                <ListItemIcon>
+                                    <InboxIcon/>
+                                </ListItemIcon>
+                                <ListItemText primary="Login Page"/>
+                            </ListItem>
+                        </List>
+                        <List>
+                            <ListItem button onClick={() => changeRoute({page: "signUp", panel: null})}>
+                                <ListItemIcon>
+                                    <InboxIcon/>
+                                </ListItemIcon>
+                                <ListItemText primary="Register Page"/>
+                            </ListItem>
+                        </List>
                     </div>
                 </Drawer>
             </React.Fragment>
@@ -137,8 +163,14 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>
                     <Route path="/pages/organization">
                         <OrganizationPageView/>
                     </Route>
-                    <Route path="/pages/Submit">
+                    <Route path="/pages/submit">
                         <SubmitPageView/>
+                    </Route>
+                    <Route path="/pages/authorization">
+                        <AuthorizationPageView/>
+                    </Route>
+                    <Route path="/pages/signUp">
+                        <SignUpPage/>
                     </Route>
                 </Switch>
             </main>

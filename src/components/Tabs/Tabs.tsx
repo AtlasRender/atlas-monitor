@@ -28,6 +28,7 @@ interface CustomTabsProps extends Stylable, Containerable {
     value?: number,
     onChange?: any,
     onChangeIndex?: any,
+
 }
 
 /**

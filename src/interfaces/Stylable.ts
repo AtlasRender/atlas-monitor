@@ -7,26 +7,25 @@
  * All rights reserved.
  */
 
+import {CSSProperties} from "react";
+
 /**
  * Stylable - interface for components, which can be styled.
  * @interface
  * @export default
  * @author Danil Andreev
  */
-export default interface Stylable {
+export default interface Stylable<T = any> {
     /**
      * style - styles of the element.
-     * @type object
      */
-    style?: any;
+    style?: CSSProperties;
     /**
      * className - css class of the element.
-     * @type string
      */
     className?: string;
     /**
      * classes - classes, applied to the element.
-     * @type object
      */
-    classes?: any;
+    classes?: T;
 }

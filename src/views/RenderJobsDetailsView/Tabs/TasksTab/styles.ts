@@ -8,8 +8,6 @@
  */
 
 import {createStyles, Theme} from "@material-ui/core";
-import grey from '@material-ui/core/colors/grey';
-
 
 const styles = (theme: Theme) => createStyles({
     root: {
@@ -28,10 +26,10 @@ const styles = (theme: Theme) => createStyles({
             minWidth: 0,
         },
     },
-    box:{
+    box: {
         display: "flex",
         justifyContent: "flex-end",
-        alignItems:"center"
+        alignItems: "center"
     },
     iconButton: {
         top: -8,

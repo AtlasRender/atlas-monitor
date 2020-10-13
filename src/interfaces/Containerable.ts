@@ -7,16 +7,17 @@
  * All rights reserved.
  */
 
+import {ReactNode} from "react";
+
 /**
  * Containerable - interface for components, which has children.
  * @interface
  * @export default
  * @author Danil Andreev
  */
-export default interface Containerable {
+export default interface Containerable<T = ReactNode> {
     /**
      * Children of element.
-     * @type any
      */
-    children?: any;
+    children?: T;
 }

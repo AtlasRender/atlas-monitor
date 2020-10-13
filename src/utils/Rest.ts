@@ -16,6 +16,7 @@ import superagent from "superagent";
  * - ___delete___ - DELETE
  * - ___put___ - PUT
  * @interface
+ * @export RequestMethods
  * @author Danil Andreev
  */
 export interface RequestMethods {
@@ -52,41 +53,62 @@ export interface RequestMethods {
 }
 
 /**
+ * RequestMiddleware - type for superagent request middleware.
+ * @export RequestMiddleware
+ * @author Danil Andreev
+ */
+export declare type RequestMiddleware = (request: superagent.SuperAgentRequest) => superagent.SuperAgentRequest;
+
+/**
  * request - function, designed to send HTTP request to API.
  * @function
+ * @param endPoint - Path to Origin.
+ * @param middleware - Superagent request middleware.
  * @author Danil Andreev
+ * @export request
  * @example
  * request("thhps://myhost:1234")
  *     .get("hello/darkness/1")
  *     .then(response => {...})
  *     .catch(error => {...});
  */
-export const request = (endPoint: string): RequestMethods => {
+export const request = (endPoint: string, middleware?: RequestMiddleware) : RequestMethods => {
+    /**
+     * defaultMiddleware - request middleware by default.
+     * @function
+     * @param request - Superagent request
+     * @author Danil Andreev
+     */
+    function defaultMiddleware(request: superagent.SuperAgentRequest): superagent.SuperAgentRequest {
+        return request.set('accept', 'application/json');
+    }
+
+    const requestMiddleware = middleware || defaultMiddleware;
     const requestLog = (p: string, s: string) => console.log(`request.${p}:`, s);
     return {
         endPoint: () => endPoint,
         post: (route: string): superagent.SuperAgentRequest => {
             const url = `${endPoint}/${route}`;
             requestLog('post', url);
-            return superagent.post(url).set('accept', 'application/json').withCredentials();
+            return requestMiddleware(superagent.post(url));
         },
 
         put: (route: string): superagent.SuperAgentRequest => {
             const url = `${endPoint}/${route}`;
             requestLog('put', url);
-            return superagent.put(url).set('accept', 'application/json').withCredentials();
+            return requestMiddleware(superagent.put(url));
         },
 
         delete: (route: string): superagent.SuperAgentRequest => {
             const url = `${endPoint}/${route}`;
             requestLog('delete', url);
-            return superagent.delete(url).set('accept', 'application/json').withCredentials();
+            return requestMiddleware(superagent.delete(url));
         },
 
         get: (route: string): superagent.SuperAgentRequest => {
             const url = `${endPoint}/${route}`;
             requestLog('get', url);
-            return superagent.get(url).set('accept', 'application/json').withCredentials();
+            return requestMiddleware(superagent.get(url));
         }
     }
 };
@@ -94,13 +116,16 @@ export const request = (endPoint: string): RequestMethods => {
 /**
  * coreRequest - function, designed to do requests to Pathfinder Core.
  * @function
+ * @param path - Path to Origin. By default got from ENV REACT_APP_CORE_URL
+ * @param middleware - Superagent request middleware.
  * @author Danil Andreev
+ * @export coreRequest
  * @example
  * coreRequest()
  *     .get("hello/darkness/1")
  *     .then(response => {...})
  *     .catch(error => {...});
  */
-export const coreRequest = (path: string | null = null): RequestMethods => {
-    return request(path || process.env.REACT_APP_CORE_URL || "");
+export const coreRequest = (path?: string, middleware?: RequestMiddleware): RequestMethods => {
+    return request(path || process.env.REACT_APP_CORE_URL || "", middleware);
 };

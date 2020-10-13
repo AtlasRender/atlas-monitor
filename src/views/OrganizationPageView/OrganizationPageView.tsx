@@ -8,23 +8,24 @@
  */
 
 import React, {Ref} from "react";
-import {withStyles} from "@material-ui/core";
-import {IconButton,
+import {
     Avatar,
-    Grid,
     Box,
-    Select,
+    Grid,
+    IconButton,
     ListItem,
-    ListItemIcon,
-    ListItemText,
-    ListItemSecondaryAction,
-    MenuItem,
     ListItemAvatar,
-}
-from "@material-ui/core";
+    ListItemIcon,
+    ListItemSecondaryAction,
+    ListItemText,
+    MenuItem,
+    Select,
+    withStyles,
+    useMediaQuery,
+    useTheme,
+} from "@material-ui/core";
 import styles from "./styles";
 import DataTextField from "../../components/DataTextField";
-import clsx from "clsx";
 import TopicWithButton from "./LocalComponents/TopicWithButton";
 import BuildIcon from '@material-ui/icons/Build';
 import SettingsIcon from '@material-ui/icons/Settings';
@@ -36,27 +37,35 @@ import Stylable from "../../interfaces/Stylable";
  * @interface
  * @author Nikita Nesterov
  */
-interface OrganizationPageViewPropsStyled extends Stylable{
+interface OrganizationPageViewProps extends Stylable {
 
 }
 
-const OrganizationPageView = React.forwardRef((props: OrganizationPageViewPropsStyled, ref: Ref<any>) => {
+interface Users {
+    name: string;
+    role: string;
+    id: number;
+    department: string;
+}
+
+const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps, ref: Ref<any>) => {
     const {
         classes,
         className,
     } = props;
 
-    const [users, setUsers] = React.useState <any>([
-        {name:"Danil", role:"admin", id:1,department:"Pathfinder"},
-        {name:"Andriy", role:"moderator", id:2, department:"Gachi"},
-        {name:"Nikita", role:"member", id:3, department:"Gutsul"},
+    const [users, setUsers] = React.useState <Users[]>([
+        {name: "Danil", role: "admin", id: 1, department: "Pathfinder"},
+        {name: "Andriy", role: "moderator", id: 2, department: "Gachi"},
+        {name: "Nikita", role: "member", id: 3, department: "Gutsul"},
+        {name: "Nikita1", role: "member", id: 4, department: "Gutsul"},
     ]);
 
     // const users =[
     //
     // ]
 
-    const slaves=[
+    const slaves = [
         "Kiev slave",
         "Harkov slave",
         "Lvov slave",
@@ -68,16 +77,21 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewPropsS
      * @author Nikita Nesterov
      */
     const handleChange = (event: any) => {
-        const newUsers=[...users];
-        const user = newUsers.find(user=>user.id===event.target.name)
-        user.role = event.target.value;
+        console.log(event.target);
+        const newUsers = [...users];
+        const user = newUsers.find(user => user.id === event.target.name)
+        console.log(user);
+        if (user) {
+            user.role = event.target.value;
+        }
         setUsers(newUsers);
     };
 
-
-
-    return(
-        <Box>
+    const theme = useTheme();
+    const matches = useMediaQuery(theme.breakpoints.up("md"));
+    let mainInfo;
+    if(matches){
+        mainInfo=(
             <Box className={classes.container}>
                 <Grid container className={classes.firstLine}>
                     <Grid item xs={8}>
@@ -93,21 +107,42 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewPropsS
                             </Grid>
                         </Box>
                     </Grid>
-                        <Grid item xs={2}>
-                            <Avatar
-                                src="https://cdn.sportclub.ru/assets/2019-09-20/n97c311rvb.jpg"
-                                className={classes.avatar}
-                            />
-                        </Grid>
+                    <Grid item xs={2}>
+                        <Avatar
+                            src="https://cdn.sportclub.ru/assets/2019-09-20/n97c311rvb.jpg"
+                            className={classes.avatar}
+                        />
+                    </Grid>
                 </Grid>
             </Box>
+        )
+    }
+    else{
+        mainInfo=(
+            <Grid container spacing={2} className={classes.firstLine}>
+                <Box className={classes.avatarBox}>
+                    <Avatar src="https://cdn.sportclub.ru/assets/2019-09-20/n97c311rvb.jpg" className={classes.avatar}/>
+                </Box>
+                <Grid item xs={10}>
+                    <DataTextField label="Organization name" children="Blizzard entertainment"/>
+                </Grid>
+                <Grid item xs={10}>
+                    <DataTextField label="description" children="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dicta dolorem, dolorum nam quidem sint sunt!"/>
+                </Grid>
+            </Grid>
+        )
+    }
 
+
+    return (
+        <Box>
+            {mainInfo}
             <TopicWithButton children="Slaves"/>
             <Grid container className={classes.firstLine}>
                 <Grid item xs={10}>
-                    {slaves.map((slave)=>{
-                        return(
-                            <ListItem>
+                    {slaves.map((slave, key) => {
+                        return (
+                            <ListItem key={key}>
                                 <ListItemIcon>
                                     <BuildIcon/>
                                 </ListItemIcon>
@@ -126,11 +161,11 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewPropsS
             </Grid>
 
             <TopicWithButton children="Members"/>
-            <Grid container className={classes.firstLine}>
-                {users.map((user:any)=>{
-                    console.log(user);
-                    return(
-                        <Grid item xs={10} spacing={0}>
+            <Grid container className={classes.firstLine} spacing={0}>
+                {users.map((user: any, key: number) => {
+                    //console.log(user);
+                    return (
+                        <Grid item xs={10} key={key}>
                             <ListItem>
                                 <ListItemAvatar>
                                     <Avatar src="https://cdn.sportclub.ru/assets/2019-09-20/n97c311rvb.jpg"/>
@@ -139,20 +174,20 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewPropsS
                                 <ListItemSecondaryAction>
                                     <Select
                                         // value={state.role}
-                                        style={{width:100}}
-                                        onChange={handleChange}
-                                        name={user.id}
+                                        style={{width: 100}}
+                                        name={"" + user.id} // why id?
                                         // inputProps={{
                                         //     role: 'member',
                                         //     id: 'role-native-simple',
                                         // }}
                                         value={user.role}
                                         label="Admin"
+                                        onChange={handleChange}
                                         className={classes.selectFieldStyle}
                                     >
-                                        <MenuItem value={"admin"}>Admin</MenuItem>
-                                        <MenuItem value={"member"}>Member</MenuItem>
-                                        <MenuItem value={"moderator"}>Moderator</MenuItem>
+                                        <MenuItem value="admin">Admin</MenuItem>
+                                        <MenuItem value="member">Member</MenuItem>
+                                        <MenuItem value="moderator">Moderator</MenuItem>
                                     </Select>
                                     <IconButton>
                                         <SettingsIcon/>

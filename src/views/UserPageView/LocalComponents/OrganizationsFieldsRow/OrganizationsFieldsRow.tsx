@@ -7,10 +7,10 @@
  * All rights reserved.
  */
 
-import React from "react";
-import {Grid, withStyles} from "@material-ui/core";
+import React, {Ref} from "react";
+import {Grid, useMediaQuery, withStyles, useTheme} from "@material-ui/core";
 
-import styles from "../../styles";
+import styles from "./styles"
 import clsx from "clsx";
 import DataTextField from "../../../../components/DataTextField";
 import Stylable from "../../../../interfaces/Stylable";
@@ -20,7 +20,7 @@ import Stylable from "../../../../interfaces/Stylable";
  * @interface
  * @author Nikita Nesterov
  */
-interface OrganizationsFieldsRowPropsStyled extends Stylable{
+interface OrganizationsFieldsRowProps extends Stylable {
     organization?: string,
     role?: string,
     status?: string,
@@ -31,8 +31,8 @@ interface OrganizationsFieldsRowPropsStyled extends Stylable{
  * @function
  * @author Nikita Nesterov
  */
-const OrganizationsFieldsRow = React.forwardRef((props:OrganizationsFieldsRowPropsStyled) =>{
-    const{
+const OrganizationsFieldsRow = React.forwardRef((props: OrganizationsFieldsRowProps, ref: Ref<any>) => {
+    const {
         classes,
         className,
         organization,
@@ -40,19 +40,45 @@ const OrganizationsFieldsRow = React.forwardRef((props:OrganizationsFieldsRowPro
         status
     } = props;
 
-    return(
-        <Grid container spacing ={2} className={clsx(classes.container, className)}>
-            <Grid item xs={6}>
-                <DataTextField label="Organization" children={organization}/>
+    const theme = useTheme();
+    const matches = useMediaQuery(theme.breakpoints.up("md"));
+    let row;
+
+    if (matches) {
+        row = (
+            <Grid container spacing={1} className={classes.container}>
+                <Grid item xs={6}>
+                    <DataTextField label="Organization" children={organization}/>
+                </Grid>
+                <Grid item xs={2}>
+                    <DataTextField label="Role" children={role}/>
+                </Grid>
+                <Grid item xs={2}>
+                    <DataTextField label="Status" children={status}/>
+                </Grid>
             </Grid>
-            <Grid item xs={2}>
-                <DataTextField label="Role" children={role}/>
+        )
+    } else {
+        row = (
+            <Grid container spacing={1} className={clsx(classes.container, classes.margins)}>
+                <Grid item xs={10}>
+                    <DataTextField label="Organization" children={organization}/>
+                </Grid>
+                <Grid item xs={5}>
+                    <DataTextField label="Role" children={role}/>
+                </Grid>
+                <Grid item xs={5}>
+                    <DataTextField label="Status" children={status}/>
+                </Grid>
             </Grid>
-            <Grid item xs={2}>
-                <DataTextField label="Status" children={status}/>
-            </Grid>
-        </Grid>
+        );
+    }
+
+    return (
+        <React.Fragment>
+            {row}
+        </React.Fragment>
     );
-} );
+});
 
 export default withStyles(styles)(OrganizationsFieldsRow);
