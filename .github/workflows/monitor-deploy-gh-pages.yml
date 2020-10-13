@@ -22,7 +22,7 @@ jobs:
       - name: Install dependencies 
         run: yarn install
       - name: Create new build
-        run: yarn run build
+        run: CI=false yarn run build
       - name: Remove legacy build
         run: rm -rf docs
       - name: Copy new build to target library
