@@ -32,7 +32,7 @@ export default function useCoreRequest(defaultPath?: string): CoreRequestHooked 
     const middleware: RequestMiddleware = (request: SuperAgentRequest): SuperAgentRequest => {
         request.set('accept', 'application/json');
         request.set('Content-Type', 'application/json');
-        if (isLogged && user && user.bearer) request.set("token", user.bearer);
+        if (isLogged && user && user.bearer) request.set("Authorization", "Bearer " + user.bearer);
         return request;
     }
     return (path: string | undefined = defaultPath): RequestMethods => coreRequest(path, middleware);
