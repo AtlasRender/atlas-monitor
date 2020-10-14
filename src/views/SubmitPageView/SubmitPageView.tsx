@@ -24,7 +24,7 @@ import {
     Button,
     Chip,
     useMediaQuery,
-    useTheme,
+    InputLabel,
 } from "@material-ui/core";
 import styles from "./styles";
 import Stylable from "../../interfaces/Stylable";
@@ -60,6 +60,8 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
     const matches = useMediaQuery("(min-width:625px)");
     let submitInfo;
     let renderSettings;
+    let plugin;
+    let submitButton;
     if (matches) {
         submitInfo = (
             <React.Fragment>
@@ -100,6 +102,34 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
                 </Grid>
             </Grid>
         );
+        plugin = (
+            <React.Fragment>
+                <Grid item xs={8} className={classes.flexItem}>
+                    <Select value={1} fullWidth>
+                        <MenuItem value={1}>
+                            Arnold Shwarznegger and Silvestr s talonom
+                        </MenuItem>
+                    </Select>
+                </Grid>
+                <Grid item xs={2}>
+                    <Select value="1.01" fullWidth>
+                        <MenuItem value="1.01">
+                            1.01
+                        </MenuItem>
+                    </Select>
+                </Grid>
+            </React.Fragment>
+        );
+        submitButton=(
+            <React.Fragment>
+                <Grid item xs={10} className={classes.flexItem}>
+                    <Grid item xs={8}/>
+                    <Grid item xs={2}>
+                        <Button fullWidth variant="contained" className={classes.submitButton}>Submit</Button>
+                    </Grid>
+                </Grid>
+            </React.Fragment>
+        );
     } else {
         submitInfo = (
             <React.Fragment>
@@ -137,6 +167,31 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
                 </Grid>
                 <Grid item xs={5}>
                     <TextField fullWidth label="Priority"/>
+                </Grid>
+            </React.Fragment>
+        );
+        plugin = (
+            <React.Fragment>
+                <Grid item xs={10} className={classes.flexItem}>
+                    <Select value={1} fullWidth>
+                        <MenuItem value={1}>
+                            Arnold Shwarznegger and Silvestr s talonom
+                        </MenuItem>
+                    </Select>
+                </Grid>
+                <Grid item xs={10}>
+                    <Select value="1.01" fullWidth>
+                        <MenuItem value="1.01">
+                            1.01
+                        </MenuItem>
+                    </Select>
+                </Grid>
+            </React.Fragment>
+        );
+        submitButton=(
+            <React.Fragment>
+                <Grid item xs={10} className={classes.flexItem}>
+                    <Button fullWidth variant="contained" className={classes.submitButton}>Submit</Button>
                 </Grid>
             </React.Fragment>
         )
@@ -178,40 +233,8 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
                 <Grid item xs={10}>
                     <Typography variant="h6">Plugin</Typography>
                 </Grid>
-                <Grid item xs={10} className={classes.flexItem}>
-                    <Grid item xs={2}>
-                        <TextField fullWidth label="Samples"/>
-                    </Grid>
-                    <Grid item xs={2}>
-                        <TextField fullWidth label="Samples"/>
-                    </Grid>
-                    <Grid item xs={2}>
-                        <TextField fullWidth label="Samples"/>
-                    </Grid>
-                    <Grid item xs={2}>
-                        <TextField fullWidth label="Samples"/>
-                    </Grid>
-                    <Grid item xs={2}>
-                        <TextField fullWidth label="Samples"/>
-                    </Grid>
-                </Grid>
-                <Grid item xs={10} className={classes.flexItem}>
-                    <Grid item xs={4}>
-                        <TextField fullWidth label="Verification"/>
-                    </Grid>
-                    <Grid item xs={4}>
-                        <TextField fullWidth label="Description"/>
-                    </Grid>
-                    <Grid item xs={2}>
-                        <TextField fullWidth label="Samples"/>
-                    </Grid>
-                </Grid>
-                <Grid item xs={10} className={classes.flexItem}>
-                    <Grid item xs={8}/>
-                    <Grid item xs={2}>
-                        <Button fullWidth variant="contained" className={classes.submitButton}>Submit</Button>
-                    </Grid>
-                </Grid>
+                {plugin}
+                {submitButton}
             </Grid>
         </Box>
     );
