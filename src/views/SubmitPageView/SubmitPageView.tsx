@@ -26,6 +26,7 @@ import {
     useMediaQuery,
     InputLabel,
 } from "@material-ui/core";
+import clsx from "clsx";
 import styles from "./styles";
 import Stylable from "../../interfaces/Stylable";
 import AddIcon from "@material-ui/icons/Add";
@@ -57,7 +58,7 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
         console.info("You clicked the delete icon.");
     };
 
-    const matches = useMediaQuery("(min-width:625px)");
+    const matches = useMediaQuery("(min-width:800px)");
     let submitInfo;
     let renderSettings;
     let plugin;
@@ -81,7 +82,7 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
             </React.Fragment>
         );
         renderSettings = (
-            <Grid item xs={10} className={classes.flexItem}>
+            <Grid container spacing={2} xs={10} className={clsx(classes.container,classes.flexNoWrap)}>
                 <Grid item xs={2}>
                     <TextField fullWidth label="Frame start"/>
                 </Grid>
@@ -97,9 +98,12 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
                 <Grid item xs={2}>
                     <TextField fullWidth label="Renum step"/>
                 </Grid>
-                <Grid item xs={1}>
+                <Grid item spacing={0} style={{paddingRight:0, flexGrow:1}}>
                     <TextField fullWidth label="Priority"/>
                 </Grid>
+                <Box>
+                    <IconButton ><AddIcon/></IconButton>
+                </Box>
             </Grid>
         );
         plugin = (
@@ -122,9 +126,9 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
         );
         submitButton = (
             <React.Fragment>
-                <Grid item xs={10} className={classes.flexItem}>
-                    <Grid item xs={8}/>
-                    <Grid item xs={2}>
+                <Grid container xs={10} spacing={2} className={classes.flexItem}>
+                    <Grid item xs={9}/>
+                    <Grid item xs={3}>
                         <Button fullWidth variant="contained" className={classes.submitButton}>Submit</Button>
                     </Grid>
                 </Grid>
@@ -168,6 +172,9 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
                 <Grid item xs={5}>
                     <TextField fullWidth label="Priority"/>
                 </Grid>
+                <Grid item xs={4}>
+                    <Button variant="contained" fullWidth className={classes.buttonAdd}>ADD</Button>
+                </Grid>
             </React.Fragment>
         );
         plugin = (
@@ -210,16 +217,14 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
                             <ListItemText
                                 primary={<Typography variant="h6">Render settings</Typography>}
                             />
-                            <ListItemSecondaryAction>
-                                <IconButton><AddIcon/></IconButton>
-                            </ListItemSecondaryAction>
+                            {/*<ListItemSecondaryAction>*/}
+                            {/*    <IconButton><AddIcon/></IconButton>*/}
+                            {/*</ListItemSecondaryAction>*/}
                         </ListItem>
                     </List>
                 </Grid>
                 {renderSettings}
-                <Grid item xs={4}>
-                    <Button variant="contained" fullWidth className={classes.buttonAdd}>ADD</Button>
-                </Grid>
+
                 <Grid item xs={10} className={classes.flexItem}>
                     <Box>
                         <Chip
