@@ -15,6 +15,7 @@ import SimpleList from "../../components/SimpleList";
 import clsx from "clsx";
 import Stylable from "../../interfaces/Stylable";
 import SearchIcon from '@material-ui/icons/Search';
+import DateField from "../../components/DateField";
 
 /**
  * RenderJobsViewProps - interface for RenderJobsView component
@@ -63,6 +64,7 @@ const RenderJobsView = React.forwardRef((props: RenderJobsViewProps, ref: Ref<an
 
     return (
         <Box>
+            <DateField/>
             {tableList}
         </Box>
     );

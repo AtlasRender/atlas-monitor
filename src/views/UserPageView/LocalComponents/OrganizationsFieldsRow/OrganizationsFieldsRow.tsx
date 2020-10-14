@@ -20,7 +20,7 @@ import Stylable from "../../../../interfaces/Stylable";
  * @interface
  * @author Nikita Nesterov
  */
-interface OrganizationsFieldsRowPropsStyled extends Stylable {
+interface OrganizationsFieldsRowProps extends Stylable {
     organization?: string,
     role?: string,
     status?: string,
@@ -31,7 +31,7 @@ interface OrganizationsFieldsRowPropsStyled extends Stylable {
  * @function
  * @author Nikita Nesterov
  */
-const OrganizationsFieldsRow = React.forwardRef((props: OrganizationsFieldsRowPropsStyled, ref: Ref<any>) => {
+const OrganizationsFieldsRow = React.forwardRef((props: OrganizationsFieldsRowProps, ref: Ref<any>) => {
     const {
         classes,
         className,
@@ -42,10 +42,10 @@ const OrganizationsFieldsRow = React.forwardRef((props: OrganizationsFieldsRowPr
 
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up("md"));
-    let Row;
+    let row;
 
     if (matches) {
-        Row = (
+        row = (
             <Grid container spacing={1} className={classes.container}>
                 <Grid item xs={6}>
                     <DataTextField label="Organization" children={organization}/>
@@ -59,7 +59,7 @@ const OrganizationsFieldsRow = React.forwardRef((props: OrganizationsFieldsRowPr
             </Grid>
         )
     } else {
-        Row = (
+        row = (
             <Grid container spacing={1} className={clsx(classes.container, classes.margins)}>
                 <Grid item xs={10}>
                     <DataTextField label="Organization" children={organization}/>
@@ -76,7 +76,7 @@ const OrganizationsFieldsRow = React.forwardRef((props: OrganizationsFieldsRowPr
 
     return (
         <React.Fragment>
-            {Row}
+            {row}
         </React.Fragment>
     );
 });

@@ -9,7 +9,6 @@
 
 import React from "react";
 import User from "../interfaces/User";
-import moment from "moment";
 import Containerable from "../interfaces/Containerable";
 import PropTypes from "prop-types";
 
@@ -19,12 +18,28 @@ import PropTypes from "prop-types";
  * @author Danil Adnreev
  */
 export interface AuthContext {
+    /**
+     * getUser - returns current logged in user data.
+     * @function
+     * @author Danil Adnreev
+     */
     getUser(): User | null;
-
+    /**
+     * isLogged - true, when user is logged and false if not.
+     */
     isLogged: boolean,
-
+    /**
+     * login - locally saves user credentials.
+     * @function
+     * @param user User data for login
+     * @author Danil Andreev
+     */
     login(user: User): void;
-
+    /**
+     * logout - clears locally seved user credentials.
+     * @function
+     * @author Danil Andreev
+     */
     logout(): void;
 }
 
@@ -73,13 +88,13 @@ export function AuthProvider(props: AuthProviderProps) {
     function getUser(): User | null {
         try {
             const credentials: any = JSON.parse(localStorage.auth);
-            const user: User | null = credentials.user ? {
+            const user: User | null = credentials ? {
                 id: +credentials.id,
                 username: String(credentials.username),
                 email: String(credentials.email),
                 deleted: !!credentials.deleted,
-                createdAt: moment(credentials.createdAt),
-                updatedAt: moment(credentials.updatedAt),
+                createdAt: new Date(credentials.createdAt),
+                updatedAt: new Date(credentials.updatedAt),
                 bearer: String(credentials.bearer),
             } : null;
             if (user && !user.id) {

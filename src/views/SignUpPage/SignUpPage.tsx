@@ -27,10 +27,9 @@ import useAuth from "../../hooks/useAuth";
 import useCoreRequest from "../../hooks/useCoreRequest";
 import {useChangeRoute} from "routing-manager";
 import {useSnackbar} from "notistack";
-import enqueueErrorSnackbar from "../../utils/enqueueErrorSnackbar";
 import useEnqueueErrorSnackbar from "../../utils/enqueueErrorSnackbar";
 
-interface SignUpPagePropsStyled extends Stylable {
+interface SignUpPageProps extends Stylable {
 
 }
 
@@ -40,7 +39,7 @@ interface Credentials {
     email: string;
 }
 
-const SignUpPage = React.forwardRef((props: SignUpPagePropsStyled, ref: Ref<any>) => {
+const SignUpPage = React.forwardRef((props: SignUpPageProps, ref: Ref<any>) => {
     const {
         classes,
         className,
@@ -66,9 +65,7 @@ const SignUpPage = React.forwardRef((props: SignUpPagePropsStyled, ref: Ref<any>
             .send(credentials)
             .then(res => {
                 const user = res.body;
-                console.log(user);
                 if (!user) {
-                    //console.error("No such user");
                     enqueueErrorSnackbar("No such user");
                 }
                 if ((typeof user.id !== "number") ||
@@ -131,6 +128,7 @@ const SignUpPage = React.forwardRef((props: SignUpPagePropsStyled, ref: Ref<any>
                             label="Password"
                             type="password"
                             autoComplete="current-password"
+                            onChange={handleInput}
                         />
                     </Grid>
                     <Grid item xs={12}>
@@ -146,6 +144,7 @@ const SignUpPage = React.forwardRef((props: SignUpPagePropsStyled, ref: Ref<any>
                     variant="contained"
                     color="primary"
                     className={classes.submit}
+                    onClick={handleRegister}
                 >
                     Sign Up
                 </Button>

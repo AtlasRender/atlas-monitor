@@ -30,7 +30,7 @@ import Stylable from "../../../../interfaces/Stylable";
  * @interface
  * @author Nikita Nesterov
  */
-interface PluginComponentPropsStyled extends Stylable {
+interface PluginComponentProps extends Stylable {
     plugin?: string;
     description?: string;
 }
@@ -40,7 +40,7 @@ interface PluginComponentPropsStyled extends Stylable {
  * @function
  * @author Nikita Nesterov
  */
-const PluginComponent = React.forwardRef((props: PluginComponentPropsStyled, ref: Ref<any>) => {
+const PluginComponent = React.forwardRef((props: PluginComponentProps, ref: Ref<any>) => {
     const {
         classes,
         style,

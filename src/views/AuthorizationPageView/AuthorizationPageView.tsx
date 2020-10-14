@@ -21,7 +21,7 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import Stylable from "../../interfaces/Stylable";
-import {FormControl, withStyles} from "@material-ui/core";
+import {FormControl, FormLabel, withStyles} from "@material-ui/core";
 import styles from "./style"
 import useCoreRequest from "../../hooks/useCoreRequest";
 import useAuth from "../../hooks/useAuth";
@@ -130,6 +130,7 @@ const AuthorizationPageView = React.forwardRef((props: AuthorizationPageViewProp
                     variant="contained"
                     color="primary"
                     className={classes.submit}
+                    onClick={handleLogin}
                 >
                     Sign In
                 </Button>

@@ -6,7 +6,7 @@
  * File last modified: 01.10.2020, 17:18
  * All rights reserved.
  */
-import React, {Ref} from "react";
+import React, {Ref, useEffect, useState} from "react";
 import {withStyles} from "@material-ui/core";
 import styles from "./styles";
 import {Avatar, Grid, Box, Typography, Divider,useTheme, useMediaQuery} from "@material-ui/core";
@@ -16,13 +16,18 @@ import OrganizationsFieldsRow from "./LocalComponents/OrganizationsFieldsRow";
 import clsx from "clsx";
 import TokensViewer from "./LocalComponents/TokensViewer";
 import Stylable from "../../interfaces/Stylable";
+import useCoreRequest from "../../hooks/useCoreRequest";
+import {useSnackbar} from "notistack";
+import useEnqueueErrorSnackbar from "../../utils/enqueueErrorSnackbar";
+import useAuth from "../../hooks/useAuth";
+import User from "../../interfaces/User";
 
 /**
  * UserPageViewPropsStyled - interface for UserPageView
  * @interface
  * @author Nikita Nesterov
  */
-interface UserPageViewPropsStyled extends Stylable{
+interface UserPageViewProps extends Stylable{
 
 }
 
@@ -31,10 +36,35 @@ interface UserPageViewPropsStyled extends Stylable{
  * @function
  * @author NikitaNesterov
  */
-const UserPageView = React.forwardRef((props: UserPageViewPropsStyled, ref: Ref<any>) => {
+const UserPageView = React.forwardRef((props: UserPageViewProps, ref: Ref<any>) => {
     const {
-        classes, className, style
+        classes,
+        className,
+        style,
     } = props;
+
+    const {getUser} = useAuth();
+    const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
+    const coreRequest = useCoreRequest();
+    const [userData, setUserData] = useState<User | null>(null);
+
+    useEffect(() => {
+        handleGetUser();
+    }, []);
+
+    function handleGetUser() {
+        //TODO if user is empty redirect to login page
+        const userId = getUser()?.id;
+        coreRequest()
+            .get(`users/${userId}`)
+            .then((response) => {
+                setUserData(response.body);
+            })
+            .catch(err => {
+                //TODO handle errors
+                enqueueErrorSnackbar("No such user");
+            });
+    }
 
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up("md"));
@@ -43,7 +73,7 @@ const UserPageView = React.forwardRef((props: UserPageViewPropsStyled, ref: Ref<
         mainInfo=(
             <Grid container spacing={2} className={clsx(classes.container, className)}>
                 <Grid item xs={4}>
-                    <DataTextField label="Name" children="Nikita Nesterov"/>
+                    <DataTextField label="Name" children={userData?.username}/>
                 </Grid>
                 <Grid item xs={4}>
                     <DataTextField label="Department" children="Pathfinder team crew"/>

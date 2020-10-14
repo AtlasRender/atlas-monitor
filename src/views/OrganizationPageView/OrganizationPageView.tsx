@@ -7,7 +7,7 @@
  * All rights reserved.
  */
 
-import React, {Ref} from "react";
+import React, {Ref, useEffect, useState} from "react";
 import {
     Avatar,
     Box,
@@ -31,13 +31,17 @@ import BuildIcon from '@material-ui/icons/Build';
 import SettingsIcon from '@material-ui/icons/Settings';
 import PluginComponent from "./LocalComponents/PluginComponent";
 import Stylable from "../../interfaces/Stylable";
+import useAuth from "../../hooks/useAuth";
+import useEnqueueErrorSnackbar from "../../utils/enqueueErrorSnackbar";
+import useCoreRequest from "../../hooks/useCoreRequest";
+import User from "../../interfaces/User";
 
 /**
  * OrganizationPageViewPropsStyled - interface for OrganizationPageView function
  * @interface
  * @author Nikita Nesterov
  */
-interface OrganizationPageViewPropsStyled extends Stylable {
+interface OrganizationPageViewProps extends Stylable {
 
 }
 
@@ -48,7 +52,7 @@ interface Users {
     department: string;
 }
 
-const OrganizationPageView = React.forwardRef((props: OrganizationPageViewPropsStyled, ref: Ref<any>) => {
+const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps, ref: Ref<any>) => {
     const {
         classes,
         className,
@@ -175,7 +179,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewPropsS
                                     <Select
                                         // value={state.role}
                                         style={{width: 100}}
-                                        name={user.id} // why id?
+                                        name={"" + user.id} // why id?
                                         // inputProps={{
                                         //     role: 'member',
                                         //     id: 'role-native-simple',

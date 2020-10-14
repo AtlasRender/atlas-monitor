@@ -20,7 +20,7 @@ import Stylable from "../../../../interfaces/Stylable";
  * @interface
  * @author Nikita Nesterov
  */
-interface TokensViewerPropsStyled extends Stylable {
+interface TokensViewerProps extends Stylable {
 
 }
 
@@ -29,7 +29,7 @@ interface TokensViewerPropsStyled extends Stylable {
  * @function
  * @author Nikita Nesterov
  */
-const TokensViewer = React.forwardRef((props: TokensViewerPropsStyled, ref: Ref<any>) => {
+const TokensViewer = React.forwardRef((props: TokensViewerProps, ref: Ref<any>) => {
     const {
         classes,
         style,
