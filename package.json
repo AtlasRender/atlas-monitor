@@ -39,7 +39,7 @@
     "url": "https://github.com/DanilAndreev/pathfinder-monitor.git"
   },
   "dependencies": {
-    "@date-io/date-fns": "1.x",
+    "@date-io/date-fns": "2.x",
     "@devexpress/dx-react-chart": "^2.7.2",
     "@devexpress/dx-react-chart-material-ui": "^2.7.2",
     "@devexpress/dx-react-core": "^2.7.2",
