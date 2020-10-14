@@ -120,7 +120,7 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
                 </Grid>
             </React.Fragment>
         );
-        submitButton=(
+        submitButton = (
             <React.Fragment>
                 <Grid item xs={10} className={classes.flexItem}>
                     <Grid item xs={8}/>
@@ -188,7 +188,7 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
                 </Grid>
             </React.Fragment>
         );
-        submitButton=(
+        submitButton = (
             <React.Fragment>
                 <Grid item xs={10} className={classes.flexItem}>
                     <Button fullWidth variant="contained" className={classes.submitButton}>Submit</Button>
@@ -222,12 +222,21 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
                 </Grid>
                 <Grid item xs={10} className={classes.flexItem}>
                     <Box>
-                        <Chip label="1000-1001 2 save as 10 Priority:1" onDelete={handleDelete}
-                              className={classes.chipStyle}/>
-                        <Chip label="1002-1279 1 save as 1 Priority:3" onDelete={handleDelete}
-                              className={classes.chipStyle}/>
-                        <Chip label="1279-1400 5 save as 1 Priority:2" onDelete={handleDelete}
-                              className={classes.chipStyle}/>
+                        <Chip
+                            label="1000-1001 2 save as 10 Priority:1"
+                            onDelete={handleDelete}
+                            className={classes.chipStyle}
+                        />
+                        <Chip
+                            label="1002-1279 1 save as 1 Priority:3"
+                            onDelete={handleDelete}
+                            className={classes.chipStyle}
+                        />
+                        <Chip
+                            label="1279-1400 5 save as 1 Priority:2"
+                            onDelete={handleDelete}
+                            className={classes.chipStyle}
+                        />
                     </Box>
                 </Grid>
                 <Grid item xs={10}>
