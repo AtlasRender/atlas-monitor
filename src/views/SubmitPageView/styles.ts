@@ -30,6 +30,13 @@ const styles = (theme: Theme) => createStyles({
     },
     submitButton:{
         backgroundColor: blue[500],
+    },
+    chipStyle:{
+        marginRight: theme.spacing(1),
+        marginBottom: theme.spacing(1),
+    },
+    selectMargin:{
+        marginTop:theme.spacing(2),
     }
 
 });

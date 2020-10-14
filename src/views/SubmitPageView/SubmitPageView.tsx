@@ -18,7 +18,13 @@ import {
     MenuItem,
     IconButton,
     ListItem,
-    ListItemText, ListItemSecondaryAction, List, Button, Chip
+    ListItemText,
+    ListItemSecondaryAction,
+    List,
+    Button,
+    Chip,
+    useMediaQuery,
+    InputLabel,
 } from "@material-ui/core";
 import styles from "./styles";
 import Stylable from "../../interfaces/Stylable";
@@ -48,15 +54,17 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
     // const[obj, setObj] = React.useState();
     // const[render, setRender] = React.useState([]);
     const handleDelete = () => {
-        console.info('You clicked the delete icon.');
+        console.info("You clicked the delete icon.");
     };
 
-    return (
-        <Box>
-            <Grid container spacing={2} className={classes.container}>
-                <Grid item xs={10}>
-                    <Typography variant="h6">Submit info</Typography>
-                </Grid>
+    const matches = useMediaQuery("(min-width:625px)");
+    let submitInfo;
+    let renderSettings;
+    let plugin;
+    let submitButton;
+    if (matches) {
+        submitInfo = (
+            <React.Fragment>
                 <Grid item xs={4}>
                     <TextField fullWidth label="Work title"/>
                 </Grid>
@@ -70,6 +78,132 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
                         <MenuItem value="pathfinder slave">Pathfinder Slave</MenuItem>
                     </Select>
                 </Grid>
+            </React.Fragment>
+        );
+        renderSettings = (
+            <Grid item xs={10} className={classes.flexItem}>
+                <Grid item xs={2}>
+                    <TextField fullWidth label="Frame start"/>
+                </Grid>
+                <Grid item xs={2}>
+                    <TextField fullWidth label="Frame end"/>
+                </Grid>
+                <Grid item xs={1}>
+                    <TextField fullWidth label="Step"/>
+                </Grid>
+                <Grid item xs={2}>
+                    <TextField fullWidth label="Start from"/>
+                </Grid>
+                <Grid item xs={2}>
+                    <TextField fullWidth label="Renum step"/>
+                </Grid>
+                <Grid item xs={1}>
+                    <TextField fullWidth label="Priority"/>
+                </Grid>
+            </Grid>
+        );
+        plugin = (
+            <React.Fragment>
+                <Grid item xs={8} className={classes.flexItem}>
+                    <Select value={1} fullWidth>
+                        <MenuItem value={1}>
+                            Arnold Shwarznegger and Silvestr s talonom
+                        </MenuItem>
+                    </Select>
+                </Grid>
+                <Grid item xs={2}>
+                    <Select value="1.01" fullWidth>
+                        <MenuItem value="1.01">
+                            1.01
+                        </MenuItem>
+                    </Select>
+                </Grid>
+            </React.Fragment>
+        );
+        submitButton = (
+            <React.Fragment>
+                <Grid item xs={10} className={classes.flexItem}>
+                    <Grid item xs={8}/>
+                    <Grid item xs={2}>
+                        <Button fullWidth variant="contained" className={classes.submitButton}>Submit</Button>
+                    </Grid>
+                </Grid>
+            </React.Fragment>
+        );
+    } else {
+        submitInfo = (
+            <React.Fragment>
+                <Grid item xs={10}>
+                    <TextField fullWidth label="Work title"/>
+                </Grid>
+                <Grid item xs={10}>
+                    <TextField fullWidth label="Submitter"/>
+                </Grid>
+                <Grid item xs={10}>
+                    <Select value="pathfinder monitor" fullWidth className={classes.selectMargin}>
+                        <MenuItem value="pathfinder monitor">Pathfinder Monitor</MenuItem>
+                        <MenuItem value="pathfinder core">Pathfinder Core</MenuItem>
+                        <MenuItem value="pathfinder slave">Pathfinder Slave</MenuItem>
+                    </Select>
+                </Grid>
+            </React.Fragment>
+        );
+        renderSettings = (
+            <React.Fragment>
+                <Grid item xs={5}>
+                    <TextField fullWidth label="Frame start"/>
+                </Grid>
+                <Grid item xs={5}>
+                    <TextField fullWidth label="Frame end"/>
+                </Grid>
+                <Grid item xs={5}>
+                    <TextField fullWidth label="Step"/>
+                </Grid>
+                <Grid item xs={5}>
+                    <TextField fullWidth label="Start from"/>
+                </Grid>
+                <Grid item xs={5}>
+                    <TextField fullWidth label="Renum step"/>
+                </Grid>
+                <Grid item xs={5}>
+                    <TextField fullWidth label="Priority"/>
+                </Grid>
+            </React.Fragment>
+        );
+        plugin = (
+            <React.Fragment>
+                <Grid item xs={10} className={classes.flexItem}>
+                    <Select value={1} fullWidth>
+                        <MenuItem value={1}>
+                            Arnold Shwarznegger and Silvestr s talonom
+                        </MenuItem>
+                    </Select>
+                </Grid>
+                <Grid item xs={10}>
+                    <Select value="1.01" fullWidth>
+                        <MenuItem value="1.01">
+                            1.01
+                        </MenuItem>
+                    </Select>
+                </Grid>
+            </React.Fragment>
+        );
+        submitButton = (
+            <React.Fragment>
+                <Grid item xs={10} className={classes.flexItem}>
+                    <Button fullWidth variant="contained" className={classes.submitButton}>Submit</Button>
+                </Grid>
+            </React.Fragment>
+        )
+    }
+
+    return (
+        <Box>
+            <Grid container spacing={2} className={classes.container}>
+                <Grid item xs={10}>
+                    <Typography variant="h6">Submit info</Typography>
+                </Grid>
+                {submitInfo}
                 <Grid item xs={10} className={classes.flexItem}>
                     <List disablePadding className={classes.fullWidth}>
                         <ListItem disableGutters>
@@ -82,70 +216,34 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
                         </ListItem>
                     </List>
                 </Grid>
-                <Grid item xs={10} className={classes.flexItem}>
-                    <Grid item xs={2}>
-                        <TextField fullWidth label="Frame start"/>
-                    </Grid>
-                    <Grid item xs={2}>
-                        <TextField fullWidth label="Frame end"/>
-                    </Grid>
-                    <Grid item xs={2}>
-                        <TextField fullWidth label="Step"/>
-                    </Grid>
-                    <Grid item xs={2}>
-                        <TextField fullWidth label="Save frame as"/>
-                    </Grid>
-                    <Grid item xs={1}>
-                        <TextField fullWidth label="Priority"/>
-                    </Grid>
-                    <Grid item xs={1}>
-                        <Button variant="contained" className={classes.buttonAdd}>ADD</Button>
-                    </Grid>
+                {renderSettings}
+                <Grid item xs={4}>
+                    <Button variant="contained" fullWidth className={classes.buttonAdd}>ADD</Button>
                 </Grid>
                 <Grid item xs={10} className={classes.flexItem}>
-                    <Box >
-                        <Chip label="1000-1001 2 save as 10 Priority:1" onDelete={handleDelete}/>
-                        <Chip label="1002-1279 1 save as 1 Priority:3" onDelete={handleDelete}/>
-                        <Chip label="1279-1400 5 save as 1 Priority:2" onDelete={handleDelete}/>
+                    <Box>
+                        <Chip
+                            label="1000-1001 2 save as 10 Priority:1"
+                            onDelete={handleDelete}
+                            className={classes.chipStyle}
+                        />
+                        <Chip
+                            label="1002-1279 1 save as 1 Priority:3"
+                            onDelete={handleDelete}
+                            className={classes.chipStyle}
+                        />
+                        <Chip
+                            label="1279-1400 5 save as 1 Priority:2"
+                            onDelete={handleDelete}
+                            className={classes.chipStyle}
+                        />
                     </Box>
                 </Grid>
                 <Grid item xs={10}>
                     <Typography variant="h6">Plugin</Typography>
                 </Grid>
-                <Grid item xs={10} className={classes.flexItem}>
-                    <Grid item xs={2}>
-                        <TextField fullWidth label="Samples"/>
-                    </Grid>
-                    <Grid item xs={2}>
-                        <TextField fullWidth label="Samples"/>
-                    </Grid>
-                    <Grid item xs={2}>
-                        <TextField fullWidth label="Samples"/>
-                    </Grid>
-                    <Grid item xs={2}>
-                        <TextField fullWidth label="Samples"/>
-                    </Grid>
-                    <Grid item xs={2}>
-                        <TextField fullWidth label="Samples"/>
-                    </Grid>
-                </Grid>
-                <Grid item xs={10} className={classes.flexItem}>
-                    <Grid item xs={4}>
-                        <TextField fullWidth label="Verification"/>
-                    </Grid>
-                    <Grid item xs={4}>
-                        <TextField fullWidth label="Description"/>
-                    </Grid>
-                    <Grid item xs={2}>
-                        <TextField fullWidth label="Samples"/>
-                    </Grid>
-                </Grid>
-                <Grid item xs={10} className={classes.flexItem}>
-                    <Grid item xs={8}/>
-                    <Grid item xs={2}>
-                        <Button fullWidth variant="contained" className={classes.submitButton}>Submit</Button>
-                    </Grid>
-                </Grid>
+                {plugin}
+                {submitButton}
             </Grid>
         </Box>
     );
