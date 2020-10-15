@@ -16,7 +16,7 @@ import ValidatorResult from "../../interfaces/ValidatorResult";
  * @author Andrii Demchyshyn
  */
 export default function NumberValidator(value: any): ValidatorResult<number>{
-    if(isNaN(+value)) {
+    if(isNaN(+value) || typeof value === "boolean") {
         return {value: undefined, error: true};
     }
     return {value: +value, error: false};
