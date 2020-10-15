@@ -7,6 +7,7 @@
  * All rights reserved.
  */
 
+import React from "react";
 import useAuth from "./useAuth";
 import {coreRequest, RequestMethods, RequestMiddleware} from "../utils/Rest";
 import {SuperAgentRequest} from "superagent";
@@ -28,7 +29,12 @@ export declare type CoreRequestHooked = (path?: string) => RequestMethods;
  */
 export default function useCoreRequest(defaultPath?: string): CoreRequestHooked {
     const {getUser, isLogged} = useAuth();
-    const user = getUser();
+    const [user, setUser] = React.useState(getUser());
+
+    React.useEffect(() => {
+        setUser(getUser());
+    }, [isLogged]);
+
     const middleware: RequestMiddleware = (request: SuperAgentRequest): SuperAgentRequest => {
         request.set('accept', 'application/json');
         request.set('Content-Type', 'application/json');
