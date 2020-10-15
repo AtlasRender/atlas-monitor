@@ -19,5 +19,4 @@ export default interface User {
     deleted: boolean;
     createdAt: Date;
     updatedAt: Date;
-    bearer: string;
 }
