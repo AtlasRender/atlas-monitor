@@ -64,7 +64,6 @@ const RenderJobsView = React.forwardRef((props: RenderJobsViewProps, ref: Ref<an
 
     return (
         <Box>
-            <DateField/>
             {tableList}
         </Box>
     );
