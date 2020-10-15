@@ -75,17 +75,23 @@ export function AuthProvider(props: AuthProviderProps) {
         children,
     } = props;
     const [logged, setLogged] = React.useState<boolean>(false);
+    const [user, setUser] = React.useState<User | null>(null);
+    const [loaded, setLoaded] = React.useState(false);
 
     React.useEffect(() => {
-        setLogged(!!getUser());
+        const localStorageUser = getUserFromLocalStorage();
+        setUser(localStorageUser);
+        setLogged(!!localStorageUser);
+        setLoaded(true);
     }, []);
 
     function logout(): void {
         localStorage.auth = null;
         setLogged(false);
+        setUser(null);
     }
 
-    function getUser(): User | null {
+    function getUserFromLocalStorage(): User | null {
         try {
             const credentials: any = JSON.parse(localStorage.auth);
             const user: User | null = credentials ? {
@@ -108,10 +114,21 @@ export function AuthProvider(props: AuthProviderProps) {
         return null;
     }
 
+    function getUser() {
+        if (!user) {
+            logout();
+            return null;
+        }
+        return user;
+    }
+
     function login(user: User) {
         localStorage.auth = JSON.stringify(user);
+        setUser(user);
         setLogged(true);
     }
+
+    if (!loaded) return null;
 
     return (
         <Context.Provider value={{isLogged: logged, getUser, login, logout}}>

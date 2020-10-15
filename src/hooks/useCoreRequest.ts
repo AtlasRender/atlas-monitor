@@ -29,11 +29,7 @@ export declare type CoreRequestHooked = (path?: string) => RequestMethods;
  */
 export default function useCoreRequest(defaultPath?: string): CoreRequestHooked {
     const {getUser, isLogged} = useAuth();
-    const [user, setUser] = React.useState(getUser());
-
-    React.useEffect(() => {
-        setUser(getUser());
-    }, [isLogged]);
+    const user = getUser();
 
     const middleware: RequestMiddleware = (request: SuperAgentRequest): SuperAgentRequest => {
         request.set('accept', 'application/json');
