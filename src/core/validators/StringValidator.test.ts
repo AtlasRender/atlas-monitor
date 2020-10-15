@@ -33,4 +33,10 @@ describe("core/validators/StringValidator", () => {
         expect(result.value).toBe(undefined);
         expect(result.error).toBe(true);
     });
+
+    test("Input object test", () => {
+        const result = StringValidator(null);
+        expect(result.value).toBe(null);
+        expect(result.error).toBe(false);
+    });
 });

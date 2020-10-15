@@ -20,6 +20,9 @@ export default function StringValidator(value: any): ValidatorResult<string>{
     if(typeof stringValue === "number") {
         stringValue = "" + stringValue;
     }
+    if(stringValue === null) {
+        return {value: stringValue, error: false};
+    }
     if(typeof stringValue !== "string") {
         return {value: undefined, error: true};
     }
