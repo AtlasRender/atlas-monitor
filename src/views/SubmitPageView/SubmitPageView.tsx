@@ -172,7 +172,7 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
                 <Grid item xs={5}>
                     <TextField fullWidth label="Priority"/>
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item xs={10}>
                     <Button variant="contained" fullWidth className={classes.buttonAdd}>ADD</Button>
                 </Grid>
             </React.Fragment>
