@@ -16,9 +16,12 @@ const styles = (theme: Theme) => createStyles({
         justifyContent: "center",
         alignItems: "flex-end",
     },
+    flexNoWrap:{
+        flexWrap:"nowrap",
+    },
     flexItem:{
         display: "flex",
-        justifyContent: "space-between",
+        //justifyContent: "space-between",
         alignItems:"center",
         listStyleType: "none",
     },
@@ -30,8 +33,14 @@ const styles = (theme: Theme) => createStyles({
     },
     submitButton:{
         backgroundColor: blue[500],
-    }
-
+    },
+    chipStyle:{
+        marginRight: theme.spacing(1),
+        marginBottom: theme.spacing(1),
+    },
+    selectMargin:{
+        marginTop:theme.spacing(2),
+    },
 });
 
 export default styles;
