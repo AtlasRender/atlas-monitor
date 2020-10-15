@@ -16,18 +16,17 @@ import ValidatorResult from "../../interfaces/ValidatorResult";
  * @author Nikita Nesterov
  */
 
-export default function DateValidator(value:any): ValidatorResult<Date>{
+export default function DateValidator(value: any): ValidatorResult<Date> {
 
-    if(!(typeof value ==="string" || value instanceof Date)){
-        return {value:undefined, error: true};
+    if (!(typeof value === "string" || value instanceof Date)) {
+        return {value: undefined, error: true};
+    } else if (value instanceof Date) {
+        return {value: value, error: false};
     }
-    else if(value instanceof Date){
-        return {value:value, error: false};
-    }
-    let valueCopy = ""+value;
-    if(isNaN(Date.parse(valueCopy))){
-        return {value:undefined, error:true};
-    }else {
+    let valueCopy = "" + value;
+    if (isNaN(Date.parse(valueCopy))) {
+        return {value: undefined, error: true};
+    } else {
         return {value: new Date(valueCopy), error: false}
     }
 }
