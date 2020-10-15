@@ -35,6 +35,8 @@ import useAuth from "../../hooks/useAuth";
 import useEnqueueErrorSnackbar from "../../utils/enqueueErrorSnackbar";
 import useCoreRequest from "../../hooks/useCoreRequest";
 import User from "../../interfaces/User";
+import {useChangeRoute} from "routing-manager";
+import Organization from "../../interfaces/Organization";
 
 /**
  * OrganizationPageViewPropsStyled - interface for OrganizationPageView function
@@ -61,19 +63,22 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
     const {getUser} = useAuth();
     const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
     const coreRequest = useCoreRequest();
-    const [organizationData, setOrganizationData] = useState<User | null>(null);
-
+    const [organizationData, setOrganizationData] = useState<Organization | null>(null);
+    const {getRouteParams} = useChangeRoute();
+    const {panel} = getRouteParams();
 
     useEffect(() => {
         handleGetOrganization();
     }, []);
 
     function handleGetOrganization() {
-        const organizationId = getUser()?.id;
+        const organizationId = panel;
+        console.log(panel);
         coreRequest()
-            .get(`organization/${organizationId}`)
+            .get(`organizations/${organizationId}`)
             .then((response) => {
-            setOrganizationData(response.body);
+                console.log(response.body);
+                setOrganizationData(response.body);
             })
             .catch(err => {
                 //TODO handle errors
@@ -118,15 +123,15 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up("md"));
     let mainInfo;
-    if(matches){
-        mainInfo=(
+    if (matches) {
+        mainInfo = (
             <Box className={classes.container}>
                 <Grid container className={classes.firstLine}>
                     <Grid item xs={8}>
                         <Box>
                             <Grid container spacing={2} className={classes.nameDescription}>
                                 <Grid item xs={6}>
-                                    <DataTextField label="Organization name" children="Blizzard entertainment"/>
+                                    <DataTextField label="Organization name" children={organizationData?.name}/>
                                 </Grid>
                                 <Grid item xs={6}/>
                                 <Grid item xs={10}>
@@ -144,9 +149,8 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                 </Grid>
             </Box>
         )
-    }
-    else{
-        mainInfo=(
+    } else {
+        mainInfo = (
             <Grid container spacing={2} className={classes.firstLine}>
                 <Box className={classes.avatarBox}>
                     <Avatar src="https://cdn.sportclub.ru/assets/2019-09-20/n97c311rvb.jpg" className={classes.avatar}/>
@@ -155,7 +159,8 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                     <DataTextField label="Organization name" children="Blizzard entertainment"/>
                 </Grid>
                 <Grid item xs={10}>
-                    <DataTextField label="description" children="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dicta dolorem, dolorum nam quidem sint sunt!"/>
+                    <DataTextField label="description"
+                                   children="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dicta dolorem, dolorum nam quidem sint sunt!"/>
                 </Grid>
             </Grid>
         )

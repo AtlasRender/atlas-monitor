@@ -8,24 +8,10 @@
  */
 
 import BaseEntity from "../core/BaseEntity";
-import {instanceOf} from "prop-types";
 import NumberValidator from "../core/validators/NumberValidator";
 import StringValidator from "../core/validators/StringValidator";
-
-/**
- * User - interface for user data. You can get it from Origin.
- * @interface
- * @author Danil Andreev
- */
-export interface UserFields {
-    id: number;
-    username: string;
-    email?: string;
-    deleted: boolean;
-    createdAt: Date | string;
-    updatedAt: Date | string;
-    bearer: string;
-}
+import DateValidator from "../core/validators/DateValidator";
+import ValidationError from "../core/ValidationError";
 
 export interface UserValidationMap {
     id?: boolean;
@@ -37,7 +23,7 @@ export interface UserValidationMap {
     bearer?: boolean;
 }
 
-export default class User extends BaseEntity{
+export default class User extends BaseEntity {
     public id?: number;
     public username?: string;
     public email?: string;
@@ -61,17 +47,19 @@ export default class User extends BaseEntity{
 
         this.deleted = !!user.deleted;
 
-        if(!(typeof user.createdAt === "string" || user.createdAt instanceof Date)) {
-            validationMap.createdAt = true;
-        }
-        this.createdAt = user.createdAt;
+        this.createdAt = DateValidator(user.createdAt).value;
+        validationMap.createdAt = DateValidator(user.createdAt).error;
 
-        if(!(typeof user.updatedAt === "string" || user.updatedAt instanceof Date)) {
-            validationMap.updatedAt = true;
-        }
-        this.updatedAt = user.updatedAt;
+        this.updatedAt = DateValidator(user.updatedAt).value;
+        validationMap.updatedAt = DateValidator(user.updatedAt).error;
 
         this.bearer = StringValidator(user.bearer).value;
         validationMap.bearer = StringValidator(user.bearer).error;
+
+        for (const key in validationMap) {
+            if ((validationMap as any)[key] === true) {
+                throw new ValidationError<UserValidationMap>("Invalid types", validationMap);
+            }
+        }
     }
 }
