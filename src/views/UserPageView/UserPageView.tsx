@@ -51,8 +51,6 @@ const UserPageView = React.forwardRef((props: UserPageViewProps, ref: Ref<any>) 
     const { getRouteParams } = useChangeRoute();
     const { panel } = getRouteParams();
 
-    console.log("p" + panel);
-
     useEffect(() => {
         handleGetUser();
     }, []);
