@@ -21,6 +21,7 @@ import {useSnackbar} from "notistack";
 import useEnqueueErrorSnackbar from "../../utils/enqueueErrorSnackbar";
 import useAuth from "../../hooks/useAuth";
 import User from "../../interfaces/User";
+import {useChangeRoute} from "routing-manager";
 
 /**
  * UserPageViewPropsStyled - interface for UserPageView
@@ -47,6 +48,10 @@ const UserPageView = React.forwardRef((props: UserPageViewProps, ref: Ref<any>) 
     const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
     const coreRequest = useCoreRequest();
     const [userData, setUserData] = useState<User | null>(null);
+    const { getRouteParams } = useChangeRoute();
+    const { panel } = getRouteParams();
+
+    console.log("p" + panel);
 
     useEffect(() => {
         handleGetUser();
@@ -54,7 +59,11 @@ const UserPageView = React.forwardRef((props: UserPageViewProps, ref: Ref<any>) 
 
     function handleGetUser() {
         //TODO if user is empty redirect to login page
-        const userId = getUser()?.id;
+        const user = getUser();
+        let userId = panel;
+        if(!userId) {
+            userId = user?.id;
+        }
         coreRequest()
             .get(`users/${userId}`)
             .then((response) => {

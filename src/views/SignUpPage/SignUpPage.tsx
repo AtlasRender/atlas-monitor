@@ -78,7 +78,7 @@ const SignUpPage = React.forwardRef((props: SignUpPageProps, ref: Ref<any>) => {
                     enqueueErrorSnackbar("One of parameters has wrong type");
                 }
                 login(user);
-                changeRoute({page: "user"});
+                changeRoute({page: `user/${user.id}`});
             })
             .catch(err => {
                 enqueueErrorSnackbar("Register Error");

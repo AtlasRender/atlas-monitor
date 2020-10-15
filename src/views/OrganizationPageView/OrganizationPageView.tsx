@@ -58,6 +58,29 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
         className,
     } = props;
 
+    const {getUser} = useAuth();
+    const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
+    const coreRequest = useCoreRequest();
+    const [organizationData, setOrganizationData] = useState<User | null>(null);
+
+
+    useEffect(() => {
+        handleGetOrganization();
+    }, []);
+
+    function handleGetOrganization() {
+        const organizationId = getUser()?.id;
+        coreRequest()
+            .get(`organization/${organizationId}`)
+            .then((response) => {
+            setOrganizationData(response.body);
+            })
+            .catch(err => {
+                //TODO handle errors
+                enqueueErrorSnackbar("No such user");
+            });
+    }
+
     const [users, setUsers] = React.useState <Users[]>([
         {name: "Danil", role: "admin", id: 1, department: "Pathfinder"},
         {name: "Andriy", role: "moderator", id: 2, department: "Gachi"},
@@ -74,6 +97,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
         "Harkov slave",
         "Lvov slave",
     ]
+
     /**
      * handleChange - function that handles changes in select field in members list
      * @function
