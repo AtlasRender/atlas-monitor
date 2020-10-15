@@ -59,10 +59,7 @@ export default class User extends BaseEntity{
         this.email = StringValidator(user.email).value;
         validationMap.email = StringValidator(user.email).error;
 
-        if(typeof user.deleted !== "boolean") {
-            validationMap.deleted = true;
-        }
-        this.deleted = user.deleted;
+        this.deleted = !!user.deleted;
 
         if(!(typeof user.createdAt === "string" || user.createdAt instanceof Date)) {
             validationMap.createdAt = true;
