@@ -18,19 +18,9 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import MenuIcon from '@material-ui/icons/Menu';
-import MailIcon from '@material-ui/icons/Mail';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import styles from "./styles";
-import {
-    Box,
-    IconButton,
-    useMediaQuery,
-    useTheme,
-    withStyles,
-    Divider,
-    Button,
-    SwipeableDrawer
-} from "@material-ui/core";
+import {Box, Divider, IconButton, SwipeableDrawer, useMediaQuery, useTheme, withStyles} from "@material-ui/core";
 import {Route, Switch} from "react-router-dom";
 import RenderJobsView from "../../views/RenderJobsView/RenderJobsView";
 import RenderJobsDetailsView from "../../views/RenderJobsDetailsView";

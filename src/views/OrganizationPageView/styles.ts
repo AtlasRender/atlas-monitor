@@ -41,6 +41,6 @@ const styles =(theme: Theme) => createStyles({
         justifyContent:"center",
         marginTop: theme.spacing(2),
         width:"inherit",
-    }
+    },
 })
 export default styles;
