@@ -8,7 +8,7 @@
  */
 
 import React from "react";
-import User from "../interfaces/User";
+import User from "../entities/User";
 import Containerable from "../interfaces/Containerable";
 import PropTypes from "prop-types";
 
@@ -94,7 +94,7 @@ export function AuthProvider(props: AuthProviderProps) {
     function getUserFromLocalStorage(): User | null {
         try {
             const credentials: any = JSON.parse(localStorage.auth);
-            const user: User | null = credentials ? {
+            const user: User | null = credentials ? new User ({
                 id: +credentials.id,
                 username: String(credentials.username),
                 email: String(credentials.email),
@@ -102,7 +102,7 @@ export function AuthProvider(props: AuthProviderProps) {
                 createdAt: new Date(credentials.createdAt),
                 updatedAt: new Date(credentials.updatedAt),
                 bearer: String(credentials.bearer),
-            } : null;
+            }) : null;
             if (user && !user.id) {
                 logout();
                 return null;

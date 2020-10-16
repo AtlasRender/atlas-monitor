@@ -41,6 +41,11 @@ const styles = (theme: Theme) => createStyles({
     selectMargin:{
         marginTop:theme.spacing(2),
     },
+    gridContainer: {
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "flex-end",
+    }
 });
 
 export default styles;

@@ -22,8 +22,9 @@ const styles = (theme: Theme) => createStyles({
         justifyContent: "flex-end",
         alignItems:"center"
     },
-    accordionLayout:{
-
+    lastToken: {
+        color: theme.palette.common.white,
+        backgroundColor: theme.palette.error.dark,
     }
 });
 
