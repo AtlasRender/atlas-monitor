@@ -143,7 +143,7 @@ const SignUpPage = React.forwardRef((props: SignUpPageProps, ref: Ref<any>) => {
                 </Button>
                 <Grid container justify="flex-end">
                     <Grid item>
-                        <Link href="#" variant="body2">
+                        <Link href="" variant="body2" onClick={() => changeRoute({page: "authorization", panel: null})}>
                             Already have an account? Sign in
                         </Link>
                     </Grid>

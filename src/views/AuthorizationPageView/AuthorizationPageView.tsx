@@ -142,7 +142,7 @@ const AuthorizationPageView = React.forwardRef((props: AuthorizationPageViewProp
                         </Link>
                     </Grid>
                     <Grid item>
-                        <Link href="#" variant="body2">
+                        <Link href="" variant="body2" onClick={() => changeRoute({page: "signUp", panel: null})}>
                             {"Don't have an account? Sign Up"}
                         </Link>
                     </Grid>
