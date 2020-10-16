@@ -3,19 +3,23 @@
  * Owner and project architect: Danil Andreev | danssg08@gmail.com |  https://github.com/DanilAndreev
  * File creator: Andrii Demchyshyn
  * Project: pathfinder-monitor
- * File last modified: 15.10.2020, 23:35
+ * File last modified: 16.10.2020, 01:35
  * All rights reserved.
  */
 
-import UserData from "./UserData";
+import Organization from "./Organization";
 
-export default interface Organization {
+/**
+ * User - interface for user data. You can get it from Origin.
+ * @interface
+ * @author Danil Andreev
+ */
+export default interface UserData {
     id: number;
-    name: string;
-    description: string | null;
+    username: string;
+    email?: string;
+    deleted: boolean;
     createdAt: Date;
     updatedAt: Date;
-    //TODO into another interface
-    ownerUser: UserData;
-    users: UserData[];
+    organizations: Organization[];
 }

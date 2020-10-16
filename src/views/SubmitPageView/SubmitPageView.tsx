@@ -98,7 +98,7 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
                 <Grid item xs={2}>
                     <TextField fullWidth label="Renum step"/>
                 </Grid>
-                <Grid item spacing={0} style={{paddingRight:0, flexGrow:1}}>
+                <Grid item style={{paddingRight:0, flexGrow:1}}>
                     <TextField fullWidth label="Priority"/>
                 </Grid>
                 <Box>
