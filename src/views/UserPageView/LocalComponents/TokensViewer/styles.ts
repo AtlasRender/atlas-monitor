@@ -31,7 +31,8 @@ const styles = (theme: Theme) => createStyles({
         paddingBottom:0,
     },
     newToken:{
-        justifyContent:"space-between",
+        paddingLeft:0,
+        paddingRight:0,
     },
     tokenAdd:{
         paddingLeft:0,
@@ -42,7 +43,20 @@ const styles = (theme: Theme) => createStyles({
     },
     topMargin:{
         marginTop:theme.spacing(1),
-    }
+    },
+    generatedToken: {
+        display: "flex",
+        flexGrow: 1,
+        alignItems: "center",
+    },
+    noWrap: {
+        flexWrap:"nowrap",
+    },
+    createTokenControls:{
+        display:"flex",
+        justifyContent:"flex-end",
+        alignItems:"center",
+    },
 
 });
 
