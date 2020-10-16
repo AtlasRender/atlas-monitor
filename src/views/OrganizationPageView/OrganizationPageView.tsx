@@ -106,10 +106,8 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
      * @author Nikita Nesterov
      */
     const handleChange = (event: any) => {
-        //console.log(event.target);
         const newUsers = [...users];
         const user = newUsers.find(user => user.id === event.target.name)
-        //console.log(user);
         if (user) {
             user.role = event.target.value;
         }

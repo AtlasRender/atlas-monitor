@@ -145,8 +145,10 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>
     );
 
     const matches = useMediaQuery(theme.breakpoints.up('md'));
+
     let drawer;
     if (matches) {
+        state.left && setState({left: false});
         drawer = (
             <React.Fragment>
                 <CssBaseline/>
@@ -244,6 +246,8 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>
             </React.Fragment>
         );
     } else {
+        //
+        open && setOpen(false);
         drawer = (
             <React.Fragment>
                 <CssBaseline/>
