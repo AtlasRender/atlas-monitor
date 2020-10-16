@@ -38,7 +38,7 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import UserToken from "../../../../entities/UserToken";
 import CloseIcon from "@material-ui/icons/Close";
-import CheckIcon from '@material-ui/icons/Check';
+import CheckIcon from "@material-ui/icons/Check";
 
 /**
  * TokensViewerPropsStyled - interface for TokensViewer function
@@ -132,6 +132,19 @@ const TokensViewer = React.forwardRef((props: TokensViewerProps, ref: Ref<any>) 
         setIsButtonActive(true);
     }
 
+    async function copyToClipboard(str: any) {
+        const el = document.createElement("textarea");
+        el.value = str;
+        el.setAttribute("readonly", "");
+        el.style.position = "absolute";
+        el.style.left = "-9999px";
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand("copy");
+        document.body.removeChild(el);
+        return str;
+    }
+
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up("md"));
 
@@ -149,7 +162,7 @@ const TokensViewer = React.forwardRef((props: TokensViewerProps, ref: Ref<any>) 
                                     edge="end"
                                     aria-label="delete"
                                     onClick={handleIsButtonActive}
-                                    style={{marginRight:theme.spacing(1)}}
+                                    style={{marginRight: theme.spacing(1)}}
                                 >
                                     <AddIcon/>
                                 </IconButton>
@@ -267,7 +280,7 @@ const TokensViewer = React.forwardRef((props: TokensViewerProps, ref: Ref<any>) 
                                     <IconButton
                                         edge="end"
                                         aria-label="delete"
-                                        style={{marginRight:theme.spacing(0)}}
+                                        style={{marginRight: theme.spacing(0)}}
                                         onClick={handleIsButtonActive}
                                     >
                                         <AddIcon/>
@@ -339,18 +352,29 @@ const TokensViewer = React.forwardRef((props: TokensViewerProps, ref: Ref<any>) 
                             //         </IconButton>
                             //     </ListItemSecondaryAction>
                             // </ListItem>
-                            <Grid container className={clsx(classes.container, classes.noWrap,classes.lastToken)}>
-                                <Box className={classes.generatedToken}>
-                                    <Typography noWrap={false}>{lastAddedToken?.token}</Typography>
+                            <ListItem
+                                button
+                                classes={{button:classes.copyClipboardHover}}
+                                className={clsx(classes.container, classes.noWrap, classes.lastToken)}
+                                onClick={() => {
+                                    copyToClipboard(lastAddedToken?.token)
+                                        .then()
+                                }}
+                            >
+                                <Box className={clsx(classes.generatedToken, classes.wrapWord)}>
+                                    <Typography variant="h6">{lastAddedToken?.token}</Typography>
+                                    <Typography variant="caption">This will never be shown again</Typography>
                                 </Box>
                                 <IconButton
                                     edge="end"
                                     aria-label="close"
+                                    style={{marginRight: theme.spacing(1)}}
                                     onClick={() => setLastAddedToken(null)}
+
                                 >
-                                    <CloseIcon color="inherit"/>
+                                    <CloseIcon className={classes.closeButtonColor}/>
                                 </IconButton>
-                            </Grid>
+                            </ListItem>
                             }
                             <Collapse in={isOpen} timeout="auto" unmountOnExit>
                                 {tokens?.map((token) =>
