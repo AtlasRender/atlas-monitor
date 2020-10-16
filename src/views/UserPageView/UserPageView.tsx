@@ -7,7 +7,7 @@
  * All rights reserved.
  */
 import React, {Ref, useEffect, useState} from "react";
-import {withStyles} from "@material-ui/core";
+import {Button, IconButton, withStyles} from "@material-ui/core";
 import styles from "./styles";
 import {Avatar, Grid, Box, Typography, Divider,useTheme, useMediaQuery} from "@material-ui/core";
 import githubAvatar from "./githubAvatar.jpg";
@@ -22,6 +22,8 @@ import useEnqueueErrorSnackbar from "../../utils/enqueueErrorSnackbar";
 import useAuth from "../../hooks/useAuth";
 import User from "../../interfaces/User";
 import {useChangeRoute} from "routing-manager";
+import Token from "../../interfaces/Token";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 /**
  * UserPageViewPropsStyled - interface for UserPageView
@@ -50,10 +52,28 @@ const UserPageView = React.forwardRef((props: UserPageViewProps, ref: Ref<any>) 
     const [userData, setUserData] = useState<User | null>(null);
     const { getRouteParams } = useChangeRoute();
     const { panel } = getRouteParams();
+    const [tokens, setTokens] = useState<Token[]>([]);
 
     useEffect(() => {
         handleGetUser();
     }, []);
+
+    useEffect(() =>{
+        handleGetToken();
+    }, []);
+
+    function handleGetToken(){
+        coreRequest()
+            .get(`tokens`)
+            .then((response) => {
+                console.log(response.body);
+                setTokens(response.body);
+            })
+            .catch(err => {
+                enqueueErrorSnackbar("No such token");
+            })
+
+    }
 
     function handleGetUser() {
         //TODO if user is empty redirect to login page
@@ -71,6 +91,10 @@ const UserPageView = React.forwardRef((props: UserPageViewProps, ref: Ref<any>) 
                 //TODO handle errors
                 enqueueErrorSnackbar("No such user");
             });
+    }
+
+    function handleTokenAdd(){
+
     }
 
     const theme = useTheme();
@@ -119,7 +143,28 @@ const UserPageView = React.forwardRef((props: UserPageViewProps, ref: Ref<any>) 
             <OrganizationsFieldsRow organization="Reveille" role="admin" status="working"/>
             <OrganizationsFieldsRow organization="Maya3D" role="user" status="training"/>
             <OrganizationsFieldsRow organization="Microsoft" role="Bill Gates" status="on vacation"/>
-            <TokensViewer/>
+            <Grid container className={clsx(classes.containerToken, className)}>
+                <Grid item xs={10}>
+                    <Grid container>
+                        <Grid item xs={11} className={classes.typographyToken}>
+                            <Typography variant="h6">Tokens</Typography>
+                            <Button onClick={handleTokenAdd}>button</Button>
+                        </Grid>
+                        <Grid item xs={1} className={clsx(classes.box, className)}>
+                            <IconButton><ExpandMoreIcon/></IconButton>
+                        </Grid>
+                    </Grid>
+                </Grid>
+                <Grid item xs={10}>
+                    <Divider/>
+                </Grid>
+            </Grid>
+            {tokens.map((item)=>{
+                return(
+                    <TokensViewer key={item.id} description={item.description} token={item.name}/>
+                );
+            })
+            }
         </Box>
     );
 });

@@ -23,6 +23,7 @@ export interface UserTokensValidationMap {
 }
 
 export default class UserToken extends BaseEntity {
+    // TODO pomenyai
     public id?: number;
     public name?: string;
     public description?: string;

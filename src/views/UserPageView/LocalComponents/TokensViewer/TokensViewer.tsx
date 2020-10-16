@@ -21,7 +21,8 @@ import Stylable from "../../../../interfaces/Stylable";
  * @author Nikita Nesterov
  */
 interface TokensViewerProps extends Stylable {
-
+    description?: string,
+    token?: string,
 }
 
 /**
@@ -34,6 +35,8 @@ const TokensViewer = React.forwardRef((props: TokensViewerProps, ref: Ref<any>) 
         classes,
         style,
         className,
+        description,
+        token,
     } = props;
 
     const [isOpen, setIsOpen] = React.useState(false);
@@ -43,23 +46,23 @@ const TokensViewer = React.forwardRef((props: TokensViewerProps, ref: Ref<any>) 
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up("md"));
 
-    let token;
+    let tokenView;
     if (matches) {
-        token = (
+        tokenView = (
             <Grid container spacing={2} className={clsx(classes.container, className)}>
                 <Grid item xs={6}>
-                    <DataTextField label="Description" children="token"/>
+                    <DataTextField label="Description" children={description}/>
                 </Grid>
                 <Grid item xs={4}>
-                    <DataTextField label="Token" children="1232123125321423124"/>
+                    <DataTextField label="Token" children={token}/>
                 </Grid>
             </Grid>
         )
     } else {
-        token = (
+        tokenView = (
             <Grid container spacing={2} className={clsx(classes.container, className)}>
                 <Grid item xs={10}>
-                    <DataTextField label="Gachi forever" children="12414%423&*1jfwof"/>
+                    <DataTextField label={description} children={token}/>
                 </Grid>
             </Grid>
         )
@@ -67,22 +70,7 @@ const TokensViewer = React.forwardRef((props: TokensViewerProps, ref: Ref<any>) 
 
     return (
         <Box>
-            <Grid container className={clsx(classes.container, className)}>
-                <Grid item xs={10}>
-                    <Grid container>
-                        <Grid item xs={11}>
-                            <Typography variant="h6">Tokens</Typography>
-                        </Grid>
-                        <Grid item xs={1} className={clsx(classes.box, className)}>
-                            <IconButton onClick={handleClick}><ExpandMoreIcon/></IconButton>
-                        </Grid>
-                    </Grid>
-                </Grid>
-                <Grid item xs={10}>
-                    <Divider/>
-                </Grid>
-            </Grid>
-            {token}
+            {tokenView}
         </Box>
     );
 })
