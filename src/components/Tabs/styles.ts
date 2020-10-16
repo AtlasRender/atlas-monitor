@@ -15,6 +15,9 @@ const styles = (theme: Theme) => createStyles({
     },
     fullWidth: {
         width: "100%",
+    },
+    paddingToolbar: {
+        padding: theme.spacing(2),
     }
 });
 

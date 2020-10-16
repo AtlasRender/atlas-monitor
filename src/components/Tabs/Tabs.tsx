@@ -63,7 +63,7 @@ const CustomTabs = React.forwardRef((props: CustomTabsProps, ref: Ref<any>) => {
 
     return (
         <Box className={clsx(classes.root, className)}>
-            <Toolbar>
+            <Toolbar className={classes.paddingToolbar}>
                 <Tabs
                     className={clsx(classes.fullWidth, className)}
                     value={value}

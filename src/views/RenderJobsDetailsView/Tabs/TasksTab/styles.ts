@@ -22,6 +22,9 @@ const styles = (theme: Theme) => createStyles({
     },
     progress: {
         minWidth: 150,
+        [theme.breakpoints.down('md')]: {
+            minWidth: 110,
+        },
         [theme.breakpoints.down('sm')]: {
             minWidth: 0,
         },
