@@ -9,7 +9,7 @@
 import React, {Ref, useEffect, useState} from "react";
 import {withStyles} from "@material-ui/core";
 import styles from "./styles";
-import {Avatar, Grid, Box, Typography, Divider,useTheme, useMediaQuery} from "@material-ui/core";
+import {Avatar, Grid, Box, Typography, Divider, useTheme, useMediaQuery} from "@material-ui/core";
 import githubAvatar from "./githubAvatar.jpg";
 import DataTextField from "../../components/DataTextField";
 import OrganizationsFieldsRow from "./LocalComponents/OrganizationsFieldsRow";
@@ -20,14 +20,15 @@ import useCoreRequest from "../../hooks/useCoreRequest";
 import {useSnackbar} from "notistack";
 import useEnqueueErrorSnackbar from "../../utils/enqueueErrorSnackbar";
 import useAuth from "../../hooks/useAuth";
-import User from "../../interfaces/User";
+import UserData from "../../interfaces/UserData";
+import {useChangeRoute} from "routing-manager";
 
 /**
  * UserPageViewPropsStyled - interface for UserPageView
  * @interface
  * @author Nikita Nesterov
  */
-interface UserPageViewProps extends Stylable{
+interface UserPageViewProps extends Stylable {
 
 }
 
@@ -46,7 +47,9 @@ const UserPageView = React.forwardRef((props: UserPageViewProps, ref: Ref<any>) 
     const {getUser} = useAuth();
     const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
     const coreRequest = useCoreRequest();
-    const [userData, setUserData] = useState<User | null>(null);
+    const [userData, setUserData] = useState<UserData | null>(null);
+    const {getRouteParams} = useChangeRoute();
+    const {panel} = getRouteParams();
 
     useEffect(() => {
         handleGetUser();
@@ -54,7 +57,11 @@ const UserPageView = React.forwardRef((props: UserPageViewProps, ref: Ref<any>) 
 
     function handleGetUser() {
         //TODO if user is empty redirect to login page
-        const userId = getUser()?.id;
+        const user = getUser();
+        let userId = panel;
+        if (!userId) {
+            userId = user?.id;
+        }
         coreRequest()
             .get(`users/${userId}`)
             .then((response) => {
@@ -69,8 +76,8 @@ const UserPageView = React.forwardRef((props: UserPageViewProps, ref: Ref<any>) 
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up("md"));
     let mainInfo;
-    if(matches){
-        mainInfo=(
+    if (matches) {
+        mainInfo = (
             <Grid container spacing={2} className={clsx(classes.container, className)}>
                 <Grid item xs={4}>
                     <DataTextField label="Name" children={userData?.username}/>
@@ -83,9 +90,8 @@ const UserPageView = React.forwardRef((props: UserPageViewProps, ref: Ref<any>) 
                 </Grid>
             </Grid>
         );
-    }
-    else{
-        mainInfo=(
+    } else {
+        mainInfo = (
             <Grid container spacing={2} className={clsx(classes.container, className)}>
                 <Grid item xs={12} className={clsx(classes.container, classes.root, className)}>
                     <Avatar src={githubAvatar} className={clsx(classes.avatar)}/>
@@ -104,14 +110,20 @@ const UserPageView = React.forwardRef((props: UserPageViewProps, ref: Ref<any>) 
         <Box>
             {mainInfo}
             <Grid container spacing={2} className={clsx(classes.container, className)}>
-                <Grid item xs = {10} className={clsx(classes.topic, className)}>
+                <Grid item xs={10} className={clsx(classes.topic, className)}>
                     <Typography variant="h6">Organizations</Typography>
                     <Divider/>
                 </Grid>
             </Grid>
-            <OrganizationsFieldsRow organization="Reveille" role="admin" status="working"/>
-            <OrganizationsFieldsRow organization="Maya3D" role="user" status="training"/>
-            <OrganizationsFieldsRow organization="Microsoft" role="Bill Gates" status="on vacation"/>
+            {/*TODO If no organisation print smth else*/}
+            {userData?.organizations.map((organization) =>
+                <OrganizationsFieldsRow
+                    organization={organization.name}
+                    key={organization.id}
+                    role="admin"
+                    status="working"
+                />
+            )}
             <TokensViewer/>
         </Box>
     );

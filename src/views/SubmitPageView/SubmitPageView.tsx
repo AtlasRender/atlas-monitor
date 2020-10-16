@@ -98,7 +98,7 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
                 <Grid item xs={2}>
                     <TextField fullWidth label="Renum step"/>
                 </Grid>
-                <Grid item spacing={0} style={{paddingRight:0, flexGrow:1}}>
+                <Grid item style={{paddingRight:0, flexGrow:1}}>
                     <TextField fullWidth label="Priority"/>
                 </Grid>
                 <Box>
@@ -172,7 +172,7 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
                 <Grid item xs={5}>
                     <TextField fullWidth label="Priority"/>
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item xs={10}>
                     <Button variant="contained" fullWidth className={classes.buttonAdd}>ADD</Button>
                 </Grid>
             </React.Fragment>

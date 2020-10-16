@@ -28,6 +28,7 @@ import useCoreRequest from "../../hooks/useCoreRequest";
 import {useChangeRoute} from "routing-manager";
 import {useSnackbar} from "notistack";
 import useEnqueueErrorSnackbar from "../../utils/enqueueErrorSnackbar";
+import User from "../../entities/User";
 
 interface SignUpPageProps extends Stylable {
 
@@ -68,17 +69,9 @@ const SignUpPage = React.forwardRef((props: SignUpPageProps, ref: Ref<any>) => {
                 if (!user) {
                     enqueueErrorSnackbar("No such user");
                 }
-                if ((typeof user.id !== "number") ||
-                    (typeof user.username !== "string") ||
-                    (typeof user.email !== "string") ||
-                    (typeof user.bearer !== "string") ||
-                    (typeof user.createdAt !== "string") ||
-                    (typeof user.updatedAt !== "string") ||
-                    (typeof user.deleted !== "boolean")) {
-                    enqueueErrorSnackbar("One of parameters has wrong type");
-                }
-                login(user);
-                changeRoute({page: "user"});
+                const currentUser = new User(user);
+                login(currentUser);
+                changeRoute({page: `user/${user.id}`});
             })
             .catch(err => {
                 enqueueErrorSnackbar("Register Error");
