@@ -179,7 +179,6 @@ const TokensViewer = React.forwardRef((props: TokensViewerProps, ref: Ref<any>) 
                         <Divider/>
                         {isButtonActive &&
                         <ListItem className={classes.newToken}>
-                            {/*<ListItemText primary="Add new token"/>*/}
                             <Grid container>
                                 <Grid item xs={6} className={clsx(classes.tokenAdd, classes.spacingInNewToken)}>
                                     <TextField
@@ -207,42 +206,33 @@ const TokensViewer = React.forwardRef((props: TokensViewerProps, ref: Ref<any>) 
                                     <IconButton><CloseIcon/></IconButton>
                                     <IconButton onClick={handleAddToken}><CheckIcon/></IconButton>
                                 </Grid>
-
-                                {/*<Button*/}
-                                {/*    type="submit"*/}
-                                {/*    fullWidth*/}
-                                {/*    variant="contained"*/}
-                                {/*    color="primary"*/}
-                                {/*    className={clsx(classes.tokenAdd, classes.topMargin)}*/}
-                                {/*    onClick={handleAddToken}*/}
-                                {/*>*/}
-                                {/*    Add Token*/}
-                                {/*</Button>*/}
-
-
-                                {/*<Grid item xs={12} className={classes.createTokenControls}>*/}
-                                {/*    <IconButton><CloseIcon/></IconButton>*/}
-                                {/*    <IconButton onClick={handleAddToken}><CheckIcon/></IconButton>*/}
-                                {/*</Grid>*/}
-
                             </Grid>
                         </ListItem>
                         }
                         {lastAddedToken &&
-                        <ListItem className={classes.lastToken}>
-                            <ListItemText
-                                primary={lastAddedToken?.token}
-                                secondary={"Запоминайте бо пизда"}
-                            />
-                            <ListItemSecondaryAction>
-                                <IconButton
-                                    edge="end"
-                                    aria-label="close"
-                                    onClick={() => setLastAddedToken(null)}
-                                >
-                                    <CloseIcon color="inherit"/>
-                                </IconButton>
-                            </ListItemSecondaryAction>
+                        <ListItem
+                            button
+                            classes={{button: classes.copyClipboardHover}}
+                            className={clsx(classes.container, classes.noWrap, classes.lastToken)}
+                            onClick={() => {
+                                copyToClipboard(lastAddedToken?.token)
+                                    .then()
+                            }}
+                        >
+                            <Box className={clsx(classes.generatedToken, classes.wrapWord)}>
+                                <Typography variant="h6">{lastAddedToken?.token}</Typography>
+                                <Typography variant="caption">This will never be shown again (Click to
+                                    copy)</Typography>
+                            </Box>
+                            <IconButton
+                                edge="end"
+                                aria-label="close"
+                                style={{marginRight: theme.spacing(1)}}
+                                onClick={() => setLastAddedToken(null)}
+
+                            >
+                                <CloseIcon className={classes.closeButtonColor}/>
+                            </IconButton>
                         </ListItem>
                         }
                         <Collapse in={isOpen} timeout="auto" unmountOnExit>
@@ -298,7 +288,6 @@ const TokensViewer = React.forwardRef((props: TokensViewerProps, ref: Ref<any>) 
                             <Divider/>
                             {isButtonActive &&
                             <ListItem className={classes.newToken}>
-                                {/*<ListItemText primary="Add new token"/>*/}
                                 <Grid container className={classes.newToken}>
                                     <Grid item xs={12} className={classes.tokenAdd}>
                                         <TextField
@@ -337,32 +326,22 @@ const TokensViewer = React.forwardRef((props: TokensViewerProps, ref: Ref<any>) 
                             </ListItem>
                             }
                             {lastAddedToken &&
-                            // <ListItem className={classes.lastToken}>
-                            //     <ListItemText
-                            //         primary={lastAddedToken?.token}
-                            //         secondary={"Запоминайте бо пизда"}
-                            //     />
-                            //     <ListItemSecondaryAction>
-                            //         <IconButton
-                            //             edge="end"
-                            //             aria-label="close"
-                            //             onClick={() => setLastAddedToken(null)}
-                            //         >
-                            //             <CloseIcon color="inherit"/>
-                            //         </IconButton>
-                            //     </ListItemSecondaryAction>
-                            // </ListItem>
                             <ListItem
                                 button
-                                classes={{button:classes.copyClipboardHover}}
+                                classes={{button: classes.copyClipboardHover}}
                                 className={clsx(classes.container, classes.noWrap, classes.lastToken)}
                                 onClick={() => {
                                     copyToClipboard(lastAddedToken?.token)
                                         .then()
                                 }}
                             >
-                                <Box className={clsx(classes.generatedToken, classes.wrapWord)}>
-                                    <Typography variant="h6">{lastAddedToken?.token}</Typography>
+                                <Box className={clsx(classes.generatedToken)}>
+                                    <Typography
+                                        variant="h6"
+                                        className={classes.wrapWord}
+                                    >
+                                        {lastAddedToken?.token}
+                                    </Typography>
                                     <Typography variant="caption">This will never be shown again</Typography>
                                 </Box>
                                 <IconButton
