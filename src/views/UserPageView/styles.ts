@@ -41,7 +41,8 @@ const styles = (theme: Theme) => createStyles({
     typographyToken:{
         display:"flex",
         alignItems:"flex-end",
-    }
+    },
+
 
 });
 
