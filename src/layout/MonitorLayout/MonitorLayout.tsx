@@ -34,6 +34,8 @@ import Stylable from "../../interfaces/Stylable";
 import SubmitPageView from "../../views/SubmitPageView";
 import AuthorizationPageView from "../../views/AuthorizationPageView";
 import SignUpPage from "../../views/SignUpPage";
+import Button from "@material-ui/core/Button";
+import useAuth from "../../hooks/useAuth";
 
 /**
  * MonitorLayoutProps - interface for MonitorLayout component
@@ -62,6 +64,7 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
     const [state, setState] = React.useState({left: false});
+    const {logout} = useAuth();
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -87,7 +90,7 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>
     };
 
     const list = (anchor: Anchor) => (
-        <div
+        <Box
             className={clsx(classes.list)}
             role="presentation"
             onClick={toggleDrawer(anchor, false)}
@@ -125,23 +128,7 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>
                     <ListItemText primary="Submit Page"/>
                 </ListItem>
             </List>
-            <List>
-                <ListItem button onClick={() => changeRoute({page: "authorization", panel: null})}>
-                    <ListItemIcon>
-                        <InboxIcon/>
-                    </ListItemIcon>
-                    <ListItemText primary="Login Page"/>
-                </ListItem>
-            </List>
-            <List>
-                <ListItem button onClick={() => changeRoute({page: "signUp", panel: null})}>
-                    <ListItemIcon>
-                        <InboxIcon/>
-                    </ListItemIcon>
-                    <ListItemText primary="Register Page"/>
-                </ListItem>
-            </List>
-        </div>
+        </Box>
     );
 
     const matches = useMediaQuery(theme.breakpoints.up('md'));
@@ -173,6 +160,16 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>
                         <Typography variant="h6" noWrap>
                             Pathfinder
                         </Typography>
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            color="primary"
+                            className={classes.submit}
+                            onClick={logout}
+                        >
+                            Logout
+                        </Button>
                     </Toolbar>
                 </AppBar>
                 <Drawer
@@ -188,11 +185,11 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>
                         }),
                     }}
                 >
-                    <div className={classes.toolbar}>
+                    <Box className={classes.toolbar}>
                         <IconButton onClick={handleDrawerClose}>
                             {theme.direction === 'rtl' ? <ChevronRightIcon/> : <ChevronLeftIcon/>}
                         </IconButton>
-                    </div>
+                    </Box>
                     <Divider/>
                     <List>
                         <ListItem button onClick={() => changeRoute({page: "jobs", panel: null})}>
@@ -224,22 +221,6 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>
                                 <InboxIcon/>
                             </ListItemIcon>
                             <ListItemText primary="Submit Page"/>
-                        </ListItem>
-                    </List>
-                    <List>
-                        <ListItem button onClick={() => changeRoute({page: "authorization", panel: null})}>
-                            <ListItemIcon>
-                                <InboxIcon/>
-                            </ListItemIcon>
-                            <ListItemText primary="Login Page"/>
-                        </ListItem>
-                    </List>
-                    <List>
-                        <ListItem button onClick={() => changeRoute({page: "signUp", panel: null})}>
-                            <ListItemIcon>
-                                <InboxIcon/>
-                            </ListItemIcon>
-                            <ListItemText primary="Register Page"/>
                         </ListItem>
                     </List>
                 </Drawer>
@@ -308,12 +289,6 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>
                     </Route>
                     <Route path="/pages/submit">
                         <SubmitPageView/>
-                    </Route>
-                    <Route path="/pages/authorization">
-                        <AuthorizationPageView/>
-                    </Route>
-                    <Route path="/pages/signUp">
-                        <SignUpPage/>
                     </Route>
                 </Switch>
             </main>

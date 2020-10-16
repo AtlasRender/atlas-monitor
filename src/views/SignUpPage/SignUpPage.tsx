@@ -47,7 +47,7 @@ const SignUpPage = React.forwardRef((props: SignUpPageProps, ref: Ref<any>) => {
         style,
     } = props;
 
-    const {getUser, isLogged, login} = useAuth();
+    const {login} = useAuth();
     const {closeSnackbar} = useSnackbar();
     const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
     const [credentials, setCredentials] = useState<Credentials>({username: "", password: "", email: ""});
@@ -143,7 +143,7 @@ const SignUpPage = React.forwardRef((props: SignUpPageProps, ref: Ref<any>) => {
                 </Button>
                 <Grid container justify="flex-end">
                     <Grid item>
-                        <Link href="" variant="body2" onClick={() => changeRoute({page: "authorization", panel: null})}>
+                        <Link href="" variant="body2" onClick={() => changeRoute({pages: "authorization", panel: null})}>
                             Already have an account? Sign in
                         </Link>
                     </Grid>

@@ -14,13 +14,9 @@ import Stylable from "../../interfaces/Stylable";
 import Header from "../../components/Header";
 import Toolbar from "@material-ui/core/Toolbar";
 import {Route, Switch} from "react-router-dom";
-import RenderJobsView from "../../views/RenderJobsView/RenderJobsView";
-import RenderJobsDetailsView from "../../views/RenderJobsDetailsView/RenderJobsDetailsView";
-import UserPageView from "../../views/UserPageView/UserPageView";
-import OrganizationPageView from "../../views/OrganizationPageView/OrganizationPageView";
-import SubmitPageView from "../../views/SubmitPageView/SubmitPageView";
 import AuthorizationPageView from "../../views/AuthorizationPageView/AuthorizationPageView";
 import SignUpPage from "../../views/SignUpPage/SignUpPage";
+import {ChangeRouteProvider} from "routing-manager";
 
 /**
  * MainPageLayoutProps - interface for MainPageLayout component
@@ -43,21 +39,23 @@ const MainPageLayout = React.forwardRef((props: MainPageLayoutProps, ref: Ref<an
     } = props;
 
     return (
-        <Box className={classes.root}>
-            <Header/>
+        <ChangeRouteProvider routeMask="/:pages">
+            <Box className={classes.root}>
+                <Header/>
 
-            <main className={classes.content}>
-                <Toolbar/>
-                <Switch>
-                    <Route path="/pages/authorization">
-                        <AuthorizationPageView/>
-                    </Route>
-                    <Route path="/pages/signUp">
-                        <SignUpPage/>
-                    </Route>
-                </Switch>
-            </main>
-        </Box>
+                <main className={classes.content}>
+                    <Toolbar/>
+                    <Switch>
+                        <Route path="/authorization">
+                            <AuthorizationPageView/>
+                        </Route>
+                        <Route path="/signUp">
+                            <SignUpPage/>
+                        </Route>
+                    </Switch>
+                </main>
+            </Box>
+        </ChangeRouteProvider>
     );
 });
 

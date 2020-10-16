@@ -8,6 +8,7 @@ import {ChangeRouteProvider} from "routing-manager";
 import {AuthProvider} from "./hooks/useAuth";
 import {SnackbarProvider} from "notistack";
 import MainPageLayout from "./layout/MainPageLayout";
+import ChooseLayout from "./layout/ChooseLayout";
 
 ReactDOM.render(
     <React.StrictMode>
@@ -15,8 +16,7 @@ ReactDOM.render(
             <BrowserRouter>
                 <ChangeRouteProvider routeMask="/pages/:page(/:panel)">
                     <SnackbarProvider maxSnack={3} >
-                        <MainPageLayout/>
-                        {/*<MonitorLayout/>*/}
+                        <ChooseLayout/>
                     </SnackbarProvider>
                 </ChangeRouteProvider>
             </BrowserRouter>

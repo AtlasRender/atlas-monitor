@@ -46,7 +46,7 @@ const AuthorizationPageView = React.forwardRef((props: AuthorizationPageViewProp
 
     const {changeRoute} = useChangeRoute();
     const {enqueueSnackbar, closeSnackbar} = useSnackbar();
-    const {getUser, isLogged, login} = useAuth();
+    const {getUser, isLogged, login, logout} = useAuth();
     const coreRequest = useCoreRequest();
     const [credentials, setCredentials] = useState<Credentials>({username: "", password: ""});
 
@@ -142,7 +142,7 @@ const AuthorizationPageView = React.forwardRef((props: AuthorizationPageViewProp
                         </Link>
                     </Grid>
                     <Grid item>
-                        <Link href="" variant="body2" onClick={() => changeRoute({page: "signUp", panel: null})}>
+                        <Link href="" variant="body2" onClick={() => changeRoute({pages: "signUp", panel: null})}>
                             {"Don't have an account? Sign Up"}
                         </Link>
                     </Grid>
