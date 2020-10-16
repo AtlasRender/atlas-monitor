@@ -120,7 +120,7 @@ const UserPageView = React.forwardRef((props: UserPageViewProps, ref: Ref<any>) 
                     <Avatar src={githubAvatar} className={clsx(classes.avatar)}/>
                 </Grid>
                 <Grid item xs={10}>
-                    <DataTextField label="Name" children="Nikita Nesterov"/>
+                    <DataTextField label="Name" children={userData?.username}/>
                 </Grid>
                 <Grid item xs={10}>
                     <DataTextField label="Department" children="Pathfinder team crew"/>

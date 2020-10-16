@@ -19,13 +19,31 @@ const styles = (theme: Theme) => createStyles({
     },
     box:{
         display: "flex",
-        justifyContent: "flex-end",
-        alignItems:"center"
+        justifyContent: "flex-begin",
+        alignItems:"flex-end"
     },
     lastToken: {
         color: theme.palette.common.white,
         backgroundColor: theme.palette.error.dark,
+    },
+    paddingNone:{
+        paddingLeft: 0,
+        paddingBottom:0,
+    },
+    newToken:{
+        justifyContent:"space-between",
+    },
+    tokenAdd:{
+        paddingLeft:0,
+        paddingRight:0,
+    },
+    spacingInNewToken:{
+        paddingRight:theme.spacing(2),
+    },
+    topMargin:{
+        marginTop:theme.spacing(1),
     }
+
 });
 
 export default styles

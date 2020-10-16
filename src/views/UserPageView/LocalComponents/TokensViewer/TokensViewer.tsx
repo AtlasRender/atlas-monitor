@@ -30,14 +30,14 @@ import ListItemProgress from "../../../../components/ListItemProgress/ListItemPr
 import ListItemText from "@material-ui/core/ListItemText";
 import List from "@material-ui/core/List";
 import Token from "../../../../interfaces/Token";
-import DeleteIcon from '@material-ui/icons/Delete';
-import AddIcon from '@material-ui/icons/Add';
-import ExpandLess from '@material-ui/icons/ExpandLess';
-import ExpandMore from '@material-ui/icons/ExpandMore';
+import DeleteIcon from "@material-ui/icons/Delete";
+import AddIcon from "@material-ui/icons/Add";
+import ExpandLess from "@material-ui/icons/ExpandLess";
+import ExpandMore from "@material-ui/icons/ExpandMore";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import UserToken from "../../../../entities/UserToken";
-import CloseIcon from '@material-ui/icons/Close';
+import CloseIcon from "@material-ui/icons/Close";
 
 
 /**
@@ -46,7 +46,8 @@ import CloseIcon from '@material-ui/icons/Close';
  * @author Nikita Nesterov
  */
 interface TokensViewerProps extends Stylable {
-
+    description?: string,
+    token?: string,
 }
 
 /**
@@ -139,18 +140,18 @@ const TokensViewer = React.forwardRef((props: TokensViewerProps, ref: Ref<any>) 
         tokenView = (
             <Grid container className={clsx(classes.container, className)}>
                 <Grid item xs={10}>
-                    <List component="nav" aria-label="secondary mailbox folders" className={classes.paddingNone}>
-                        <ListItem>
-                            <ListItemText primary="Token" primaryTypographyProps={{variant: "h6"}}/>
+                    <List component="nav" aria-label="secondary mailbox folders" >
+                        <ListItem className={classes.paddingNone}>
+                            <ListItemText primary="Token" primaryTypographyProps={{variant: "h6"}} />
                             <ListItemSecondaryAction>
                                 {isOpen &&
-                                    <IconButton
-                                        edge="end"
-                                        aria-label="delete"
-                                        onClick={handleIsButtonActive}
-                                    >
-                                        <AddIcon/>
-                                    </IconButton>
+                                <IconButton
+                                    edge="end"
+                                    aria-label="delete"
+                                    onClick={handleIsButtonActive}
+                                >
+                                    <AddIcon/>
+                                </IconButton>
                                 }
                                 <IconButton
                                     edge="end"
@@ -164,9 +165,9 @@ const TokensViewer = React.forwardRef((props: TokensViewerProps, ref: Ref<any>) 
                         <Divider/>
                         {isButtonActive &&
                         <ListItem>
-                            <ListItemText primary="Add new token"/>
-                            <Grid container spacing={2}>
-                                <Grid item xs={12}>
+                            {/*<ListItemText primary="Add new token"/>*/}
+                            <Grid container className={classes.newToken}>
+                                <Grid item xs={6} className={clsx(classes.tokenAdd, classes.spacingInNewToken)}>
                                     <TextField
                                         variant="outlined"
                                         required
@@ -177,7 +178,7 @@ const TokensViewer = React.forwardRef((props: TokensViewerProps, ref: Ref<any>) 
                                         onChange={handleInputToken}
                                     />
                                 </Grid>
-                                <Grid item xs={12}>
+                                <Grid item xs={6} className={classes.tokenAdd}>
                                     <TextField
                                         variant="outlined"
                                         required
@@ -193,7 +194,7 @@ const TokensViewer = React.forwardRef((props: TokensViewerProps, ref: Ref<any>) 
                                     fullWidth
                                     variant="contained"
                                     color="primary"
-                                    className={classes.submit}
+                                    className={clsx(classes.tokenAdd, classes.topMargin)}
                                     onClick={handleAddToken}
                                 >
                                     Add Token
@@ -243,11 +244,111 @@ const TokensViewer = React.forwardRef((props: TokensViewerProps, ref: Ref<any>) 
         )
     } else {
         tokenView = (
-            <Grid container spacing={2} className={clsx(classes.container, className)}>
-                <Grid item xs={10}>
-                    <DataTextField label={description} children={token}/>
+            tokenView = (
+                <Grid container className={clsx(classes.container, className)}>
+                    <Grid item xs={10}>
+                        <List component="nav" aria-label="secondary mailbox folders" >
+                            <ListItem className={classes.paddingNone}>
+                                <ListItemText primary="Token" primaryTypographyProps={{variant: "h6"}} />
+                                <ListItemSecondaryAction>
+                                    {isOpen &&
+                                    <IconButton
+                                        edge="end"
+                                        aria-label="delete"
+                                        onClick={handleIsButtonActive}
+                                    >
+                                        <AddIcon/>
+                                    </IconButton>
+                                    }
+                                    <IconButton
+                                        edge="end"
+                                        aria-label="delete"
+                                        onClick={handleClick}
+                                    >
+                                        {isOpen ? <ExpandLess/> : <ExpandMore/>}
+                                    </IconButton>
+                                </ListItemSecondaryAction>
+                            </ListItem>
+                            <Divider/>
+                            {isButtonActive &&
+                            <ListItem>
+                                {/*<ListItemText primary="Add new token"/>*/}
+                                <Grid container className={classes.newToken}>
+                                    <Grid item xs={12} className={classes.tokenAdd}>
+                                        <TextField
+                                            variant="outlined"
+                                            required
+                                            fullWidth
+                                            name="name"
+                                            label="Name"
+                                            autoFocus
+                                            onChange={handleInputToken}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12} className={clsx(classes.tokenAdd, classes.topMargin)}>
+                                        <TextField
+                                            variant="outlined"
+                                            required
+                                            fullWidth
+                                            name="description"
+                                            label="Description"
+                                            autoFocus
+                                            onChange={handleInputToken}
+                                        />
+                                    </Grid>
+                                    <Button
+                                        type="submit"
+                                        fullWidth
+                                        variant="contained"
+                                        color="primary"
+                                        className={clsx(classes.tokenAdd, classes.topMargin)}
+                                        onClick={handleAddToken}
+                                    >
+                                        Add Token
+                                    </Button>
+
+                                </Grid>
+                            </ListItem>
+                            }
+                            {lastAddedToken &&
+                            <ListItem className={classes.lastToken}>
+                                <ListItemText
+                                    primary={lastAddedToken?.token}
+                                    secondary={"Запоминайте бо пизда"}
+                                />
+                                <ListItemSecondaryAction>
+                                    <IconButton
+                                        edge="end"
+                                        aria-label="close"
+                                        onClick={() => setLastAddedToken(null)}
+                                    >
+                                        <CloseIcon color="inherit"/>
+                                    </IconButton>
+                                </ListItemSecondaryAction>
+                            </ListItem>
+                            }
+                            <Collapse in={isOpen} timeout="auto" unmountOnExit>
+                                {tokens?.map((token) =>
+                                    <ListItem
+                                        key={`render-job-${token.id}`}
+                                    >
+                                        <ListItemText primary={token.name} secondary={token.description}/>
+                                        <ListItemSecondaryAction>
+                                            <IconButton
+                                                edge="end"
+                                                aria-label="delete"
+                                                onClick={() => handleRemoveToken(token.id)}
+                                            >
+                                                <DeleteIcon/>
+                                            </IconButton>
+                                        </ListItemSecondaryAction>
+                                    </ListItem>
+                                )}
+                            </Collapse>
+                        </List>
+                    </Grid>
                 </Grid>
-            </Grid>
+            )
         )
     }
 
