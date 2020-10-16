@@ -7,7 +7,7 @@
  * All rights reserved.
  */
 
-import React, {Ref, useState} from "react";
+import React, {Ref, useEffect, useState} from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -55,6 +55,7 @@ const AuthorizationPageView = React.forwardRef((props: AuthorizationPageViewProp
         event.persist();
         setCredentials(prev => ({...prev, [event.target.name]: event.target.value}));
     }
+
 
     function handleLogin(event: React.ChangeEvent<any>) {
 

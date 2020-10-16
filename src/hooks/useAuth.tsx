@@ -8,7 +8,7 @@
  */
 
 import React from "react";
-import User from "../interfaces/User";
+import User from "../entities/User";
 import Containerable from "../interfaces/Containerable";
 import PropTypes from "prop-types";
 
@@ -75,20 +75,26 @@ export function AuthProvider(props: AuthProviderProps) {
         children,
     } = props;
     const [logged, setLogged] = React.useState<boolean>(false);
+    const [user, setUser] = React.useState<User | null>(null);
+    const [loaded, setLoaded] = React.useState(false);
 
     React.useEffect(() => {
-        setLogged(!!getUser());
+        const localStorageUser = getUserFromLocalStorage();
+        setUser(localStorageUser);
+        setLogged(!!localStorageUser);
+        setLoaded(true);
     }, []);
 
     function logout(): void {
         localStorage.auth = null;
         setLogged(false);
+        setUser(null);
     }
 
-    function getUser(): User | null {
+    function getUserFromLocalStorage(): User | null {
         try {
             const credentials: any = JSON.parse(localStorage.auth);
-            const user: User | null = credentials ? {
+            const user: User | null = credentials ? new User ({
                 id: +credentials.id,
                 username: String(credentials.username),
                 email: String(credentials.email),
@@ -96,7 +102,7 @@ export function AuthProvider(props: AuthProviderProps) {
                 createdAt: new Date(credentials.createdAt),
                 updatedAt: new Date(credentials.updatedAt),
                 bearer: String(credentials.bearer),
-            } : null;
+            }) : null;
             if (user && !user.id) {
                 logout();
                 return null;
@@ -108,10 +114,21 @@ export function AuthProvider(props: AuthProviderProps) {
         return null;
     }
 
+    function getUser() {
+        if (!user) {
+            logout();
+            return null;
+        }
+        return user;
+    }
+
     function login(user: User) {
         localStorage.auth = JSON.stringify(user);
+        setUser(user);
         setLogged(true);
     }
+
+    if (!loaded) return null;
 
     return (
         <Context.Provider value={{isLogged: logged, getUser, login, logout}}>

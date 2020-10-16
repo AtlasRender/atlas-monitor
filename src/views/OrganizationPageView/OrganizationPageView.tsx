@@ -20,9 +20,9 @@ import {
     ListItemText,
     MenuItem,
     Select,
-    withStyles,
     useMediaQuery,
     useTheme,
+    withStyles,
 } from "@material-ui/core";
 import styles from "./styles";
 import DataTextField from "../../components/DataTextField";
@@ -34,7 +34,9 @@ import Stylable from "../../interfaces/Stylable";
 import useAuth from "../../hooks/useAuth";
 import useEnqueueErrorSnackbar from "../../utils/enqueueErrorSnackbar";
 import useCoreRequest from "../../hooks/useCoreRequest";
-import User from "../../interfaces/User";
+import {useChangeRoute} from "routing-manager";
+import Organization from "../../interfaces/Organization";
+import UserData from "../../interfaces/UserData";
 
 /**
  * OrganizationPageViewPropsStyled - interface for OrganizationPageView function
@@ -58,6 +60,31 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
         className,
     } = props;
 
+    const {getUser} = useAuth();
+    const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
+    const coreRequest = useCoreRequest();
+    const [organizationData, setOrganizationData] = useState<Organization | null>(null);
+    const {getRouteParams} = useChangeRoute();
+    const {panel} = getRouteParams();
+
+    useEffect(() => {
+        handleGetOrganization();
+    }, []);
+
+    function handleGetOrganization() {
+        const organizationId = panel;
+        console.log(panel);
+        coreRequest()
+            .get(`organizations/${organizationId}`)
+            .then((response) => {
+                setOrganizationData(response.body);
+            })
+            .catch(err => {
+                //TODO handle errors
+                enqueueErrorSnackbar("No such user");
+            });
+    }
+
     const [users, setUsers] = React.useState <Users[]>([
         {name: "Danil", role: "admin", id: 1, department: "Pathfinder"},
         {name: "Andriy", role: "moderator", id: 2, department: "Gachi"},
@@ -65,15 +92,13 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
         {name: "Nikita1", role: "member", id: 4, department: "Gutsul"},
     ]);
 
-    // const users =[
-    //
-    // ]
 
     const slaves = [
         "Kiev slave",
         "Harkov slave",
         "Lvov slave",
     ]
+
     /**
      * handleChange - function that handles changes in select field in members list
      * @function
@@ -81,10 +106,10 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
      * @author Nikita Nesterov
      */
     const handleChange = (event: any) => {
-        console.log(event.target);
+        //console.log(event.target);
         const newUsers = [...users];
         const user = newUsers.find(user => user.id === event.target.name)
-        console.log(user);
+        //console.log(user);
         if (user) {
             user.role = event.target.value;
         }
@@ -94,15 +119,15 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up("md"));
     let mainInfo;
-    if(matches){
-        mainInfo=(
+    if (matches) {
+        mainInfo = (
             <Box className={classes.container}>
                 <Grid container className={classes.firstLine}>
                     <Grid item xs={8}>
                         <Box>
                             <Grid container spacing={2} className={classes.nameDescription}>
                                 <Grid item xs={6}>
-                                    <DataTextField label="Organization name" children="Blizzard entertainment"/>
+                                    <DataTextField label="Organization name" children={organizationData?.name}/>
                                 </Grid>
                                 <Grid item xs={6}/>
                                 <Grid item xs={10}>
@@ -120,9 +145,8 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                 </Grid>
             </Box>
         )
-    }
-    else{
-        mainInfo=(
+    } else {
+        mainInfo = (
             <Grid container spacing={2} className={classes.firstLine}>
                 <Box className={classes.avatarBox}>
                     <Avatar src="https://cdn.sportclub.ru/assets/2019-09-20/n97c311rvb.jpg" className={classes.avatar}/>
@@ -131,7 +155,8 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                     <DataTextField label="Organization name" children="Blizzard entertainment"/>
                 </Grid>
                 <Grid item xs={10}>
-                    <DataTextField label="description" children="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dicta dolorem, dolorum nam quidem sint sunt!"/>
+                    <DataTextField label="description"
+                                   children="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dicta dolorem, dolorum nam quidem sint sunt!"/>
                 </Grid>
             </Grid>
         )
@@ -166,15 +191,14 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
 
             <TopicWithButton children="Members"/>
             <Grid container className={classes.firstLine} spacing={0}>
-                {users.map((user: any, key: number) => {
-                    //console.log(user);
+                {organizationData?.users.map((user: UserData, key: number) => {
                     return (
                         <Grid item xs={10} key={key}>
                             <ListItem>
                                 <ListItemAvatar>
                                     <Avatar src="https://cdn.sportclub.ru/assets/2019-09-20/n97c311rvb.jpg"/>
                                 </ListItemAvatar>
-                                <ListItemText primary={user.name} secondary={user.department}/>
+                                <ListItemText primary={user.username} secondary={user.email}/>
                                 <ListItemSecondaryAction>
                                     <Select
                                         // value={state.role}
@@ -184,7 +208,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                                         //     role: 'member',
                                         //     id: 'role-native-simple',
                                         // }}
-                                        value={user.role}
+                                        value="admin"
                                         label="Admin"
                                         onChange={handleChange}
                                         className={classes.selectFieldStyle}
