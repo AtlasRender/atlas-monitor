@@ -1,16 +1,37 @@
 /*
  * Copyright (c) 2020. This code created and belongs to Pathfinder render manager project.
  * Owner and project architect: Danil Andreev | danssg08@gmail.com |  https://github.com/DanilAndreev
- * File creator: Nikita Nesterov
+ * File creator: Andrii Demchyshyn
  * Project: pathfinder-monitor
  * File last modified: 16.10.2020, 1:33
  * All rights reserved.
  */
 
+
+/**
+ * Token - type for Token.
+ * @interface
+ * @author Andrii Demchyshyn
+ */
 export default interface Token{
-    name: string,
-    description: string,
-    createdAt: Date,
-    token?: string,
+    /**
+     * id - token id
+     */
     id: number,
+    /**
+     * name - token name.
+     */
+    name: string,
+    /**
+     * description - token description.
+     */
+    description: string,
+    /**
+     * createdAt - timestamp of token creation.
+     */
+    createdAt: Date,
+    /**
+     * token - token value
+     */
+    token?: string,
 }

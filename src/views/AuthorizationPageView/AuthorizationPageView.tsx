@@ -88,74 +88,68 @@ const AuthorizationPageView = React.forwardRef((props: AuthorizationPageViewProp
             });
     }
 
-    let {path} = useRouteMatch();
-
     return (
-        <Switch>
-            <Route exact path={path}>
-                <Container component="main" maxWidth="xs">
-                    <CssBaseline/>
-                    <Box className={classes.paper}>
-                        <Avatar className={classes.avatar}>
-                            <LockOutlinedIcon/>
-                        </Avatar>
-                        <Typography component="h1" variant="h5">
-                            Sign in
-                        </Typography>
-                        <TextField
-                            variant="outlined"
-                            margin="normal"
-                            required
-                            fullWidth
-                            id="username"
-                            label="Username"
-                            name="username"
-                            autoComplete="username"
-                            autoFocus
-                            onChange={handleInput}
-                        />
-                        <TextField
-                            variant="outlined"
-                            margin="normal"
-                            required
-                            fullWidth
-                            name="password"
-                            label="Password"
-                            type="password"
-                            id="password"
-                            autoComplete="current-password"
-                            onChange={handleInput}
-                        />
-                        <FormControlLabel
-                            control={<Checkbox value="remember" color="primary"/>}
-                            label="Remember me"
-                        />
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            color="primary"
-                            className={classes.submit}
-                            onClick={handleLogin}
-                        >
-                            Sign In
-                        </Button>
-                        <Grid container>
-                            <Grid item xs>
-                                <Link href="#" variant="body2">
-                                    Forgot password?
-                                </Link>
-                            </Grid>
-                            <Grid item>
-                                <Link href="" variant="body2" onClick={() => changeRoute({page: "signUp"})}>
-                                    {"Don't have an account? Sign Up"}
-                                </Link>
-                            </Grid>
-                        </Grid>
-                    </Box>
-                </Container>
-            </Route>
-        </Switch>
+        <Container component="main" maxWidth="xs">
+            <CssBaseline/>
+            <Box className={classes.paper}>
+                <Avatar className={classes.avatar}>
+                    <LockOutlinedIcon/>
+                </Avatar>
+                <Typography component="h1" variant="h5">
+                    Sign in
+                </Typography>
+                <TextField
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="username"
+                    label="Username"
+                    name="username"
+                    autoComplete="username"
+                    autoFocus
+                    onChange={handleInput}
+                />
+                <TextField
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    name="password"
+                    label="Password"
+                    type="password"
+                    id="password"
+                    autoComplete="current-password"
+                    onChange={handleInput}
+                />
+                <FormControlLabel
+                    control={<Checkbox value="remember" color="primary"/>}
+                    label="Remember me"
+                />
+                <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                    className={classes.submit}
+                    onClick={handleLogin}
+                >
+                    Sign In
+                </Button>
+                <Grid container>
+                    <Grid item xs>
+                        <Link href="#" variant="body2">
+                            Forgot password?
+                        </Link>
+                    </Grid>
+                    <Grid item>
+                        <Link href="" variant="body2" onClick={() => changeRoute({page: "signUp"})}>
+                            {"Don't have an account? Sign Up"}
+                        </Link>
+                    </Grid>
+                </Grid>
+            </Box>
+        </Container>
 
     );
 });

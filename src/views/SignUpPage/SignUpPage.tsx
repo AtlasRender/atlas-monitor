@@ -78,85 +78,79 @@ const SignUpPage = React.forwardRef((props: SignUpPageProps, ref: Ref<any>) => {
             });
     }
 
-    let {path} = useRouteMatch();
-
     return (
-        <Switch>
-            <Route exact path={path}>
-                <Container component="main" maxWidth="xs">
-                    <CssBaseline/>
-                    <Box className={classes.paper}>
-                        <Avatar className={classes.avatar}>
-                            <LockOutlinedIcon/>
-                        </Avatar>
-                        <Typography component="h1" variant="h5">
-                            Sign up
-                        </Typography>
-                        <Grid container spacing={2}>
-                            <Grid item xs={12}>
-                                <TextField
-                                    autoComplete="username"
-                                    variant="outlined"
-                                    required
-                                    fullWidth
-                                    name="username"
-                                    label="Username"
-                                    autoFocus
-                                    onChange={handleInput}
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    variant="outlined"
-                                    required
-                                    fullWidth
-                                    label="Email Address"
-                                    name="email"
-                                    autoComplete="email"
-                                    onChange={handleInput}
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    variant="outlined"
-                                    required
-                                    fullWidth
-                                    name="password"
-                                    label="Password"
-                                    type="password"
-                                    autoComplete="current-password"
-                                    onChange={handleInput}
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <FormControlLabel
-                                    control={<Checkbox value="allowExtraEmails" color="primary"/>}
-                                    label="I want to receive inspiration, marketing promotions and updates via email."
-                                />
-                            </Grid>
-                        </Grid>
-                        <Button
-                            type="submit"
+        <Container component="main" maxWidth="xs">
+            <CssBaseline/>
+            <Box className={classes.paper}>
+                <Avatar className={classes.avatar}>
+                    <LockOutlinedIcon/>
+                </Avatar>
+                <Typography component="h1" variant="h5">
+                    Sign up
+                </Typography>
+                <Grid container spacing={2}>
+                    <Grid item xs={12}>
+                        <TextField
+                            autoComplete="username"
+                            variant="outlined"
+                            required
                             fullWidth
-                            variant="contained"
-                            color="primary"
-                            className={classes.submit}
-                            onClick={handleRegister}
-                        >
-                            Sign Up
-                        </Button>
-                        <Grid container justify="flex-end">
-                            <Grid item>
-                                <Link href="" variant="body2"
-                                      onClick={() => changeRoute({page: "authorization"})}>
-                                    Already have an account? Sign in
-                                </Link>
-                            </Grid>
-                        </Grid>
-                    </Box>
-                </Container>
-            </Route>
-        </Switch>
+                            name="username"
+                            label="Username"
+                            autoFocus
+                            onChange={handleInput}
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <TextField
+                            variant="outlined"
+                            required
+                            fullWidth
+                            label="Email Address"
+                            name="email"
+                            autoComplete="email"
+                            onChange={handleInput}
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <TextField
+                            variant="outlined"
+                            required
+                            fullWidth
+                            name="password"
+                            label="Password"
+                            type="password"
+                            autoComplete="current-password"
+                            onChange={handleInput}
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <FormControlLabel
+                            control={<Checkbox value="allowExtraEmails" color="primary"/>}
+                            label="I want to receive inspiration, marketing promotions and updates via email."
+                        />
+                    </Grid>
+                </Grid>
+                <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                    className={classes.submit}
+                    onClick={handleRegister}
+                >
+                    Sign Up
+                </Button>
+                <Grid container justify="flex-end">
+                    <Grid item>
+                        <Link href="" variant="body2"
+                              onClick={() => changeRoute({page: "authorization"})}>
+                            Already have an account? Sign in
+                        </Link>
+                    </Grid>
+                </Grid>
+            </Box>
+        </Container>
     );
 });
 SignUpPage.displayName = "SignUpPage";

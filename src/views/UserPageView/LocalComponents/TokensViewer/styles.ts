@@ -65,14 +65,9 @@ const styles = (theme: Theme) => createStyles({
         alignItems:"center",
     },
     wrapWord: {
-        // whiteSpace: "-moz-pre-wrap",  /* Mozilla, since 1999 */
-        whiteSpace: "pre-wrap",          /* Chrome & Safari */
-        // whiteSpace: "-pre-wrap",                 /* Opera 4-6 */
-        // whiteSpace: "-o-pre-wrap",               /* Opera 7 */
-        // whiteSpace: "pre-wrap",                  /* CSS3 */
-        wordWrap: "break-word",                  /* Internet Explorer 5.5+ */
+        whiteSpace: "pre-wrap",
+        wordWrap: "break-word",
         wordBreak: "break-all",
-        // whiteSpace: "normal",
     },
     closeButtonColor:{
         color:grey[50],

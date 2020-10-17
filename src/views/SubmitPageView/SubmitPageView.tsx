@@ -204,59 +204,53 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
         )
     }
 
-    let {path} = useRouteMatch();
-
     return (
-        <Switch>
-            <Route exact path={path}>
-                <Box className={className} style={style}>
-                    <Grid container spacing={2} className={classes.container}>
-                        <Grid item xs={10}>
-                            <Typography variant="h6">Submit info</Typography>
-                        </Grid>
-                        {submitInfo}
-                        <Grid item xs={10} className={classes.flexItem}>
-                            <List disablePadding className={classes.fullWidth}>
-                                <ListItem disableGutters>
-                                    <ListItemText
-                                        primary={<Typography variant="h6">Render settings</Typography>}
-                                    />
-                                    {/*<ListItemSecondaryAction>*/}
-                                    {/*    <IconButton><AddIcon/></IconButton>*/}
-                                    {/*</ListItemSecondaryAction>*/}
-                                </ListItem>
-                            </List>
-                        </Grid>
-                        {renderSettings}
+        <Box className={className} style={style}>
+            <Grid container spacing={2} className={classes.container}>
+                <Grid item xs={10}>
+                    <Typography variant="h6">Submit info</Typography>
+                </Grid>
+                {submitInfo}
+                <Grid item xs={10} className={classes.flexItem}>
+                    <List disablePadding className={classes.fullWidth}>
+                        <ListItem disableGutters>
+                            <ListItemText
+                                primary={<Typography variant="h6">Render settings</Typography>}
+                            />
+                            {/*<ListItemSecondaryAction>*/}
+                            {/*    <IconButton><AddIcon/></IconButton>*/}
+                            {/*</ListItemSecondaryAction>*/}
+                        </ListItem>
+                    </List>
+                </Grid>
+                {renderSettings}
 
-                        <Grid item xs={10} className={classes.flexItem}>
-                            <Box>
-                                <Chip
-                                    label="1000-1001 2 save as 10 Priority:1"
-                                    onDelete={handleDelete}
-                                    className={classes.chipStyle}
-                                />
-                                <Chip
-                                    label="1002-1279 1 save as 1 Priority:3"
-                                    onDelete={handleDelete}
-                                    className={classes.chipStyle}
-                                />
-                                <Chip
-                                    label="1279-1400 5 save as 1 Priority:2"
-                                    onDelete={handleDelete}
-                                    className={classes.chipStyle}
-                                />
-                            </Box>
-                        </Grid>
-                        <Grid item xs={10}>
-                            <Typography variant="h6">Plugin</Typography>
-                        </Grid>
-                        {plugin}
-                        {submitButton}
-                    </Grid>
-                </Box>
-            </Route>
-        </Switch>
+                <Grid item xs={10} className={classes.flexItem}>
+                    <Box>
+                        <Chip
+                            label="1000-1001 2 save as 10 Priority:1"
+                            onDelete={handleDelete}
+                            className={classes.chipStyle}
+                        />
+                        <Chip
+                            label="1002-1279 1 save as 1 Priority:3"
+                            onDelete={handleDelete}
+                            className={classes.chipStyle}
+                        />
+                        <Chip
+                            label="1279-1400 5 save as 1 Priority:2"
+                            onDelete={handleDelete}
+                            className={classes.chipStyle}
+                        />
+                    </Box>
+                </Grid>
+                <Grid item xs={10}>
+                    <Typography variant="h6">Plugin</Typography>
+                </Grid>
+                {plugin}
+                {submitButton}
+            </Grid>
+        </Box>
     );
 });
 
