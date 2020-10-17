@@ -42,6 +42,7 @@ const AuthorizationPageView = React.forwardRef((props: AuthorizationPageViewProp
     const {
         classes,
         className,
+        style
     } = props;
 
     const {changeRoute} = useChangeRoute();
@@ -82,7 +83,7 @@ const AuthorizationPageView = React.forwardRef((props: AuthorizationPageViewProp
                 login(user);
                 changeRoute({page: "user"});
             })
-            .catch(() => {
+            .catch(err => {
                 enqueueSnackbar("Authorization Error", {variant: "error"});
             });
     }

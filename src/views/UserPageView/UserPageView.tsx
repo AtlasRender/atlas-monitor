@@ -7,9 +7,8 @@
  * All rights reserved.
  */
 import React, {Ref, useEffect, useState} from "react";
-import {Button, IconButton, withStyles} from "@material-ui/core";
+import {Avatar, Box, Divider, Grid, Typography, Button, useMediaQuery, useTheme, withStyles} from "@material-ui/core";
 import styles from "./styles";
-import {Avatar, Grid, Box, Typography, Divider, useTheme, useMediaQuery} from "@material-ui/core";
 import githubAvatar from "./githubAvatar.jpg";
 import DataTextField from "../../components/DataTextField";
 import OrganizationsFieldsRow from "./LocalComponents/OrganizationsFieldsRow";
@@ -17,7 +16,6 @@ import clsx from "clsx";
 import TokensViewer from "./LocalComponents/TokensViewer";
 import Stylable from "../../interfaces/Stylable";
 import useCoreRequest from "../../hooks/useCoreRequest";
-import {useSnackbar} from "notistack";
 import useEnqueueErrorSnackbar from "../../utils/enqueueErrorSnackbar";
 import useAuth from "../../hooks/useAuth";
 import UserData from "../../interfaces/UserData";
@@ -135,7 +133,7 @@ const UserPageView = React.forwardRef((props: UserPageViewProps, ref: Ref<any>) 
     return (
         <Switch>
             <Route path={path}>
-                <Box>
+                <Box style={style} className={className}>
                     <Button onClick={() => changeRoute({page: "jobs"})}>click me</Button>
                     {mainInfo}
                     <Grid container spacing={2} className={clsx(classes.container, className)}>

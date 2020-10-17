@@ -45,6 +45,7 @@ const SignUpPage = React.forwardRef((props: SignUpPageProps, ref: Ref<any>) => {
     const {
         classes,
         className,
+        style,
     } = props;
 
     const {login} = useAuth();
