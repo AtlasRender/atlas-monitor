@@ -80,6 +80,12 @@ const styles = (theme: Theme) => createStyles({
     fullList: {
         width: 'auto',
     },
+    popperTop: {
+        marginTop: 8,
+    },
+    typographyFlex: {
+        flexGrow: 1,
+    }
 });
 
 export default styles;

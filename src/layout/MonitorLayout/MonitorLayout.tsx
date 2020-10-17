@@ -20,7 +20,16 @@ import ListItemText from '@material-ui/core/ListItemText';
 import MenuIcon from '@material-ui/icons/Menu';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import styles from "./styles";
-import {Box, Divider, IconButton, SwipeableDrawer, useMediaQuery, useTheme, withStyles} from "@material-ui/core";
+import {
+    Avatar,
+    Box,
+    Divider,
+    IconButton, Popper,
+    SwipeableDrawer,
+    useMediaQuery,
+    useTheme,
+    withStyles
+} from "@material-ui/core";
 import {Route, Switch, useRouteMatch} from "react-router-dom";
 import RenderJobsView from "../../views/RenderJobsView/RenderJobsView";
 import RenderJobsDetailsView from "../../views/RenderJobsDetailsView";
@@ -64,6 +73,14 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>
     const [open, setOpen] = React.useState(false);
     const [state, setState] = React.useState({left: false});
     const {logout} = useAuth();
+    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
+    const openPopper = Boolean(anchorEl);
+    const id = openPopper ? 'simple-popper' : undefined;
+
+    const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+        setAnchorEl(anchorEl ? null : event.currentTarget);
+    };
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -161,19 +178,31 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>
                         >
                             <MenuIcon/>
                         </IconButton>
-                        <Typography variant="h6" noWrap>
+                        <Typography variant="h6" noWrap className={classes.typographyFlex}>
                             Pathfinder
                         </Typography>
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            color="primary"
-                            className={classes.submit}
-                            onClick={handleLogout}
+                        <IconButton
+                            aria-describedby={id}
+                            type="button"
+                            onClick={handleClick}
                         >
-                            Logout
-                        </Button>
+                            <Avatar />
+                        </IconButton>
+                        <Popper
+                            id={id}
+                            open={openPopper}
+                            anchorEl={anchorEl}
+                            className={classes.popperTop}
+                        >
+                            <Button
+                                type="submit"
+                                variant="contained"
+                                color="primary"
+                                onClick={handleLogout}
+                            >
+                                Logout
+                            </Button>
+                        </Popper>
                     </Toolbar>
                 </AppBar>
                 <Drawer

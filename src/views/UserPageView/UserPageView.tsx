@@ -134,7 +134,6 @@ const UserPageView = React.forwardRef((props: UserPageViewProps, ref: Ref<any>) 
         <Switch>
             <Route path={path}>
                 <Box style={style} className={className}>
-                    <Button onClick={() => changeRoute({page: "jobs"})}>click me</Button>
                     {mainInfo}
                     <Grid container spacing={2} className={clsx(classes.container, className)}>
                         <Grid item xs={10} className={clsx(classes.topic, className)}>
