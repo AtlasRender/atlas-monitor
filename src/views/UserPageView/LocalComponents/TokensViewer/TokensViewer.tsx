@@ -39,6 +39,7 @@ import Button from "@material-ui/core/Button";
 import UserToken from "../../../../entities/UserToken";
 import CloseIcon from "@material-ui/icons/Close";
 import CheckIcon from "@material-ui/icons/Check";
+import useEnqueueSuccessSnackbar from "../../../../utils/EnqueSuccessSnackbar";
 
 /**
  * TokensViewerPropsStyled - interface for TokensViewer function
@@ -70,6 +71,7 @@ const TokensViewer = React.forwardRef((props: TokensViewerProps, ref: Ref<any>) 
     const [isButtonActive, setIsButtonActive] = React.useState(false);
     const [newToken, setNewToken] = React.useState({name: "", description: ""});
     const [lastAddedToken, setLastAddedToken] = React.useState<UserToken | null>(null);
+    const enqueueSuccessSnackbar = useEnqueueSuccessSnackbar();
     const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
 
     useEffect(() => {
@@ -216,7 +218,12 @@ const TokensViewer = React.forwardRef((props: TokensViewerProps, ref: Ref<any>) 
                             className={clsx(classes.container, classes.noWrap, classes.lastToken)}
                             onClick={() => {
                                 copyToClipboard(lastAddedToken?.token)
-                                    .then()
+                                    .then(res => {
+                                        enqueueSuccessSnackbar("successfully copied")
+                                    })
+                                    .catch(error => {
+                                        enqueueErrorSnackbar("failed to copy")
+                                    });
                             }}
                         >
                             <Box className={clsx(classes.generatedToken, classes.wrapWord)}>
@@ -224,15 +231,17 @@ const TokensViewer = React.forwardRef((props: TokensViewerProps, ref: Ref<any>) 
                                 <Typography variant="caption">This will never be shown again (Click to
                                     copy)</Typography>
                             </Box>
-                            <IconButton
-                                edge="end"
-                                aria-label="close"
-                                style={{marginRight: theme.spacing(1)}}
-                                onClick={() => setLastAddedToken(null)}
+                            <ListItemSecondaryAction>
+                                <IconButton
+                                    edge="end"
+                                    aria-label="close"
+                                    style={{marginRight: theme.spacing(1)}}
+                                    onClick={() => setLastAddedToken(null)}
 
-                            >
-                                <CloseIcon className={classes.closeButtonColor}/>
-                            </IconButton>
+                                >
+                                    <CloseIcon className={classes.closeButtonColor}/>
+                                </IconButton>
+                            </ListItemSecondaryAction>
                         </ListItem>
                         }
                         <Collapse in={isOpen} timeout="auto" unmountOnExit>
@@ -332,7 +341,12 @@ const TokensViewer = React.forwardRef((props: TokensViewerProps, ref: Ref<any>) 
                                 className={clsx(classes.container, classes.noWrap, classes.lastToken)}
                                 onClick={() => {
                                     copyToClipboard(lastAddedToken?.token)
-                                        .then()
+                                        .then(res => {
+                                            enqueueSuccessSnackbar("successfully copied")
+                                        })
+                                        .catch(error => {
+                                            enqueueErrorSnackbar("failed to copy")
+                                        });
                                 }}
                             >
                                 <Box className={clsx(classes.generatedToken)}>
@@ -344,15 +358,17 @@ const TokensViewer = React.forwardRef((props: TokensViewerProps, ref: Ref<any>) 
                                     </Typography>
                                     <Typography variant="caption">This will never be shown again</Typography>
                                 </Box>
-                                <IconButton
-                                    edge="end"
-                                    aria-label="close"
-                                    style={{marginRight: theme.spacing(1)}}
-                                    onClick={() => setLastAddedToken(null)}
+                                <ListItemSecondaryAction>
+                                    <IconButton
+                                        edge="end"
+                                        aria-label="close"
+                                        style={{marginRight: theme.spacing(1)}}
+                                        onClick={() => setLastAddedToken(null)}
 
-                                >
-                                    <CloseIcon className={classes.closeButtonColor}/>
-                                </IconButton>
+                                    >
+                                        <CloseIcon className={classes.closeButtonColor}/>
+                                    </IconButton>
+                                </ListItemSecondaryAction>
                             </ListItem>
                             }
                             <Collapse in={isOpen} timeout="auto" unmountOnExit>
