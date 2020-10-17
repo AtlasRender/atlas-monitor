@@ -203,7 +203,7 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
     }
 
     return (
-        <Box>
+        <Box className={className} style={style}>
             <Grid container spacing={2} className={classes.container}>
                 <Grid item xs={10}>
                     <Typography variant="h6">Submit info</Typography>

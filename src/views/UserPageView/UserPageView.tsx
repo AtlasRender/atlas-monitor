@@ -7,9 +7,8 @@
  * All rights reserved.
  */
 import React, {Ref, useEffect, useState} from "react";
-import {withStyles} from "@material-ui/core";
+import {Avatar, Box, Divider, Grid, Typography, useMediaQuery, useTheme, withStyles} from "@material-ui/core";
 import styles from "./styles";
-import {Avatar, Grid, Box, Typography, Divider, useTheme, useMediaQuery} from "@material-ui/core";
 import githubAvatar from "./githubAvatar.jpg";
 import DataTextField from "../../components/DataTextField";
 import OrganizationsFieldsRow from "./LocalComponents/OrganizationsFieldsRow";
@@ -21,7 +20,6 @@ import useEnqueueErrorSnackbar from "../../utils/enqueueErrorSnackbar";
 import useAuth from "../../hooks/useAuth";
 import UserData from "../../interfaces/UserData";
 import {useChangeRoute} from "routing-manager";
-import Token from "../../interfaces/Token";
 
 
 /**
@@ -108,10 +106,10 @@ const UserPageView = React.forwardRef((props: UserPageViewProps, ref: Ref<any>) 
     }
 
     return (
-        <Box>
+        <Box style={style} className={className}>
             {mainInfo}
-            <Grid container spacing={2} className={clsx(classes.container, className)}>
-                <Grid item xs={10} className={clsx(classes.topic, className)}>
+            <Grid container spacing={2} className={clsx(classes.container)}>
+                <Grid item xs={10} className={clsx(classes.topic)}>
                     <Typography variant="h6">Organizations</Typography>
                     <Divider/>
                 </Grid>

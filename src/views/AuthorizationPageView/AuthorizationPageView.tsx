@@ -45,8 +45,8 @@ const AuthorizationPageView = React.forwardRef((props: AuthorizationPageViewProp
     } = props;
 
     const {changeRoute} = useChangeRoute();
-    const {enqueueSnackbar, closeSnackbar} = useSnackbar();
-    const {getUser, isLogged, login} = useAuth();
+    const {enqueueSnackbar} = useSnackbar();
+    const {login} = useAuth();
     const coreRequest = useCoreRequest();
     const [credentials, setCredentials] = useState<Credentials>({username: "", password: ""});
 
@@ -88,7 +88,7 @@ const AuthorizationPageView = React.forwardRef((props: AuthorizationPageViewProp
     }
 
     return (
-        <Container component="main" maxWidth="xs">
+        <Container component="main" maxWidth="xs" className={className} style={style}>
             <CssBaseline/>
             <Box className={classes.paper}>
                 <Avatar className={classes.avatar}>

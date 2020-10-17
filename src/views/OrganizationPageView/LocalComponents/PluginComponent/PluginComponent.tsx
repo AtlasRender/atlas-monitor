@@ -49,7 +49,7 @@ const PluginComponent = React.forwardRef((props: PluginComponentProps, ref: Ref<
                     <Grid item xs={2} style={{padding: 0}}>
                         <DataTextField label="Plugin name" children={plugin} className={classes.dataTextFieldFix}/>
                     </Grid>
-                    <Grid item xs={2} className={clsx(classes.container, classes.selectAlignment, className)}>
+                    <Grid item xs={2} className={clsx(classes.container, classes.selectAlignment)}>
                         <Select
                             value="v.1.0.1"
                             className={classes.container}
@@ -78,7 +78,7 @@ const PluginComponent = React.forwardRef((props: PluginComponentProps, ref: Ref<
                     <Grid item xs={6} style={{padding: 0}}>
                         <DataTextField label={description} children={plugin} className={classes.dataTextFieldFix}/>
                     </Grid>
-                    <Grid item xs={2} className={clsx(classes.container, classes.selectAlignment, className)}>
+                    <Grid item xs={2} className={clsx(classes.container, classes.selectAlignment)}>
                         <Select
                             value="v.1.0.1"
                             className={classes.container}
@@ -99,7 +99,7 @@ const PluginComponent = React.forwardRef((props: PluginComponentProps, ref: Ref<
     }
 
     return (
-        <ListItem>
+        <ListItem style={style} className={className}>
             {item}
         </ListItem>
     );
