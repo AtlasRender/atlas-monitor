@@ -10,9 +10,14 @@
 import React, {Ref, useEffect, useState} from "react";
 import {
     Avatar,
-    Box,
+    Box, Button,
+    Checkbox,
+    Dialog,
+    DialogTitle,
+    Divider,
     Grid,
     IconButton,
+    InputBase,
     ListItem,
     ListItemAvatar,
     ListItemIcon,
@@ -31,13 +36,16 @@ import BuildIcon from '@material-ui/icons/Build';
 import SettingsIcon from '@material-ui/icons/Settings';
 import PluginComponent from "./LocalComponents/PluginComponent";
 import Stylable from "../../interfaces/Stylable";
-import useAuth from "../../hooks/useAuth";
 import useEnqueueErrorSnackbar from "../../utils/enqueueErrorSnackbar";
 import useCoreRequest from "../../hooks/useCoreRequest";
-import {ChangeRouteProvider, useChangeRoute} from "routing-manager";
+import {useChangeRoute} from "routing-manager";
 import Organization from "../../interfaces/Organization";
 import UserData from "../../interfaces/UserData";
 import {Route, Switch, useRouteMatch} from "react-router-dom";
+import AddIcon from "@material-ui/icons/Add";
+import List from "@material-ui/core/List";
+import SearchIcon from '@material-ui/icons/Search';
+import CloseIcon from "@material-ui/icons/Close";
 
 /**
  * OrganizationPageViewPropsStyled - interface for OrganizationPageView function
@@ -61,20 +69,24 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
         className,
     } = props;
 
-    const {getUser} = useAuth();
     const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
     const coreRequest = useCoreRequest();
+    const [isUserActive, setIsUserActive] = useState(false);
+    const [isOpen, setIsOpen] = React.useState(false);
+    const [isButtonActive, setIsButtonActive] = useState(false);
     const [organizationData, setOrganizationData] = useState<Organization | null>(null);
+    const [allUsers, setAllUsers] = useState<UserData[] | null>(null);
+    const [newUsers, setNewUsers] = useState<number[]>([]);
     const {getRouteParams} = useChangeRoute();
-    const {panel} = getRouteParams();
+    const {id} = getRouteParams();
 
     useEffect(() => {
         handleGetOrganization();
+        handleGetAllUsers();
     }, []);
 
     function handleGetOrganization() {
-        const organizationId = panel;
-        console.log(panel);
+        const organizationId = id;
         coreRequest()
             .get(`organizations/${organizationId}`)
             .then((response) => {
@@ -84,6 +96,70 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                 //TODO handle errors
                 enqueueErrorSnackbar("No such user");
             });
+    }
+
+    function handleGetAllUsers() {
+        coreRequest()
+            .get("users")
+            .then((response) => {
+                setAllUsers(response.body);
+            })
+            .catch(err => {
+                //TODO handle errors
+                enqueueErrorSnackbar("Cant get users");
+            });
+    }
+
+    function handleAddUser(usersToAddId: number[]) {
+        setIsButtonActive(false);
+        setIsUserActive(true);
+        const organizationId = id;
+        coreRequest()
+            .post(`organizations/${organizationId}/users`)
+            .send({userIds: usersToAddId})
+            .then(response => {
+                handleGetOrganization();
+            })
+            .catch(err => {
+                //TODO handle errors
+                enqueueErrorSnackbar("No such user");
+            })
+    }
+
+    function handleRemoveUser(usersToDeleteIds: number[]) {
+        const organizationId = id;
+        coreRequest()
+            .delete(`organizations/${organizationId}/users`)
+            .send({userIds: usersToDeleteIds})
+            .then(response => {
+                handleGetOrganization();
+            })
+            .catch(err => {
+                //TODO handle errors
+                enqueueErrorSnackbar(err.message);
+            })
+    }
+
+    function handleNewUsersClick(newUserId: number) {
+        let newUsersArray = newUsers;
+        if(newUsers.includes(newUserId)) {
+            newUsersArray = newUsersArray.filter(userId => userId !== newUserId);
+            setNewUsers(newUsersArray);
+        } else {
+            setNewUsers([...newUsers, newUserId])
+        }
+    }
+
+    function handleClick() {
+        setIsOpen(!isOpen);
+    }
+
+    function handleIsUserActive() {
+        setIsUserActive(true);
+    }
+
+    function handleIsButtonActive() {
+        setIsButtonActive(true);
     }
 
     const [users, setUsers] = React.useState <Users[]>([
@@ -163,10 +239,9 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
 
     let {path} = useRouteMatch();
 
-
     return (
         <Switch>
-            <Route exact path={path}>
+            <Route path={path}>
                 <Box>
                     {mainInfo}
                     <TopicWithButton children="Slaves"/>
@@ -192,7 +267,79 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                         </Grid>
                     </Grid>
 
-                    <TopicWithButton children="Members"/>
+                    <Grid container className={classes.firstLine}>
+                        <Grid item xs={10}>
+                            <List component="nav" aria-label="secondary mailbox folders">
+                                <ListItem className={classes.paddingNone}>
+                                    <ListItemText primary="Members" primaryTypographyProps={{variant: "h6"}}/>
+                                    <ListItemSecondaryAction>
+                                        <IconButton
+                                            edge="end"
+                                            aria-label="delete"
+                                            onClick={handleIsButtonActive}
+                                        >
+                                            <AddIcon/>
+                                        </IconButton>
+                                    </ListItemSecondaryAction>
+                                </ListItem>
+                                <Divider/>
+                            </List>
+                        </Grid>
+                    </Grid>
+
+                    <Dialog
+                        open={isButtonActive}
+                        onClose={() => setIsButtonActive(false)}
+                    >
+                        <DialogTitle className={classes.paddingNoneBottom}>
+                            Choose users to add
+                        </DialogTitle>
+                        <List className={classes.dialog}>
+                            <ListItem>
+                                <div className={classes.search}>
+                                    <div className={classes.searchIcon}>
+                                        <SearchIcon/>
+                                    </div>
+                                    <InputBase
+                                        placeholder="Search…"
+                                        classes={{
+                                            root: classes.inputRoot,
+                                            input: classes.inputInput,
+                                        }}
+                                        inputProps={{'aria-label': 'search'}}
+                                    />
+                                </div>
+                                <IconButton>
+                                    <CloseIcon/>
+                                </IconButton>
+                            </ListItem>
+                            {allUsers?.map((user) => (
+                                <ListItem
+                                    button
+                                    key={user.id}
+                                    onClick={() => handleNewUsersClick(user.id)}
+                                >
+                                    <ListItemAvatar>
+                                        <Avatar/>
+                                    </ListItemAvatar>
+                                    <ListItemText primary={user.username} secondary="department"/>
+
+                                    <ListItemSecondaryAction>
+
+                                        <Checkbox
+                                            checked={newUsers.includes(user.id)}
+                                            color="primary"
+                                            inputProps={{'aria-label': 'secondary checkbox'}}
+                                        />
+                                    </ListItemSecondaryAction>
+                                </ListItem>
+                            ))}
+                            <ListItem>
+                                <Button fullWidth onClick={() => handleAddUser(newUsers)}>Add new users</Button>
+                            </ListItem>
+                        </List>
+                    </Dialog>
+
                     <Grid container className={classes.firstLine} spacing={0}>
                         {organizationData?.users.map((user: UserData, key: number) => {
                             return (
@@ -221,7 +368,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                                                 <MenuItem value="member">Member</MenuItem>
                                                 <MenuItem value="moderator">Moderator</MenuItem>
                                             </Select>
-                                            <IconButton>
+                                            <IconButton onClick={() => handleRemoveUser([user.id])}>
                                                 <SettingsIcon/>
                                             </IconButton>
                                         </ListItemSecondaryAction>

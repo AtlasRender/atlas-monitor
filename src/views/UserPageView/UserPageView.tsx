@@ -55,6 +55,7 @@ const UserPageView = React.forwardRef((props: UserPageViewProps, ref: Ref<any>) 
 
     const {id} = getRouteParams();
     const [tokens, setTokens] = useState<Token[]>([]);
+
     useEffect(() => {
         handleGetUser();
     }, []);
