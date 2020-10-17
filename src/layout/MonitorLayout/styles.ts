@@ -69,7 +69,10 @@ const styles = (theme: Theme) => createStyles({
     },
     content: {
         flexGrow: 1,
-        padding: theme.spacing(3),
+        padding: theme.spacing(2),
+        [theme.breakpoints.down('sm')]: {
+            padding: theme.spacing(0),
+        }
     },
     list: {
         width: 250,
