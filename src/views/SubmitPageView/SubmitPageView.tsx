@@ -10,21 +10,19 @@
 import React, {Ref} from "react";
 import {
     Box,
-    Grid,
-    Typography,
-    withStyles,
-    TextField,
-    Select,
-    MenuItem,
-    IconButton,
-    ListItem,
-    ListItemText,
-    ListItemSecondaryAction,
-    List,
     Button,
     Chip,
+    Grid,
+    IconButton,
+    List,
+    ListItem,
+    ListItemText,
+    MenuItem,
+    Select,
+    TextField,
+    Typography,
     useMediaQuery,
-    InputLabel,
+    withStyles,
 } from "@material-ui/core";
 import clsx from "clsx";
 import styles from "./styles";
@@ -205,7 +203,7 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
     }
 
     return (
-        <Box>
+        <Box className={className} style={style}>
             <Grid container spacing={2} className={classes.container}>
                 <Grid item xs={10}>
                     <Typography variant="h6">Submit info</Typography>

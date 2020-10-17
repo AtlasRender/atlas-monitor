@@ -7,9 +7,8 @@
  * All rights reserved.
  */
 import React, {Ref, useEffect, useState} from "react";
-import {Button, IconButton, withStyles} from "@material-ui/core";
+import {Avatar, Box, Divider, Grid, Typography, useMediaQuery, useTheme, withStyles} from "@material-ui/core";
 import styles from "./styles";
-import {Avatar, Grid, Box, Typography, Divider, useTheme, useMediaQuery} from "@material-ui/core";
 import githubAvatar from "./githubAvatar.jpg";
 import DataTextField from "../../components/DataTextField";
 import OrganizationsFieldsRow from "./LocalComponents/OrganizationsFieldsRow";
@@ -17,13 +16,11 @@ import clsx from "clsx";
 import TokensViewer from "./LocalComponents/TokensViewer";
 import Stylable from "../../interfaces/Stylable";
 import useCoreRequest from "../../hooks/useCoreRequest";
-import {useSnackbar} from "notistack";
 import useEnqueueErrorSnackbar from "../../utils/enqueueErrorSnackbar";
 import useAuth from "../../hooks/useAuth";
 import UserData from "../../interfaces/UserData";
 import {useChangeRoute} from "routing-manager";
-import Token from "../../interfaces/Token";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+
 
 /**
  * UserPageViewPropsStyled - interface for UserPageView
@@ -52,27 +49,9 @@ const UserPageView = React.forwardRef((props: UserPageViewProps, ref: Ref<any>) 
     const [userData, setUserData] = useState<UserData | null>(null);
     const {getRouteParams} = useChangeRoute();
     const {panel} = getRouteParams();
-    const [tokens, setTokens] = useState<Token[]>([]);
     useEffect(() => {
         handleGetUser();
     }, []);
-
-    useEffect(() =>{
-        handleGetToken();
-    }, []);
-
-    function handleGetToken(){
-        coreRequest()
-            .get(`tokens`)
-            .then((response) => {
-                console.log(response.body);
-                setTokens(response.body);
-            })
-            .catch(err => {
-                enqueueErrorSnackbar("No such token");
-            })
-
-    }
 
     function handleGetUser() {
         //TODO if user is empty redirect to login page
@@ -92,9 +71,6 @@ const UserPageView = React.forwardRef((props: UserPageViewProps, ref: Ref<any>) 
             });
     }
 
-    function handleTokenAdd(){
-
-    }
 
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up("md"));
@@ -130,10 +106,10 @@ const UserPageView = React.forwardRef((props: UserPageViewProps, ref: Ref<any>) 
     }
 
     return (
-        <Box>
+        <Box style={style} className={className}>
             {mainInfo}
-            <Grid container spacing={2} className={clsx(classes.container, className)}>
-                <Grid item xs={10} className={clsx(classes.topic, className)}>
+            <Grid container spacing={2} className={clsx(classes.container)}>
+                <Grid item xs={10} className={clsx(classes.topic)}>
                     <Typography variant="h6">Organizations</Typography>
                     <Divider/>
                 </Grid>

@@ -47,8 +47,7 @@ const SignUpPage = React.forwardRef((props: SignUpPageProps, ref: Ref<any>) => {
         style,
     } = props;
 
-    const {getUser, isLogged, login} = useAuth();
-    const {closeSnackbar} = useSnackbar();
+    const {login} = useAuth();
     const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
     const [credentials, setCredentials] = useState<Credentials>({username: "", password: "", email: ""});
     const {changeRoute} = useChangeRoute();
@@ -79,7 +78,7 @@ const SignUpPage = React.forwardRef((props: SignUpPageProps, ref: Ref<any>) => {
     }
 
     return (
-        <Container component="main" maxWidth="xs">
+        <Container component="main" maxWidth="xs" className={className} style={style}>
             <CssBaseline/>
             <Box className={classes.paper}>
                 <Avatar className={classes.avatar}>

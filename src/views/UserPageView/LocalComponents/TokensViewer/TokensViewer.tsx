@@ -7,7 +7,7 @@
  * All rights reserved.
  */
 
-import React, {Ref, useEffect, useState} from "react";
+import React, {Ref, useEffect} from "react";
 import {
     Box,
     Divider,
@@ -20,13 +20,10 @@ import {
     ListItem, ListItemSecondaryAction, Collapse
 } from "@material-ui/core";
 import clsx from "clsx";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import styles from "./styles";
-import DataTextField from "../../../../components/DataTextField/DataTextField";
 import Stylable from "../../../../interfaces/Stylable";
 import useCoreRequest from "../../../../hooks/useCoreRequest";
 import useEnqueueErrorSnackbar from "../../../../utils/enqueueErrorSnackbar";
-import ListItemProgress from "../../../../components/ListItemProgress/ListItemProgress";
 import ListItemText from "@material-ui/core/ListItemText";
 import List from "@material-ui/core/List";
 import Token from "../../../../interfaces/Token";

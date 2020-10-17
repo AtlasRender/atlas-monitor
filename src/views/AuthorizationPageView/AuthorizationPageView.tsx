@@ -7,7 +7,7 @@
  * All rights reserved.
  */
 
-import React, {Ref, useEffect, useState} from "react";
+import React, {Ref, useState} from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -21,7 +21,7 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import Stylable from "../../interfaces/Stylable";
-import {FormControl, FormLabel, withStyles} from "@material-ui/core";
+import {withStyles} from "@material-ui/core";
 import styles from "./style"
 import useCoreRequest from "../../hooks/useCoreRequest";
 import useAuth from "../../hooks/useAuth";
@@ -45,8 +45,8 @@ const AuthorizationPageView = React.forwardRef((props: AuthorizationPageViewProp
     } = props;
 
     const {changeRoute} = useChangeRoute();
-    const {enqueueSnackbar, closeSnackbar} = useSnackbar();
-    const {getUser, isLogged, login} = useAuth();
+    const {enqueueSnackbar} = useSnackbar();
+    const {login} = useAuth();
     const coreRequest = useCoreRequest();
     const [credentials, setCredentials] = useState<Credentials>({username: "", password: ""});
 
@@ -88,7 +88,7 @@ const AuthorizationPageView = React.forwardRef((props: AuthorizationPageViewProp
     }
 
     return (
-        <Container component="main" maxWidth="xs">
+        <Container component="main" maxWidth="xs" className={className} style={style}>
             <CssBaseline/>
             <Box className={classes.paper}>
                 <Avatar className={classes.avatar}>

@@ -36,6 +36,7 @@ const OrganizationsFieldsRow = React.forwardRef((props: OrganizationsFieldsRowPr
         classes,
         className,
         organization,
+        style,
         role,
         status
     } = props;
@@ -46,7 +47,7 @@ const OrganizationsFieldsRow = React.forwardRef((props: OrganizationsFieldsRowPr
 
     if (matches) {
         row = (
-            <Grid container spacing={1} className={classes.container}>
+            <Grid container spacing={1} className={clsx(classes.container,className)} style={style}>
                 <Grid item xs={6}>
                     <DataTextField label="Organization" children={organization}/>
                 </Grid>
@@ -60,7 +61,7 @@ const OrganizationsFieldsRow = React.forwardRef((props: OrganizationsFieldsRowPr
         )
     } else {
         row = (
-            <Grid container spacing={1} className={clsx(classes.container, classes.margins)}>
+            <Grid container spacing={1} className={clsx(classes.container, classes.margins, className)} style={style}>
                 <Grid item xs={10}>
                     <DataTextField label="Organization" children={organization}/>
                 </Grid>
@@ -74,11 +75,7 @@ const OrganizationsFieldsRow = React.forwardRef((props: OrganizationsFieldsRowPr
         );
     }
 
-    return (
-        <React.Fragment>
-            {row}
-        </React.Fragment>
-    );
+    return row;
 });
 
 export default withStyles(styles)(OrganizationsFieldsRow);
