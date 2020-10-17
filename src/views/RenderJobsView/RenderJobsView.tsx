@@ -7,15 +7,16 @@
  * All rights reserved.
  */
 
-import React, {Ref} from 'react';
+import React, {Ref} from "react";
 import {Box, Grid, IconButton, Typography, useMediaQuery, useTheme, withStyles} from "@material-ui/core";
 import styles from "./styles";
 import RenderJobsTable from "../../components/RenderJobsTable";
 import SimpleList from "../../components/SimpleList";
 import clsx from "clsx";
 import Stylable from "../../interfaces/Stylable";
-import SearchIcon from '@material-ui/icons/Search';
-import DateField from "../../components/DateField";
+import SearchIcon from "@material-ui/icons/Search";
+import {Route, Switch, useRouteMatch} from "react-router-dom";
+import RenderJobsDetailsView from "../RenderJobsDetailsView";
 
 /**
  * RenderJobsViewProps - interface for RenderJobsView component
@@ -62,10 +63,21 @@ const RenderJobsView = React.forwardRef((props: RenderJobsViewProps, ref: Ref<an
         );
     }
 
+    let {path} = useRouteMatch();
+
     return (
-        <Box>
-            {tableList}
-        </Box>
+
+        <Switch>
+            <Route exact path={path}>
+                <Box>
+                    {tableList}
+                </Box>
+            </Route>
+            <Route exact path={`${path}/jobDetails`}>
+                <RenderJobsDetailsView/>
+            </Route>
+        </Switch>
+
     );
 });
 RenderJobsView.displayName = "RenderJobsView";

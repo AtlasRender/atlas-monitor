@@ -25,10 +25,11 @@ import Stylable from "../../interfaces/Stylable";
 import styles from "./styles";
 import useAuth from "../../hooks/useAuth";
 import useCoreRequest from "../../hooks/useCoreRequest";
-import {useChangeRoute} from "routing-manager";
+import {ChangeRouteProvider, useChangeRoute} from "routing-manager";
 import {useSnackbar} from "notistack";
 import useEnqueueErrorSnackbar from "../../utils/enqueueErrorSnackbar";
 import User from "../../entities/User";
+import {Route, Switch, useRouteMatch} from "react-router-dom";
 
 interface SignUpPageProps extends Stylable {
 
@@ -47,8 +48,7 @@ const SignUpPage = React.forwardRef((props: SignUpPageProps, ref: Ref<any>) => {
         style,
     } = props;
 
-    const {getUser, isLogged, login} = useAuth();
-    const {closeSnackbar} = useSnackbar();
+    const {login} = useAuth();
     const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
     const [credentials, setCredentials] = useState<Credentials>({username: "", password: "", email: ""});
     const {changeRoute} = useChangeRoute();
@@ -143,7 +143,8 @@ const SignUpPage = React.forwardRef((props: SignUpPageProps, ref: Ref<any>) => {
                 </Button>
                 <Grid container justify="flex-end">
                     <Grid item>
-                        <Link href="#" variant="body2">
+                        <Link href="" variant="body2"
+                              onClick={() => changeRoute({page: "authorization"})}>
                             Already have an account? Sign in
                         </Link>
                     </Grid>

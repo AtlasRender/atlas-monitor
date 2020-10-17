@@ -21,7 +21,7 @@ export interface AuthContext {
     /**
      * getUser - returns current logged in user data.
      * @function
-     * @author Danil Adnreev
+     * @author Danil Andreev
      */
     getUser(): User | null;
     /**

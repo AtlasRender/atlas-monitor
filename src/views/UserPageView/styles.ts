@@ -10,6 +10,12 @@
 import {createStyles, Theme} from "@material-ui/core";
 
 const styles = (theme: Theme) => createStyles({
+    containerToken:{
+        justifyContent:"center",
+        alignItems:"center",
+        marginTop: theme.spacing(2),
+        marginBottom: theme.spacing(2),
+    },
     root: {
         display: "flex",
         flexDirection: "row",
@@ -26,7 +32,17 @@ const styles = (theme: Theme) => createStyles({
     topic:{
         marginTop: theme.spacing(2),
         marginBottom: theme.spacing(2),
-    }
+    },
+    box:{
+        display: "flex",
+        justifyContent: "flex-end",
+        alignItems:"center"
+    },
+    typographyToken:{
+        display:"flex",
+        alignItems:"flex-end",
+    },
+
 
 });
 

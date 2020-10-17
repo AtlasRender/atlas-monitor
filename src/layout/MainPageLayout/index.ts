@@ -3,19 +3,8 @@
  * Owner and project architect: Danil Andreev | danssg08@gmail.com |  https://github.com/DanilAndreev
  * File creator: Andrii Demchyshyn
  * Project: pathfinder-monitor
- * File last modified: 30.09.2020, 17:11
+ * File last modified: 16.10.2020, 22:33
  * All rights reserved.
  */
 
-import {createStyles, fade, Theme} from "@material-ui/core";
-
-const styles = (theme: Theme) => createStyles({
-    root: {
-        flexGrow: 1,
-    },
-    title: {
-        flexGrow: 1,
-    },
-});
-
-export default styles;
+export {default} from "./MainPageLayout";

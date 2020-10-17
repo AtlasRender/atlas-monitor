@@ -3,13 +3,35 @@
  * Owner and project architect: Danil Andreev | danssg08@gmail.com |  https://github.com/DanilAndreev
  * File creator: Andrii Demchyshyn
  * Project: pathfinder-monitor
- * File last modified: 16.10.2020, 11:32
+ * File last modified: 16.10.2020, 1:33
  * All rights reserved.
  */
 
-export default interface Token {
-    id: number;
-    name: string;
-    description: string;
-    createdAt: Date;
+
+/**
+ * Token - type for Token.
+ * @interface
+ * @author Andrii Demchyshyn
+ */
+export default interface Token{
+    /**
+     * id - token id
+     */
+    id: number,
+    /**
+     * name - token name.
+     */
+    name: string,
+    /**
+     * description - token description.
+     */
+    description: string,
+    /**
+     * createdAt - timestamp of token creation.
+     */
+    createdAt: Date,
+    /**
+     * token - token value
+     */
+    token?: string,
 }
