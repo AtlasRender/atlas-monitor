@@ -10,21 +10,19 @@
 import React, {Ref} from "react";
 import {
     Box,
-    Grid,
-    Typography,
-    withStyles,
-    TextField,
-    Select,
-    MenuItem,
-    IconButton,
-    ListItem,
-    ListItemText,
-    ListItemSecondaryAction,
-    List,
     Button,
     Chip,
+    Grid,
+    IconButton,
+    List,
+    ListItem,
+    ListItemText,
+    MenuItem,
+    Select,
+    TextField,
+    Typography,
     useMediaQuery,
-    InputLabel,
+    withStyles,
 } from "@material-ui/core";
 import clsx from "clsx";
 import styles from "./styles";

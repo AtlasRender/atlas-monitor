@@ -7,15 +7,14 @@
  * All rights reserved.
  */
 
-import React, {Ref} from 'react';
+import React, {Ref} from "react";
 import {Box, Grid, IconButton, Typography, useMediaQuery, useTheme, withStyles} from "@material-ui/core";
 import styles from "./styles";
 import RenderJobsTable from "../../components/RenderJobsTable";
 import SimpleList from "../../components/SimpleList";
 import clsx from "clsx";
 import Stylable from "../../interfaces/Stylable";
-import SearchIcon from '@material-ui/icons/Search';
-import DateField from "../../components/DateField";
+import SearchIcon from "@material-ui/icons/Search";
 
 /**
  * RenderJobsViewProps - interface for RenderJobsView component

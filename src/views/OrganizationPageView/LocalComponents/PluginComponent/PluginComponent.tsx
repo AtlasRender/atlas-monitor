@@ -8,17 +8,7 @@
  */
 
 import React, {Ref} from "react";
-import {
-    Grid,
-    IconButton,
-    ListItem,
-    MenuItem,
-    Select,
-    withStyles,
-    useMediaQuery,
-    useTheme,
-    ListItemSecondaryAction,
-} from "@material-ui/core";
+import {Grid, IconButton, ListItem, MenuItem, Select, useMediaQuery, useTheme, withStyles,} from "@material-ui/core";
 import styles from "./styles";
 import DataTextField from "../../../../components/DataTextField";
 import clsx from "clsx";
