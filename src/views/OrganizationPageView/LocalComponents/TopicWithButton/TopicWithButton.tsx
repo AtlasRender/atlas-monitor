@@ -11,6 +11,7 @@ import React, {Ref} from "react";
 import {Divider, Grid, IconButton, Typography, withStyles} from "@material-ui/core";
 import styles from "./styles";
 import AddIcon from '@material-ui/icons/Add';
+import clsx from "clsx"
 import Stylable from "../../../../interfaces/Stylable";
 
 /**
@@ -35,7 +36,7 @@ const TopicWithButton = React.forwardRef((props: TopicWithButtonProps, ref: Ref<
         children
     } = props;
     return (
-        <Grid container className={classes.container}>
+        <Grid container className={clsx(classes.container, className)} style={style}>
             <Grid item xs={10}>
                 <Grid container className={classes.childAlign}>
                     <Grid item xs={11}>

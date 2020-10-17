@@ -7,7 +7,6 @@
  * All rights reserved.
  */
 
-import React from "react";
 import useAuth from "./useAuth";
 import {coreRequest, RequestMethods, RequestMiddleware} from "../utils/Rest";
 import {SuperAgentRequest} from "superagent";

@@ -1,0 +1,6 @@
+label-alias:
+  bug: 'bug'
+  feature_request: 'enhancement'
+  question: 'question'
+  invalid: 'invalid'
+  create: 'development'
