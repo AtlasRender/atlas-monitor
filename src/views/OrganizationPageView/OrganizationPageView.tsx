@@ -34,9 +34,10 @@ import Stylable from "../../interfaces/Stylable";
 import useAuth from "../../hooks/useAuth";
 import useEnqueueErrorSnackbar from "../../utils/enqueueErrorSnackbar";
 import useCoreRequest from "../../hooks/useCoreRequest";
-import {useChangeRoute} from "routing-manager";
+import {ChangeRouteProvider, useChangeRoute} from "routing-manager";
 import Organization from "../../interfaces/Organization";
 import UserData from "../../interfaces/UserData";
+import {Route, Switch, useRouteMatch} from "react-router-dom";
 
 /**
  * OrganizationPageViewPropsStyled - interface for OrganizationPageView function
@@ -160,74 +161,82 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
         )
     }
 
+    let {path} = useRouteMatch();
+
 
     return (
-        <Box>
-            {mainInfo}
-            <TopicWithButton children="Slaves"/>
-            <Grid container className={classes.firstLine}>
-                <Grid item xs={10}>
-                    {slaves.map((slave, key) => {
-                        return (
-                            <ListItem key={key}>
-                                <ListItemIcon>
-                                    <BuildIcon/>
-                                </ListItemIcon>
-                                <ListItemText
-                                    primary={slave}
-                                    secondary="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur, rerum?"
-                                />
+        <Switch>
+            <Route exact path={path}>
+                <Box>
+                    {mainInfo}
+                    <TopicWithButton children="Slaves"/>
+                    <Grid container className={classes.firstLine}>
+                        <Grid item xs={10}>
+                            {slaves.map((slave, key) => {
+                                return (
+                                    <ListItem key={key}>
+                                        <ListItemIcon>
+                                            <BuildIcon/>
+                                        </ListItemIcon>
+                                        <ListItemText
+                                            primary={slave}
+                                            secondary="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur, rerum?"
+                                        />
 
-                                <ListItemSecondaryAction>
-                                    <IconButton><SettingsIcon/></IconButton>
-                                </ListItemSecondaryAction>
-                            </ListItem>
-                        )
-                    })}
-                </Grid>
-            </Grid>
-
-            <TopicWithButton children="Members"/>
-            <Grid container className={classes.firstLine} spacing={0}>
-                {organizationData?.users.map((user: UserData, key: number) => {
-                    return (
-                        <Grid item xs={10} key={key}>
-                            <ListItem>
-                                <ListItemAvatar>
-                                    <Avatar src="https://cdn.sportclub.ru/assets/2019-09-20/n97c311rvb.jpg"/>
-                                </ListItemAvatar>
-                                <ListItemText primary={user.username} secondary={user.email}/>
-                                <ListItemSecondaryAction>
-                                    <Select
-                                        // value={state.role}
-                                        style={{width: 100}}
-                                        name={"" + user.id} // why id?
-                                        // inputProps={{
-                                        //     role: 'member',
-                                        //     id: 'role-native-simple',
-                                        // }}
-                                        value="admin"
-                                        label="Admin"
-                                        onChange={handleChange}
-                                        className={classes.selectFieldStyle}
-                                    >
-                                        <MenuItem value="admin">Admin</MenuItem>
-                                        <MenuItem value="member">Member</MenuItem>
-                                        <MenuItem value="moderator">Moderator</MenuItem>
-                                    </Select>
-                                    <IconButton>
-                                        <SettingsIcon/>
-                                    </IconButton>
-                                </ListItemSecondaryAction>
-                            </ListItem>
+                                        <ListItemSecondaryAction>
+                                            <IconButton><SettingsIcon/></IconButton>
+                                        </ListItemSecondaryAction>
+                                    </ListItem>
+                                )
+                            })}
                         </Grid>
-                    )
-                })}
-            </Grid>
+                    </Grid>
 
-            <TopicWithButton children="Plugins"/>
-            <PluginComponent plugin="GachiWork" description="best remixes of all time"/>
-        </Box>
+                    <TopicWithButton children="Members"/>
+                    <Grid container className={classes.firstLine} spacing={0}>
+                        {organizationData?.users.map((user: UserData, key: number) => {
+                            return (
+                                <Grid item xs={10} key={key}>
+                                    <ListItem>
+                                        <ListItemAvatar>
+                                            <Avatar
+                                                src="https://cdn.sportclub.ru/assets/2019-09-20/n97c311rvb.jpg"/>
+                                        </ListItemAvatar>
+                                        <ListItemText primary={user.username} secondary={user.email}/>
+                                        <ListItemSecondaryAction>
+                                            <Select
+                                                // value={state.role}
+                                                style={{width: 100}}
+                                                name={"" + user.id} // why id?
+                                                // inputProps={{
+                                                //     role: 'member',
+                                                //     id: 'role-native-simple',
+                                                // }}
+                                                value="admin"
+                                                label="Admin"
+                                                onChange={handleChange}
+                                                className={classes.selectFieldStyle}
+                                            >
+                                                <MenuItem value="admin">Admin</MenuItem>
+                                                <MenuItem value="member">Member</MenuItem>
+                                                <MenuItem value="moderator">Moderator</MenuItem>
+                                            </Select>
+                                            <IconButton>
+                                                <SettingsIcon/>
+                                            </IconButton>
+                                        </ListItemSecondaryAction>
+                                    </ListItem>
+                                </Grid>
+                            )
+                        })}
+                    </Grid>
+
+                    <TopicWithButton children="Plugins"/>
+                    <PluginComponent plugin="GachiWork" description="best remixes of all time"/>
+                </Box>
+            </Route>
+        </Switch>
+
     );
 })
 

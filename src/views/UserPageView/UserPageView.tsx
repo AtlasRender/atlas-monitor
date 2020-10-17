@@ -21,9 +21,10 @@ import {useSnackbar} from "notistack";
 import useEnqueueErrorSnackbar from "../../utils/enqueueErrorSnackbar";
 import useAuth from "../../hooks/useAuth";
 import UserData from "../../interfaces/UserData";
-import {useChangeRoute} from "routing-manager";
+import {ChangeRouteProvider, useChangeRoute} from "routing-manager";
 import Token from "../../interfaces/Token";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import {Route, Switch, useRouteMatch, useLocation} from "react-router-dom";
 
 /**
  * UserPageViewPropsStyled - interface for UserPageView
@@ -50,18 +51,21 @@ const UserPageView = React.forwardRef((props: UserPageViewProps, ref: Ref<any>) 
     const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
     const coreRequest = useCoreRequest();
     const [userData, setUserData] = useState<UserData | null>(null);
-    const {getRouteParams} = useChangeRoute();
-    const {panel} = getRouteParams();
+    const {getRouteParams, changeRoute} = useChangeRoute();
+
+    // debugger;
+
+    const {id} = getRouteParams();
     const [tokens, setTokens] = useState<Token[]>([]);
     useEffect(() => {
         handleGetUser();
     }, []);
 
-    useEffect(() =>{
+    useEffect(() => {
         handleGetToken();
     }, []);
 
-    function handleGetToken(){
+    function handleGetToken() {
         coreRequest()
             .get(`tokens`)
             .then((response) => {
@@ -77,7 +81,8 @@ const UserPageView = React.forwardRef((props: UserPageViewProps, ref: Ref<any>) 
     function handleGetUser() {
         //TODO if user is empty redirect to login page
         const user = getUser();
-        let userId = panel;
+        console.log(id);
+        let userId = id;
         if (!userId) {
             userId = user?.id;
         }
@@ -90,10 +95,6 @@ const UserPageView = React.forwardRef((props: UserPageViewProps, ref: Ref<any>) 
                 //TODO handle errors
                 enqueueErrorSnackbar("No such user");
             });
-    }
-
-    function handleTokenAdd(){
-
     }
 
     const theme = useTheme();
@@ -129,26 +130,33 @@ const UserPageView = React.forwardRef((props: UserPageViewProps, ref: Ref<any>) 
         )
     }
 
+    let {path} = useRouteMatch();
+
     return (
-        <Box>
-            {mainInfo}
-            <Grid container spacing={2} className={clsx(classes.container, className)}>
-                <Grid item xs={10} className={clsx(classes.topic, className)}>
-                    <Typography variant="h6">Organizations</Typography>
-                    <Divider/>
-                </Grid>
-            </Grid>
-            {/*TODO If no organisation print smth else*/}
-            {userData?.organizations.map((organization) =>
-                <OrganizationsFieldsRow
-                    organization={organization.name}
-                    key={organization.id}
-                    role="admin"
-                    status="working"
-                />
-            )}
-            <TokensViewer/>
-        </Box>
+        <Switch>
+            <Route path={path}>
+                <Box>
+                    <Button onClick={() => changeRoute({page: "jobs"})}>click me</Button>
+                    {mainInfo}
+                    <Grid container spacing={2} className={clsx(classes.container, className)}>
+                        <Grid item xs={10} className={clsx(classes.topic, className)}>
+                            <Typography variant="h6">Organizations</Typography>
+                            <Divider/>
+                        </Grid>
+                    </Grid>
+                    {/*TODO If no organisation print smth else*/}
+                    {userData?.organizations.map((organization) =>
+                        <OrganizationsFieldsRow
+                            organization={organization.name}
+                            key={organization.id}
+                            role="admin"
+                            status="working"
+                        />
+                    )}
+                    <TokensViewer/>
+                </Box>
+            </Route>
+        </Switch>
     );
 });
 

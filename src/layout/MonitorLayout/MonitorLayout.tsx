@@ -21,7 +21,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import styles from "./styles";
 import {Box, Divider, IconButton, SwipeableDrawer, useMediaQuery, useTheme, withStyles} from "@material-ui/core";
-import {Route, Switch} from "react-router-dom";
+import {Route, Switch, useRouteMatch} from "react-router-dom";
 import RenderJobsView from "../../views/RenderJobsView/RenderJobsView";
 import RenderJobsDetailsView from "../../views/RenderJobsDetailsView";
 import UserPageView from "../../views/UserPageView";
@@ -29,13 +29,12 @@ import OrganizationPageView from "../../views/OrganizationPageView";
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import clsx from "clsx";
-import {useChangeRoute} from "routing-manager";
+import {ChangeRouteProvider, useChangeRoute} from "routing-manager";
 import Stylable from "../../interfaces/Stylable";
 import SubmitPageView from "../../views/SubmitPageView";
-import AuthorizationPageView from "../../views/AuthorizationPageView";
-import SignUpPage from "../../views/SignUpPage";
 import Button from "@material-ui/core/Button";
 import useAuth from "../../hooks/useAuth";
+import {func} from "prop-types";
 
 /**
  * MonitorLayoutProps - interface for MonitorLayout component
@@ -88,6 +87,11 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>
 
         setState({...state, [anchor]: open});
     };
+
+    function handleLogout() {
+        logout();
+        changeRoute({page: "authorization", panel: null});
+    }
 
     const list = (anchor: Anchor) => (
         <Box
@@ -166,7 +170,7 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>
                             variant="contained"
                             color="primary"
                             className={classes.submit}
-                            onClick={logout}
+                            onClick={handleLogout}
                         >
                             Logout
                         </Button>
@@ -192,7 +196,7 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>
                     </Box>
                     <Divider/>
                     <List>
-                        <ListItem button onClick={() => changeRoute({page: "jobs", panel: null})}>
+                        <ListItem button onClick={() => changeRoute({page: "jobs"})}>
                             <ListItemIcon>
                                 <InboxIcon/>
                             </ListItemIcon>
@@ -267,6 +271,8 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>
         );
     }
 
+    let {path} = useRouteMatch();
+
     return (
         <Box className={classes.root}>
 
@@ -275,20 +281,25 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>
             <main className={classes.content}>
                 <Toolbar/>
                 <Switch>
-                    <Route exact path="/pages/jobs">
-                        <RenderJobsView/>
+                    <Route path="/jobs">
+                        <ChangeRouteProvider routeMask="(/:panel)">
+                            <RenderJobsView/>
+                        </ChangeRouteProvider>
                     </Route>
-                    <Route path="/pages/jobs/jobDetails">
-                        <RenderJobsDetailsView/>
+                    <Route path="/user">
+                        <ChangeRouteProvider routeMask="(/:id)">
+                            <UserPageView/>
+                        </ChangeRouteProvider>
                     </Route>
-                    <Route path="/pages/user">
-                        <UserPageView/>
+                    <Route path="/organization">
+                        <ChangeRouteProvider routeMask="(/:slave)">
+                            <OrganizationPageView/>
+                        </ChangeRouteProvider>
                     </Route>
-                    <Route path="/pages/organization">
-                        <OrganizationPageView/>
-                    </Route>
-                    <Route path="/pages/submit">
-                        <SubmitPageView/>
+                    <Route path="/submit">
+                        <ChangeRouteProvider routeMask="(/:panel)">
+                            <SubmitPageView/>
+                        </ChangeRouteProvider>
                     </Route>
                 </Switch>
             </main>

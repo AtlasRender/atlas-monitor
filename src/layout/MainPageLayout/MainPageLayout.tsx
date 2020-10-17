@@ -39,23 +39,24 @@ const MainPageLayout = React.forwardRef((props: MainPageLayoutProps, ref: Ref<an
     } = props;
 
     return (
-        <ChangeRouteProvider routeMask="/:pages">
-            <Box className={classes.root}>
-                <Header/>
-
-                <main className={classes.content}>
-                    <Toolbar/>
-                    <Switch>
-                        <Route path="/authorization">
+        <Box>
+            <Header/>
+            <main>
+                <Toolbar/>
+                <Switch>
+                    <Route path="/authorization">
+                        <ChangeRouteProvider routeMask="(/:id)">
                             <AuthorizationPageView/>
-                        </Route>
-                        <Route path="/signUp">
+                        </ChangeRouteProvider>
+                    </Route>
+                    <Route path="/signUp">
+                        <ChangeRouteProvider routeMask="(/:id)">
                             <SignUpPage/>
-                        </Route>
-                    </Switch>
-                </main>
-            </Box>
-        </ChangeRouteProvider>
+                        </ChangeRouteProvider>
+                    </Route>
+                </Switch>
+            </main>
+        </Box>
     );
 });
 

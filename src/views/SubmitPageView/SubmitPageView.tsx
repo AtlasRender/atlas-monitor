@@ -30,6 +30,8 @@ import clsx from "clsx";
 import styles from "./styles";
 import Stylable from "../../interfaces/Stylable";
 import AddIcon from "@material-ui/icons/Add";
+import {Route, Switch, useRouteMatch} from "react-router-dom";
+import {ChangeRouteProvider} from "routing-manager";
 
 /**
  * SubmitPagePropsStyled - interface for SubmitPageView function
@@ -82,7 +84,7 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
             </React.Fragment>
         );
         renderSettings = (
-            <Grid container spacing={2} xs={10} className={clsx(classes.container,classes.flexNoWrap)}>
+            <Grid container spacing={2} xs={10} className={clsx(classes.container, classes.flexNoWrap)}>
                 <Grid item xs={2}>
                     <TextField fullWidth label="Frame start"/>
                 </Grid>
@@ -98,11 +100,11 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
                 <Grid item xs={2}>
                     <TextField fullWidth label="Renum step"/>
                 </Grid>
-                <Grid item style={{paddingRight:0, flexGrow:1}}>
+                <Grid item style={{paddingRight: 0, flexGrow: 1}}>
                     <TextField fullWidth label="Priority"/>
                 </Grid>
                 <Box>
-                    <IconButton ><AddIcon/></IconButton>
+                    <IconButton><AddIcon/></IconButton>
                 </Box>
             </Grid>
         );
@@ -204,53 +206,59 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
         )
     }
 
-    return (
-        <Box>
-            <Grid container spacing={2} className={classes.container}>
-                <Grid item xs={10}>
-                    <Typography variant="h6">Submit info</Typography>
-                </Grid>
-                {submitInfo}
-                <Grid item xs={10} className={classes.flexItem}>
-                    <List disablePadding className={classes.fullWidth}>
-                        <ListItem disableGutters>
-                            <ListItemText
-                                primary={<Typography variant="h6">Render settings</Typography>}
-                            />
-                            {/*<ListItemSecondaryAction>*/}
-                            {/*    <IconButton><AddIcon/></IconButton>*/}
-                            {/*</ListItemSecondaryAction>*/}
-                        </ListItem>
-                    </List>
-                </Grid>
-                {renderSettings}
+    let {path} = useRouteMatch();
 
-                <Grid item xs={10} className={classes.flexItem}>
-                    <Box>
-                        <Chip
-                            label="1000-1001 2 save as 10 Priority:1"
-                            onDelete={handleDelete}
-                            className={classes.chipStyle}
-                        />
-                        <Chip
-                            label="1002-1279 1 save as 1 Priority:3"
-                            onDelete={handleDelete}
-                            className={classes.chipStyle}
-                        />
-                        <Chip
-                            label="1279-1400 5 save as 1 Priority:2"
-                            onDelete={handleDelete}
-                            className={classes.chipStyle}
-                        />
-                    </Box>
-                </Grid>
-                <Grid item xs={10}>
-                    <Typography variant="h6">Plugin</Typography>
-                </Grid>
-                {plugin}
-                {submitButton}
-            </Grid>
-        </Box>
+    return (
+        <Switch>
+            <Route exact path={path}>
+                <Box>
+                    <Grid container spacing={2} className={classes.container}>
+                        <Grid item xs={10}>
+                            <Typography variant="h6">Submit info</Typography>
+                        </Grid>
+                        {submitInfo}
+                        <Grid item xs={10} className={classes.flexItem}>
+                            <List disablePadding className={classes.fullWidth}>
+                                <ListItem disableGutters>
+                                    <ListItemText
+                                        primary={<Typography variant="h6">Render settings</Typography>}
+                                    />
+                                    {/*<ListItemSecondaryAction>*/}
+                                    {/*    <IconButton><AddIcon/></IconButton>*/}
+                                    {/*</ListItemSecondaryAction>*/}
+                                </ListItem>
+                            </List>
+                        </Grid>
+                        {renderSettings}
+
+                        <Grid item xs={10} className={classes.flexItem}>
+                            <Box>
+                                <Chip
+                                    label="1000-1001 2 save as 10 Priority:1"
+                                    onDelete={handleDelete}
+                                    className={classes.chipStyle}
+                                />
+                                <Chip
+                                    label="1002-1279 1 save as 1 Priority:3"
+                                    onDelete={handleDelete}
+                                    className={classes.chipStyle}
+                                />
+                                <Chip
+                                    label="1279-1400 5 save as 1 Priority:2"
+                                    onDelete={handleDelete}
+                                    className={classes.chipStyle}
+                                />
+                            </Box>
+                        </Grid>
+                        <Grid item xs={10}>
+                            <Typography variant="h6">Plugin</Typography>
+                        </Grid>
+                        {plugin}
+                        {submitButton}
+                    </Grid>
+                </Box>
+            </Route>
+        </Switch>
     );
 });
 

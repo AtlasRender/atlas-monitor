@@ -10531,10 +10531,10 @@ route-parser@0.0.5:
   resolved "https://registry.yarnpkg.com/route-parser/-/route-parser-0.0.5.tgz#7d1d09d335e49094031ea16991a4a79b01bbe1f4"
   integrity sha1-fR0J0zXkkJQDHqFpkaSnmwG74fQ=
 
-routing-manager@^2.1.2:
-  version "2.1.2"
-  resolved "https://registry.yarnpkg.com/routing-manager/-/routing-manager-2.1.2.tgz#cdb98202ece8ca70b38228bf3ca49bf48581e3c2"
-  integrity sha512-0cqAJMAu+vDr5AreIrerVyzezjNhDakAYMAUg4hew/OrcIx8MRm8yRWk4oSYlt3nthOT1+g+QSZqeCTSKxnKmw==
+routing-manager@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/routing-manager/-/routing-manager-2.2.0.tgz#b4d628379bfd2d20b575b7739355063384fc6cf4"
+  integrity sha512-7UxOPecKej8HmyKlpWV60nNTJzkmvxU2lQVZRtw/o1Q5cLjghD7mV7MHn7SjhvJJqD3jwyPcPtzw21jQP+XWKw==
   dependencies:
     "@testing-library/jest-dom" "^4.2.4"
     "@testing-library/react" "^9.5.0"

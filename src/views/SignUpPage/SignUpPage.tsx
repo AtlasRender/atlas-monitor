@@ -25,10 +25,11 @@ import Stylable from "../../interfaces/Stylable";
 import styles from "./styles";
 import useAuth from "../../hooks/useAuth";
 import useCoreRequest from "../../hooks/useCoreRequest";
-import {useChangeRoute} from "routing-manager";
+import {ChangeRouteProvider, useChangeRoute} from "routing-manager";
 import {useSnackbar} from "notistack";
 import useEnqueueErrorSnackbar from "../../utils/enqueueErrorSnackbar";
 import User from "../../entities/User";
+import {Route, Switch, useRouteMatch} from "react-router-dom";
 
 interface SignUpPageProps extends Stylable {
 
@@ -44,11 +45,9 @@ const SignUpPage = React.forwardRef((props: SignUpPageProps, ref: Ref<any>) => {
     const {
         classes,
         className,
-        style,
     } = props;
 
     const {login} = useAuth();
-    const {closeSnackbar} = useSnackbar();
     const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
     const [credentials, setCredentials] = useState<Credentials>({username: "", password: "", email: ""});
     const {changeRoute} = useChangeRoute();
@@ -78,78 +77,85 @@ const SignUpPage = React.forwardRef((props: SignUpPageProps, ref: Ref<any>) => {
             });
     }
 
+    let {path} = useRouteMatch();
+
     return (
-        <Container component="main" maxWidth="xs">
-            <CssBaseline/>
-            <Box className={classes.paper}>
-                <Avatar className={classes.avatar}>
-                    <LockOutlinedIcon/>
-                </Avatar>
-                <Typography component="h1" variant="h5">
-                    Sign up
-                </Typography>
-                <Grid container spacing={2}>
-                    <Grid item xs={12}>
-                        <TextField
-                            autoComplete="username"
-                            variant="outlined"
-                            required
+        <Switch>
+            <Route exact path={path}>
+                <Container component="main" maxWidth="xs">
+                    <CssBaseline/>
+                    <Box className={classes.paper}>
+                        <Avatar className={classes.avatar}>
+                            <LockOutlinedIcon/>
+                        </Avatar>
+                        <Typography component="h1" variant="h5">
+                            Sign up
+                        </Typography>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12}>
+                                <TextField
+                                    autoComplete="username"
+                                    variant="outlined"
+                                    required
+                                    fullWidth
+                                    name="username"
+                                    label="Username"
+                                    autoFocus
+                                    onChange={handleInput}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    variant="outlined"
+                                    required
+                                    fullWidth
+                                    label="Email Address"
+                                    name="email"
+                                    autoComplete="email"
+                                    onChange={handleInput}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    variant="outlined"
+                                    required
+                                    fullWidth
+                                    name="password"
+                                    label="Password"
+                                    type="password"
+                                    autoComplete="current-password"
+                                    onChange={handleInput}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <FormControlLabel
+                                    control={<Checkbox value="allowExtraEmails" color="primary"/>}
+                                    label="I want to receive inspiration, marketing promotions and updates via email."
+                                />
+                            </Grid>
+                        </Grid>
+                        <Button
+                            type="submit"
                             fullWidth
-                            name="username"
-                            label="Username"
-                            autoFocus
-                            onChange={handleInput}
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <TextField
-                            variant="outlined"
-                            required
-                            fullWidth
-                            label="Email Address"
-                            name="email"
-                            autoComplete="email"
-                            onChange={handleInput}
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <TextField
-                            variant="outlined"
-                            required
-                            fullWidth
-                            name="password"
-                            label="Password"
-                            type="password"
-                            autoComplete="current-password"
-                            onChange={handleInput}
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <FormControlLabel
-                            control={<Checkbox value="allowExtraEmails" color="primary"/>}
-                            label="I want to receive inspiration, marketing promotions and updates via email."
-                        />
-                    </Grid>
-                </Grid>
-                <Button
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    color="primary"
-                    className={classes.submit}
-                    onClick={handleRegister}
-                >
-                    Sign Up
-                </Button>
-                <Grid container justify="flex-end">
-                    <Grid item>
-                        <Link href="" variant="body2" onClick={() => changeRoute({pages: "authorization", panel: null})}>
-                            Already have an account? Sign in
-                        </Link>
-                    </Grid>
-                </Grid>
-            </Box>
-        </Container>
+                            variant="contained"
+                            color="primary"
+                            className={classes.submit}
+                            onClick={handleRegister}
+                        >
+                            Sign Up
+                        </Button>
+                        <Grid container justify="flex-end">
+                            <Grid item>
+                                <Link href="" variant="body2"
+                                      onClick={() => changeRoute({page: "authorization"})}>
+                                    Already have an account? Sign in
+                                </Link>
+                            </Grid>
+                        </Grid>
+                    </Box>
+                </Container>
+            </Route>
+        </Switch>
     );
 });
 SignUpPage.displayName = "SignUpPage";

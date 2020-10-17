@@ -7,15 +7,14 @@
  * All rights reserved.
  */
 
-import React, {Ref, useEffect, useState} from 'react';
+import React, {Ref} from 'react';
 import styles from "./styles";
 import {withStyles} from "@material-ui/core";
 import Stylable from "../../interfaces/Stylable";
-import useCoreRequest from "../../hooks/useCoreRequest";
-import UserData from "../../interfaces/UserData";
 import useAuth from "../../hooks/useAuth";
 import MonitorLayout from "../MonitorLayout";
 import MainPageLayout from "../MainPageLayout";
+import {ChangeRouteProvider} from "routing-manager";
 
 /**
  * ChooseLayoutProps - interface for ChooseLayout component
@@ -38,7 +37,15 @@ const ChooseLayout = React.forwardRef((props: ChooseLayoutProps, ref: Ref<any>) 
 
     return (
         <React.Fragment>
-            {user ? <MonitorLayout/> : <MainPageLayout/>}
+            {user ?
+                <ChangeRouteProvider routeMask="(/:page)">
+                    <MonitorLayout/>
+                </ChangeRouteProvider>
+                :
+                <ChangeRouteProvider routeMask="(/:page)">
+                    <MainPageLayout/>
+                </ChangeRouteProvider>
+            }
         </React.Fragment>
     );
 });

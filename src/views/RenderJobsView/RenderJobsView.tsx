@@ -16,6 +16,10 @@ import clsx from "clsx";
 import Stylable from "../../interfaces/Stylable";
 import SearchIcon from '@material-ui/icons/Search';
 import DateField from "../../components/DateField";
+import Toolbar from "@material-ui/core/Toolbar";
+import {Route, Switch, useRouteMatch} from "react-router-dom";
+import {ChangeRouteProvider} from "routing-manager";
+import RenderJobsDetailsView from "../RenderJobsDetailsView";
 
 /**
  * RenderJobsViewProps - interface for RenderJobsView component
@@ -62,10 +66,21 @@ const RenderJobsView = React.forwardRef((props: RenderJobsViewProps, ref: Ref<an
         );
     }
 
+    let {path} = useRouteMatch();
+
     return (
-        <Box>
-            {tableList}
-        </Box>
+
+        <Switch>
+            <Route exact path={path}>
+                <Box>
+                    {tableList}
+                </Box>
+            </Route>
+            <Route exact path={`${path}/jobDetails`}>
+                <RenderJobsDetailsView/>
+            </Route>
+        </Switch>
+
     );
 });
 RenderJobsView.displayName = "RenderJobsView";
