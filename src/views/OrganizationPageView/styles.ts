@@ -24,7 +24,6 @@ const styles =(theme: Theme) => createStyles({
         flexAlignment:"flex-end",
     },
     avatar: {
-        variant: "circle",
         height: theme.spacing(25),
         width: theme.spacing(25),
     },
