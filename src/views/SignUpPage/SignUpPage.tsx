@@ -42,8 +42,12 @@ interface Credentials {
 }
 
 interface Error {
-    error: boolean;
-    message: string;
+    "usernameError": boolean;
+    "emailError": boolean;
+    "passwordError": boolean;
+    "usernameMessage": string;
+    "emailMessage": string;
+    "passwordMessage": string;
 }
 
 const SignUpPage = React.forwardRef((props: SignUpPageProps, ref: Ref<any>) => {
@@ -55,9 +59,16 @@ const SignUpPage = React.forwardRef((props: SignUpPageProps, ref: Ref<any>) => {
 
     const {login} = useAuth();
     const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
-    const [userError, setUserError] = useState<Error>({error: false, message: ""});
-    const [emailError, setEmailError] = useState<Error>({error: false, message: ""});
-    const [passwordError, setPasswordError] = useState<Error>({error: false, message: ""});
+    const [errors, setErrors] = useState<Error>(
+        {
+            usernameError: false,
+            usernameMessage: "",
+            emailError: false,
+            emailMessage: "",
+            passwordError: false,
+            passwordMessage: "",
+        }
+    );
     const [credentials, setCredentials] = useState<Credentials>({username: "", password: "", email: ""});
     const {changeRoute} = useChangeRoute();
     const coreRequest = useCoreRequest();
@@ -86,46 +97,36 @@ const SignUpPage = React.forwardRef((props: SignUpPageProps, ref: Ref<any>) => {
                     case 400:
                         err.response.body.response.errors.map((item: any) => {
                             console.log(item);
+                            const keyError = item.dataPath.substr(1) + "Error";
+                            const keyMessage = item.dataPath.substr(1) + "Message";
                             switch (item.keyword) {
                                 case "format":
-                                    // enqueueErrorSnackbar(`${item.dataPath.substr(1)} has invalid format`);
-                                    if (item.dataPath.substr(1) === "username") {
-                                        setUserError({error: true, message: "Username has invalid format"});
-                                    } else if (item.dataPath.substr(1) === "email") {
-                                        setEmailError({error: true, message: "Email has invalid format"})
-                                    } else if (item.dataPath.substr(1) === "password") {
-                                        setPasswordError({error: true, message: "Password has invalid format"})
-                                    }
+                                    setErrors((prev) => ({
+                                        ...prev,
+                                        [keyError]: true,
+                                        [keyMessage]: `${item.dataPath.substr(1)} has invalid format`
+                                    }));
                                     break;
                                 case "minLength":
-                                    // enqueueErrorSnackbar(`${item.dataPath.substr(1)} is too short`);
-                                    if (item.dataPath.substr(1) === "username") {
-                                        setUserError({error: true, message: "Username is too short"});
-                                    } else if (item.dataPath.substr(1) === "email") {
-                                        setEmailError({error: true, message: "Email is too short"})
-                                    } else if (item.dataPath.substr(1) === "password") {
-                                        setPasswordError({error: true, message: "Password is too short"})
-                                    }
+                                    setErrors((prev) => ({
+                                        ...prev,
+                                        [keyError]: true,
+                                        [keyMessage]: `${item.dataPath.substr(1)} is too short`
+                                    }));
                                     break;
                                 case "maxLength":
-                                    // enqueueErrorSnackbar(`${item.dataPath.substr(1)} is too long`);
-                                    if (item.dataPath.substr(1) === "username") {
-                                        setUserError({error: true, message: "Username is too long"});
-                                    } else if (item.dataPath.substr(1) === "email") {
-                                        setEmailError({error: true, message: "Email is too long"})
-                                    } else if (item.dataPath.substr(1) === "password") {
-                                        setPasswordError({error: true, message: "Password is too long"})
-                                    }
+                                    setErrors((prev) => ({
+                                        ...prev,
+                                        [keyError]: true,
+                                        [keyMessage]: `${item.dataPath.substr(1)} is too long`
+                                    }));
                                     break;
                                 case "pattern":
-                                    // enqueueErrorSnackbar(`${item.dataPath.substr(1)} has wrong pattern`);
-                                    if (item.dataPath.substr(1) === "username") {
-                                        setUserError({error: true, message: "Username has wrong pattern"});
-                                    } else if (item.dataPath.substr(1) === "email") {
-                                        setEmailError({error: true, message: "Email has wrong pattern"})
-                                    } else if (item.dataPath.substr(1) === "password") {
-                                        setPasswordError({error: true, message: "Password has wrong pattern"})
-                                    }
+                                    setErrors((prev) => ({
+                                        ...prev,
+                                        [keyError]: true,
+                                        [keyMessage]: `${item.dataPath.substr(1)} has wrong pattern`
+                                    }));
                                     break;
                             }
                         });
@@ -152,12 +153,12 @@ const SignUpPage = React.forwardRef((props: SignUpPageProps, ref: Ref<any>) => {
                         <TextField
                             autoComplete="username"
                             variant="outlined"
-                            error={userError.error}
+                            error={errors.usernameError}
                             required
                             fullWidth
                             name="username"
                             label="Username"
-                            helperText={userError.message}
+                            helperText={errors.usernameMessage}
                             autoFocus
                             onChange={handleInput}
                         />
@@ -167,8 +168,8 @@ const SignUpPage = React.forwardRef((props: SignUpPageProps, ref: Ref<any>) => {
                             variant="outlined"
                             required
                             fullWidth
-                            error={emailError.error}
-                            helperText={emailError.message}
+                            error={errors.emailError}
+                            helperText={errors.emailMessage}
                             label="Email Address"
                             name="email"
                             autoComplete="email"
@@ -180,8 +181,8 @@ const SignUpPage = React.forwardRef((props: SignUpPageProps, ref: Ref<any>) => {
                             variant="outlined"
                             required
                             fullWidth
-                            error={passwordError.error}
-                            helperText={passwordError.message}
+                            error={errors.passwordError}
+                            helperText={errors.passwordMessage}
                             name="password"
                             label="Password"
                             type="password"
