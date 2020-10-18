@@ -85,6 +85,23 @@ const styles =(theme: Theme) => createStyles({
     },
     paddingNoneBottom: {
         paddingBottom: 0,
+    },
+    newRole:{
+        paddingLeft:0,
+        paddingRight:0,
+    },
+    roleAdd:{
+        paddingLeft:0,
+        paddingRight:0,
+        marginBottom: theme.spacing(2),
+    },
+    spacingInNewRole:{
+        paddingRight:theme.spacing(2),
+    },
+    dialogUsers: {
+        width : "100%",
+        textAlign: "center",
+        paddingBottom: 0,
     }
 })
 export default styles;
