@@ -702,7 +702,6 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                         })}
                     </Grid>
 
-
                     <TopicWithButton children="Plugins"/>
                     <PluginComponent plugin="GachiWork" description="best remixes of all time"/>
                 </Box>
