@@ -52,6 +52,7 @@ import Role from "../../interfaces/Role";
 import clsx from "clsx";
 import TextField from "@material-ui/core/TextField";
 import DeleteIcon from "@material-ui/icons/Delete";
+import useConfirm from "../../hooks/useConfirm";
 
 /**
  * OrganizationPageViewPropsStyled - interface for OrganizationPageView function
@@ -81,6 +82,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
     const coreRequest = useCoreRequest();
     const {getRouteParams} = useChangeRoute();
     const {id} = getRouteParams();
+    const confirm = useConfirm();
 
 
     //roles
@@ -685,7 +687,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                                                         Delete User
                                                     </ListItemText>
                                                     <ListItemSecondaryAction
-                                                        onClick={() => handleRemoveUser([user.id])}
+                                                        onClick={() => confirm(async () => handleRemoveUser([user.id]), {title: "are you sure to delete?"})}
                                                     >
                                                         <IconButton>
                                                             <DeleteIcon/>
@@ -711,4 +713,4 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
     );
 })
 
-export default withStyles(styles)(OrganizationPageView)
+export default withStyles(styles)(OrganizationPageView);
