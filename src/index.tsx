@@ -7,18 +7,21 @@ import {BrowserRouter} from "react-router-dom";
 import {ChangeRouteProvider} from "routing-manager";
 import {AuthProvider} from "./hooks/useAuth";
 import {SnackbarProvider} from "notistack";
+import {ConfirmProvider} from "./hooks/useConfirm";
 
 ReactDOM.render(
     <React.StrictMode>
-        <AuthProvider>
-            <BrowserRouter>
-                <ChangeRouteProvider routeMask="/pages/:page(/:panel)">
-                    <SnackbarProvider maxSnack={3} >
-                        <MonitorLayout/>
-                    </SnackbarProvider>
-                </ChangeRouteProvider>
-            </BrowserRouter>
-        </AuthProvider>
+        <ConfirmProvider>
+            <AuthProvider>
+                <BrowserRouter>
+                    <ChangeRouteProvider routeMask="/pages/:page(/:panel)">
+                        <SnackbarProvider maxSnack={3} >
+                            <MonitorLayout/>
+                        </SnackbarProvider>
+                    </ChangeRouteProvider>
+                </BrowserRouter>
+            </AuthProvider>
+        </ConfirmProvider>
     </React.StrictMode>,
     document.getElementById('root')
 );
