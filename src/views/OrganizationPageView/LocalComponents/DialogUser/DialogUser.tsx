@@ -14,7 +14,9 @@ import {
     IconButton,
     ListItem,
     ListItemSecondaryAction,
-    ListItemText, Menu, MenuItem,
+    ListItemText,
+    Menu,
+    MenuItem,
     withStyles,
 } from "@material-ui/core";
 import styles from "./styles";

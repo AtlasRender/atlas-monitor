@@ -8,20 +8,11 @@
  */
 
 import React, {Ref, useState} from "react";
-import {
-    Button,
-    Grid,
-    IconButton,
-    ListItem,
-    ListItemSecondaryAction,
-    ListItemText,
-    withStyles,
-} from "@material-ui/core";
+import {Button, Grid, ListItem, withStyles,} from "@material-ui/core";
 import styles from "./styles";
 import Stylable from "../../../../interfaces/Stylable";
 import clsx from "clsx";
 import TextField from "@material-ui/core/TextField";
-import SettingsIcon from "@material-ui/icons/Settings";
 
 interface AddRoleFieldProps extends Stylable {
     onAddRole(role: any): void;
@@ -34,6 +25,7 @@ const AddRoleField = React.forwardRef((props: AddRoleFieldProps, ref: Ref<any>) 
         className,
         onAddRole,
     } = props;
+
 
     const [addRole, setAddRole] = useState({name: "", description: "", permissionLevel: -1, color: ""});
 

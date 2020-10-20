@@ -11,7 +11,6 @@ import React, {Ref, useEffect, useState} from "react";
 import {
     Avatar,
     Box,
-    Button,
     Divider,
     Grid,
     IconButton,
@@ -20,6 +19,7 @@ import {
     ListItemIcon,
     ListItemSecondaryAction,
     ListItemText,
+    Menu,
     MenuItem,
     Select,
     useMediaQuery,
@@ -42,12 +42,12 @@ import {Route, Switch, useRouteMatch} from "react-router-dom";
 import AddIcon from "@material-ui/icons/Add";
 import List from "@material-ui/core/List";
 import Role from "../../interfaces/Role";
-import clsx from "clsx";
-import TextField from "@material-ui/core/TextField";
 import useConfirm from "../../hooks/useConfirm";
 import DialogUser from "./LocalComponents/DialogUser";
 import DialogAddUsers from "./LocalComponents/DialogAddUsers";
 import AddRoleField from "./LocalComponents/AddRoleField";
+import DialogModifyRole from "./LocalComponents/DialogModifyRole";
+import DeleteIcon from "@material-ui/icons/Delete";
 
 /**
  * OrganizationPageViewPropsStyled - interface for OrganizationPageView function
@@ -82,13 +82,13 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
 
     //roles
     const [isAddRoleButtonActive, setIsAddRoleButtonActive] = useState(false);
+    const [isDialogModifyRoleButtonActive, setIsDialogModifyRoleButtonActive] = useState(false);
     const [isAddRoleToUserButtonActive, setIsAddRoleToUserButtonActive] = useState<null | HTMLElement>(null);
     const [isRemoveRoleFromUserButtonActive, setIsRemoveRoleFromUserButtonActive] = useState<null | HTMLElement>(null);
+    const [isModifyRoleButtonActive, setIsModifyRoleButtonActive] = useState<null | HTMLElement>(null);
     const [roles, setRoles] = useState<Role[]>([]);
-
     const [role, setRole] = useState<Role | null>(null);
     const [roleUsers, setRoleUsers] = useState<UserData[] | null>(null);
-    const [modifiedRole, setModifiedRole] = useState({name: "", description: "", permissionLevel: -1, color: ""});
 
 
     //organizations and users
@@ -196,6 +196,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
     }
 
     function handleDeleteRole(roleId: number) {
+        setIsModifyRoleButtonActive(null);
         coreRequest()
             .delete(`organizations/${id}/roles/${roleId}`)
             .then((response) => {
@@ -207,15 +208,38 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
             })
     }
 
-    function handleInputModifiedRole(event: React.ChangeEvent<HTMLInputElement>) {
-        event.persist();
-        setModifiedRole(prev => ({...prev, [event.target.name]: event.target.value}));
+    function handleModifyRole(roleId: number, roleToModify: any) {
+        setIsDialogModifyRoleButtonActive(false);
+        roleToModify.permissionLevel = +roleToModify.permissionLevel;
+        coreRequest()
+            .post(`organizations/${id}/roles/${roleId}`)
+            .send(roleToModify)
+            .then((response) => {
+                handleGetRoles();
+            })
+            .catch(err => {
+                //TODO handle errors
+                enqueueErrorSnackbar("Cant edit role");
+            })
     }
-
 
     function handleIsAddRoleButtonActive() {
         setIsAddRoleButtonActive(!isAddRoleButtonActive);
     }
+
+    function handleOpenModifyRoleButtonActive(event: any) {
+        setIsModifyRoleButtonActive(event.currentTarget);
+    }
+
+    function handleCloseModifyRoleButtonActive() {
+        setIsModifyRoleButtonActive(null);
+    }
+
+    function handleIsDialogModifyRoleButtonActive(roleId: number) {
+        handleGetRoleById(roleId);
+        setIsDialogModifyRoleButtonActive(true);
+    }
+
 
     //organizations and users
     function handleGetOrganizationUsers() {
@@ -311,6 +335,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
         setIsUserSettingsButtonActive(true);
         setCurrentUser(user);
     }
+
 
     const slaves = [
         "Kiev slave",
@@ -418,7 +443,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                     <Grid container className={classes.firstLine}>
                         <Grid item xs={10}>
                             {isAddRoleButtonActive &&
-                                <AddRoleField onAddRole={handleAddRole}/>
+                            <AddRoleField onAddRole={handleAddRole}/>
                             }
                             {roles.map((role) => {
                                 return (
@@ -427,9 +452,23 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                                             primary={role.name}
                                             secondary={`color: ${role.color}`}
                                         />
-                                        <ListItemSecondaryAction onClick={() => handleDeleteRole(role.id)}>
-                                            <IconButton>
-                                                <SettingsIcon/>
+                                        <ListItemSecondaryAction>
+                                            <IconButton
+                                                edge="end"
+                                                aria-label="delete"
+                                                style={{marginRight: theme.spacing(0)}}
+                                                onClick={() => handleIsDialogModifyRoleButtonActive(role.id)}
+                                            >
+                                                <AddIcon/>
+                                            </IconButton>
+
+                                            <IconButton
+                                                edge="end"
+                                                aria-label="delete"
+                                                onClick={() => confirm(async () => handleDeleteRole(role.id),
+                                                    {title: `are you sure to delete role: ${role.name} ?`})}
+                                            >
+                                                <DeleteIcon/>
                                             </IconButton>
                                         </ListItemSecondaryAction>
                                     </ListItem>
@@ -437,6 +476,13 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                             })}
                         </Grid>
                     </Grid>
+
+                    <DialogModifyRole
+                        open={isDialogModifyRoleButtonActive}
+                        onClose={() => setIsDialogModifyRoleButtonActive(false)}
+                        role={role}
+                        onModifyRole={handleModifyRole}
+                    />
 
                     <Grid container className={classes.firstLine}>
                         <Grid item xs={10}>

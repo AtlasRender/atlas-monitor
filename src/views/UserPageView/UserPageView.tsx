@@ -80,7 +80,6 @@ const UserPageView = React.forwardRef((props: UserPageViewProps, ref: Ref<any>) 
     function handleGetUser() {
         //TODO if user is empty redirect to login page
         const user = getUser();
-        console.log(id);
         let userId = id;
         if (!userId) {
             userId = user?.id;

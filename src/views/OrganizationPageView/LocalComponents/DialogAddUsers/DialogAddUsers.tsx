@@ -7,25 +7,25 @@
  * All rights reserved.
  */
 
-import React, {Ref, useState} from "react";
+import React, {Ref} from "react";
 import {
-    Avatar, Button, Checkbox,
+    Avatar,
+    Button,
+    Checkbox,
     Dialog,
     DialogTitle,
-    IconButton, InputBase,
-    ListItem, ListItemAvatar,
+    IconButton,
+    InputBase,
+    ListItem,
+    ListItemAvatar,
     ListItemSecondaryAction,
-    ListItemText, Menu, MenuItem,
+    ListItemText,
     withStyles,
 } from "@material-ui/core";
 import styles from "./styles";
 import List from "@material-ui/core/List";
-import AddIcon from "@material-ui/icons/Add";
-import DeleteIcon from "@material-ui/icons/Delete";
-import useConfirm from "../../../../hooks/useConfirm";
 import Stylable from "../../../../interfaces/Stylable";
 import UserData from "../../../../interfaces/UserData";
-import Role from "../../../../interfaces/Role";
 import SearchIcon from "@material-ui/icons/Search";
 import CloseIcon from "@material-ui/icons/Close";
 
@@ -33,8 +33,11 @@ interface DialogAddUsersProps extends Stylable {
     open: boolean;
     allUsers: UserData[] | null;
     newUsers: number[];
+
     onClose(): void;
+
     onNewUserClick(userId: number): void;
+
     onAdduser(usersIds: number[]): void;
 }
 
