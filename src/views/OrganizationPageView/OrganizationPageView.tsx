@@ -48,6 +48,8 @@ import DialogAddUsers from "./LocalComponents/DialogAddUsers";
 import AddRoleField from "./LocalComponents/AddRoleField";
 import DialogModifyRole from "./LocalComponents/DialogModifyRole";
 import DeleteIcon from "@material-ui/icons/Delete";
+import EditIcon from '@material-ui/icons/Edit';
+import DialogAddRoles from "./LocalComponents/DialogAddRoles";
 
 /**
  * OrganizationPageViewPropsStyled - interface for OrganizationPageView function
@@ -124,16 +126,14 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
             })
     }
 
-    function handleGetRoleById(roleId: number) {
-        coreRequest()
-            .get(`organizations/${id}/roles/${roleId}`)
-            .then((response) => {
-                setRole(response.body);
-            })
-            .catch(err => {
-                //TODO handle errors
-                enqueueErrorSnackbar("Cant get role by id");
-            })
+    async function handleGetRoleById(roleId: number) {
+        try {
+            const response = await coreRequest()
+                .get(`organizations/${id}/roles/${roleId}`);
+            setRole(response.body);
+        } catch (err) {
+            enqueueErrorSnackbar("Cant get role by id");
+        }
     }
 
     function handleGetRoleUsers(roleId: number) {
@@ -236,8 +236,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
     }
 
     function handleIsDialogModifyRoleButtonActive(roleId: number) {
-        handleGetRoleById(roleId);
-        setIsDialogModifyRoleButtonActive(true);
+        handleGetRoleById(roleId).then(() => setIsDialogModifyRoleButtonActive(true));
     }
 
 
@@ -440,11 +439,14 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                         </Grid>
                     </Grid>
 
+                    <DialogAddRoles
+                        open={isAddRoleButtonActive}
+                        onClose={() => setIsAddRoleButtonActive(false)}
+                        onAddRole={handleAddRole}
+                    />
+
                     <Grid container className={classes.firstLine}>
                         <Grid item xs={10}>
-                            {isAddRoleButtonActive &&
-                            <AddRoleField onAddRole={handleAddRole}/>
-                            }
                             {roles.map((role) => {
                                 return (
                                     <ListItem key={role.id}>
@@ -459,7 +461,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                                                 style={{marginRight: theme.spacing(0)}}
                                                 onClick={() => handleIsDialogModifyRoleButtonActive(role.id)}
                                             >
-                                                <AddIcon/>
+                                                <EditIcon/>
                                             </IconButton>
 
                                             <IconButton

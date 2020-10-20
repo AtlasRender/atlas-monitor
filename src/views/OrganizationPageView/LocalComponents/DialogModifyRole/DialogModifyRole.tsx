@@ -49,9 +49,9 @@ const DialogModifyRole = React.forwardRef((props: DialogModifyRoleProps, ref: Re
         })
     }, [role])
 
-    function handleInputModifiedRole(event: React.ChangeEvent<HTMLInputElement>) {
+    const handleInputModifiedRole = (name: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
         event.persist();
-        setModifiedRole(prev => ({...prev, [event.target.name]: event.target.value}));
+        setModifiedRole(prev => ({...prev, [name]: event.target.value}));
     }
 
     return (
@@ -73,7 +73,7 @@ const DialogModifyRole = React.forwardRef((props: DialogModifyRoleProps, ref: Re
                         autoFocus
                         defaultValue={role?.name}
                         InputLabelProps={{shrink: true}}
-                        onChange={handleInputModifiedRole}
+                        onChange={handleInputModifiedRole("name")}
                     />
                 </Grid>
                 <Grid item xs={6} className={clsx(classes.roleAdd, classes.spacingInNewRole)}>
@@ -86,7 +86,7 @@ const DialogModifyRole = React.forwardRef((props: DialogModifyRoleProps, ref: Re
                         defaultValue={role?.description}
                         autoFocus
                         InputLabelProps={{shrink: true}}
-                        onChange={handleInputModifiedRole}
+                        onChange={handleInputModifiedRole("description")}
                     />
                 </Grid>
                 <Grid item xs={6} className={clsx(classes.roleAdd, classes.spacingInNewRole)}>
@@ -100,7 +100,7 @@ const DialogModifyRole = React.forwardRef((props: DialogModifyRoleProps, ref: Re
                         defaultValue={role?.permissionLevel}
                         autoFocus
                         InputLabelProps={{shrink: true}}
-                        onChange={handleInputModifiedRole}
+                        onChange={handleInputModifiedRole("permissionLevel")}
                     />
                 </Grid>
                 <Grid item xs={6} className={clsx(classes.roleAdd, classes.spacingInNewRole)}>
@@ -113,7 +113,7 @@ const DialogModifyRole = React.forwardRef((props: DialogModifyRoleProps, ref: Re
                         defaultValue={role?.color}
                         autoFocus
                         InputLabelProps={{shrink: true}}
-                        onChange={handleInputModifiedRole}
+                        onChange={handleInputModifiedRole("color")}
                     />
                 </Grid>
                 <Button
