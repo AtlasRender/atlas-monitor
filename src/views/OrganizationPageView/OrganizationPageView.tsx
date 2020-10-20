@@ -12,19 +12,14 @@ import {
     Avatar,
     Box,
     Button,
-    Checkbox,
-    Dialog,
-    DialogTitle,
     Divider,
     Grid,
     IconButton,
-    InputBase,
     ListItem,
     ListItemAvatar,
     ListItemIcon,
     ListItemSecondaryAction,
     ListItemText,
-    Menu,
     MenuItem,
     Select,
     useMediaQuery,
@@ -46,14 +41,12 @@ import UserData from "../../interfaces/UserData";
 import {Route, Switch, useRouteMatch} from "react-router-dom";
 import AddIcon from "@material-ui/icons/Add";
 import List from "@material-ui/core/List";
-import SearchIcon from '@material-ui/icons/Search';
-import CloseIcon from "@material-ui/icons/Close";
 import Role from "../../interfaces/Role";
 import clsx from "clsx";
 import TextField from "@material-ui/core/TextField";
-import DeleteIcon from "@material-ui/icons/Delete";
 import useConfirm from "../../hooks/useConfirm";
 import DialogUser from "./LocalComponents/DialogUser";
+import DialogAddUsers from "./LocalComponents/DialogAddUsers";
 
 /**
  * OrganizationPageViewPropsStyled - interface for OrganizationPageView function
@@ -94,6 +87,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
     const [addRole, setAddRole] = useState({name: "", description: "", permissionLevel: -1, color: ""});
     const [role, setRole] = useState<Role | null>(null);
     const [roleUsers, setRoleUsers] = useState<UserData[] | null>(null);
+    const [modifiedRole, setModifiedRole] = useState();
 
 
     //organizations and users
@@ -153,14 +147,15 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
             })
     }
 
-    function handleAddRoleToUser(roleId: number, usersToAddRoleId: number[]) {
+    function handleAddRoleToUser(roleId: number, userToAddRoleId: number) {
         setIsAddRoleToUserButtonActive(null);
-        console.log(usersToAddRoleId);
+        console.log(userToAddRoleId);
         coreRequest()
             .post(`organizations/${id}/roles/${roleId}/users`)
-            .send({userIds: usersToAddRoleId})
+            .send({userId: userToAddRoleId})
             .then((response) => {
                 handleGetOrganizationUsers();
+                handleGetRoles();
             })
             .catch(err => {
                 //TODO handle errors
@@ -168,13 +163,14 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
             })
     }
 
-    function handleRemoveRoleFromUser(roleId: number, usersToRemoveRoleId: number[]) {
+    function handleRemoveRoleFromUser(roleId: number, userToRemoveRoleId: number) {
         setIsRemoveRoleFromUserButtonActive(null);
         coreRequest()
             .delete(`organizations/${id}/roles/${roleId}/users`)
-            .send({userIds: usersToRemoveRoleId})
+            .send({userId: userToRemoveRoleId})
             .then((response) => {
                 handleGetOrganizationUsers();
+                handleGetRoles();
             })
             .catch(err => {
                 //TODO handle errors
@@ -511,58 +507,14 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                         </Grid>
                     </Grid>
 
-                    <Dialog
+                    <DialogAddUsers
                         open={isButtonActive}
                         onClose={() => setIsButtonActive(false)}
-                    >
-                        <DialogTitle className={classes.paddingNoneBottom}>
-                            Choose users to add
-                        </DialogTitle>
-                        <List className={classes.dialog}>
-                            <ListItem>
-                                <div className={classes.search}>
-                                    <div className={classes.searchIcon}>
-                                        <SearchIcon/>
-                                    </div>
-                                    <InputBase
-                                        placeholder="Search…"
-                                        classes={{
-                                            root: classes.inputRoot,
-                                            input: classes.inputInput,
-                                        }}
-                                        inputProps={{'aria-label': 'search'}}
-                                    />
-                                </div>
-                                <IconButton>
-                                    <CloseIcon/>
-                                </IconButton>
-                            </ListItem>
-                            {allUsers?.map((user) => (
-                                <ListItem
-                                    button
-                                    key={user.id}
-                                    onClick={() => handleNewUsersClick(user.id)}
-                                >
-                                    <ListItemAvatar>
-                                        <Avatar/>
-                                    </ListItemAvatar>
-                                    <ListItemText primary={user.username} secondary="department"/>
-
-                                    <ListItemSecondaryAction>
-
-                                        <Checkbox
-                                            checked={newUsers.includes(user.id)}
-                                            color="primary"
-                                            inputProps={{'aria-label': 'secondary checkbox'}}
-                                        />
-                                    </ListItemSecondaryAction>
-                                </ListItem>
-                            ))}
-                            <ListItem>
-                                <Button fullWidth onClick={() => handleAddUser(newUsers)}>Add new users</Button>
-                            </ListItem>
-                        </List>
-                    </Dialog>
+                        allUsers={allUsers}
+                        newUsers={newUsers}
+                        onNewUserClick={handleNewUsersClick}
+                        onAdduser={handleAddUser}
+                    />
 
                     <Grid container className={classes.firstLine} spacing={0}>
                         {organizationUsers.map((user: UserData, key: number) => {
@@ -599,9 +551,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                                 </Grid>
                             )
                         })}
-
                     </Grid>
-
 
                     <DialogUser
                         open={isUserSettingsButtonActive}
@@ -612,7 +562,6 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                         onAddRole={handleAddRoleToUser}
                         onRemoveRole={handleRemoveRoleFromUser}
                     />
-
 
                     <TopicWithButton children="Plugins"/>
                     <PluginComponent plugin="GachiWork" description="best remixes of all time"/>

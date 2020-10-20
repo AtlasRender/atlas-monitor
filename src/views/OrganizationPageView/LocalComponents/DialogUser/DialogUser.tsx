@@ -35,9 +35,9 @@ interface DialogUserProps extends Stylable {
 
     onRemove([]): void;
 
-    onAddRole(role: number, []): void;
+    onAddRole(roleId: number, user: number | undefined): void;
 
-    onRemoveRole(role: number, []): void;
+    onRemoveRole(roleId: number, userId: number | undefined): void;
 }
 
 const DialogUser = React.forwardRef((props: DialogUserProps, ref: Ref<any>) => {
@@ -107,7 +107,7 @@ const DialogUser = React.forwardRef((props: DialogUserProps, ref: Ref<any>) => {
                             return (
                                 <MenuItem
                                     key={role.id}
-                                    onClick={() => onAddRole(role.id, [user?.id])}
+                                    onClick={() => onAddRole(role.id, user?.id)}
                                 >
                                     {role.name}
                                 </MenuItem>
@@ -138,7 +138,7 @@ const DialogUser = React.forwardRef((props: DialogUserProps, ref: Ref<any>) => {
                             return (
                                 <MenuItem
                                     key={role.id}
-                                    onClick={() => onRemoveRole(role.id, [user?.id])}
+                                    onClick={() => onRemoveRole(role.id, user?.id)}
                                 >
                                     {role.name}
                                 </MenuItem>
