@@ -3,20 +3,22 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import * as serviceWorker from './serviceWorker';
 import {BrowserRouter} from "react-router-dom";
-import {ChangeRouteProvider} from "routing-manager";
 import {AuthProvider} from "./hooks/useAuth";
 import {SnackbarProvider} from "notistack";
 import ChooseLayout from "./layout/ChooseLayout";
+import {ConfirmProvider} from "./hooks/useConfirm";
 
 ReactDOM.render(
     <React.StrictMode>
-        <AuthProvider>
-            <BrowserRouter>
-                <SnackbarProvider maxSnack={3}>
-                    <ChooseLayout/>
-                </SnackbarProvider>
-            </BrowserRouter>
-        </AuthProvider>
+        <ConfirmProvider>
+            <AuthProvider>
+                <BrowserRouter>
+                    <SnackbarProvider maxSnack={3}>
+                        <ChooseLayout/>
+                    </SnackbarProvider>
+                </BrowserRouter>
+            </AuthProvider>
+        </ConfirmProvider>
     </React.StrictMode>,
     document.getElementById('root')
 );

@@ -38,6 +38,13 @@ interface Credentials {
     password: string;
 }
 
+interface Error {
+    "usernameError": boolean;
+    "passwordError": boolean;
+    "usernameMessage": string;
+    "passwordMessage": string;
+}
+
 const AuthorizationPageView = React.forwardRef((props: AuthorizationPageViewProps, ref: Ref<any>) => {
     const {
         classes,
@@ -49,6 +56,14 @@ const AuthorizationPageView = React.forwardRef((props: AuthorizationPageViewProp
     const {enqueueSnackbar} = useSnackbar();
     const {login} = useAuth();
     const coreRequest = useCoreRequest();
+    const [errors, setErrors] = useState<Error>(
+        {
+            usernameError: false,
+            usernameMessage: "",
+            passwordError: false,
+            passwordMessage: "",
+        }
+    );
     const [credentials, setCredentials] = useState<Credentials>({username: "", password: ""});
 
     // TODO event type
@@ -84,7 +99,47 @@ const AuthorizationPageView = React.forwardRef((props: AuthorizationPageViewProp
                 changeRoute({page: "user"});
             })
             .catch(err => {
-                enqueueSnackbar("Authorization Error", {variant: "error"});
+                switch (err.status) {
+                    case 400:
+                        err.response.body.response.errors.map((item: any) => {
+                            console.log(item);
+                            const keyError = item.dataPath.substr(1) + "Error";
+                            const keyMessage = item.dataPath.substr(1) + "Message";
+                            switch (item.keyword) {
+                                case "format":
+                                    setErrors((prev) => ({
+                                        ...prev,
+                                        [keyError]: true,
+                                        [keyMessage]: `${item.dataPath.substr(1)} has invalid format`
+                                    }));
+                                    break;
+                                case "minLength":
+                                    setErrors((prev) => ({
+                                        ...prev,
+                                        [keyError]: true,
+                                        [keyMessage]: `${item.dataPath.substr(1)} is too short`
+                                    }));
+                                    break;
+                                case "maxLength":
+                                    setErrors((prev) => ({
+                                        ...prev,
+                                        [keyError]: true,
+                                        [keyMessage]: `${item.dataPath.substr(1)} is too long`
+                                    }));
+                                    break;
+                                case "pattern":
+                                    setErrors((prev) => ({
+                                        ...prev,
+                                        [keyError]: true,
+                                        [keyMessage]: `${item.dataPath.substr(1)} has wrong pattern`
+                                    }));
+                                    break;
+                            }
+                        });
+                        break;
+                    default:
+                        enqueueSnackbar("Unrecognized Error");
+                }
             });
     }
 
@@ -103,6 +158,8 @@ const AuthorizationPageView = React.forwardRef((props: AuthorizationPageViewProp
                     margin="normal"
                     required
                     fullWidth
+                    error={errors.usernameError}
+                    helperText={errors.usernameMessage}
                     id="username"
                     label="Username"
                     name="username"
@@ -115,6 +172,8 @@ const AuthorizationPageView = React.forwardRef((props: AuthorizationPageViewProp
                     margin="normal"
                     required
                     fullWidth
+                    error={errors.passwordError}
+                    helperText={errors.passwordMessage}
                     name="password"
                     label="Password"
                     type="password"

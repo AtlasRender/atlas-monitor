@@ -1,50 +1,15 @@
 /*
  * Copyright (c) 2020. This code created and belongs to Pathfinder render manager project.
  * Owner and project architect: Danil Andreev | danssg08@gmail.com |  https://github.com/DanilAndreev
- * File creator: Nikita Nesterov
+ * File creator: Andrii Demchyshyn
  * Project: pathfinder-monitor
- * File last modified: 02.10.2020, 17:32
+ * File last modified: 20.10.2020, 17:03
  * All rights reserved.
  */
 
 import {createStyles, fade, Theme} from "@material-ui/core";
-import { grey } from '@material-ui/core/colors'
 
 const styles =(theme: Theme) => createStyles({
-    firstLine:{
-        justifyContent: "center",
-        alignItems:"center",
-        listStyleType:"none",
-    },
-    nameDescription:{
-        justifyContent:"flex-begin",
-    },
-    settingButtongAlign:{
-        display:"flex",
-        flexAlignment:"flex-end",
-    },
-    avatar: {
-        height: theme.spacing(25),
-        width: theme.spacing(25),
-    },
-    itemsRowBackground:{
-        marginBottom: theme.spacing(1),
-        backgroundColor: grey[200],
-        borderRadius: "5px",
-    },
-    selectFieldStyle: {
-        borderRadius: "5px",
-    },
-    avatarBox:{
-        display: "flex",
-        justifyContent:"center",
-        marginTop: theme.spacing(2),
-        width:"inherit",
-    },
-    paddingNone:{
-        paddingLeft: 0,
-        paddingBottom:0,
-    },
     dialog: {
         minWidth: 500,
         [theme.breakpoints.down('xs')]: {
@@ -85,22 +50,6 @@ const styles =(theme: Theme) => createStyles({
     paddingNoneBottom: {
         paddingBottom: 0,
     },
-    newRole:{
-        paddingLeft:0,
-        paddingRight:0,
-    },
-    roleAdd:{
-        paddingLeft:0,
-        paddingRight:0,
-        marginBottom: theme.spacing(2),
-    },
-    spacingInNewRole:{
-        paddingRight:theme.spacing(2),
-    },
-    dialogUsers: {
-        width : "100%",
-        textAlign: "center",
-        paddingBottom: 0,
-    }
-})
+});
+
 export default styles;
