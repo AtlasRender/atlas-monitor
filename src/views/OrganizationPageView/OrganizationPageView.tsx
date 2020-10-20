@@ -47,6 +47,7 @@ import TextField from "@material-ui/core/TextField";
 import useConfirm from "../../hooks/useConfirm";
 import DialogUser from "./LocalComponents/DialogUser";
 import DialogAddUsers from "./LocalComponents/DialogAddUsers";
+import AddRoleField from "./LocalComponents/AddRoleField";
 
 /**
  * OrganizationPageViewPropsStyled - interface for OrganizationPageView function
@@ -84,10 +85,10 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
     const [isAddRoleToUserButtonActive, setIsAddRoleToUserButtonActive] = useState<null | HTMLElement>(null);
     const [isRemoveRoleFromUserButtonActive, setIsRemoveRoleFromUserButtonActive] = useState<null | HTMLElement>(null);
     const [roles, setRoles] = useState<Role[]>([]);
-    const [addRole, setAddRole] = useState({name: "", description: "", permissionLevel: -1, color: ""});
+
     const [role, setRole] = useState<Role | null>(null);
     const [roleUsers, setRoleUsers] = useState<UserData[] | null>(null);
-    const [modifiedRole, setModifiedRole] = useState();
+    const [modifiedRole, setModifiedRole] = useState({name: "", description: "", permissionLevel: -1, color: ""});
 
 
     //organizations and users
@@ -178,9 +179,9 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
             })
     }
 
-    function handleAddRole() {
+    function handleAddRole(roleToAdd: any) {
         setIsAddRoleButtonActive(false);
-        const addNewRole = addRole;
+        const addNewRole = roleToAdd;
         addNewRole.permissionLevel = +addNewRole.permissionLevel;
         coreRequest()
             .post(`organizations/${id}/roles`)
@@ -206,10 +207,11 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
             })
     }
 
-    function handleInputRole(event: React.ChangeEvent<HTMLInputElement>) {
+    function handleInputModifiedRole(event: React.ChangeEvent<HTMLInputElement>) {
         event.persist();
-        setAddRole(prev => ({...prev, [event.target.name]: event.target.value}));
+        setModifiedRole(prev => ({...prev, [event.target.name]: event.target.value}));
     }
+
 
     function handleIsAddRoleButtonActive() {
         setIsAddRoleButtonActive(!isAddRoleButtonActive);
@@ -416,58 +418,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                     <Grid container className={classes.firstLine}>
                         <Grid item xs={10}>
                             {isAddRoleButtonActive &&
-                            <ListItem className={classes.newRole}>
-                                <Grid container>
-                                    <Grid item xs={6} className={clsx(classes.roleAdd, classes.spacingInNewRole)}>
-                                        <TextField
-                                            variant="standard"
-                                            required
-                                            fullWidth
-                                            name="name"
-                                            label="Name"
-                                            autoFocus
-                                            onChange={handleInputRole}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={6} className={clsx(classes.roleAdd, classes.spacingInNewRole)}>
-                                        <TextField
-                                            variant="standard"
-                                            required
-                                            fullWidth
-                                            name="description"
-                                            label="Description"
-                                            autoFocus
-                                            onChange={handleInputRole}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={6} className={clsx(classes.roleAdd, classes.spacingInNewRole)}>
-                                        <TextField
-                                            type="number"
-                                            variant="standard"
-                                            required
-                                            fullWidth
-                                            name="permissionLevel"
-                                            label="Permission Level"
-                                            autoFocus
-                                            onChange={handleInputRole}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={6} className={clsx(classes.roleAdd, classes.spacingInNewRole)}>
-                                        <TextField
-                                            variant="standard"
-                                            required
-                                            fullWidth
-                                            name="color"
-                                            label="Color"
-                                            autoFocus
-                                            onChange={handleInputRole}
-                                        />
-                                    </Grid>
-                                    <Button fullWidth onClick={handleAddRole}>
-                                        Add role
-                                    </Button>
-                                </Grid>
-                            </ListItem>
+                                <AddRoleField onAddRole={handleAddRole}/>
                             }
                             {roles.map((role) => {
                                 return (
