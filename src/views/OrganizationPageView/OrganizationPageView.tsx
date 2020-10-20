@@ -53,6 +53,7 @@ import clsx from "clsx";
 import TextField from "@material-ui/core/TextField";
 import DeleteIcon from "@material-ui/icons/Delete";
 import useConfirm from "../../hooks/useConfirm";
+import DialogUser from "./LocalComponents/DialogUser";
 
 /**
  * OrganizationPageViewPropsStyled - interface for OrganizationPageView function
@@ -104,6 +105,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
     const [allUsers, setAllUsers] = useState<UserData[] | null>(null);
     const [newUsers, setNewUsers] = useState<number[]>([]);
     const [organizationUsers, serOrganizationUsers] = useState<UserData[]>([]);
+    const [currentUser, setCurrentUser] = useState<UserData | null>(null);
 
 
     useEffect(() => {
@@ -153,6 +155,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
 
     function handleAddRoleToUser(roleId: number, usersToAddRoleId: number[]) {
         setIsAddRoleToUserButtonActive(null);
+        console.log(usersToAddRoleId);
         coreRequest()
             .post(`organizations/${id}/roles/${roleId}/users`)
             .send({userIds: usersToAddRoleId})
@@ -214,22 +217,6 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
 
     function handleIsAddRoleButtonActive() {
         setIsAddRoleButtonActive(!isAddRoleButtonActive);
-    }
-
-    function handleOpenAddRoleToUserButtonActive(event: any) {
-        setIsAddRoleToUserButtonActive(event.currentTarget);
-    }
-
-    function handleCloseAddRoleToUserButtonActive() {
-        setIsAddRoleToUserButtonActive(null);
-    }
-
-    function handleOpenRemoveRoleFromUserButtonActive(event: any) {
-        setIsRemoveRoleFromUserButtonActive(event.currentTarget);
-    }
-
-    function handleCloseRemoveRoleFromUserButtonActive() {
-        setIsRemoveRoleFromUserButtonActive(null);
     }
 
     //organizations and users
@@ -322,8 +309,9 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
         setIsButtonActive(true);
     }
 
-    function handleIsUserSettingsButtonActive() {
+    function handleIsUserSettingsButtonActive(user: UserData) {
         setIsUserSettingsButtonActive(true);
+        setCurrentUser(user);
     }
 
     const slaves = [
@@ -588,11 +576,6 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                                         <ListItemText primary={user.username} secondary={user.email}/>
                                         <ListItemSecondaryAction>
                                             {user.roles.map(role => {
-                                                // let maxPermissionLevel = 100;
-                                                //
-                                                // if (maxPermissionLevel >= role.permissionLevel) {
-                                                //     maxPermissionLevel = role.permissionLevel;
-                                                // }
                                                 return (
                                                     <Select
                                                         key={role.id}
@@ -608,101 +591,28 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                                                     </Select>
                                                 )
                                             })}
-                                            <IconButton onClick={handleIsUserSettingsButtonActive}>
+                                            <IconButton onClick={() => handleIsUserSettingsButtonActive(user)}>
                                                 <SettingsIcon/>
                                             </IconButton>
                                         </ListItemSecondaryAction>
-
-
-                                        <Dialog
-                                            open={isUserSettingsButtonActive}
-                                            onClose={() => setIsUserSettingsButtonActive(false)}
-                                        >
-                                            <DialogTitle className={classes.dialogUsers}>
-                                                {user.username}
-                                            </DialogTitle>
-                                            <List className={classes.dialog}>
-                                                <ListItem>
-                                                    <ListItemText>
-                                                        Add role
-                                                    </ListItemText>
-                                                    <ListItemSecondaryAction
-                                                        onClick={handleOpenAddRoleToUserButtonActive}
-                                                    >
-                                                        <IconButton>
-                                                            <AddIcon/>
-                                                        </IconButton>
-                                                    </ListItemSecondaryAction>
-                                                    <Menu
-                                                        id="simple-menu"
-                                                        anchorEl={isAddRoleToUserButtonActive}
-                                                        keepMounted
-                                                        open={Boolean(isAddRoleToUserButtonActive)}
-                                                        onClose={handleCloseAddRoleToUserButtonActive}
-                                                    >
-                                                        {roles.map(role => {
-                                                            return (
-                                                                <MenuItem
-                                                                    key={role.id}
-                                                                    onClick={() => handleAddRoleToUser(role.id, [user.id])}
-                                                                >
-                                                                    {role.name}
-                                                                </MenuItem>
-                                                            );
-                                                        })}
-                                                    </Menu>
-                                                </ListItem>
-                                                <ListItem>
-                                                    <ListItemText>
-                                                        Remove role
-                                                    </ListItemText>
-                                                    <ListItemSecondaryAction
-                                                        onClick={handleOpenRemoveRoleFromUserButtonActive}
-                                                    >
-                                                        <IconButton>
-                                                            <DeleteIcon/>
-                                                        </IconButton>
-                                                    </ListItemSecondaryAction>
-                                                    <Menu
-                                                        id="simple-menu-1"
-                                                        anchorEl={isRemoveRoleFromUserButtonActive}
-                                                        keepMounted
-                                                        open={Boolean(isRemoveRoleFromUserButtonActive)}
-                                                        onClose={handleCloseRemoveRoleFromUserButtonActive}
-                                                    >
-                                                        {user.roles.map(role => {
-                                                            return (
-                                                                <MenuItem
-                                                                    key={role.id}
-                                                                    onClick={() => handleRemoveRoleFromUser(role.id, [user.id])}
-                                                                >
-                                                                    {role.name}
-                                                                </MenuItem>
-                                                            );
-                                                        })}
-                                                    </Menu>
-                                                </ListItem>
-                                                <ListItem>
-                                                    <ListItemText>
-                                                        Delete User
-                                                    </ListItemText>
-                                                    <ListItemSecondaryAction
-                                                        onClick={() => confirm(async () => handleRemoveUser([user.id]), {title: "are you sure to delete?"})}
-                                                    >
-                                                        <IconButton>
-                                                            <DeleteIcon/>
-                                                        </IconButton>
-                                                    </ListItemSecondaryAction>
-                                                </ListItem>
-                                            </List>
-                                        </Dialog>
-
-
                                     </ListItem>
                                 </Grid>
                             )
                         })}
+
                     </Grid>
+
+
+                    <DialogUser
+                        open={isUserSettingsButtonActive}
+                        onClose={() => setIsUserSettingsButtonActive(false)}
+                        user={currentUser}
+                        roles={roles}
+                        onRemove={handleRemoveUser}
+                        onAddRole={handleAddRoleToUser}
+                        onRemoveRole={handleRemoveRoleFromUser}
+                    />
+
 
                     <TopicWithButton children="Plugins"/>
                     <PluginComponent plugin="GachiWork" description="best remixes of all time"/>
