@@ -29,8 +29,8 @@ import {
 import styles from "./styles";
 import DataTextField from "../../components/DataTextField";
 import TopicWithButton from "./LocalComponents/TopicWithButton";
-import BuildIcon from '@material-ui/icons/Build';
-import SettingsIcon from '@material-ui/icons/Settings';
+import BuildIcon from "@material-ui/icons/Build";
+import SettingsIcon from "@material-ui/icons/Settings";
 import PluginComponent from "./LocalComponents/PluginComponent";
 import Stylable from "../../interfaces/Stylable";
 import useEnqueueErrorSnackbar from "../../utils/enqueueErrorSnackbar";
@@ -48,7 +48,7 @@ import DialogAddUsers from "./LocalComponents/DialogAddUsers";
 import AddRoleField from "./LocalComponents/AddRoleField";
 import DialogModifyRole from "./LocalComponents/DialogModifyRole";
 import DeleteIcon from "@material-ui/icons/Delete";
-import EditIcon from '@material-ui/icons/Edit';
+import EditIcon from "@material-ui/icons/Edit";
 import DialogAddRoles from "./LocalComponents/DialogAddRoles";
 
 /**
@@ -89,7 +89,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
     const [isRemoveRoleFromUserButtonActive, setIsRemoveRoleFromUserButtonActive] = useState<null | HTMLElement>(null);
     const [isModifyRoleButtonActive, setIsModifyRoleButtonActive] = useState<null | HTMLElement>(null);
     const [roles, setRoles] = useState<Role[]>([]);
-    const [role, setRole] = useState<Role | null>(null);
+    const [roleToChange, setRole] = useState<Role>();
     const [roleUsers, setRoleUsers] = useState<UserData[] | null>(null);
 
 
@@ -443,6 +443,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                         open={isAddRoleButtonActive}
                         onClose={() => setIsAddRoleButtonActive(false)}
                         onAddRole={handleAddRole}
+                        onModifyRole={handleModifyRole}
                     />
 
                     <Grid container className={classes.firstLine}>
@@ -450,12 +451,13 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                             {roles.map((role) => {
                                 return (
                                     <ListItem key={role.id}>
-                                        <ListItemAvatar style={{minWidth:16}}>
-                                            <Box className={classes.colorBar} style={{backgroundColor: `#${role.color}`}}/>
+                                        <ListItemAvatar style={{minWidth: 16}}>
+                                            <Box className={classes.colorBar}
+                                                 style={{backgroundColor: `#${role.color}`}}/>
                                         </ListItemAvatar>
                                         <ListItemText
                                             primary={role.name}
-                                            secondary={`description: ${role.description}`}
+                                            secondary={role.description}
                                         />
                                         <ListItemSecondaryAction>
                                             <IconButton
@@ -482,10 +484,12 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                         </Grid>
                     </Grid>
 
-                    <DialogModifyRole
+                    <DialogAddRoles
                         open={isDialogModifyRoleButtonActive}
                         onClose={() => setIsDialogModifyRoleButtonActive(false)}
-                        role={role}
+                        role={roleToChange}
+                        modify={true}
+                        onAddRole={handleAddRole}
                         onModifyRole={handleModifyRole}
                     />
 

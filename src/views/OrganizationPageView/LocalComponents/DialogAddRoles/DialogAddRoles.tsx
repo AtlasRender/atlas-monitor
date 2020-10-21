@@ -7,7 +7,7 @@
  * All rights reserved.
  */
 
-import React, {Ref, useState} from "react";
+import React, {Ref, useEffect, useState} from "react";
 import {
     Button,
     Dialog,
@@ -23,17 +23,18 @@ import Stylable from "../../../../interfaces/Stylable";
 import styles from "./styles";
 import TextField from "@material-ui/core/TextField";
 import ColorPicker from "../../../../components/ColorPicker";
+import Role from "../../../../interfaces/Role";
 
 interface DialogAddRolesProps extends Stylable {
     open: boolean;
-    // roleName?: string;
-    // roleColor?: string;
-
-
+    role?: Role;
+    modify?: boolean;
 
     onClose(): void;
 
     onAddRole(role: any): void;
+
+    onModifyRole(roleId: number | undefined, roleToModify: any): void;
 }
 
 const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<any>) => {
@@ -41,12 +42,16 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
         classes,
         style,
         className,
+        modify,
+        role,
         open,
         onClose,
-        onAddRole
+        onAddRole,
+        onModifyRole,
     } = props;
-
-    const [addRole, setAddRole] = useState({name: "", description: "", permissionLevel: -1, color: ""});
+    const [addRole, setAddRole] = useState({
+        name: "", description: "", color: "", permissionLevel: -1,
+    });
     const [state, setState] = React.useState({
         checkedA: true,
     });
@@ -57,11 +62,11 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
 
     const handleInputRole = (name: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
         event.persist();
-        setAddRole(prev => ({...prev, [name]: event.target.value}));
+        setAddRole(prev => (prev && {...prev, [name]: event.target.value}));
     }
 
     function handleGetColor(inputColor: string) {
-        setAddRole((prev) => ({...prev, color: inputColor}));
+        setAddRole((prev) => (prev && {...prev, color: inputColor}));
     }
 
     return (
@@ -69,8 +74,8 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
             open={open}
             onClose={onClose}
         >
-            <DialogTitle className={classes.dialogRoles} style={{background: `#${addRole.color}`}}>
-                Add new role
+            <DialogTitle className={classes.dialogRoles} style={{background: `#${addRole?.color}`}}>
+                {modify ? "Modify role" : "Add new role"}
             </DialogTitle>
             <Divider/>
             <ListItem className={classes.newRole}>
@@ -82,6 +87,7 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
                             fullWidth
                             name="name"
                             label="Name"
+                            defaultValue={role?.name}
                             autoFocus
                             onChange={handleInputRole("name")}
                         />
@@ -93,6 +99,7 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
                             fullWidth
                             name="description"
                             label="Description"
+                            defaultValue={role?.description}
                             autoFocus
                             onChange={handleInputRole("description")}
                         />
@@ -105,6 +112,7 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
                             fullWidth
                             name="permissionLevel"
                             label="Permission Level"
+                            defaultValue={role?.permissionLevel}
                             autoFocus
                             onChange={handleInputRole("permissionLevel")}
                         />
@@ -112,7 +120,7 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
                     <Grid item xs={12} className={classes.gridPadding}>
                         <ColorPicker
                             onChange={handleGetColor}
-                            color={addRole.color}
+                            color={role?.color}
                         />
                     </Grid>
                     <Grid container className={classes.firstLine}>
@@ -124,7 +132,7 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
                                         checked={state.checkedA}
                                         onChange={handleChange}
                                         name="checkedA"
-                                        inputProps={{'aria-label': 'secondary checkbox'}}
+                                        inputProps={{"aria-label": "secondary checkbox"}}
                                     />
                                 </ListItemSecondaryAction>
                             </ListItem>
@@ -135,7 +143,7 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
                                         checked={state.checkedA}
                                         onChange={handleChange}
                                         name="checkedA"
-                                        inputProps={{'aria-label': 'secondary checkbox'}}
+                                        inputProps={{"aria-label": "secondary checkbox"}}
                                     />
                                 </ListItemSecondaryAction>
                             </ListItem>
@@ -146,7 +154,7 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
                                         checked={state.checkedA}
                                         onChange={handleChange}
                                         name="checkedA"
-                                        inputProps={{'aria-label': 'secondary checkbox'}}
+                                        inputProps={{"aria-label": "secondary checkbox"}}
                                     />
                                 </ListItemSecondaryAction>
                             </ListItem>
@@ -157,7 +165,7 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
                                         checked={state.checkedA}
                                         onChange={handleChange}
                                         name="checkedA"
-                                        inputProps={{'aria-label': 'secondary checkbox'}}
+                                        inputProps={{"aria-label": "secondary checkbox"}}
                                     />
                                 </ListItemSecondaryAction>
                             </ListItem>
@@ -165,9 +173,11 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
                     </Grid>
                     <Button
                         fullWidth
-                        onClick={() => onAddRole(addRole)}
+                        onClick={() => {
+                            modify ? onModifyRole(role?.id, addRole) : onAddRole(addRole)
+                        }}
                     >
-                        Add role
+                        {modify ? "Modify" : "Add role"}
                     </Button>
                 </Grid>
             </ListItem>
