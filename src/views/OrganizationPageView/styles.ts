@@ -7,7 +7,7 @@
  * All rights reserved.
  */
 
-import {createStyles, Theme} from "@material-ui/core";
+import {createStyles, fade, Theme} from "@material-ui/core";
 import { grey } from '@material-ui/core/colors'
 
 const styles =(theme: Theme) => createStyles({
@@ -24,7 +24,6 @@ const styles =(theme: Theme) => createStyles({
         flexAlignment:"flex-end",
     },
     avatar: {
-        variant: "circle",
         height: theme.spacing(25),
         width: theme.spacing(25),
     },
@@ -41,6 +40,14 @@ const styles =(theme: Theme) => createStyles({
         justifyContent:"center",
         marginTop: theme.spacing(2),
         width:"inherit",
+    },
+    paddingNone:{
+        paddingLeft: 0,
+        paddingBottom:0,
+    },
+    colorBar:{
+        width: 4,
+        height: theme.spacing(7),
     },
 })
 export default styles;

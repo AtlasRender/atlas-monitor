@@ -44,6 +44,7 @@ import SubmitPageView from "../../views/SubmitPageView";
 import Button from "@material-ui/core/Button";
 import useAuth from "../../hooks/useAuth";
 import {func} from "prop-types";
+import CreateOrganizationPageView from "../../views/CreateOrganizationPageView";
 
 /**
  * MonitorLayoutProps - interface for MonitorLayout component
@@ -321,13 +322,18 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>
                         </ChangeRouteProvider>
                     </Route>
                     <Route path="/organization">
-                        <ChangeRouteProvider routeMask="(/:slave)">
+                        <ChangeRouteProvider routeMask="(/:id)">
                             <OrganizationPageView/>
                         </ChangeRouteProvider>
                     </Route>
                     <Route path="/submit">
                         <ChangeRouteProvider routeMask="(/:panel)">
                             <SubmitPageView/>
+                        </ChangeRouteProvider>
+                    </Route>
+                    <Route path="/createorganization">
+                        <ChangeRouteProvider routeMask="(/:panel)">
+                            <CreateOrganizationPageView/>
                         </ChangeRouteProvider>
                     </Route>
                 </Switch>

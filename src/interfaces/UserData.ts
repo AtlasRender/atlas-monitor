@@ -8,6 +8,7 @@
  */
 
 import Organization from "./Organization";
+import Role from "./Role";
 
 /**
  * User - interface for user data. You can get it from Origin.
@@ -22,4 +23,5 @@ export default interface UserData {
     createdAt: Date;
     updatedAt: Date;
     organizations: Organization[];
+    roles: Role[];
 }

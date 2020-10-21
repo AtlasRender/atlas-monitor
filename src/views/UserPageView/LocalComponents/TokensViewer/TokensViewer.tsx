@@ -114,9 +114,9 @@ const TokensViewer = React.forwardRef((props: TokensViewerProps, ref: Ref<any>) 
         setTokens(tokens?.filter(token => token.id !== tokenId));
         coreRequest()
             .delete(`tokens/${tokenId}`)
-            .then((response => {
+            .then(response => {
                 handleGetTokens();
-            }))
+            })
             .catch(err => {
                 //TODO handle errors
                 enqueueErrorSnackbar(err.message);

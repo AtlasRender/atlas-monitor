@@ -41,6 +41,15 @@ interface Credentials {
     email: string;
 }
 
+interface validationError {
+    "usernameError": boolean;
+    "emailError": boolean;
+    "passwordError": boolean;
+    "usernameMessage": string;
+    "emailMessage": string;
+    "passwordMessage": string;
+}
+
 const SignUpPage = React.forwardRef((props: SignUpPageProps, ref: Ref<any>) => {
     const {
         classes,
@@ -50,6 +59,16 @@ const SignUpPage = React.forwardRef((props: SignUpPageProps, ref: Ref<any>) => {
 
     const {login} = useAuth();
     const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
+    const [errors, setErrors] = useState<validationError>(
+        {
+            usernameError: false,
+            usernameMessage: "",
+            emailError: false,
+            emailMessage: "",
+            passwordError: false,
+            passwordMessage: "",
+        }
+    );
     const [credentials, setCredentials] = useState<Credentials>({username: "", password: "", email: ""});
     const {changeRoute} = useChangeRoute();
     const coreRequest = useCoreRequest();
@@ -74,7 +93,48 @@ const SignUpPage = React.forwardRef((props: SignUpPageProps, ref: Ref<any>) => {
                 changeRoute({page: `user/${user.id}`});
             })
             .catch(err => {
-                enqueueErrorSnackbar("Register Error");
+                switch (err.status) {
+                    case 400:
+                        err.response.body.response.errors.map((item: any) => {
+                            console.log(item);
+                            const keyError = item.dataPath.substr(1) + "Error";
+                            const keyMessage = item.dataPath.substr(1) + "Message";
+                            switch (item.keyword) {
+                                case "format":
+                                    setErrors((prev) => ({
+                                        ...prev,
+                                        [keyError]: true,
+                                        [keyMessage]: `${item.dataPath.substr(1)} has invalid format`
+                                    }));
+                                    break;
+                                case "minLength":
+                                    setErrors((prev) => ({
+                                        ...prev,
+                                        [keyError]: true,
+                                        [keyMessage]: `${item.dataPath.substr(1)} is too short`
+                                    }));
+                                    break;
+                                case "maxLength":
+                                    setErrors((prev) => ({
+                                        ...prev,
+                                        [keyError]: true,
+                                        [keyMessage]: `${item.dataPath.substr(1)} is too long`
+                                    }));
+                                    break;
+                                case "pattern":
+                                    setErrors((prev) => ({
+                                        ...prev,
+                                        [keyError]: true,
+                                        [keyMessage]: `${item.dataPath.substr(1)} has wrong pattern`
+                                    }));
+                                    break;
+                            }
+                        });
+                        break;
+                    default:
+                        enqueueErrorSnackbar("Unrecognized Error");
+                }
+
             });
     }
 
@@ -93,10 +153,12 @@ const SignUpPage = React.forwardRef((props: SignUpPageProps, ref: Ref<any>) => {
                         <TextField
                             autoComplete="username"
                             variant="outlined"
+                            error={errors.usernameError}
                             required
                             fullWidth
                             name="username"
                             label="Username"
+                            helperText={errors.usernameMessage}
                             autoFocus
                             onChange={handleInput}
                         />
@@ -106,6 +168,8 @@ const SignUpPage = React.forwardRef((props: SignUpPageProps, ref: Ref<any>) => {
                             variant="outlined"
                             required
                             fullWidth
+                            error={errors.emailError}
+                            helperText={errors.emailMessage}
                             label="Email Address"
                             name="email"
                             autoComplete="email"
@@ -117,6 +181,8 @@ const SignUpPage = React.forwardRef((props: SignUpPageProps, ref: Ref<any>) => {
                             variant="outlined"
                             required
                             fullWidth
+                            error={errors.passwordError}
+                            helperText={errors.passwordMessage}
                             name="password"
                             label="Password"
                             type="password"
