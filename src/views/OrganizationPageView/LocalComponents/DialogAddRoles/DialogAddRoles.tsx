@@ -23,6 +23,7 @@ import Stylable from "../../../../interfaces/Stylable";
 import styles from "./styles";
 import TextField from "@material-ui/core/TextField";
 import {TwitterPicker} from "react-color";
+import ColorPicker from "../../../../components/ColorPicker";
 
 interface DialogAddRolesProps extends Stylable {
     open: boolean;
@@ -101,11 +102,7 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
                         />
                     </Grid>
                     <Grid item xs={12} className={classes.gridPadding}>
-                        <TwitterPicker
-                            width="100%"
-                            triangle="hide"
-                            className={classes.picker}
-                        />
+                        <ColorPicker/>
                     </Grid>
                     <Grid container className={classes.firstLine}>
                         <Grid item xs={12}>

@@ -10,9 +10,6 @@
 import {createStyles, fade, Theme} from "@material-ui/core";
 
 const styles =(theme: Theme) => createStyles({
-    "& > *": {
-        boxShadow: "none"
-    },
     firstLine:{
         justifyContent: "center",
         alignItems:"center",
@@ -30,11 +27,10 @@ const styles =(theme: Theme) => createStyles({
         paddingLeft: 0,
         paddingBottom:0,
     },
-    picker: {
-        boxShadow: "none",
-        "& > *": {
-            boxShadow: "none"
-        }
+    newRole: {
+        [theme.breakpoints.down('xs')]: {
+            maxWidth: 375,
+        },
     }
 });
 
