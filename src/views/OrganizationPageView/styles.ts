@@ -45,5 +45,9 @@ const styles =(theme: Theme) => createStyles({
         paddingLeft: 0,
         paddingBottom:0,
     },
+    colorBar:{
+        width: 4,
+        height: theme.spacing(7),
+    },
 })
 export default styles;

@@ -450,6 +450,9 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                             {roles.map((role) => {
                                 return (
                                     <ListItem key={role.id}>
+                                        <ListItemAvatar style={{minWidth:16}}>
+                                            <Box className={classes.colorBar} style={{backgroundColor: `#${role.color}`}}/>
+                                        </ListItemAvatar>
                                         <ListItemText
                                             primary={role.name}
                                             secondary={`description: ${role.description}`}

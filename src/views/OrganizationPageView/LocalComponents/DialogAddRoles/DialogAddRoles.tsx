@@ -26,6 +26,10 @@ import ColorPicker from "../../../../components/ColorPicker";
 
 interface DialogAddRolesProps extends Stylable {
     open: boolean;
+    // roleName?: string;
+    // roleColor?: string;
+
+
 
     onClose(): void;
 
