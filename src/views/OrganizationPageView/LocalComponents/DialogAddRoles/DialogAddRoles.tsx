@@ -11,7 +11,7 @@ import React, {Ref, useState} from "react";
 import {
     Button,
     Dialog,
-    DialogTitle,
+    DialogTitle, Divider,
     Grid,
     ListItem,
     ListItemSecondaryAction,
@@ -22,7 +22,6 @@ import {
 import Stylable from "../../../../interfaces/Stylable";
 import styles from "./styles";
 import TextField from "@material-ui/core/TextField";
-import {TwitterPicker} from "react-color";
 import ColorPicker from "../../../../components/ColorPicker";
 
 interface DialogAddRolesProps extends Stylable {
@@ -57,14 +56,19 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
         setAddRole(prev => ({...prev, [name]: event.target.value}));
     }
 
+    function handleGetColor(inputColor: string) {
+        setAddRole((prev) => ({...prev, color: inputColor}));
+    }
+
     return (
         <Dialog
             open={open}
             onClose={onClose}
         >
-            <DialogTitle className={classes.dialogRoles}>
+            <DialogTitle className={classes.dialogRoles} style={{background: `#${addRole.color}`}}>
                 Add new role
             </DialogTitle>
+            <Divider/>
             <ListItem className={classes.newRole}>
                 <Grid container>
                     <Grid item xs={12} className={classes.gridPadding}>
@@ -102,7 +106,10 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
                         />
                     </Grid>
                     <Grid item xs={12} className={classes.gridPadding}>
-                        <ColorPicker/>
+                        <ColorPicker
+                            onChange={handleGetColor}
+                            color={addRole.color}
+                        />
                     </Grid>
                     <Grid container className={classes.firstLine}>
                         <Grid item xs={12}>

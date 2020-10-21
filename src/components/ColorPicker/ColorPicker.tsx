@@ -7,7 +7,7 @@
  * All rights reserved.
  */
 
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Box, InputBase, List, ListItem, useMediaQuery, useTheme, withStyles} from "@material-ui/core";
 import styles from "./styles";
 import clsx from "clsx";
@@ -16,30 +16,37 @@ import {grey, red} from "@material-ui/core/colors";
 
 
 interface ColorPickerProps extends Stylable {
+    color?: string;
 
+    onChange?(color: string): void;
 }
 
 const ColorPicker = React.forwardRef((props: ColorPickerProps, ref: React.Ref<any>) => {
     const {
         classes,
         className,
+        onChange,
+        color: inputColor,
     } = props;
 
     const theme = useTheme();
     const defaultColors = ['FF6900', 'FCB900', '00D084', '8ED1FC', '0693E3', 'ABB8C3', 'EB144C', 'F78DA7', '9900EF'];
-    const [color, setColor] = useState("FFF");
-    const [currentId, setCurrentId] = useState<number | null>(null);
+    const [color, setColor] = useState(inputColor || "FFF");
     const [error, setError] = useState(false);
 
+    useEffect(() => {
+        inputColor && setColor(inputColor);
+    }, [inputColor])
+
     function handleChangeColor(newColor: string, id: number) {
-        setColor(newColor);
+        !inputColor && setColor(newColor);
         setError(false);
-        setCurrentId(id);
+        onChange && onChange(newColor);
     }
 
     function handleChangeColorInput(event: React.ChangeEvent<HTMLInputElement>) {
-        setCurrentId(null);
-        setColor(event.target.value);
+        !inputColor && setColor(event.target.value);
+        onChange && onChange(event.target.value);
     }
 
     function isValidHex(color: string) {
@@ -83,16 +90,19 @@ const ColorPicker = React.forwardRef((props: ColorPickerProps, ref: React.Ref<an
     return (
         <List className={clsx(classes.container, className)}>
             <Box className={classes.defaultContainer}>
-                {defaultColors.map((color, key) => {
+                {defaultColors.map((defaultColor, key) => {
                     return (
                         <ListItem
                             key={key}
                             button
                             className={classes.color}
-                            style={currentId === key ? {background: `#${color}`, boxShadow: `#${color} 0px 0px 6px`} :
-                                {background: `#${color}`}
+                            style={color === defaultColor ? {
+                                    background: `#${defaultColor}`,
+                                    boxShadow: `#${defaultColor} 0px 0px 8px`
+                                } :
+                                {background: `#${defaultColor}`}
                             }
-                            onClick={() => handleChangeColor(color, key)}
+                            onClick={() => handleChangeColor(defaultColor, key)}
                         />
 
                     );

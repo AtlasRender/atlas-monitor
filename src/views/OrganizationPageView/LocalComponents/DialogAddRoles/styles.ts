@@ -18,7 +18,7 @@ const styles =(theme: Theme) => createStyles({
     dialogRoles: {
         width : "100%",
         textAlign: "center",
-        paddingBottom: 0,
+        paddingBottom: theme.spacing(2),
     },
     gridPadding: {
         marginBottom: theme.spacing(1),
@@ -31,7 +31,8 @@ const styles =(theme: Theme) => createStyles({
         [theme.breakpoints.down('xs')]: {
             maxWidth: 375,
         },
-    }
+    },
+
 });
 
 export default styles;
