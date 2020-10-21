@@ -41,7 +41,7 @@ interface Credentials {
     email: string;
 }
 
-interface Error {
+interface validationError {
     "usernameError": boolean;
     "emailError": boolean;
     "passwordError": boolean;
@@ -59,7 +59,7 @@ const SignUpPage = React.forwardRef((props: SignUpPageProps, ref: Ref<any>) => {
 
     const {login} = useAuth();
     const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
-    const [errors, setErrors] = useState<Error>(
+    const [errors, setErrors] = useState<validationError>(
         {
             usernameError: false,
             usernameMessage: "",

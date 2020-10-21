@@ -38,7 +38,7 @@ interface Credentials {
     password: string;
 }
 
-interface Error {
+interface validationError {
     "usernameError": boolean;
     "passwordError": boolean;
     "usernameMessage": string;
@@ -56,7 +56,7 @@ const AuthorizationPageView = React.forwardRef((props: AuthorizationPageViewProp
     const {enqueueSnackbar} = useSnackbar();
     const {login} = useAuth();
     const coreRequest = useCoreRequest();
-    const [errors, setErrors] = useState<Error>(
+    const [errors, setErrors] = useState<validationError>(
         {
             usernameError: false,
             usernameMessage: "",
