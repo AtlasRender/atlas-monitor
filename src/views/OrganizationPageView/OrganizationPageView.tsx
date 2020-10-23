@@ -58,13 +58,6 @@ interface OrganizationPageViewProps extends Stylable {
 
 }
 
-interface Users {
-    name: string;
-    role: string;
-    id: number;
-    department: string;
-}
-
 const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps, ref: Ref<any>) => {
     const {
         classes,
@@ -160,8 +153,8 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
             .post(`organizations/${id}/roles/${roleId}/users`)
             .send({userId: userToAddRoleId})
             .then((response) => {
-                handleGetOrganizationUsers();
-                handleGetRoles();
+                handleGetOrganizationUsers().then();
+                handleGetRoles().then();
             })
             .catch(err => {
                 //TODO handle errors
@@ -175,8 +168,8 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
             .delete(`organizations/${id}/roles/${roleId}/users`)
             .send({userId: userToRemoveRoleId})
             .then((response) => {
-                handleGetOrganizationUsers();
-                handleGetRoles();
+                handleGetOrganizationUsers().then();
+                handleGetRoles().then();
             })
             .catch(err => {
                 //TODO handle errors
@@ -192,7 +185,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
             .post(`organizations/${id}/roles`)
             .send(addNewRole)
             .then((response) => {
-                handleGetRoles();
+                handleGetRoles().then();
             })
             .catch(err => {
                 //TODO handle errors
@@ -205,7 +198,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
         coreRequest()
             .delete(`organizations/${id}/roles/${roleId}`)
             .then((response) => {
-                handleGetRoles();
+                handleGetRoles().then();
             })
             .catch(err => {
                 //TODO handle errors
@@ -220,7 +213,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
             .post(`organizations/${id}/roles/${roleId}`)
             .send(roleToModify)
             .then((response) => {
-                handleGetRoles();
+                handleGetRoles().then();
             })
             .catch(err => {
                 //TODO handle errors
@@ -283,8 +276,8 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
             .post(`organizations/${id}/users`)
             .send({userIds: usersToAddId})
             .then(response => {
-                handleGetOrganization();
-                handleGetOrganizationUsers();
+                handleGetOrganization().then();
+                handleGetOrganizationUsers().then();
             })
             .catch(err => {
                 //TODO handle errors
@@ -298,8 +291,8 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
             .delete(`organizations/${id}/users`)
             .send({userIds: usersToDeleteIds})
             .then(response => {
-                handleGetOrganization();
-                handleGetOrganizationUsers();
+                handleGetOrganization().then();
+                handleGetOrganizationUsers().then();
             })
             .catch(err => {
                 //TODO handle errors
@@ -353,11 +346,17 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                         <Box>
                             <Grid container spacing={2} className={classes.nameDescription}>
                                 <Grid item xs={6}>
-                                    <DataTextField label="Organization name" children={organizationData?.name}/>
+                                    <DataTextField 
+                                        label="Organization name" 
+                                        children={organizationData?.name}
+                                    />
                                 </Grid>
                                 <Grid item xs={6}/>
                                 <Grid item xs={10}>
-                                    <DataTextField label="description" children="Lorem ipsum"/>
+                                    <DataTextField
+                                        label="description"
+                                        children={organizationData?.description || "No description provided."}
+                                    />
                                 </Grid>
                             </Grid>
                         </Box>
