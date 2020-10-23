@@ -51,17 +51,23 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
     } = props;
 
     const theme = useTheme();
-
+    const [currentId, setCurrentId] = useState<number[]>([]);
     const [addRole, setAddRole] = useState({
         name: "", description: "", color: "#fff", permissionLevel: -1,
     });
 
-    const [state, setState] = React.useState({
-        checkedA: true,
-    });
+    const [state, setState] = React.useState(true);
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setState({...state, [event.target.name]: event.target.checked});
+        console.log(currentId);
+        let currentIdCopy = currentId;
+        if(currentIdCopy.includes(+event.target.id)) {
+            currentIdCopy = currentIdCopy.filter(id => id !== +event.target.id);
+            setCurrentId(currentIdCopy);
+        } else {
+            setCurrentId(prev => ([...prev, +event.target.id]));
+        }
+        setState(event.target.checked);
     };
 
     const handleInputRole = (name: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -132,50 +138,22 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
                     </Grid>
                     <Grid container className={classes.firstLine}>
                         <Grid item xs={12}>
-                            <ListItem className={classes.paddingNone}>
-                                <ListItemText primary="Roles" secondary="description"/>
-                                <ListItemSecondaryAction>
-                                    <Switch
-                                        checked={state.checkedA}
-                                        onChange={handleChange}
-                                        name="checkedA"
-                                        inputProps={{"aria-label": "secondary checkbox"}}
-                                    />
-                                </ListItemSecondaryAction>
-                            </ListItem>
-                            <ListItem className={classes.paddingNone}>
-                                <ListItemText primary="Roles" secondary="description"/>
-                                <ListItemSecondaryAction>
-                                    <Switch
-                                        checked={state.checkedA}
-                                        onChange={handleChange}
-                                        name="checkedA"
-                                        inputProps={{"aria-label": "secondary checkbox"}}
-                                    />
-                                </ListItemSecondaryAction>
-                            </ListItem>
-                            <ListItem className={classes.paddingNone}>
-                                <ListItemText primary="Roles" secondary="description"/>
-                                <ListItemSecondaryAction>
-                                    <Switch
-                                        checked={state.checkedA}
-                                        onChange={handleChange}
-                                        name="checkedA"
-                                        inputProps={{"aria-label": "secondary checkbox"}}
-                                    />
-                                </ListItemSecondaryAction>
-                            </ListItem>
-                            <ListItem className={classes.paddingNone}>
-                                <ListItemText primary="Roles" secondary="description"/>
-                                <ListItemSecondaryAction>
-                                    <Switch
-                                        checked={state.checkedA}
-                                        onChange={handleChange}
-                                        name="checkedA"
-                                        inputProps={{"aria-label": "secondary checkbox"}}
-                                    />
-                                </ListItemSecondaryAction>
-                            </ListItem>
+                            {[0, 1, 2, 3].map((role, key) => {
+                                return (
+                                    <ListItem className={classes.paddingNone} key={key}>
+                                        <ListItemText primary="Roles" secondary="description"/>
+                                        <ListItemSecondaryAction>
+                                            <Switch
+                                                id={`${role}`}
+                                                checked={currentId.includes(role) && state}
+                                                onChange={handleChange}
+                                                name="checkedA"
+                                                inputProps={{"aria-label": "secondary checkbox"}}
+                                            />
+                                        </ListItemSecondaryAction>
+                                    </ListItem>
+                                );
+                            })}
                         </Grid>
                     </Grid>
                     <Button
