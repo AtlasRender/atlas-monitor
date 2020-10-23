@@ -19,7 +19,6 @@ import {
     ListItemIcon,
     ListItemSecondaryAction,
     ListItemText,
-    Menu,
     MenuItem,
     Select,
     useMediaQuery,
@@ -45,8 +44,6 @@ import Role from "../../interfaces/Role";
 import useConfirm from "../../hooks/useConfirm";
 import DialogUser from "./LocalComponents/DialogUser";
 import DialogAddUsers from "./LocalComponents/DialogAddUsers";
-import AddRoleField from "./LocalComponents/AddRoleField";
-import DialogModifyRole from "./LocalComponents/DialogModifyRole";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import DialogAddRoles from "./LocalComponents/DialogAddRoles";

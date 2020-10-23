@@ -16,7 +16,7 @@ import {
     ListItem,
     ListItemSecondaryAction,
     ListItemText,
-    Switch,
+    Switch, useTheme,
     withStyles,
 } from "@material-ui/core";
 import Stylable from "../../../../interfaces/Stylable";
@@ -49,9 +49,13 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
         onAddRole,
         onModifyRole,
     } = props;
+
+    const theme = useTheme();
+
     const [addRole, setAddRole] = useState({
-        name: "", description: "", color: "", permissionLevel: -1,
+        name: "", description: "", color: "#fff", permissionLevel: -1,
     });
+
     const [state, setState] = React.useState({
         checkedA: true,
     });
@@ -74,7 +78,10 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
             open={open}
             onClose={onClose}
         >
-            <DialogTitle className={classes.dialogRoles} style={{background: `#${addRole?.color}`}}>
+            <DialogTitle
+                className={classes.dialogRoles}
+                style={{background: `#${addRole?.color}`, color: theme.palette.getContrastText(`#${addRole?.color}`)}}
+            >
                 {modify ? "Modify role" : "Add new role"}
             </DialogTitle>
             <Divider/>
