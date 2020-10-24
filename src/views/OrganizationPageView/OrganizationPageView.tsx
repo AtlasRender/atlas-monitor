@@ -532,7 +532,9 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                                         </ListItemAvatar>
                                         <ListItemText primary={user.username} secondary={user.email}/>
                                         <ListItemSecondaryAction>
-                                            <Chip label={user.roles[0].name}/>
+                                            <Chip label={user.roles[0].name}
+                                                  style={{backgroundColor: `#${roles[0].color}`}}
+                                            />
                                             <IconButton onClick={() => handleIsUserSettingsButtonActive(user)}>
                                                 <SettingsIcon/>
                                             </IconButton>
