@@ -10,7 +10,7 @@
 import React, {Ref, useEffect, useState} from "react";
 import {
     Avatar,
-    Box,
+    Box, Chip,
     Divider,
     Grid,
     IconButton,
@@ -532,22 +532,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                                         </ListItemAvatar>
                                         <ListItemText primary={user.username} secondary={user.email}/>
                                         <ListItemSecondaryAction>
-                                            {user.roles.map(role => {
-                                                return (
-                                                    <Select
-                                                        key={role.id}
-                                                        style={{width: 100}}
-                                                        name={"" + user.id} // why id?
-                                                        value={role.name}
-                                                        label="Admin"
-                                                        className={classes.selectFieldStyle}
-                                                    >
-                                                        <MenuItem value={role.name}>{role.name}</MenuItem>
-                                                        <MenuItem value="member">Member</MenuItem>
-                                                        <MenuItem value="moderator">Moderator</MenuItem>
-                                                    </Select>
-                                                )
-                                            })}
+                                            <Chip label={user.roles[0].name}/>
                                             <IconButton onClick={() => handleIsUserSettingsButtonActive(user)}>
                                                 <SettingsIcon/>
                                             </IconButton>
