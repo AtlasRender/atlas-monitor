@@ -34,7 +34,7 @@ interface DialogAddRolesProps extends Stylable {
 
     onAddRole(role: any): void;
 
-    onModifyRole(roleId: number | undefined, roleToModify: any): void;
+    onModifyRole?(roleId: number | undefined, roleToModify: any): void;
 }
 
 const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<any>) => {
@@ -174,7 +174,7 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
                     <Button
                         fullWidth
                         onClick={() => {
-                            modify ? onModifyRole(role?.id, addRole) : onAddRole(addRole)
+                            modify ? onModifyRole && onModifyRole(role?.id, addRole) : onAddRole(addRole)
                         }}
                     >
                         {modify ? "Modify" : "Add role"}

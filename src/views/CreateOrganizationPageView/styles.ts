@@ -8,6 +8,7 @@
  */
 
 import {createStyles, Theme} from "@material-ui/core";
+import grey from "@material-ui/core/colors/grey";
 
 const styles = (theme: Theme) => createStyles({
     container:{
@@ -27,12 +28,27 @@ const styles = (theme: Theme) => createStyles({
         paddingLeft:theme.spacing(2),
         paddingRight:theme.spacing(2),
     },
+    paddingNone:{
+        paddingLeft: 0,
+        paddingBottom:0,
+    },
     listHeader:{
         paddingBottom:0,
     },
     divider:{
         marginBottom: theme.spacing(2),
     },
+    colorBar:{
+        width: 4,
+        height: theme.spacing(7),
+    },
+    minWidthList:{
+        minWidth:320,
+    },
+    button:{
+        backgroundColor:grey[300],
+
+    }
 
 });
 

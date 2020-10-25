@@ -10,7 +10,7 @@
 import React, {Ref, useEffect, useState} from "react";
 import {
     Avatar,
-    Box,
+    Box, Chip,
     Divider,
     Grid,
     IconButton,
@@ -46,7 +46,6 @@ import useConfirm from "../../hooks/useConfirm";
 import DialogUser from "./LocalComponents/DialogUser";
 import DialogAddUsers from "./LocalComponents/DialogAddUsers";
 import AddRoleField from "./LocalComponents/AddRoleField";
-import DialogModifyRole from "./LocalComponents/DialogModifyRole";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import DialogAddRoles from "./LocalComponents/DialogAddRoles";
@@ -533,22 +532,9 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                                         </ListItemAvatar>
                                         <ListItemText primary={user.username} secondary={user.email}/>
                                         <ListItemSecondaryAction>
-                                            {user.roles.map(role => {
-                                                return (
-                                                    <Select
-                                                        key={role.id}
-                                                        style={{width: 100}}
-                                                        name={"" + user.id} // why id?
-                                                        value={role.name}
-                                                        label="Admin"
-                                                        className={classes.selectFieldStyle}
-                                                    >
-                                                        <MenuItem value={role.name}>{role.name}</MenuItem>
-                                                        <MenuItem value="member">Member</MenuItem>
-                                                        <MenuItem value="moderator">Moderator</MenuItem>
-                                                    </Select>
-                                                )
-                                            })}
+                                            <Chip label={user.roles[0].name}
+                                                  style={{backgroundColor: `#${roles[0].color}`}}
+                                            />
                                             <IconButton onClick={() => handleIsUserSettingsButtonActive(user)}>
                                                 <SettingsIcon/>
                                             </IconButton>
