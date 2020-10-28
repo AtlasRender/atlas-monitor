@@ -16,7 +16,7 @@ import {
     ListItem,
     ListItemSecondaryAction,
     ListItemText,
-    Switch,
+    Switch, useTheme,
     withStyles,
 } from "@material-ui/core";
 import Stylable from "../../../../interfaces/Stylable";
@@ -32,9 +32,16 @@ interface DialogAddRolesProps extends Stylable {
 
     onClose(): void;
 
-    onAddRole(role: any): void;
+    onAddRole(role: any, errors: any): void;
 
     onModifyRole?(roleId: number | undefined, roleToModify: any): void;
+}
+
+interface ValidationErrors {
+    "noInputError": boolean;
+    "nameError": boolean;
+    "descriptionError": boolean;
+    "permissionLevelError": boolean;
 }
 
 const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<any>) => {
@@ -49,15 +56,35 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
         onAddRole,
         onModifyRole,
     } = props;
+
+    const roleOpportunities = [
+        {
+            flag: false,
+        },
+        {
+            flag: false,
+        }
+    ]
+
+
+    const theme = useTheme();
+    const [activeIds, setCurrentId] = useState<number[]>([]);
     const [addRole, setAddRole] = useState({
-        name: "", description: "", color: "", permissionLevel: -1,
+        name: "", description: "", color: "#fff", permissionLevel: -1,
     });
-    const [state, setState] = React.useState({
-        checkedA: true,
+    const [errors, setErrors] = useState<ValidationErrors>({
+        "noInputError": true,
+        "nameError": false,
+        "descriptionError": false,
+        "permissionLevelError": false,
     });
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setState({...state, [event.target.name]: event.target.checked});
+        if (activeIds.includes(+event.target.id)) {
+            setCurrentId(prev => prev.filter(id => id !== +event.target.id));
+        } else {
+            setCurrentId(prev => ([...prev, +event.target.id]));
+        }
     };
 
     const handleInputRole = (name: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -69,12 +96,80 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
         setAddRole((prev) => (prev && {...prev, color: inputColor}));
     }
 
+    const handleValidation = (event: React.FocusEvent<HTMLInputElement>) => {
+        setErrors(prev => ({
+            ...prev, "noInputError": false
+        }))
+        if (event.target.name === "name") {
+            if (!addRole.name.match(/^[a-zA-Z]+$/) || !addRole.name || addRole.name.length < 3 || addRole.name.length > 50) {
+                setErrors(prev => ({
+                    ...prev, "nameError": true
+                }))
+            } else {
+                setErrors(prev => ({
+                    ...prev, "nameError": false
+                }))
+            }
+        }
+        if (event.target.name === "description") {
+            if (!addRole.description || addRole.name.length > 500) {
+                setErrors(prev => ({
+                    ...prev, "descriptionError": true
+                }))
+            } else {
+                setErrors(prev => ({
+                    ...prev, "descriptionError": false
+                }))
+            }
+        }
+        if (event.target.name === "permissionLevel") {
+            if (!addRole.permissionLevel || addRole.permissionLevel < 0 || addRole.permissionLevel > 1000) {
+                setErrors(prev => ({
+                    ...prev, "permissionLevelError": true
+                }))
+            } else {
+                setErrors(prev => ({
+                    ...prev, "permissionLevelError": false
+                }))
+            }
+        }
+    }
+
+    function handleClick() {
+        modify ? onModifyRole && onModifyRole(role?.id, addRole) : onAddRole(addRole, errors);
+        setAddRole({
+            name: "", description: "", color: "#fff", permissionLevel: -1,
+        })
+        setErrors({
+            "noInputError": true,
+            "nameError": false,
+            "descriptionError": false,
+            "permissionLevelError": false,
+        });
+    }
+
+    function handleOnClose() {
+        setAddRole({
+            name: "", description: "", color: "#fff", permissionLevel: -1,
+        })
+        setErrors({
+            "noInputError": true,
+            "nameError": false,
+            "descriptionError": false,
+            "permissionLevelError": false,
+        });
+        onClose();
+    }
+
     return (
         <Dialog
             open={open}
-            onClose={onClose}
+            onClose={handleOnClose}
         >
-            <DialogTitle className={classes.dialogRoles} style={{background: `#${addRole?.color}`}}>
+            <DialogTitle
+                className={classes.dialogRoles}
+                style={{background: `#${addRole?.color}`, color: theme.palette.getContrastText(`#${addRole?.color}`)}}
+            >
                 {modify ? "Modify role" : "Add new role"}
             </DialogTitle>
             <Divider/>
@@ -82,30 +177,33 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
                 <Grid container>
                     <Grid item xs={12} className={classes.gridPadding}>
                         <TextField
+                            error={errors.nameError}
                             variant="standard"
                             required
                             fullWidth
                             name="name"
                             label="Name"
                             defaultValue={role?.name}
-                            autoFocus
                             onChange={handleInputRole("name")}
+                            onBlur={handleValidation}
                         />
                     </Grid>
                     <Grid item xs={12} className={classes.gridPadding}>
                         <TextField
+                            error={errors.descriptionError}
                             variant="standard"
                             required
                             fullWidth
                             name="description"
                             label="Description"
                             defaultValue={role?.description}
-                            autoFocus
                             onChange={handleInputRole("description")}
+                            onBlur={handleValidation}
                         />
                     </Grid>
                     <Grid item xs={12} className={classes.gridPadding}>
                         <TextField
+                            error={errors.permissionLevelError}
                             type="number"
                             variant="standard"
                             required
@@ -113,8 +211,8 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
                             name="permissionLevel"
                             label="Permission Level"
                             defaultValue={role?.permissionLevel}
-                            autoFocus
                             onChange={handleInputRole("permissionLevel")}
+                            onBlur={handleValidation}
                         />
                     </Grid>
                     <Grid item xs={12} className={classes.gridPadding}>
@@ -125,57 +223,27 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
                     </Grid>
                     <Grid container className={classes.firstLine}>
                         <Grid item xs={12}>
-                            <ListItem className={classes.paddingNone}>
-                                <ListItemText primary="Roles" secondary="description"/>
-                                <ListItemSecondaryAction>
-                                    <Switch
-                                        checked={state.checkedA}
-                                        onChange={handleChange}
-                                        name="checkedA"
-                                        inputProps={{"aria-label": "secondary checkbox"}}
-                                    />
-                                </ListItemSecondaryAction>
-                            </ListItem>
-                            <ListItem className={classes.paddingNone}>
-                                <ListItemText primary="Roles" secondary="description"/>
-                                <ListItemSecondaryAction>
-                                    <Switch
-                                        checked={state.checkedA}
-                                        onChange={handleChange}
-                                        name="checkedA"
-                                        inputProps={{"aria-label": "secondary checkbox"}}
-                                    />
-                                </ListItemSecondaryAction>
-                            </ListItem>
-                            <ListItem className={classes.paddingNone}>
-                                <ListItemText primary="Roles" secondary="description"/>
-                                <ListItemSecondaryAction>
-                                    <Switch
-                                        checked={state.checkedA}
-                                        onChange={handleChange}
-                                        name="checkedA"
-                                        inputProps={{"aria-label": "secondary checkbox"}}
-                                    />
-                                </ListItemSecondaryAction>
-                            </ListItem>
-                            <ListItem className={classes.paddingNone}>
-                                <ListItemText primary="Roles" secondary="description"/>
-                                <ListItemSecondaryAction>
-                                    <Switch
-                                        checked={state.checkedA}
-                                        onChange={handleChange}
-                                        name="checkedA"
-                                        inputProps={{"aria-label": "secondary checkbox"}}
-                                    />
-                                </ListItemSecondaryAction>
-                            </ListItem>
+                            {[0, 1, 2, 3].map((role, key) => {
+                                return (
+                                    <ListItem className={classes.paddingNone} key={key}>
+                                        <ListItemText primary="User manager" secondary="Can manage users"/>
+                                        <ListItemSecondaryAction>
+                                            <Switch
+                                                id={`${role}`}
+                                                checked={activeIds.includes(role)}
+                                                onChange={handleChange}
+                                                name="checkedA"
+                                                inputProps={{"aria-label": "secondary checkbox"}}
+                                            />
+                                        </ListItemSecondaryAction>
+                                    </ListItem>
+                                );
+                            })}
                         </Grid>
                     </Grid>
                     <Button
                         fullWidth
-                        onClick={() => {
-                            modify ? onModifyRole && onModifyRole(role?.id, addRole) : onAddRole(addRole)
-                        }}
+                        onClick={handleClick}
                     >
                         {modify ? "Modify" : "Add role"}
                     </Button>

@@ -19,7 +19,6 @@ import {
     ListItemIcon,
     ListItemSecondaryAction,
     ListItemText,
-    Menu,
     MenuItem,
     Select,
     useMediaQuery,
@@ -45,10 +44,10 @@ import Role from "../../interfaces/Role";
 import useConfirm from "../../hooks/useConfirm";
 import DialogUser from "./LocalComponents/DialogUser";
 import DialogAddUsers from "./LocalComponents/DialogAddUsers";
-import AddRoleField from "./LocalComponents/AddRoleField";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import DialogAddRoles from "./LocalComponents/DialogAddRoles";
+import Loading from "../../components/Loading";
 
 /**
  * OrganizationPageViewPropsStyled - interface for OrganizationPageView function
@@ -59,11 +58,16 @@ interface OrganizationPageViewProps extends Stylable {
 
 }
 
-interface Users {
-    name: string;
-    role: string;
-    id: number;
-    department: string;
+/**
+ * ValidationErrors - interface for role input errors
+ * @interface
+ * @author Andrii Demchyshyn
+ */
+interface ValidationErrors {
+    "noInputError": boolean;
+    "nameError": boolean;
+    "descriptionError": boolean;
+    "permissionLevelError": boolean;
 }
 
 const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps, ref: Ref<any>) => {
@@ -79,6 +83,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
     const {getRouteParams} = useChangeRoute();
     const {id} = getRouteParams();
     const confirm = useConfirm();
+    const [loaded, setLoaded] = useState(false);
 
 
     //roles
@@ -103,26 +108,32 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
     const [organizationUsers, serOrganizationUsers] = useState<UserData[]>([]);
     const [currentUser, setCurrentUser] = useState<UserData | null>(null);
 
-
     useEffect(() => {
-        handleGetOrganization();
-        handleGetAllUsers();
-        handleGetOrganizationUsers();
-        handleGetRoles();
+        Promise.all([
+            handleGetOrganization(),
+            handleGetAllUsers(),
+            handleGetOrganizationUsers(),
+            handleGetRoles()
+        ]).then(() => {
+            setLoaded(true);
+        })
     }, []);
+
+    //basic
+    function handleSetLoaded() {
+        setLoaded(true);
+    }
 
 
     //roles
-    function handleGetRoles() {
-        coreRequest()
-            .get(`organizations/${id}/roles`)
-            .then((response) => {
-                setRoles(response.body);
-            })
-            .catch(err => {
-                //TODO handle errors
-                enqueueErrorSnackbar("Cant get roles");
-            })
+    async function handleGetRoles() {
+        try {
+            const response = await coreRequest().get(`organizations/${id}/roles`);
+            setRoles(response.body);
+        } catch (err) {
+            //TODO handle errors
+            enqueueErrorSnackbar("Cant get roles");
+        }
     }
 
     async function handleGetRoleById(roleId: number) {
@@ -154,8 +165,8 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
             .post(`organizations/${id}/roles/${roleId}/users`)
             .send({userId: userToAddRoleId})
             .then((response) => {
-                handleGetOrganizationUsers();
-                handleGetRoles();
+                handleGetOrganizationUsers().then();
+                handleGetRoles().then();
             })
             .catch(err => {
                 //TODO handle errors
@@ -169,8 +180,8 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
             .delete(`organizations/${id}/roles/${roleId}/users`)
             .send({userId: userToRemoveRoleId})
             .then((response) => {
-                handleGetOrganizationUsers();
-                handleGetRoles();
+                handleGetOrganizationUsers().then();
+                handleGetRoles().then();
             })
             .catch(err => {
                 //TODO handle errors
@@ -178,20 +189,25 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
             })
     }
 
-    function handleAddRole(roleToAdd: any) {
-        setIsAddRoleButtonActive(false);
-        const addNewRole = roleToAdd;
-        addNewRole.permissionLevel = +addNewRole.permissionLevel;
-        coreRequest()
-            .post(`organizations/${id}/roles`)
-            .send(addNewRole)
-            .then((response) => {
-                handleGetRoles();
-            })
-            .catch(err => {
-                //TODO handle errors
-                enqueueErrorSnackbar("Cant add role");
-            })
+    function handleAddRole(roleToAdd: any, errors: ValidationErrors) {
+        if (!errors.noInputError && !errors.nameError && !errors.descriptionError && !errors.permissionLevelError) {
+            setIsAddRoleButtonActive(false);
+            const addNewRole = roleToAdd;
+            addNewRole.permissionLevel = +addNewRole.permissionLevel;
+            coreRequest()
+                .post(`organizations/${id}/roles`)
+                .send(addNewRole)
+                .then((response) => {
+                    handleGetRoles().then();
+                })
+                .catch(err => {
+                    //TODO handle errors
+                    enqueueErrorSnackbar("Cant add role");
+                })
+        } else {
+            enqueueErrorSnackbar("Cant add role");
+        }
+
     }
 
     function handleDeleteRole(roleId: number) {
@@ -199,7 +215,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
         coreRequest()
             .delete(`organizations/${id}/roles/${roleId}`)
             .then((response) => {
-                handleGetRoles();
+                handleGetRoles().then();
             })
             .catch(err => {
                 //TODO handle errors
@@ -214,7 +230,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
             .post(`organizations/${id}/roles/${roleId}`)
             .send(roleToModify)
             .then((response) => {
-                handleGetRoles();
+                handleGetRoles().then();
             })
             .catch(err => {
                 //TODO handle errors
@@ -240,40 +256,34 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
 
 
     //organizations and users
-    function handleGetOrganizationUsers() {
-        coreRequest()
-            .get(`organizations/${id}/users`)
-            .then((response) => {
-                serOrganizationUsers(response.body);
-            })
-            .catch(err => {
-                //TODO handle errors
-                enqueueErrorSnackbar("Cant get roles");
-            })
+    async function handleGetOrganizationUsers() {
+        try {
+            const response = await coreRequest().get(`organizations/${id}/users`);
+            serOrganizationUsers(response.body);
+        } catch (err) {
+            //TODO handle errors
+            enqueueErrorSnackbar("Cant get roles");
+        }
     }
 
-    function handleGetOrganization() {
-        coreRequest()
-            .get(`organizations/${id}`)
-            .then((response) => {
-                setOrganizationData(response.body);
-            })
-            .catch(err => {
-                //TODO handle errors
-                enqueueErrorSnackbar("No such user");
-            });
+    async function handleGetOrganization() {
+        try {
+            const response = await coreRequest().get(`organizations/${id}`)
+            setOrganizationData(response.body);
+        } catch (err) {
+            //TODO handle errors
+            enqueueErrorSnackbar("No such user");
+        }
     }
 
-    function handleGetAllUsers() {
-        coreRequest()
-            .get("users")
-            .then((response) => {
-                setAllUsers(response.body);
-            })
-            .catch(err => {
-                //TODO handle errors
-                enqueueErrorSnackbar("Cant get users");
-            });
+    async function handleGetAllUsers() {
+        try {
+            const response = await coreRequest().get("users");
+            setAllUsers(response.body);
+        } catch (err) {
+            //TODO handle errors
+            enqueueErrorSnackbar("Cant get users");
+        }
     }
 
     function handleAddUser(usersToAddId: number[]) {
@@ -283,8 +293,8 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
             .post(`organizations/${id}/users`)
             .send({userIds: usersToAddId})
             .then(response => {
-                handleGetOrganization();
-                handleGetOrganizationUsers();
+                handleGetOrganization().then();
+                handleGetOrganizationUsers().then();
             })
             .catch(err => {
                 //TODO handle errors
@@ -298,8 +308,8 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
             .delete(`organizations/${id}/users`)
             .send({userIds: usersToDeleteIds})
             .then(response => {
-                handleGetOrganization();
-                handleGetOrganizationUsers();
+                handleGetOrganization().then();
+                handleGetOrganizationUsers().then();
             })
             .catch(err => {
                 //TODO handle errors
@@ -353,11 +363,17 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                         <Box>
                             <Grid container spacing={2} className={classes.nameDescription}>
                                 <Grid item xs={6}>
-                                    <DataTextField label="Organization name" children={organizationData?.name}/>
+                                    <DataTextField
+                                        label="Organization name"
+                                        children={organizationData?.name}
+                                    />
                                 </Grid>
                                 <Grid item xs={6}/>
                                 <Grid item xs={10}>
-                                    <DataTextField label="description" children="Lorem ipsum"/>
+                                    <DataTextField
+                                        label="description"
+                                        children={organizationData?.description || "No description provided."}
+                                    />
                                 </Grid>
                             </Grid>
                         </Box>
@@ -377,10 +393,10 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                 <Box className={classes.avatarBox}>
                     <Avatar src="https://cdn.sportclub.ru/assets/2019-09-20/n97c311rvb.jpg" className={classes.avatar}/>
                 </Box>
-                <Grid item xs={10}>
+                <Grid item xs={12} md={10}>
                     <DataTextField label="Organization name" children="Blizzard entertainment"/>
                 </Grid>
-                <Grid item xs={10}>
+                <Grid item xs={12} md={10}>
                     <DataTextField label="description"
                                    children="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dicta dolorem, dolorum nam quidem sint sunt!"/>
                 </Grid>
@@ -391,175 +407,180 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
     let {path} = useRouteMatch();
 
     return (
-        <Switch>
-            <Route path={path}>
-                <Box>
-                    {mainInfo}
-                    <TopicWithButton children="Slaves"/>
-                    <Grid container className={classes.firstLine}>
-                        <Grid item xs={10}>
-                            {slaves.map((slave, key) => {
-                                return (
-                                    <ListItem key={key}>
-                                        <ListItemIcon>
-                                            <BuildIcon/>
-                                        </ListItemIcon>
-                                        <ListItemText
-                                            primary={slave}
-                                            secondary="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur, rerum?"
-                                        />
-
-                                        <ListItemSecondaryAction>
-                                            <IconButton><SettingsIcon/></IconButton>
-                                        </ListItemSecondaryAction>
-                                    </ListItem>
-                                )
-                            })}
-                        </Grid>
-                    </Grid>
-
-                    <Grid container className={classes.firstLine}>
-                        <Grid item xs={10}>
-                            <List component="nav" aria-label="secondary mailbox folders">
-                                <ListItem className={classes.paddingNone}>
-                                    <ListItemText primary="Roles" primaryTypographyProps={{variant: "h6"}}/>
-                                    <ListItemSecondaryAction>
-                                        <IconButton
-                                            edge="end"
-                                            aria-label="delete"
-                                            onClick={handleIsAddRoleButtonActive}
-                                        >
-                                            <AddIcon/>
-                                        </IconButton>
-                                    </ListItemSecondaryAction>
-                                </ListItem>
-                                <Divider/>
-                            </List>
-                        </Grid>
-                    </Grid>
-
-                    <DialogAddRoles
-                        open={isAddRoleButtonActive}
-                        onClose={() => setIsAddRoleButtonActive(false)}
-                        onAddRole={handleAddRole}
-                        onModifyRole={handleModifyRole}
-                    />
-
-                    <Grid container className={classes.firstLine}>
-                        <Grid item xs={10}>
-                            {roles.map((role) => {
-                                return (
-                                    <ListItem key={role.id}>
-                                        <ListItemAvatar style={{minWidth: 16}}>
-                                            <Box className={classes.colorBar}
-                                                 style={{backgroundColor: `#${role.color}`}}/>
-                                        </ListItemAvatar>
-                                        <ListItemText
-                                            primary={role.name}
-                                            secondary={role.description}
-                                        />
-                                        <ListItemSecondaryAction>
-                                            <IconButton
-                                                edge="end"
-                                                aria-label="delete"
-                                                style={{marginRight: theme.spacing(0)}}
-                                                onClick={() => handleIsDialogModifyRoleButtonActive(role.id)}
-                                            >
-                                                <EditIcon/>
-                                            </IconButton>
-
-                                            <IconButton
-                                                edge="end"
-                                                aria-label="delete"
-                                                onClick={() => confirm(async () => handleDeleteRole(role.id),
-                                                    {title: `are you sure to delete role: ${role.name} ?`})}
-                                            >
-                                                <DeleteIcon/>
-                                            </IconButton>
-                                        </ListItemSecondaryAction>
-                                    </ListItem>
-                                )
-                            })}
-                        </Grid>
-                    </Grid>
-
-                    <DialogAddRoles
-                        open={isDialogModifyRoleButtonActive}
-                        onClose={() => setIsDialogModifyRoleButtonActive(false)}
-                        role={roleToChange}
-                        modify={true}
-                        onAddRole={handleAddRole}
-                        onModifyRole={handleModifyRole}
-                    />
-
-                    <Grid container className={classes.firstLine}>
-                        <Grid item xs={10}>
-                            <List component="nav" aria-label="secondary mailbox folders">
-                                <ListItem className={classes.paddingNone}>
-                                    <ListItemText primary="Members" primaryTypographyProps={{variant: "h6"}}/>
-                                    <ListItemSecondaryAction>
-                                        <IconButton
-                                            edge="end"
-                                            aria-label="delete"
-                                            onClick={handleIsButtonActive}
-                                        >
-                                            <AddIcon/>
-                                        </IconButton>
-                                    </ListItemSecondaryAction>
-                                </ListItem>
-                                <Divider/>
-                            </List>
-                        </Grid>
-                    </Grid>
-
-                    <DialogAddUsers
-                        open={isButtonActive}
-                        onClose={() => setIsButtonActive(false)}
-                        allUsers={allUsers}
-                        newUsers={newUsers}
-                        onNewUserClick={handleNewUsersClick}
-                        onAdduser={handleAddUser}
-                    />
-
-                    <Grid container className={classes.firstLine} spacing={0}>
-                        {organizationUsers.map((user: UserData, key: number) => {
-                            return (
-                                <Grid item xs={10} key={key}>
-                                    <ListItem>
-                                        <ListItemAvatar>
-                                            <Avatar
-                                                src="https://cdn.sportclub.ru/assets/2019-09-20/n97c311rvb.jpg"/>
-                                        </ListItemAvatar>
-                                        <ListItemText primary={user.username} secondary={user.email}/>
-                                        <ListItemSecondaryAction>
-                                            <Chip label={user.roles[0].name}
-                                                  style={{backgroundColor: `#${roles[0].color}`}}
+        loaded ?
+            <Switch>
+                <Route path={path}>
+                    <Box>
+                        {mainInfo}
+                        <TopicWithButton children="Slaves"/>
+                        <Grid container className={classes.firstLine}>
+                            <Grid item xs={12} md={10}>
+                                {slaves.map((slave, key) => {
+                                    return (
+                                        <ListItem key={key}>
+                                            <ListItemIcon>
+                                                <BuildIcon/>
+                                            </ListItemIcon>
+                                            <ListItemText
+                                                primary={slave}
+                                                secondary="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur, rerum?"
                                             />
-                                            <IconButton onClick={() => handleIsUserSettingsButtonActive(user)}>
-                                                <SettingsIcon/>
+
+                                            <ListItemSecondaryAction>
+                                                <IconButton><SettingsIcon/></IconButton>
+                                            </ListItemSecondaryAction>
+                                        </ListItem>
+                                    )
+                                })}
+                            </Grid>
+                        </Grid>
+
+                        <Grid container className={classes.firstLine}>
+                            <Grid item xs={12} md={10}>
+                                <List component="nav" aria-label="secondary mailbox folders">
+                                    <ListItem className={classes.paddingNone}>
+                                        <ListItemText primary="Roles" primaryTypographyProps={{variant: "h6"}}/>
+                                        <ListItemSecondaryAction>
+                                            <IconButton
+                                                edge="end"
+                                                aria-label="delete"
+                                                onClick={handleIsAddRoleButtonActive}
+                                            >
+                                                <AddIcon/>
                                             </IconButton>
                                         </ListItemSecondaryAction>
                                     </ListItem>
-                                </Grid>
-                            )
-                        })}
-                    </Grid>
+                                    <Divider/>
+                                </List>
+                            </Grid>
+                        </Grid>
 
-                    <DialogUser
-                        open={isUserSettingsButtonActive}
-                        onClose={() => setIsUserSettingsButtonActive(false)}
-                        user={currentUser}
-                        roles={roles}
-                        onRemove={handleRemoveUser}
-                        onAddRole={handleAddRoleToUser}
-                        onRemoveRole={handleRemoveRoleFromUser}
-                    />
+                        <DialogAddRoles
+                            open={isAddRoleButtonActive}
+                            onClose={() => setIsAddRoleButtonActive(false)}
+                            onAddRole={handleAddRole}
+                            onModifyRole={handleModifyRole}
+                        />
 
-                    <TopicWithButton children="Plugins"/>
-                    <PluginComponent plugin="GachiWork" description="best remixes of all time"/>
-                </Box>
-            </Route>
-        </Switch>
+                        <Grid container className={classes.firstLine}>
+                            <Grid item xs={12} md={10}>
+                                {roles.map((role) => {
+                                    return (
+                                        <ListItem key={role.id}>
+                                            <ListItemAvatar style={{minWidth: 16}}>
+                                                <Box className={classes.colorBar}
+                                                     style={{backgroundColor: `#${role.color}`}}/>
+                                            </ListItemAvatar>
+                                            <ListItemText
+                                                primary={role.name}
+                                                secondary={role.description}
+                                            />
+                                            <ListItemSecondaryAction>
+                                                <IconButton
+                                                    edge="end"
+                                                    aria-label="delete"
+                                                    style={{marginRight: theme.spacing(0)}}
+                                                    onClick={() => handleIsDialogModifyRoleButtonActive(role.id)}
+                                                >
+                                                    <EditIcon/>
+                                                </IconButton>
+
+                                                <IconButton
+                                                    edge="end"
+                                                    aria-label="delete"
+                                                    onClick={() => confirm(async () => handleDeleteRole(role.id),
+                                                        {title: `are you sure to delete role: ${role.name} ?`})}
+                                                >
+                                                    <DeleteIcon/>
+                                                </IconButton>
+                                            </ListItemSecondaryAction>
+                                        </ListItem>
+                                    )
+                                })}
+                            </Grid>
+                        </Grid>
+
+                        <DialogAddRoles
+                            open={isDialogModifyRoleButtonActive}
+                            onClose={() => setIsDialogModifyRoleButtonActive(false)}
+                            role={roleToChange}
+                            modify={true}
+                            onAddRole={handleAddRole}
+                            onModifyRole={handleModifyRole}
+                        />
+
+                        <Grid container className={classes.firstLine}>
+                            <Grid item xs={12} md={10}>
+                                <List component="nav" aria-label="secondary mailbox folders">
+                                    <ListItem className={classes.paddingNone}>
+                                        <ListItemText primary="Members" primaryTypographyProps={{variant: "h6"}}/>
+                                        <ListItemSecondaryAction>
+                                            <IconButton
+                                                edge="end"
+                                                aria-label="delete"
+                                                onClick={handleIsButtonActive}
+                                            >
+                                                <AddIcon/>
+                                            </IconButton>
+                                        </ListItemSecondaryAction>
+                                    </ListItem>
+                                    <Divider/>
+                                </List>
+                            </Grid>
+                        </Grid>
+
+                        <DialogAddUsers
+                            open={isButtonActive}
+                            onClose={() => setIsButtonActive(false)}
+                            allUsers={allUsers}
+                            newUsers={newUsers}
+                            onNewUserClick={handleNewUsersClick}
+                            onAdduser={handleAddUser}
+                        />
+
+                        <Grid container className={classes.firstLine} spacing={0}>
+                            {organizationUsers.map((user: UserData, key: number) => {
+                                return (
+                                    <Grid item xs={12} md={10} key={key}>
+                                        <ListItem>
+                                            <ListItemAvatar>
+                                                <Avatar
+                                                    src="https://cdn.sportclub.ru/assets/2019-09-20/n97c311rvb.jpg"/>
+                                            </ListItemAvatar>
+                                            <ListItemText primary={user.username} secondary={user.email}/>
+                                            <ListItemSecondaryAction>
+                                                <Chip label={user.roles[0].name}
+                                                      style={{backgroundColor: `#${roles[0].color}`}}
+                                                />
+                                                <IconButton onClick={() => handleIsUserSettingsButtonActive(user)}>
+                                                    <SettingsIcon/>
+                                                </IconButton>
+                                            </ListItemSecondaryAction>
+                                        </ListItem>
+                                    </Grid>
+                                )
+                            })}
+                        </Grid>
+
+                        <DialogUser
+                            open={isUserSettingsButtonActive}
+                            onClose={() => setIsUserSettingsButtonActive(false)}
+                            user={currentUser}
+                            roles={roles}
+                            onRemove={handleRemoveUser}
+                            onAddRole={handleAddRoleToUser}
+                            onRemoveRole={handleRemoveRoleFromUser}
+                        />
+
+                        <TopicWithButton children="Plugins"/>
+                        <PluginComponent plugin="GachiWork" description="best remixes of all time"/>
+                    </Box>
+                </Route>
+            </Switch>
+            :
+            <Box className={classes.loading}>
+                <Loading/>
+            </Box>
 
     );
 })

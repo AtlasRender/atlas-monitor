@@ -57,8 +57,8 @@ const ColorPicker = React.forwardRef((props: ColorPickerProps, ref: React.Ref<an
         switch (color.length) {
             case 3:
                 return /^[0-9A-F]{3}$/i.test(color);
-            case 4:
-                return /^[0-9A-F]{4}$/i.test(color);
+            // case 4:
+            //     return /^[0-9A-F]{4}$/i.test(color);
             case 6:
                 return /^[0-9A-F]{6}$/i.test(color);
             case 8:
@@ -111,7 +111,10 @@ const ColorPicker = React.forwardRef((props: ColorPickerProps, ref: React.Ref<an
             <Box className={classes.inputContainer} style={{width: width}}>
                 <Box
                     className={classes.inputAdornment}
-                    style={{background: `#${color}`}}
+                    style={{
+                        background: `#${color}`, border: `1px solid #${color}`,
+                        color: theme.palette.getContrastText(`#${color}`)
+                    }}
                 >
                     #
                 </Box>

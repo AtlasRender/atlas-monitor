@@ -11,10 +11,20 @@ import {createStyles, fade, Theme} from "@material-ui/core";
 import { grey } from '@material-ui/core/colors'
 
 const styles =(theme: Theme) => createStyles({
+    loading: {
+        display: "flex",
+        height: "90vh",
+        justifyContent: "center",
+        alignItems: "center",
+    },
     firstLine:{
         justifyContent: "center",
         alignItems:"center",
         listStyleType:"none",
+        [theme.breakpoints.down('sm')]: {
+            paddingLeft: theme.spacing(2),
+            paddingRight: theme.spacing(2),
+        },
     },
     nameDescription:{
         justifyContent:"flex-begin",

@@ -28,6 +28,10 @@ const styles = (theme: Theme) => createStyles({
     container:{
         alignItems: "center",
         justifyContent:"center",
+        [theme.breakpoints.down('sm')]: {
+            paddingLeft: theme.spacing(2),
+            paddingRight: theme.spacing(2),
+        },
     },
     topic:{
         marginTop: theme.spacing(2),
