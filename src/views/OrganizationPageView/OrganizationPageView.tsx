@@ -44,7 +44,6 @@ import Role from "../../interfaces/Role";
 import useConfirm from "../../hooks/useConfirm";
 import DialogUser from "./LocalComponents/DialogUser";
 import DialogAddUsers from "./LocalComponents/DialogAddUsers";
-import AddRoleField from "./LocalComponents/AddRoleField";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import DialogAddRoles from "./LocalComponents/DialogAddRoles";
@@ -394,10 +393,10 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                 <Box className={classes.avatarBox}>
                     <Avatar src="https://cdn.sportclub.ru/assets/2019-09-20/n97c311rvb.jpg" className={classes.avatar}/>
                 </Box>
-                <Grid item xs={10}>
+                <Grid item xs={12} md={10}>
                     <DataTextField label="Organization name" children="Blizzard entertainment"/>
                 </Grid>
-                <Grid item xs={10}>
+                <Grid item xs={12} md={10}>
                     <DataTextField label="description"
                                    children="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dicta dolorem, dolorum nam quidem sint sunt!"/>
                 </Grid>
@@ -415,7 +414,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                         {mainInfo}
                         <TopicWithButton children="Slaves"/>
                         <Grid container className={classes.firstLine}>
-                            <Grid item xs={10}>
+                            <Grid item xs={12} md={10}>
                                 {slaves.map((slave, key) => {
                                     return (
                                         <ListItem key={key}>
@@ -437,7 +436,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                         </Grid>
 
                         <Grid container className={classes.firstLine}>
-                            <Grid item xs={10}>
+                            <Grid item xs={12} md={10}>
                                 <List component="nav" aria-label="secondary mailbox folders">
                                     <ListItem className={classes.paddingNone}>
                                         <ListItemText primary="Roles" primaryTypographyProps={{variant: "h6"}}/>
@@ -464,7 +463,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                         />
 
                         <Grid container className={classes.firstLine}>
-                            <Grid item xs={10}>
+                            <Grid item xs={12} md={10}>
                                 {roles.map((role) => {
                                     return (
                                         <ListItem key={role.id}>
@@ -511,7 +510,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                         />
 
                         <Grid container className={classes.firstLine}>
-                            <Grid item xs={10}>
+                            <Grid item xs={12} md={10}>
                                 <List component="nav" aria-label="secondary mailbox folders">
                                     <ListItem className={classes.paddingNone}>
                                         <ListItemText primary="Members" primaryTypographyProps={{variant: "h6"}}/>
@@ -542,7 +541,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                     <Grid container className={classes.firstLine} spacing={0}>
                         {organizationUsers.map((user: UserData, key: number) => {
                             return (
-                                <Grid item xs={10} key={key}>
+                                <Grid item xs={12} md={10} key={key}>
                                     <ListItem>
                                         <ListItemAvatar>
                                             <Avatar

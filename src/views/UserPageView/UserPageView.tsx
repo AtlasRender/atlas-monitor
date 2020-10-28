@@ -118,10 +118,10 @@ const UserPageView = React.forwardRef((props: UserPageViewProps, ref: Ref<any>) 
                 <Grid item xs={12} className={clsx(classes.container, classes.root, className)}>
                     <Avatar src={githubAvatar} className={clsx(classes.avatar)}/>
                 </Grid>
-                <Grid item xs={10}>
+                <Grid item xs={12} md={10}>
                     <DataTextField label="Name" children={userData?.username}/>
                 </Grid>
-                <Grid item xs={10}>
+                <Grid item xs={12} md={10}>
                     <DataTextField label="Department" children="Pathfinder team crew"/>
                 </Grid>
             </Grid>
@@ -136,7 +136,7 @@ const UserPageView = React.forwardRef((props: UserPageViewProps, ref: Ref<any>) 
                 <Box style={style} className={className}>
                     {mainInfo}
                     <Grid container spacing={2} className={clsx(classes.container, className)}>
-                        <Grid item xs={10} className={clsx(classes.topic, className)}>
+                        <Grid item xs={12} md={10} className={clsx(classes.topic, className)}>
                             <Typography variant="h6">Organizations</Typography>
                             <Divider/>
                         </Grid>

@@ -218,7 +218,7 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
                     <Button
                         fullWidth
                         onClick={() => {
-                            modify ? onModifyRole(role?.id, addRole) : onAddRole(addRole, errors)
+                            modify ? onModifyRole && onModifyRole(role?.id, addRole) : onAddRole(addRole, errors)
                         }}
                     >
                         {modify ? "Modify" : "Add role"}

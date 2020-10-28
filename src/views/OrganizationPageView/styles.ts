@@ -21,6 +21,10 @@ const styles =(theme: Theme) => createStyles({
         justifyContent: "center",
         alignItems:"center",
         listStyleType:"none",
+        [theme.breakpoints.down('sm')]: {
+            paddingLeft: theme.spacing(2),
+            paddingRight: theme.spacing(2),
+        },
     },
     nameDescription:{
         justifyContent:"flex-begin",

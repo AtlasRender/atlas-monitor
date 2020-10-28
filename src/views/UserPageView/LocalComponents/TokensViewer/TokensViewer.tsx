@@ -194,7 +194,7 @@ const TokensViewer = React.forwardRef((props: TokensViewerProps, ref: Ref<any>) 
     if (matches) {
         tokenView = (
             <Grid container className={clsx(classes.container, className)}>
-                <Grid item xs={10}>
+                <Grid item xs={12} md={10}>
                     <List component="nav" aria-label="secondary mailbox folders">
                         <ListItem className={classes.paddingNone}>
                             <ListItemText primary="Token" primaryTypographyProps={{variant: "h6"}}/>
@@ -312,7 +312,7 @@ const TokensViewer = React.forwardRef((props: TokensViewerProps, ref: Ref<any>) 
         tokenView = (
             tokenView = (
                 <Grid container className={clsx(classes.container, className)}>
-                    <Grid item xs={10}>
+                    <Grid item xs={12} md={10}>
                         <List component="nav" aria-label="secondary mailbox folders">
                             <ListItem className={classes.paddingNone}>
                                 <ListItemText primary="Token" primaryTypographyProps={{variant: "h6"}}/>
