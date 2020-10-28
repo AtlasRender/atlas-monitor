@@ -32,9 +32,16 @@ interface DialogAddRolesProps extends Stylable {
 
     onClose(): void;
 
-    onAddRole(role: any): void;
+    onAddRole(role: any, errors: any): void;
 
     onModifyRole(roleId: number | undefined, roleToModify: any): void;
+}
+
+interface ValidationErrors {
+    "noInputError": boolean;
+    "nameError": boolean;
+    "descriptionError": boolean;
+    "permissionLevelError": boolean;
 }
 
 const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<any>) => {
@@ -65,6 +72,12 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
     const [addRole, setAddRole] = useState({
         name: "", description: "", color: "#fff", permissionLevel: -1,
     });
+    const [errors, setErrors] = useState<ValidationErrors>({
+        "noInputError": true,
+        "nameError": false,
+        "descriptionError": false,
+        "permissionLevelError": false,
+    });
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (activeIds.includes(+event.target.id)) {
@@ -83,6 +96,45 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
         setAddRole((prev) => (prev && {...prev, color: inputColor}));
     }
 
+    const handleValidation = (event: React.FocusEvent<HTMLInputElement>) => {
+        setErrors(prev => ({
+            ...prev, "noInputError": false
+        }))
+        if (event.target.name === "name") {
+            if (!addRole.name.match(/^[a-zA-Z]+$/) || !addRole.name || addRole.name.length < 3 || addRole.name.length > 50) {
+                setErrors(prev => ({
+                    ...prev, "nameError": true
+                }))
+            } else {
+                setErrors(prev => ({
+                    ...prev, "nameError": false
+                }))
+            }
+        }
+        if (event.target.name === "description") {
+            if (!addRole.description || addRole.name.length > 500) {
+                setErrors(prev => ({
+                    ...prev, "descriptionError": true
+                }))
+            } else {
+                setErrors(prev => ({
+                    ...prev, "descriptionError": false
+                }))
+            }
+        }
+        if (event.target.name === "permissionLevel") {
+            if (!addRole.permissionLevel || addRole.permissionLevel < 0 || addRole.permissionLevel > 1000) {
+                setErrors(prev => ({
+                    ...prev, "permissionLevelError": true
+                }))
+            } else {
+                setErrors(prev => ({
+                    ...prev, "permissionLevelError": false
+                }))
+            }
+        }
+    }
+
     return (
         <Dialog
             open={open}
@@ -99,30 +151,33 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
                 <Grid container>
                     <Grid item xs={12} className={classes.gridPadding}>
                         <TextField
+                            error={errors.nameError}
                             variant="standard"
                             required
                             fullWidth
                             name="name"
                             label="Name"
                             defaultValue={role?.name}
-                            autoFocus
                             onChange={handleInputRole("name")}
+                            onBlur={handleValidation}
                         />
                     </Grid>
                     <Grid item xs={12} className={classes.gridPadding}>
                         <TextField
+                            error={errors.descriptionError}
                             variant="standard"
                             required
                             fullWidth
                             name="description"
                             label="Description"
                             defaultValue={role?.description}
-                            autoFocus
                             onChange={handleInputRole("description")}
+                            onBlur={handleValidation}
                         />
                     </Grid>
                     <Grid item xs={12} className={classes.gridPadding}>
                         <TextField
+                            error={errors.permissionLevelError}
                             type="number"
                             variant="standard"
                             required
@@ -130,8 +185,8 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
                             name="permissionLevel"
                             label="Permission Level"
                             defaultValue={role?.permissionLevel}
-                            autoFocus
                             onChange={handleInputRole("permissionLevel")}
+                            onBlur={handleValidation}
                         />
                     </Grid>
                     <Grid item xs={12} className={classes.gridPadding}>
@@ -163,7 +218,7 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
                     <Button
                         fullWidth
                         onClick={() => {
-                            modify ? onModifyRole(role?.id, addRole) : onAddRole(addRole)
+                            modify ? onModifyRole(role?.id, addRole) : onAddRole(addRole, errors)
                         }}
                     >
                         {modify ? "Modify" : "Add role"}

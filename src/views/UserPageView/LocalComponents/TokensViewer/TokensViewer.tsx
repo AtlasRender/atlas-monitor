@@ -7,7 +7,7 @@
  * All rights reserved.
  */
 
-import React, {Ref, useEffect} from "react";
+import React, {Ref, useEffect, useState} from "react";
 import {
     Box,
     Divider,
@@ -48,6 +48,12 @@ interface TokensViewerProps extends Stylable {
     token?: string,
 }
 
+interface ValidationErrors {
+    "noInputError": boolean;
+    "nameError": boolean;
+    "descriptionError": boolean;
+}
+
 /**
  * TokensViewer - function for UserPageView component used for fast output(creation) of tokens and their description
  * @function
@@ -68,6 +74,11 @@ const TokensViewer = React.forwardRef((props: TokensViewerProps, ref: Ref<any>) 
     const [isButtonActive, setIsButtonActive] = React.useState(false);
     const [newToken, setNewToken] = React.useState({name: "", description: ""});
     const [lastAddedToken, setLastAddedToken] = React.useState<UserToken | null>(null);
+    const [errors, setErrors] = useState<ValidationErrors>({
+        "noInputError": true,
+        "nameError": false,
+        "descriptionError": false,
+    })
     const enqueueSuccessSnackbar = useEnqueueSuccessSnackbar();
     const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
 
@@ -95,19 +106,23 @@ const TokensViewer = React.forwardRef((props: TokensViewerProps, ref: Ref<any>) 
     }
 
     function handleAddToken() {
-        setIsButtonActive(false);
-        coreRequest()
-            .post("tokens")
-            .send(newToken)
-            .then((response) => {
-                //TODO entity
-                setLastAddedToken(response.body);
-                handleGetTokens();
-            })
-            .catch(err => {
-                //TODO handle errors
-                enqueueErrorSnackbar(err.message);
-            });
+        if(!errors.noInputError && !errors.nameError && !errors.descriptionError) {
+            setIsButtonActive(false);
+            coreRequest()
+                .post("tokens")
+                .send(newToken)
+                .then((response) => {
+                    //TODO entity
+                    setLastAddedToken(response.body);
+                    handleGetTokens();
+                })
+                .catch(err => {
+                    //TODO handle errors
+                    enqueueErrorSnackbar(err.message);
+                });
+        } else {
+            enqueueErrorSnackbar("Can`t create a token");
+        }
     }
 
     function handleRemoveToken(tokenId: number) {
@@ -142,6 +157,34 @@ const TokensViewer = React.forwardRef((props: TokensViewerProps, ref: Ref<any>) 
         document.execCommand("copy");
         document.body.removeChild(el);
         return str;
+    }
+
+    function handleValidation(event: React.FocusEvent<HTMLInputElement>) {
+        setErrors(prev => ({
+            ...prev, "noInputError": false
+        }))
+        if (event.target.name === "name") {
+            if (!newToken.name.slice(0, 1).match(/^[a-zA-Z]+$/) || !newToken.name || newToken.name.length > 50) {
+                setErrors(prev => ({
+                    ...prev, "nameError": true
+                }))
+            } else {
+                setErrors(prev => ({
+                    ...prev, "nameError": false
+                }))
+            }
+        }
+        if (event.target.name === "description") {
+            if (!newToken.description || newToken.description.length > 100) {
+                setErrors(prev => ({
+                    ...prev, "descriptionError": true
+                }))
+            } else {
+                setErrors(prev => ({
+                    ...prev, "descriptionError": false
+                }))
+            }
+        }
     }
 
     const theme = useTheme();
@@ -181,24 +224,26 @@ const TokensViewer = React.forwardRef((props: TokensViewerProps, ref: Ref<any>) 
                             <Grid container>
                                 <Grid item xs={6} className={clsx(classes.tokenAdd, classes.spacingInNewToken)}>
                                     <TextField
+                                        error={errors.nameError}
                                         variant="standard"
                                         required
                                         fullWidth
                                         name="name"
                                         label="Name"
-                                        autoFocus
                                         onChange={handleInputToken}
+                                        onBlur={handleValidation}
                                     />
                                 </Grid>
                                 <Grid item xs={5} className={clsx(classes.tokenAdd, classes.spacingInNewToken)}>
                                     <TextField
+                                        error={errors.descriptionError}
                                         variant="standard"
                                         required
                                         fullWidth
                                         name="description"
                                         label="Description"
-                                        autoFocus
                                         onChange={handleInputToken}
+                                        onBlur={handleValidation}
                                     />
                                 </Grid>
                                 <Grid item xs={1} className={classes.createTokenControls}>

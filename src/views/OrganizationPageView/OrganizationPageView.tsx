@@ -58,6 +58,18 @@ interface OrganizationPageViewProps extends Stylable {
 
 }
 
+/**
+ * ValidationErrors - interface for role input errors
+ * @interface
+ * @author Andrii Demchyshyn
+ */
+interface ValidationErrors {
+    "noInputError": boolean;
+    "nameError": boolean;
+    "descriptionError": boolean;
+    "permissionLevelError": boolean;
+}
+
 const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps, ref: Ref<any>) => {
     const {
         classes,
@@ -177,20 +189,25 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
             })
     }
 
-    function handleAddRole(roleToAdd: any) {
-        setIsAddRoleButtonActive(false);
-        const addNewRole = roleToAdd;
-        addNewRole.permissionLevel = +addNewRole.permissionLevel;
-        coreRequest()
-            .post(`organizations/${id}/roles`)
-            .send(addNewRole)
-            .then((response) => {
-                handleGetRoles().then();
-            })
-            .catch(err => {
-                //TODO handle errors
-                enqueueErrorSnackbar("Cant add role");
-            })
+    function handleAddRole(roleToAdd: any, errors: ValidationErrors) {
+        if(!errors.noInputError && !errors.nameError && !errors.descriptionError && !errors.permissionLevelError){
+            setIsAddRoleButtonActive(false);
+            const addNewRole = roleToAdd;
+            addNewRole.permissionLevel = +addNewRole.permissionLevel;
+            coreRequest()
+                .post(`organizations/${id}/roles`)
+                .send(addNewRole)
+                .then((response) => {
+                    handleGetRoles().then();
+                })
+                .catch(err => {
+                    //TODO handle errors
+                    enqueueErrorSnackbar("Cant add role");
+                })
+        } else {
+            enqueueErrorSnackbar("Cant add role");
+        }
+
     }
 
     function handleDeleteRole(roleId: number) {
