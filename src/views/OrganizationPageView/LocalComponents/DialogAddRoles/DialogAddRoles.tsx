@@ -135,10 +135,36 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
         }
     }
 
+    function handleClick() {
+        modify ? onModifyRole && onModifyRole(role?.id, addRole) : onAddRole(addRole, errors);
+        setAddRole({
+            name: "", description: "", color: "#fff", permissionLevel: -1,
+        })
+        setErrors({
+            "noInputError": true,
+            "nameError": false,
+            "descriptionError": false,
+            "permissionLevelError": false,
+        });
+    }
+
+    function handleOnClose() {
+        setAddRole({
+            name: "", description: "", color: "#fff", permissionLevel: -1,
+        })
+        setErrors({
+            "noInputError": true,
+            "nameError": false,
+            "descriptionError": false,
+            "permissionLevelError": false,
+        });
+        onClose();
+    }
+
     return (
         <Dialog
             open={open}
-            onClose={onClose}
+            onClose={handleOnClose}
         >
             <DialogTitle
                 className={classes.dialogRoles}
@@ -217,9 +243,7 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
                     </Grid>
                     <Button
                         fullWidth
-                        onClick={() => {
-                            modify ? onModifyRole && onModifyRole(role?.id, addRole) : onAddRole(addRole, errors)
-                        }}
+                        onClick={handleClick}
                     >
                         {modify ? "Modify" : "Add role"}
                     </Button>

@@ -127,7 +127,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
 
     //roles
     async function handleGetRoles() {
-        try{
+        try {
             const response = await coreRequest().get(`organizations/${id}/roles`);
             setRoles(response.body);
         } catch (err) {
@@ -190,7 +190,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
     }
 
     function handleAddRole(roleToAdd: any, errors: ValidationErrors) {
-        if(!errors.noInputError && !errors.nameError && !errors.descriptionError && !errors.permissionLevelError){
+        if (!errors.noInputError && !errors.nameError && !errors.descriptionError && !errors.permissionLevelError) {
             setIsAddRoleButtonActive(false);
             const addNewRole = roleToAdd;
             addNewRole.permissionLevel = +addNewRole.permissionLevel;
@@ -538,29 +538,29 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                             onAdduser={handleAddUser}
                         />
 
-                    <Grid container className={classes.firstLine} spacing={0}>
-                        {organizationUsers.map((user: UserData, key: number) => {
-                            return (
-                                <Grid item xs={12} md={10} key={key}>
-                                    <ListItem>
-                                        <ListItemAvatar>
-                                            <Avatar
-                                                src="https://cdn.sportclub.ru/assets/2019-09-20/n97c311rvb.jpg"/>
-                                        </ListItemAvatar>
-                                        <ListItemText primary={user.username} secondary={user.email}/>
-                                        <ListItemSecondaryAction>
-                                            <Chip label={user.roles[0].name}
-                                                  style={{backgroundColor: `#${roles[0].color}`}}
-                                            />
-                                            <IconButton onClick={() => handleIsUserSettingsButtonActive(user)}>
-                                                <SettingsIcon/>
-                                            </IconButton>
-                                        </ListItemSecondaryAction>
-                                    </ListItem>
-                                </Grid>
-                            )
-                        })}
-                    </Grid>
+                        <Grid container className={classes.firstLine} spacing={0}>
+                            {organizationUsers.map((user: UserData, key: number) => {
+                                return (
+                                    <Grid item xs={12} md={10} key={key}>
+                                        <ListItem>
+                                            <ListItemAvatar>
+                                                <Avatar
+                                                    src="https://cdn.sportclub.ru/assets/2019-09-20/n97c311rvb.jpg"/>
+                                            </ListItemAvatar>
+                                            <ListItemText primary={user.username} secondary={user.email}/>
+                                            <ListItemSecondaryAction>
+                                                <Chip label={user.roles[0].name}
+                                                      style={{backgroundColor: `#${roles[0].color}`}}
+                                                />
+                                                <IconButton onClick={() => handleIsUserSettingsButtonActive(user)}>
+                                                    <SettingsIcon/>
+                                                </IconButton>
+                                            </ListItemSecondaryAction>
+                                        </ListItem>
+                                    </Grid>
+                                )
+                            })}
+                        </Grid>
 
                         <DialogUser
                             open={isUserSettingsButtonActive}
