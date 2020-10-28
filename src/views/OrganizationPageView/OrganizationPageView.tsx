@@ -10,7 +10,7 @@
 import React, {Ref, useEffect, useState} from "react";
 import {
     Avatar,
-    Box,
+    Box, Chip,
     Divider,
     Grid,
     IconButton,
@@ -44,6 +44,7 @@ import Role from "../../interfaces/Role";
 import useConfirm from "../../hooks/useConfirm";
 import DialogUser from "./LocalComponents/DialogUser";
 import DialogAddUsers from "./LocalComponents/DialogAddUsers";
+import AddRoleField from "./LocalComponents/AddRoleField";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import DialogAddRoles from "./LocalComponents/DialogAddRoles";
@@ -363,8 +364,8 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                         <Box>
                             <Grid container spacing={2} className={classes.nameDescription}>
                                 <Grid item xs={6}>
-                                    <DataTextField 
-                                        label="Organization name" 
+                                    <DataTextField
+                                        label="Organization name"
                                         children={organizationData?.name}
                                     />
                                 </Grid>
@@ -538,42 +539,29 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                             onAdduser={handleAddUser}
                         />
 
-                        <Grid container className={classes.firstLine} spacing={0}>
-                            {organizationUsers.map((user: UserData, key: number) => {
-                                return (
-                                    <Grid item xs={10} key={key}>
-                                        <ListItem>
-                                            <ListItemAvatar>
-                                                <Avatar
-                                                    src="https://cdn.sportclub.ru/assets/2019-09-20/n97c311rvb.jpg"/>
-                                            </ListItemAvatar>
-                                            <ListItemText primary={user.username} secondary={user.email}/>
-                                            <ListItemSecondaryAction>
-                                                {user.roles.map(role => {
-                                                    return (
-                                                        <Select
-                                                            key={role.id}
-                                                            style={{width: 100}}
-                                                            name={"" + user.id} // why id?
-                                                            value={role.name}
-                                                            label="Admin"
-                                                            className={classes.selectFieldStyle}
-                                                        >
-                                                            <MenuItem value={role.name}>{role.name}</MenuItem>
-                                                            <MenuItem value="member">Member</MenuItem>
-                                                            <MenuItem value="moderator">Moderator</MenuItem>
-                                                        </Select>
-                                                    )
-                                                })}
-                                                <IconButton onClick={() => handleIsUserSettingsButtonActive(user)}>
-                                                    <SettingsIcon/>
-                                                </IconButton>
-                                            </ListItemSecondaryAction>
-                                        </ListItem>
-                                    </Grid>
-                                )
-                            })}
-                        </Grid>
+                    <Grid container className={classes.firstLine} spacing={0}>
+                        {organizationUsers.map((user: UserData, key: number) => {
+                            return (
+                                <Grid item xs={10} key={key}>
+                                    <ListItem>
+                                        <ListItemAvatar>
+                                            <Avatar
+                                                src="https://cdn.sportclub.ru/assets/2019-09-20/n97c311rvb.jpg"/>
+                                        </ListItemAvatar>
+                                        <ListItemText primary={user.username} secondary={user.email}/>
+                                        <ListItemSecondaryAction>
+                                            <Chip label={user.roles[0].name}
+                                                  style={{backgroundColor: `#${roles[0].color}`}}
+                                            />
+                                            <IconButton onClick={() => handleIsUserSettingsButtonActive(user)}>
+                                                <SettingsIcon/>
+                                            </IconButton>
+                                        </ListItemSecondaryAction>
+                                    </ListItem>
+                                </Grid>
+                            )
+                        })}
+                    </Grid>
 
                         <DialogUser
                             open={isUserSettingsButtonActive}

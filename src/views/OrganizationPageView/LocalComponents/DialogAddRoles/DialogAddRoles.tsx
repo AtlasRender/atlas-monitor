@@ -34,7 +34,7 @@ interface DialogAddRolesProps extends Stylable {
 
     onAddRole(role: any, errors: any): void;
 
-    onModifyRole(roleId: number | undefined, roleToModify: any): void;
+    onModifyRole?(roleId: number | undefined, roleToModify: any): void;
 }
 
 interface ValidationErrors {
