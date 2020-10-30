@@ -20,7 +20,7 @@ import {
     ListItemText,
     ListItemSecondaryAction, Typography,
     Divider, ListItemIcon, ListItemAvatar,
-    Select, useMediaQuery, useTheme, Dialog, DialogTitle, Button,
+    Select, useMediaQuery, useTheme, Dialog, DialogTitle, Button, Chip,
 } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import BuildIcon from "@material-ui/icons/Build";
@@ -39,6 +39,7 @@ import useConfirm from "../../hooks/useConfirm";
 import UserData from "../../interfaces/UserData";
 import useCoreRequest from "../../hooks/useCoreRequest";
 import useAuth from "../../hooks/useAuth";
+import User from "../../interfaces/User";
 
 
 interface CreateOrganizationPageProps extends Stylable {
@@ -52,21 +53,22 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
         classes,
     } = props;
 
+    const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
+    const {getRouteParams} = useChangeRoute();
+    const coreRequest = useCoreRequest();
+    const {getUser} = useAuth();
+    const confirm = useConfirm();
+
     const [addRoleButton, setAddRoleButton] = useState<boolean>(false);
     const [name, setName] = useState<string>();
     const [description, setDescription] = useState<string>();
+    const [descriptionError, setDescriptionError] = useState({error: false, message: ""});
+    const [nameError, setNameError] = useState({error: false, message: ""});
     const [owner, setOwner] = useState<UserData>();
     const [roles, setRoles] = useState<Role[]>([]);
     const [users, setUsers] = useState<UserData[]>([]);
     const [members, setMembers] = useState<UserData[]>([]);
     const [addMemberButton, setAddMemberButton] = useState<boolean>(false);
-
-    const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
-    const {getRouteParams} = useChangeRoute();
-    const coreRequest = useCoreRequest();
-    const {getUser} = useAuth();
-
-    const confirm = useConfirm();
 
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up("md"));
@@ -89,6 +91,26 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
     const handleInputDescription = (event: React.ChangeEvent<HTMLInputElement>) => {
         setDescription(event.target.value);
         console.log(description);
+    }
+
+    function errorHandler(event: React.FocusEvent<HTMLInputElement>){
+        if (name && name?.length <= 3) {
+            setNameError({error: true, message: "Should be more than 3 symbols"});
+        } else if(name && name.length > 50) {
+            setNameError({error: true, message: "Should be less than 50 symbols"});
+        }
+        else{
+            setNameError({error:false, message:""});
+        }
+
+        if (description && description?.length <= 3) {
+            setDescriptionError({error: true, message: "Should be more than 3 symbols"});
+        } else if(description && description.length > 50) {
+            setDescriptionError({error: true, message: "Should be less than 50 symbols"});
+        }
+        else{
+            setDescriptionError({error:false, message:""});
+        }
     }
 
     function handleGetAllUsers() {
@@ -120,7 +142,7 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
     function createOrg() {
         coreRequest()
             .post("organizations")
-            .send({name:name, description: description, ownerUser: owner, users: members})
+            .send({name: name, description: description, ownerUser: owner, users: members})
             .then()
             .catch(err => {
                 //TODO handle errors
@@ -143,10 +165,21 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
                         fullWidth
                         label="Organization name"
                         onChange={handleInputName}
+                        error={nameError.error}
+                        helperText={nameError.message}
+                        onBlur={errorHandler}
                     />
                 </Grid>
                 <Grid item xs={6}>
-                    <TextField margin="normal" fullWidth label="Description" onChange={handleInputDescription}/>
+                    <TextField
+                        margin="normal"
+                        fullWidth
+                        label="Description"
+                        onChange={handleInputDescription}
+                        error={descriptionError.error}
+                        helperText={descriptionError.message}
+                        onBlur={errorHandler}
+                    />
                 </Grid>
             </React.Fragment>
         );
@@ -154,10 +187,24 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
         info = (
             <React.Fragment>
                 <Grid item xs={12}>
-                    <TextField margin="normal" required fullWidth label="Organization name"/>
+                    <TextField
+                        margin="normal"
+                        required fullWidth
+                        label="Organization name"
+                        error={nameError.error}
+                        helperText={nameError.message}
+                        onBlur={errorHandler}
+                    />
                 </Grid>
                 <Grid item xs={12}>
-                    <TextField margin="normal" fullWidth label="Description"/>
+                    <TextField
+                        margin="normal"
+                        fullWidth
+                        label="Description"
+                        error={descriptionError.error}
+                        helperText={descriptionError.message}
+                        onBlur={errorHandler}
+                    />
                 </Grid>
             </React.Fragment>
         );
@@ -231,6 +278,15 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
                         </IconButton>
                     </ListItem>
                     <Divider className={classes.divider}/>
+                    <ListItem>
+                        <ListItemAvatar>
+                            <Avatar/>
+                        </ListItemAvatar>
+                        <ListItemText primary={owner?.username}/>
+                        <ListItemSecondaryAction>
+                            <Chip label="Owner"/>
+                        </ListItemSecondaryAction>
+                    </ListItem>
                     {members.map(person => {
                         return (
                             <ListItem key={person.id}>
@@ -263,6 +319,9 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
                     <Divider/>
                     <List className={classes.minWidthList}>
                         {users.map((user) => {
+                            if(user.id === owner?.id){
+                                return;
+                            }
                             return (
                                 <ListItem key={user.id}>
                                     <ListItemAvatar><Avatar/></ListItemAvatar>
