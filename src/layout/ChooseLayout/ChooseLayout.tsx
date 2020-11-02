@@ -7,15 +7,14 @@
  * All rights reserved.
  */
 
-import React, {Ref, useEffect, useState} from 'react';
+import React, {Ref} from 'react';
 import styles from "./styles";
 import {withStyles} from "@material-ui/core";
 import Stylable from "../../interfaces/Stylable";
 import useAuth from "../../hooks/useAuth";
 import MonitorLayout from "../MonitorLayout";
 import MainPageLayout from "../MainPageLayout";
-import {ChangeRouteProvider, useChangeRoute} from "routing-manager";
-import {useRouteMatch} from "react-router-dom";
+import {ChangeRouteProvider} from "routing-manager";
 
 /**
  * ChooseLayoutProps - interface for ChooseLayout component

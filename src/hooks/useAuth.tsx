@@ -7,7 +7,7 @@
  * All rights reserved.
  */
 
-import React, {useEffect} from "react";
+import React from "react";
 import User from "../entities/User";
 import Containerable from "../interfaces/Containerable";
 import PropTypes from "prop-types";
