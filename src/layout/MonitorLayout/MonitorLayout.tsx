@@ -7,7 +7,7 @@
  * All rights reserved.
  */
 
-import React, {Ref} from 'react';
+import React, {Ref, useEffect} from 'react';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -23,8 +23,10 @@ import styles from "./styles";
 import {
     Avatar,
     Box,
+    Dialog,
     Divider,
-    IconButton, Popper,
+    IconButton,
+    Popper,
     SwipeableDrawer,
     useMediaQuery,
     useTheme,
@@ -32,7 +34,6 @@ import {
 } from "@material-ui/core";
 import {Route, Switch, useRouteMatch} from "react-router-dom";
 import RenderJobsView from "../../views/RenderJobsView/RenderJobsView";
-import RenderJobsDetailsView from "../../views/RenderJobsDetailsView";
 import UserPageView from "../../views/UserPageView";
 import OrganizationPageView from "../../views/OrganizationPageView";
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
@@ -43,8 +44,8 @@ import Stylable from "../../interfaces/Stylable";
 import SubmitPageView from "../../views/SubmitPageView";
 import Button from "@material-ui/core/Button";
 import useAuth from "../../hooks/useAuth";
-import {func} from "prop-types";
 import CreateOrganizationPageView from "../../views/CreateOrganizationPageView";
+import AuthorizationPageView from "../../views/AuthorizationPageView/AuthorizationPageView";
 
 /**
  * MonitorLayoutProps - interface for MonitorLayout component
@@ -73,11 +74,21 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
     const [state, setState] = React.useState({left: false});
-    const {logout} = useAuth();
+    const {logout, isLogged} = useAuth();
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
     const openPopper = Boolean(anchorEl);
     const id = openPopper ? 'simple-popper' : undefined;
+
+    console.log(isLogged);
+
+    useEffect(() => {
+        if (!isLogged) {
+            // logout();
+            changeRoute({page: `authorization`, panel: null});
+        }
+    }, [isLogged]);
+
 
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(anchorEl ? null : event.currentTarget);
@@ -187,7 +198,7 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>
                             type="button"
                             onClick={handleClick}
                         >
-                            <Avatar />
+                            <Avatar/>
                         </IconButton>
                         <Popper
                             id={id}
@@ -302,6 +313,7 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>
     }
 
     let {path} = useRouteMatch();
+
 
     return (
         <Box className={classes.root}>

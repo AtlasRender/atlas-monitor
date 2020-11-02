@@ -7,14 +7,15 @@
  * All rights reserved.
  */
 
-import React, {Ref} from 'react';
+import React, {Ref, useEffect, useState} from 'react';
 import styles from "./styles";
 import {withStyles} from "@material-ui/core";
 import Stylable from "../../interfaces/Stylable";
 import useAuth from "../../hooks/useAuth";
 import MonitorLayout from "../MonitorLayout";
 import MainPageLayout from "../MainPageLayout";
-import {ChangeRouteProvider} from "routing-manager";
+import {ChangeRouteProvider, useChangeRoute} from "routing-manager";
+import {useRouteMatch} from "react-router-dom";
 
 /**
  * ChooseLayoutProps - interface for ChooseLayout component
@@ -31,21 +32,20 @@ interface ChooseLayoutProps extends Stylable {
  * @author Andrii Demchyshyn
  */
 const ChooseLayout = React.forwardRef((props: ChooseLayoutProps, ref: Ref<any>) => {
-
-    const {getUser} = useAuth();
+    const {getUser, isLogged} = useAuth();
     const user = getUser();
+
+    console.log("1" + isLogged);
 
     return (
         <React.Fragment>
-            {user ?
-                <ChangeRouteProvider routeMask="(/:page)">
+            <ChangeRouteProvider routeMask="(/:page)">
+                {user ?
                     <MonitorLayout/>
-                </ChangeRouteProvider>
-                :
-                <ChangeRouteProvider routeMask="(/:page)">
+                    :
                     <MainPageLayout/>
-                </ChangeRouteProvider>
-            }
+                }
+            </ChangeRouteProvider>
         </React.Fragment>
     );
 });

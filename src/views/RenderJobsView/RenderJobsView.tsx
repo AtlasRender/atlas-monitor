@@ -17,6 +17,7 @@ import Stylable from "../../interfaces/Stylable";
 import SearchIcon from "@material-ui/icons/Search";
 import {Route, Switch, useRouteMatch} from "react-router-dom";
 import RenderJobsDetailsView from "../RenderJobsDetailsView";
+import useAuth from "../../hooks/useAuth";
 
 /**
  * RenderJobsViewProps - interface for RenderJobsView component

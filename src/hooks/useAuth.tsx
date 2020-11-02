@@ -7,7 +7,7 @@
  * All rights reserved.
  */
 
-import React from "react";
+import React, {useEffect} from "react";
 import User from "../entities/User";
 import Containerable from "../interfaces/Containerable";
 import PropTypes from "prop-types";
@@ -24,10 +24,12 @@ export interface AuthContext {
      * @author Danil Andreev
      */
     getUser(): User | null;
+
     /**
      * isLogged - true, when user is logged and false if not.
      */
     isLogged: boolean,
+
     /**
      * login - locally saves user credentials.
      * @function
@@ -35,6 +37,7 @@ export interface AuthContext {
      * @author Danil Andreev
      */
     login(user: User): void;
+
     /**
      * logout - clears locally seved user credentials.
      * @function
@@ -85,6 +88,17 @@ export function AuthProvider(props: AuthProviderProps) {
         setLoaded(true);
     }, []);
 
+    React.useEffect(() => {
+        window.addEventListener("storage", changeStorage);
+        return () => window.removeEventListener("storage", changeStorage);
+    })
+
+    function changeStorage(event: StorageEvent) {
+        if (!event.newValue && logged) {
+            logout();
+        }
+    }
+
     function logout(): void {
         localStorage.auth = null;
         setLogged(false);
@@ -94,7 +108,7 @@ export function AuthProvider(props: AuthProviderProps) {
     function getUserFromLocalStorage(): User | null {
         try {
             const credentials: any = JSON.parse(localStorage.auth);
-            const user: User | null = credentials ? new User ({
+            const user: User | null = credentials ? new User({
                 id: +credentials.id,
                 username: String(credentials.username),
                 email: String(credentials.email),
