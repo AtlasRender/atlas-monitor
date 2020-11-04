@@ -149,16 +149,18 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
     }
 
     function handleClick() {
-        modify ? onModifyRole && onModifyRole(role?.id, addRole) : onAddRole(addRole, errors);
-        setAddRole({
-            name: "", description: "", color: "#fff", permissionLevel: -1,
-        })
-        setErrors({
-            "noInputError": true,
-            "nameError": false,
-            "descriptionError": false,
-            "permissionLevelError": false,
-        });
+        if (!errors.noInputError && !errors.nameError && !errors.descriptionError && !errors.permissionLevelError) {
+            modify ? onModifyRole && onModifyRole(role?.id, addRole) : onAddRole(addRole, errors);
+            setAddRole({
+                name: "", description: "", color: "#fff", permissionLevel: -1,
+            })
+            setErrors({
+                "noInputError": true,
+                "nameError": false,
+                "descriptionError": false,
+                "permissionLevelError": false,
+            });
+        }
     }
 
     function handleOnClose() {
