@@ -59,5 +59,8 @@ const styles =(theme: Theme) => createStyles({
         width: 4,
         height: theme.spacing(7),
     },
+    rolesDescription: {
+        overflowWrap: "break-word",
+    }
 })
 export default styles;

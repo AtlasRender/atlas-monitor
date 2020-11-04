@@ -196,6 +196,9 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
                             variant="standard"
                             required
                             fullWidth
+                            multiline
+                            rows={2}
+                            rowsMax={5}
                             name="description"
                             label="Description"
                             defaultValue={role?.description}

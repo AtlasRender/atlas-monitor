@@ -477,6 +477,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                                             <ListItemText
                                                 primary={role.name}
                                                 secondary={role.description}
+                                                className={classes.rolesDescription}
                                             />
                                             <ListItemSecondaryAction>
                                                 <IconButton
