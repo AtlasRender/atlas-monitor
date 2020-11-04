@@ -10,7 +10,8 @@
 import React, {Ref, useEffect, useState} from "react";
 import {
     Avatar,
-    Box, Chip,
+    Box,
+    Chip,
     Divider,
     Grid,
     IconButton,
@@ -19,8 +20,6 @@ import {
     ListItemIcon,
     ListItemSecondaryAction,
     ListItemText,
-    MenuItem,
-    Select,
     useMediaQuery,
     useTheme,
     withStyles,
@@ -85,7 +84,6 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
     const confirm = useConfirm();
     const [loaded, setLoaded] = useState(false);
 
-
     //roles
     const [isAddRoleButtonActive, setIsAddRoleButtonActive] = useState(false);
     const [isDialogModifyRoleButtonActive, setIsDialogModifyRoleButtonActive] = useState(false);
@@ -107,6 +105,10 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
     const [newUsers, setNewUsers] = useState<number[]>([]);
     const [organizationUsers, serOrganizationUsers] = useState<UserData[]>([]);
     const [currentUser, setCurrentUser] = useState<UserData | null>(null);
+
+
+    // console.log(currentUser);
+
 
     useEffect(() => {
         Promise.all([
@@ -341,6 +343,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
 
     function handleIsUserSettingsButtonActive(user: UserData) {
         setIsUserSettingsButtonActive(true);
+        console.log(user);
         setCurrentUser(user);
     }
 
@@ -545,13 +548,17 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                                         <ListItem>
                                             <ListItemAvatar>
                                                 <Avatar
-                                                    src="https://cdn.sportclub.ru/assets/2019-09-20/n97c311rvb.jpg"/>
+                                                    src="https://cdn.sportclub.ru/assets/2019-09-20/n97c311rvb.jpg"
+                                                />
                                             </ListItemAvatar>
                                             <ListItemText primary={user.username} secondary={user.email}/>
                                             <ListItemSecondaryAction>
-                                                <Chip label={user.roles[0].name}
-                                                      style={{backgroundColor: `#${roles[0].color}`}}
+                                                {user.roles[0] &&
+                                                <Chip
+                                                    label={user.roles[0]?.name}
+                                                    style={{backgroundColor: `#${user?.roles[0].color}`}}
                                                 />
+                                                }
                                                 <IconButton onClick={() => handleIsUserSettingsButtonActive(user)}>
                                                     <SettingsIcon/>
                                                 </IconButton>
