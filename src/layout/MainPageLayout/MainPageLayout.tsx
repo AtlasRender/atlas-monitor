@@ -13,7 +13,7 @@ import {Box, withStyles} from "@material-ui/core";
 import Stylable from "../../interfaces/Stylable";
 import Header from "../../components/Header";
 import Toolbar from "@material-ui/core/Toolbar";
-import {Route, Switch} from "react-router-dom";
+import {Route, Switch, useLocation} from "react-router-dom";
 import AuthorizationPageView from "../../views/AuthorizationPageView/AuthorizationPageView";
 import SignUpPage from "../../views/SignUpPage/SignUpPage";
 import {ChangeRouteProvider, useChangeRoute} from "routing-manager";
@@ -39,11 +39,11 @@ const MainPageLayout = React.forwardRef((props: MainPageLayoutProps, ref: Ref<an
         className,
     } = props;
 
-    const {isLogged} = useAuth();
     const {changeRoute} = useChangeRoute();
+    const location = useLocation();
 
     useEffect(() => {
-        if(document.URL === "http://localhost:3000/") {
+        if(location.pathname === "/") {
             changeRoute({page: "authorization", id: null});
         }
     }, []);

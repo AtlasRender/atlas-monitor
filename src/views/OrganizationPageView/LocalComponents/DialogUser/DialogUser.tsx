@@ -79,8 +79,6 @@ const DialogUser = React.forwardRef((props: DialogUserProps, ref: Ref<any>) => {
         setIsRemoveRoleFromUserButtonActive(null);
     }
 
-    console.log();
-
     return (
         <Dialog
             open={open}

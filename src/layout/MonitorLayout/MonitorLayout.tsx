@@ -32,7 +32,7 @@ import {
     useTheme,
     withStyles
 } from "@material-ui/core";
-import {Route, Switch, useRouteMatch} from "react-router-dom";
+import {Route, Switch, useLocation, useRouteMatch} from "react-router-dom";
 import RenderJobsView from "../../views/RenderJobsView/RenderJobsView";
 import UserPageView from "../../views/UserPageView";
 import OrganizationPageView from "../../views/OrganizationPageView";
@@ -79,9 +79,10 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>
 
     const openPopper = Boolean(anchorEl);
     const id = openPopper ? 'simple-popper' : undefined;
+    const location = useLocation();
 
     useEffect(() => {
-        if(document.URL === "http://localhost:3000/") {
+        if(location.pathname === "/") {
             changeRoute({page: "user", id: null});
         }
     }, []);
