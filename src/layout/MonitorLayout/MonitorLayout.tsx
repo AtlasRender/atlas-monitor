@@ -32,7 +32,7 @@ import {
     useTheme,
     withStyles
 } from "@material-ui/core";
-import {Route, Switch, useRouteMatch} from "react-router-dom";
+import {Route, Switch, useLocation, useRouteMatch} from "react-router-dom";
 import RenderJobsView from "../../views/RenderJobsView/RenderJobsView";
 import UserPageView from "../../views/UserPageView";
 import OrganizationPageView from "../../views/OrganizationPageView";
@@ -79,12 +79,16 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>
 
     const openPopper = Boolean(anchorEl);
     const id = openPopper ? 'simple-popper' : undefined;
+    const location = useLocation();
 
-    console.log(isLogged);
+    useEffect(() => {
+        if(location.pathname === "/") {
+            changeRoute({page: "user", id: null});
+        }
+    }, []);
 
     useEffect(() => {
         if (!isLogged) {
-            // logout();
             changeRoute({page: `authorization`, panel: null});
         }
     }, [isLogged]);
@@ -146,7 +150,7 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>
                 </ListItem>
             </List>
             <List>
-                <ListItem button onClick={() => changeRoute({page: "organization", panel: null})}>
+                <ListItem button onClick={() => changeRoute({page: "organization/1", panel: null})}>
                     <ListItemIcon>
                         <InboxIcon/>
                     </ListItemIcon>
@@ -253,7 +257,7 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>
                         </ListItem>
                     </List>
                     <List>
-                        <ListItem button onClick={() => changeRoute({page: "organization", id: null})}>
+                        <ListItem button onClick={() => changeRoute({page: "organization/1", id: null})}>
                             <ListItemIcon>
                                 <InboxIcon/>
                             </ListItemIcon>
@@ -333,7 +337,7 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>
                             <UserPageView/>
                         </ChangeRouteProvider>
                     </Route>
-                    <Route path="/organization">
+                    <Route path="/organization/1">
                         <ChangeRouteProvider routeMask="(/:id)">
                             <OrganizationPageView/>
                         </ChangeRouteProvider>
