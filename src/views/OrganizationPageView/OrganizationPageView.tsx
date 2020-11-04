@@ -93,7 +93,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
     const [isRemoveRoleFromUserButtonActive, setIsRemoveRoleFromUserButtonActive] = useState<null | HTMLElement>(null);
     const [isModifyRoleButtonActive, setIsModifyRoleButtonActive] = useState<null | HTMLElement>(null);
     const [roles, setRoles] = useState<Role[]>([]);
-    const [roleToChange, setRole] = useState<Role>();
+    const [roleToChange, setRoleToChange] = useState<Role>();
     const [roleUsers, setRoleUsers] = useState<UserData[] | null>(null);
 
 
@@ -140,7 +140,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
         try {
             const response = await coreRequest()
                 .get(`organizations/${id}/roles/${roleId}`);
-            setRole(response.body);
+            setRoleToChange(response.body);
         } catch (err) {
             enqueueErrorSnackbar("Cant get role by id");
         }
@@ -160,7 +160,6 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
 
     function handleAddRoleToUser(roleId: number, userToAddRoleId: number) {
         setIsAddRoleToUserButtonActive(null);
-        console.log(userToAddRoleId);
         coreRequest()
             .post(`organizations/${id}/roles/${roleId}/users`)
             .send({userId: userToAddRoleId})
@@ -251,7 +250,9 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
     }
 
     function handleIsDialogModifyRoleButtonActive(roleId: number) {
-        handleGetRoleById(roleId).then(() => setIsDialogModifyRoleButtonActive(true));
+        handleGetRoleById(roleId).then(() => {
+            setIsDialogModifyRoleButtonActive(true)
+        });
     }
 
 
@@ -458,6 +459,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                         <DialogAddRoles
                             open={isAddRoleButtonActive}
                             onClose={() => setIsAddRoleButtonActive(false)}
+                            role={roleToChange}
                             onAddRole={handleAddRole}
                             onModifyRole={handleModifyRole}
                         />
