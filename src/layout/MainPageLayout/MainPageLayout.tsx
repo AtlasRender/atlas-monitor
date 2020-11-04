@@ -7,7 +7,7 @@
  * All rights reserved.
  */
 
-import React, {Ref} from 'react';
+import React, {Ref, useEffect} from 'react';
 import styles from "./styles";
 import {Box, withStyles} from "@material-ui/core";
 import Stylable from "../../interfaces/Stylable";
@@ -16,7 +16,8 @@ import Toolbar from "@material-ui/core/Toolbar";
 import {Route, Switch} from "react-router-dom";
 import AuthorizationPageView from "../../views/AuthorizationPageView/AuthorizationPageView";
 import SignUpPage from "../../views/SignUpPage/SignUpPage";
-import {ChangeRouteProvider} from "routing-manager";
+import {ChangeRouteProvider, useChangeRoute} from "routing-manager";
+import useAuth from "../../hooks/useAuth";
 
 /**
  * MainPageLayoutProps - interface for MainPageLayout component
@@ -37,6 +38,15 @@ const MainPageLayout = React.forwardRef((props: MainPageLayoutProps, ref: Ref<an
         classes,
         className,
     } = props;
+
+    const {isLogged} = useAuth();
+    const {changeRoute} = useChangeRoute();
+
+    useEffect(() => {
+        if(document.URL === "http://localhost:3000/") {
+            changeRoute({page: "authorization", id: null});
+        }
+    }, []);
 
     return (
         <Box>

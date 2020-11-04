@@ -80,11 +80,14 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>
     const openPopper = Boolean(anchorEl);
     const id = openPopper ? 'simple-popper' : undefined;
 
-    console.log(isLogged);
+    useEffect(() => {
+        if(document.URL === "http://localhost:3000/") {
+            changeRoute({page: "user", id: null});
+        }
+    }, []);
 
     useEffect(() => {
         if (!isLogged) {
-            // logout();
             changeRoute({page: `authorization`, panel: null});
         }
     }, [isLogged]);
@@ -146,7 +149,7 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>
                 </ListItem>
             </List>
             <List>
-                <ListItem button onClick={() => changeRoute({page: "organization", panel: null})}>
+                <ListItem button onClick={() => changeRoute({page: "organization/1", panel: null})}>
                     <ListItemIcon>
                         <InboxIcon/>
                     </ListItemIcon>
@@ -253,7 +256,7 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>
                         </ListItem>
                     </List>
                     <List>
-                        <ListItem button onClick={() => changeRoute({page: "organization", id: null})}>
+                        <ListItem button onClick={() => changeRoute({page: "organization/1", id: null})}>
                             <ListItemIcon>
                                 <InboxIcon/>
                             </ListItemIcon>
@@ -333,7 +336,7 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>
                             <UserPageView/>
                         </ChangeRouteProvider>
                     </Route>
-                    <Route path="/organization">
+                    <Route path="/organization/1">
                         <ChangeRouteProvider routeMask="(/:id)">
                             <OrganizationPageView/>
                         </ChangeRouteProvider>

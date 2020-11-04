@@ -10,7 +10,8 @@
 import React, {Ref, useEffect, useState} from "react";
 import {
     Avatar,
-    Box, Chip,
+    Box,
+    Chip,
     Divider,
     Grid,
     IconButton,
@@ -19,8 +20,6 @@ import {
     ListItemIcon,
     ListItemSecondaryAction,
     ListItemText,
-    MenuItem,
-    Select,
     useMediaQuery,
     useTheme,
     withStyles,
@@ -85,6 +84,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
     const confirm = useConfirm();
     const [loaded, setLoaded] = useState(false);
 
+    console.log(id);
 
     //roles
     const [isAddRoleButtonActive, setIsAddRoleButtonActive] = useState(false);
