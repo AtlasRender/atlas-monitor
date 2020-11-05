@@ -46,6 +46,7 @@ import Button from "@material-ui/core/Button";
 import useAuth from "../../hooks/useAuth";
 import CreateOrganizationPageView from "../../views/CreateOrganizationPageView";
 import AuthorizationPageView from "../../views/AuthorizationPageView/AuthorizationPageView";
+import UserEditView from "../../views/UserEditView/UserEditView";
 
 /**
  * MonitorLayoutProps - interface for MonitorLayout component
@@ -318,7 +319,6 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>
 
     let {path} = useRouteMatch();
 
-
     return (
         <Box className={classes.root}>
 
@@ -327,6 +327,9 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>
             <main className={classes.content}>
                 <Toolbar/>
                 <Switch>
+                    <Route exact path="/user/:id/edit">
+                        <UserEditView/>
+                    </Route>
                     <Route path="/jobs">
                         <ChangeRouteProvider routeMask="(/:panel)">
                             <RenderJobsView/>
