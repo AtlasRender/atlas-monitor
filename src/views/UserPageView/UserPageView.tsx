@@ -7,11 +7,22 @@
  * All rights reserved.
  */
 import React, {Ref, useEffect, useState} from "react";
-import {Avatar, Box, Divider, Grid, Typography, Button, useMediaQuery, useTheme, withStyles} from "@material-ui/core";
+import {
+    Avatar,
+    Box, Button, Chip,
+    Divider,
+    Grid,
+    IconButton,
+    ListItem, ListItemAvatar,
+    ListItemSecondaryAction,
+    ListItemText,
+    useMediaQuery,
+    useTheme,
+    withStyles
+} from "@material-ui/core";
 import styles from "./styles";
 import githubAvatar from "./githubAvatar.jpg";
 import DataTextField from "../../components/DataTextField";
-import OrganizationsFieldsRow from "./LocalComponents/OrganizationsFieldsRow";
 import clsx from "clsx";
 import TokensViewer from "./LocalComponents/TokensViewer";
 import Stylable from "../../interfaces/Stylable";
@@ -19,10 +30,12 @@ import useCoreRequest from "../../hooks/useCoreRequest";
 import useEnqueueErrorSnackbar from "../../utils/enqueueErrorSnackbar";
 import useAuth from "../../hooks/useAuth";
 import UserData from "../../interfaces/UserData";
-import {ChangeRouteProvider, useChangeRoute} from "routing-manager";
+import {useChangeRoute} from "routing-manager";
 import Token from "../../interfaces/Token";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import {Route, Switch, useRouteMatch, useLocation} from "react-router-dom";
+import {Route, Switch, useRouteMatch} from "react-router-dom";
+import List from "@material-ui/core/List";
+import SettingsIcon from "@material-ui/icons/Settings";
+import UserEditView from "../UserEditView";
 
 /**
  * UserPageViewPropsStyled - interface for UserPageView
@@ -50,17 +63,12 @@ const UserPageView = React.forwardRef((props: UserPageViewProps, ref: Ref<any>) 
     const coreRequest = useCoreRequest();
     const [userData, setUserData] = useState<UserData | null>(null);
     const {getRouteParams, changeRoute} = useChangeRoute();
-
-    // debugger;
-
     const {id} = getRouteParams();
     const [tokens, setTokens] = useState<Token[]>([]);
+    const [editedUser, setEditedUser] = useState();
 
     useEffect(() => {
         handleGetUser();
-    }, []);
-
-    useEffect(() => {
         handleGetToken();
     }, []);
 
@@ -68,7 +76,6 @@ const UserPageView = React.forwardRef((props: UserPageViewProps, ref: Ref<any>) 
         coreRequest()
             .get(`tokens`)
             .then((response) => {
-                console.log(response.body);
                 setTokens(response.body);
             })
             .catch(err => {
@@ -78,7 +85,6 @@ const UserPageView = React.forwardRef((props: UserPageViewProps, ref: Ref<any>) 
     }
 
     function handleGetUser() {
-        //TODO if user is empty redirect to login page
         const user = getUser();
         let userId = id;
         if (!userId) {
@@ -95,6 +101,23 @@ const UserPageView = React.forwardRef((props: UserPageViewProps, ref: Ref<any>) 
             });
     }
 
+    function handleEditUser() {
+        const userId = getUser()?.id;
+        coreRequest()
+            .post(`users/${userId}`)
+            .send()
+            .then()
+            .catch()
+    }
+
+    function handleDeleteUser() {
+        const userId = getUser()?.id;
+        coreRequest()
+            .delete(`users/${userId}`)
+            .then()
+            .catch()
+    }
+
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up("md"));
     let mainInfo;
@@ -109,6 +132,11 @@ const UserPageView = React.forwardRef((props: UserPageViewProps, ref: Ref<any>) 
                 </Grid>
                 <Grid item xs={2}>
                     <Avatar alt="Who1sthat" src={githubAvatar} className={clsx(classes.avatar, className)}/>
+                </Grid>
+                <Grid item xs={4}>
+                    <Button>
+                        Edit Profile
+                    </Button>
                 </Grid>
             </Grid>
         );
@@ -135,21 +163,51 @@ const UserPageView = React.forwardRef((props: UserPageViewProps, ref: Ref<any>) 
             <Route path={path}>
                 <Box style={style} className={className}>
                     {mainInfo}
-                    <Grid container spacing={2} className={clsx(classes.container, className)}>
-                        <Grid item xs={12} md={10} className={clsx(classes.topic, className)}>
-                            <Typography variant="h6">Organizations</Typography>
-                            <Divider/>
+                    <Grid container className={classes.firstLine}>
+                        <Grid item xs={12} md={10}>
+                            <List component="nav" aria-label="secondary mailbox folders">
+                                <ListItem className={classes.paddingNone}>
+                                    <ListItemText primary="Organizations" primaryTypographyProps={{variant: "h6"}}/>
+                                </ListItem>
+                                <Divider/>
+                            </List>
                         </Grid>
                     </Grid>
+
                     {/*TODO If no organisation print smth else*/}
-                    {userData?.organizations.map((organization) =>
-                        <OrganizationsFieldsRow
-                            organization={organization.name}
-                            key={organization.id}
-                            role="admin"
-                            status="working"
-                        />
-                    )}
+
+                    <Grid container className={classes.firstLine}>
+                        <Grid item xs={12} md={10}>
+                            <List>
+                                {userData?.organizations.map((organization) => {
+                                    return (
+                                        <ListItem key={organization.id}>
+                                            <ListItemAvatar>
+                                                <Avatar
+                                                    src="https://cdn.sportclub.ru/assets/2019-09-20/n97c311rvb.jpg"
+                                                />
+                                            </ListItemAvatar>
+                                            <ListItemText
+                                                primary={organization.name}
+                                                secondary={organization.description}
+                                            />
+                                            <ListItemSecondaryAction>
+                                                <Chip
+                                                    label={"MainRole"}
+                                                    style={{backgroundColor: `#f76`}}
+                                                />
+                                                <IconButton
+                                                    edge="end"
+                                                >
+                                                    <SettingsIcon/>
+                                                </IconButton>
+                                            </ListItemSecondaryAction>
+                                        </ListItem>
+                                    );
+                                })}
+                            </List>
+                        </Grid>
+                    </Grid>
                     <TokensViewer/>
                 </Box>
             </Route>
