@@ -216,12 +216,9 @@ const DialogUser = React.forwardRef((props: DialogUserProps, ref: Ref<any>) => {
                                         key={role.id}
                                         onClick={() => onAddRole(role.id, user?.id)}
                                     >
-                                        <ListItemAvatar style={{minWidth: 16}}>
-                                            <Box className={classes.menuRoleBar}
-                                                 style={{backgroundColor: `#${role.color}`}}/>
-                                        </ListItemAvatar>
                                         <ListItemText
                                             className={classes.menuListItemText}
+                                            style={{borderLeft: `4px solid #${role.color}`}}
                                             primary={role.name}
                                             secondary={role.description}
                                         />

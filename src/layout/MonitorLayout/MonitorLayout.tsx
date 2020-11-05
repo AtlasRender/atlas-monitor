@@ -195,7 +195,7 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>
                             <MenuIcon/>
                         </IconButton>
                         <Typography variant="h6" noWrap className={classes.typographyFlex}>
-                            Pathfinder
+                            Atlas
                         </Typography>
                         <IconButton
                             aria-describedby={id}
@@ -308,7 +308,7 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>
                             {list("left")}
                         </SwipeableDrawer>
                         <Typography variant="h6" noWrap>
-                            Pathfinder
+                            Atlas
                         </Typography>
                     </Toolbar>
                 </AppBar>
