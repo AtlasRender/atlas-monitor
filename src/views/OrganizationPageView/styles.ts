@@ -60,7 +60,23 @@ const styles =(theme: Theme) => createStyles({
         height: theme.spacing(7),
     },
     rolesDescription: {
-        overflowWrap: "break-word",
+        width: 500,
+        overflow: "hidden",
+        whiteSpace: "nowrap",
+        textOverflow: "ellipsis",
+        [theme.breakpoints.down('xs')]: {
+            width: "70%",
+        },
+    },
+    rolesPrimary: {
+        width: 500,
+        overflowWrap: "anywhere",
+        [theme.breakpoints.down('xs')]: {
+            width: "70%",
+        },
+    },
+    roleItem: {
+        paddingLeft: theme.spacing(2),
     }
 })
 export default styles;

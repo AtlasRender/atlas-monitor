@@ -56,6 +56,10 @@ const styles = (theme: Theme) => createStyles({
     menuPaper: {
         height: 400,
         width: 346,
+        [theme.breakpoints.down('xs')]: {
+            height: 300,
+            width: 215,
+        },
     },
     menuRoleBar: {
         width: 4,
@@ -65,7 +69,8 @@ const styles = (theme: Theme) => createStyles({
         paddingBottom: 0,
     },
     menuListItemText: {
-        overflowWrap: "break-word",
+        paddingLeft: theme.spacing(2),
+        overflowWrap: "anywhere",
     },
     listItemHeader: {
         paddingBottom: 0,
@@ -113,7 +118,7 @@ const styles = (theme: Theme) => createStyles({
         padding: theme.spacing(1, 1, 1, 0),
         paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
         transition: theme.transitions.create('width'),
-        width: '100%',
+        width: '11ch',
         [theme.breakpoints.up('sm')]: {
             width: '25ch',
         },

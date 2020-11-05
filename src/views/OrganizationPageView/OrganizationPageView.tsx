@@ -469,40 +469,43 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
 
                         <Grid container className={classes.firstLine}>
                             <Grid item xs={12} md={10}>
-                                {roles.map((role) => {
-                                    return (
-                                        <ListItem key={role.id}>
-                                            <ListItemAvatar style={{minWidth: 16}}>
-                                                <Box className={classes.colorBar}
-                                                     style={{backgroundColor: `#${role.color}`}}/>
-                                            </ListItemAvatar>
-                                            <ListItemText
-                                                primary={role.name}
-                                                secondary={role.description}
-                                                className={classes.rolesDescription}
-                                            />
-                                            <ListItemSecondaryAction>
-                                                <IconButton
-                                                    edge="end"
-                                                    aria-label="delete"
-                                                    style={{marginRight: theme.spacing(0)}}
-                                                    onClick={() => handleIsDialogModifyRoleButtonActive(role.id)}
-                                                >
-                                                    <EditIcon/>
-                                                </IconButton>
+                                <List>
+                                    {roles.map((role) => {
+                                        return (
+                                            <ListItem key={role.id}>
+                                                <ListItemText
+                                                    primary={role.name}
+                                                    secondary={role.description}
+                                                    className={classes.roleItem}
+                                                    style={{borderLeft: `4px solid #${role.color}`}}
+                                                    classes={{
+                                                        primary: classes.rolesPrimary,
+                                                        secondary: classes.rolesDescription,
+                                                    }}
+                                                />
+                                                <ListItemSecondaryAction>
+                                                    <IconButton
+                                                        edge="end"
+                                                        aria-label="delete"
+                                                        style={{marginRight: theme.spacing(0)}}
+                                                        onClick={() => handleIsDialogModifyRoleButtonActive(role.id)}
+                                                    >
+                                                        <EditIcon/>
+                                                    </IconButton>
 
-                                                <IconButton
-                                                    edge="end"
-                                                    aria-label="delete"
-                                                    onClick={() => confirm(async () => handleDeleteRole(role.id),
-                                                        {title: `are you sure to delete role: ${role.name} ?`})}
-                                                >
-                                                    <DeleteIcon/>
-                                                </IconButton>
-                                            </ListItemSecondaryAction>
-                                        </ListItem>
-                                    )
-                                })}
+                                                    <IconButton
+                                                        edge="end"
+                                                        aria-label="delete"
+                                                        onClick={() => confirm(async () => handleDeleteRole(role.id),
+                                                            {title: `are you sure to delete role: ${role.name} ?`})}
+                                                    >
+                                                        <DeleteIcon/>
+                                                    </IconButton>
+                                                </ListItemSecondaryAction>
+                                            </ListItem>
+                                        )
+                                    })}
+                                </List>
                             </Grid>
                         </Grid>
 
