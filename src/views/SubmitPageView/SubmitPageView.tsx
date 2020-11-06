@@ -7,7 +7,7 @@
  * All rights reserved.
  */
 
-import React, {Ref} from "react";
+import React, {Ref, useEffect, useState} from "react";
 import {
     Box,
     Button,
@@ -28,8 +28,9 @@ import clsx from "clsx";
 import styles from "./styles";
 import Stylable from "../../interfaces/Stylable";
 import AddIcon from "@material-ui/icons/Add";
-import {Route, Switch, useRouteMatch} from "react-router-dom";
-import {ChangeRouteProvider} from "routing-manager";
+import useAuth from "../../hooks/useAuth";
+import UserData from "../../interfaces/UserData";
+import useCoreRequest from "../../hooks/useCoreRequest";
 
 /**
  * SubmitPagePropsStyled - interface for SubmitPageView function
@@ -52,8 +53,48 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
         className,
     } = props
 
-    // const[obj, setObj] = React.useState();
-    // const[render, setRender] = React.useState([]);
+    const {getUser} = useAuth();
+    const coreRequest = useCoreRequest();
+    const [userData, setUserData] = useState<UserData>();
+    const [frameStart, setFrameStart] = useState<number>();
+    const [frameEnd, setFrameEnd] = useState<number>();
+    const [job, setJob] = useState({
+        name: "",
+        user: "",
+        description: "smth",
+        orgId: null,
+        frameRange: "2-10 11-100",
+    })
+    useEffect(() => {
+        handleGetUser();
+    }, []);
+
+    useEffect(() => {
+        if (userData) {
+            setJob((prev) => ({...prev, user: userData.username}));
+        }
+    }, [userData]);
+
+    function handleGetUser() {
+        const user = getUser()?.id;
+        console.log(user);
+        coreRequest()
+            .get(`users/${user}`)
+            .then((response) => {
+                setUserData(response.body);
+            })
+            .catch(err => {
+                //TODO handle errors
+                // enqueueErrorSnackbar("No such user");
+            });
+    }
+
+    function handleInput(event: React.ChangeEvent<HTMLInputElement>) {
+        event.persist();
+        setJob(prev => ({...prev, [event.target.name]: event.target.value}));
+        console.log(job);
+    }
+
     const handleDelete = () => {
         console.info("You clicked the delete icon.");
     };
@@ -67,10 +108,22 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
         submitInfo = (
             <React.Fragment>
                 <Grid item xs={4}>
-                    <TextField fullWidth label="Work title"/>
+                    <TextField
+                        fullWidth
+                        name="name"
+                        required
+                        label="Work title"
+                        onChange={handleInput}
+                    />
                 </Grid>
                 <Grid item xs={3}>
-                    <TextField fullWidth label="Submitter"/>
+                    <TextField
+                        fullWidth
+                        InputLabelProps={{shrink: true}}
+                        label="Submitter"
+                        name="user"
+                        value={job.user}
+                    />
                 </Grid>
                 <Grid item xs={3}>
                     <Select value="pathfinder monitor" fullWidth>
@@ -83,20 +136,23 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
         );
         renderSettings = (
             <Grid container spacing={2} xs={10} className={clsx(classes.container, classes.flexNoWrap)}>
-                <Grid item xs={2}>
+                <Grid item>
                     <TextField fullWidth label="Frame start"/>
                 </Grid>
-                <Grid item xs={2}>
+                <Grid item>
                     <TextField fullWidth label="Frame end"/>
                 </Grid>
-                <Grid item xs={1}>
+                <Grid item>
                     <TextField fullWidth label="Step"/>
                 </Grid>
-                <Grid item xs={2}>
+                <Grid item>
                     <TextField fullWidth label="Start from"/>
                 </Grid>
-                <Grid item xs={2}>
+                <Grid item>
                     <TextField fullWidth label="Renum step"/>
+                </Grid>
+                <Grid item>
+                    <TextField fullWidth label="Attempts"/>
                 </Grid>
                 <Grid item style={{paddingRight: 0, flexGrow: 1}}>
                     <TextField fullWidth label="Priority"/>
