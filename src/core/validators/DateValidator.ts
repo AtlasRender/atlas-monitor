@@ -25,7 +25,6 @@ export default function DateValidator(value: any): ValidatorResult<Date> {
     }
     let valueCopy = "" + value;
     if (isNaN(Date.parse(valueCopy))) {
-        console.log(Date.parse("hi" + valueCopy));
         return {value: undefined, error: true};
     } else {
         return {value: new Date(valueCopy), error: false}
