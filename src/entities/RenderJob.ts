@@ -1,28 +1,19 @@
-export default class RenderJob {
-    public static QUEUED: number = 100;
-    public static PROCESSING: number = 200;
-    public static SUSPENDED: number = 201;
-    public static FAILED: number = 300;
-    public static COMPLETED: number = 400;
+/*
+ * Copyright (c) 2020. This code created and belongs to Pathfinder render manager project.
+ * Owner and project architect: Danil Andreev | danssg08@gmail.com |  https://github.com/DanilAndreev
+ * File creator: Andrii Demchyshyn
+ * Project: atlas-monitor
+ * File last modified: 04.11.2020, 22:27
+ * All rights reserved.
+ */
+
+import ShortJobs from "./ShortJobs";
+
+export interface RenderJobValidationMap {}
 
 
-    public id: number;
-    public department: string;
-    public submitter: string;
-    public submitDate: Date;
-    public status: number;
-
-    public files: string[];
-    public projectRoot: string;
-
-
-    public constructor(data: any) {
-        this.id = +data?.id;
-        this.department = data?.department;
-        this.submitter = data?.submitter;
-        this.submitDate = data?.submitDate;
-        this.status = data?.status || RenderJob.QUEUED;
-        this.files = data?.files;
-        this.projectRoot = data?.projectRoot;
+export default class RenderJob extends ShortJobs{
+    constructor(job: any, shortJob: any) {
+        super(shortJob);
     }
 }
