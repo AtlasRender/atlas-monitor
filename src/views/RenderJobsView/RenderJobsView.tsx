@@ -7,7 +7,7 @@
  * All rights reserved.
  */
 
-import React, {Ref} from "react";
+import React, {Ref, useEffect, useState} from "react";
 import {Box, Grid, IconButton, Typography, useMediaQuery, useTheme, withStyles} from "@material-ui/core";
 import styles from "./styles";
 import RenderJobsTable from "../../components/RenderJobsTable";
@@ -18,6 +18,8 @@ import SearchIcon from "@material-ui/icons/Search";
 import {Route, Switch, useRouteMatch} from "react-router-dom";
 import RenderJobsDetailsView from "../RenderJobsDetailsView";
 import useAuth from "../../hooks/useAuth";
+import useCoreRequest from "../../hooks/useCoreRequest";
+import {Jobs} from "../../interfaces/Jobs";
 
 /**
  * RenderJobsViewProps - interface for RenderJobsView component
@@ -38,6 +40,27 @@ const RenderJobsView = React.forwardRef((props: RenderJobsViewProps, ref: Ref<an
         classes,
         className,
     } = props;
+
+    const coreRequest = useCoreRequest();
+
+
+    const [jobs, setJobs] = useState<Jobs[]>([]);
+
+
+    useEffect(() => {
+        handleGetJobs();
+    }, []);
+
+
+    function handleGetJobs() {
+        coreRequest()
+            .get("jobs")
+            .then(response => {
+                setJobs(response.body)
+            })
+            .catch()
+    }
+
 
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up('md'));
