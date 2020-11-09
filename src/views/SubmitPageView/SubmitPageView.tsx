@@ -34,7 +34,7 @@ import UserData from "../../interfaces/UserData";
 import useCoreRequest from "../../hooks/useCoreRequest";
 import useEnqueueSuccessSnackbar from "../../utils/EnqueSuccessSnackbar";
 import useEnqueueErrorSnackbar from "../../utils/enqueueErrorSnackbar";
-import Loading from "../../components/Loading/Loading";
+import Loading from "../../components/Loading";
 
 /**
  * SubmitPagePropsStyled - interface for SubmitPageView function
