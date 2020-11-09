@@ -8,18 +8,7 @@
  */
 
 import React, {Ref, useEffect, useState} from "react";
-import {
-    Avatar,
-    Box, Button,
-    Divider,
-    Grid,
-    List,
-    ListItem,
-    ListItemText,
-    TextField,
-    Typography,
-    withStyles
-} from "@material-ui/core";
+import {Avatar, Box, Button, Divider, Grid, TextField, Typography, withStyles} from "@material-ui/core";
 import styles from "./styles";
 import Stylable from "../../interfaces/Stylable";
 import useAuth from "../../hooks/useAuth";
@@ -56,9 +45,9 @@ const UserEditView = React.forwardRef((props: UserEditViewProps, ref: Ref<any>) 
     const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
     const coreRequest = useCoreRequest();
     const {changeRoute} = useChangeRoute();
-    let {path} = useRouteMatch();
     const {logout} = useAuth();
     const confirm = useConfirm();
+    let {path} = useRouteMatch();
 
     const [user, setUser] = useState<UserData | null>(null);
     const [editedUser, setEditedUser] = useState({
@@ -67,6 +56,7 @@ const UserEditView = React.forwardRef((props: UserEditViewProps, ref: Ref<any>) 
         password: "123456"
     });
     const [loaded, setLoaded] = useState(false);
+
 
     useEffect(() => {
         Promise.all([
@@ -107,7 +97,7 @@ const UserEditView = React.forwardRef((props: UserEditViewProps, ref: Ref<any>) 
             .post(`users/${userId}`)
             .send(editedUser)
             .then(response => {
-                changeRoute({page: `user/${user?.id}`});
+                changeRoute({page: `user`});
             })
             .catch(err => {
                 //TODO handle errors
