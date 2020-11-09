@@ -7,7 +7,7 @@
  * All rights reserved.
  */
 
-import React, {Ref} from 'react';
+import React, {Ref, useEffect, useState} from 'react';
 import {Box, Typography, Divider, withStyles, Grid, useMediaQuery, IconButton} from "@material-ui/core";
 import styles from "./styles";
 import clsx from "clsx";
@@ -29,6 +29,10 @@ import RenderJobsView from "../RenderJobsView/RenderJobsView";
 import UserPageView from "../UserPageView/UserPageView";
 import OrganizationPageView from "../OrganizationPageView/OrganizationPageView";
 import SubmitPageView from "../SubmitPageView/SubmitPageView";
+import ShortJobs from "../../entities/ShortJobs";
+import useCoreRequest from "../../hooks/useCoreRequest";
+import useEnqueueErrorSnackbar from "../../utils/enqueueErrorSnackbar";
+import RenderJob from "../../entities/RenderJob";
 
 /**
  * RenderJobsDetailsViewProps - interface for RenderJobsDetailsView component
@@ -49,9 +53,43 @@ const RenderJobsDetailsView = React.forwardRef((props: RenderJobsDetailsViewProp
         className,
     } = props;
 
+
+    const coreRequest = useCoreRequest();
     const theme = useTheme();
+    const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
+
+
     const [value, setValue] = React.useState(0);
     const [isOpen, setIsOpen] = React.useState(false);
+    const [tasks, setTasks] = useState();
+    const [renderJob, setRenderJob] = useState<RenderJob>();
+
+    useEffect(() => {
+
+    }, []);
+
+
+    function handleGetJob(job: ShortJobs, jobId: number) {
+        coreRequest()
+            .get(`jobs/${jobId}`)
+            .then(response => {
+                let entity: RenderJob = response.body;
+                try{
+                    entity = new RenderJob(response.body, job);
+                } catch(err) {
+                    enqueueErrorSnackbar("Invalid data types");
+                }
+                setRenderJob(entity);
+                console.log(response.body);
+            })
+            .catch(err => {
+                enqueueErrorSnackbar("Cant ger job");
+            })
+    }
+
+    function handleGetTasks() {
+
+    }
 
     const handleClick = () => {
         setIsOpen(!isOpen);

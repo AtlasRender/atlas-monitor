@@ -47,6 +47,7 @@ import useAuth from "../../hooks/useAuth";
 import CreateOrganizationPageView from "../../views/CreateOrganizationPageView";
 import AuthorizationPageView from "../../views/AuthorizationPageView/AuthorizationPageView";
 import UserEditView from "../../views/UserEditView/UserEditView";
+import AtlasLogo from "./images/AtlasSystemsLogo.svg";
 
 /**
  * MonitorLayoutProps - interface for MonitorLayout component
@@ -143,7 +144,7 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>
                     <ListItemIcon>
                         <InboxIcon/>
                     </ListItemIcon>
-                    <ListItemText primary="Render Jobs"/>
+                    <ListItemText primary="Render ShortJobs"/>
                 </ListItem>
             </List>
             <List>
@@ -199,6 +200,7 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>
                         >
                             <MenuIcon/>
                         </IconButton>
+                        <Avatar src={AtlasLogo} variant="square"/>
                         <Typography variant="h6" noWrap className={classes.typographyFlex}>
                             Atlas
                         </Typography>
@@ -259,7 +261,7 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>
                             <ListItemIcon>
                                 <InboxIcon/>
                             </ListItemIcon>
-                            <ListItemText primary="Render Jobs"/>
+                            <ListItemText primary="Render ShortJobs"/>
                         </ListItem>
                     </List>
                     <List>
