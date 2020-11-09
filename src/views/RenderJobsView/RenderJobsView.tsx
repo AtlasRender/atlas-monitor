@@ -97,7 +97,7 @@ const RenderJobsView = React.forwardRef((props: RenderJobsViewProps, ref: Ref<an
                     {tableList}
                 </Box>
             </Route>
-            <Route exact path={`${path}/jobDetails`}>
+            <Route exact path={`${path}/:jobId`}>
                 <RenderJobsDetailsView/>
             </Route>
         </Switch>

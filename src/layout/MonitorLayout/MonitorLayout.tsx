@@ -25,7 +25,7 @@ import {
     Box,
     Dialog,
     Divider,
-    IconButton,
+    IconButton, Popover,
     Popper,
     SwipeableDrawer,
     useMediaQuery,
@@ -98,6 +98,10 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>
 
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(anchorEl ? null : event.currentTarget);
+    };
+
+    const handleClosePopover = () => {
+        setAnchorEl(null);
     };
 
     const handleDrawerOpen = () => {
@@ -207,11 +211,20 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>
                         >
                             <Avatar/>
                         </IconButton>
-                        <Popper
+                        <Popover
                             id={id}
                             open={openPopper}
                             anchorEl={anchorEl}
+                            onClose={handleClosePopover}
                             className={classes.popperTop}
+                            anchorOrigin={{
+                                vertical: 'bottom',
+                                horizontal: 'center',
+                            }}
+                            transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'center',
+                            }}
                         >
                             <Button
                                 type="submit"
@@ -221,7 +234,7 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>
                             >
                                 Logout
                             </Button>
-                        </Popper>
+                        </Popover>
                     </Toolbar>
                 </AppBar>
                 <Drawer

@@ -162,7 +162,6 @@ const RenderJobsTable = React.forwardRef((props: RenderJobsTableProps, ref: Ref<
                         enqueueErrorSnackbar("Invalid data types");
                     }
                     setJobs(entity);
-                    console.log(response.body);
                 }
             })
             .catch(err => {
@@ -231,7 +230,7 @@ const RenderJobsTable = React.forwardRef((props: RenderJobsTableProps, ref: Ref<
                                         role="checkbox"
                                         tabIndex={-1}
                                         key={key}
-                                        onClick={() => changeRoute({panel: "jobDetails"})}
+                                        onClick={() => changeRoute({panel: `${job.id}`})}
                                     >
                                         <TableCell component="th" scope="row">{job.id}</TableCell>
                                         <TableCell align="left">{job.name}</TableCell>

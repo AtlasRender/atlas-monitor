@@ -54,8 +54,13 @@ const styles = (theme: Theme) => createStyles({
     },
     editField: {
         marginBottom: theme.spacing(2),
-    }
-
+    },
+    loading: {
+        display: "flex",
+        height: "90vh",
+        justifyContent: "center",
+        alignItems: "center",
+    },
 });
 
 export default styles;

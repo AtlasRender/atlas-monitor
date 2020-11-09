@@ -7,7 +7,7 @@
  * All rights reserved.
  */
 
-import React, {Ref} from 'react';
+import React, {Ref, useEffect, useState} from 'react';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -25,6 +25,12 @@ import withWidth, {isWidthUp} from "@material-ui/core/withWidth";
 import Stylable from "../../../../interfaces/Stylable";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
+import Task from "../../../../entities/Task";
+import useCoreRequest from "../../../../hooks/useCoreRequest";
+import useEnqueueErrorSnackbar from "../../../../utils/enqueueErrorSnackbar";
+import RenderJob from "../../../../entities/RenderJob";
+import ShortJobs from "../../../../entities/ShortJobs";
+import {format} from "date-fns";
 
 /**
  * TasksTabProps - interface for TasksTab component
@@ -134,8 +140,42 @@ const TasksTab = React.forwardRef((props: TasksTabProps, ref: Ref<any>) => {
         className,
     } = props;
 
+
+    const coreRequest = useCoreRequest();
+    const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
+
+
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const [tasks, setTasks] = useState<Task[]>([]);
+
+
+    useEffect(() => {
+        handleGetTasks();
+    }, []);
+
+
+    const handleGetTasks = () => {
+        coreRequest()
+            .get("jobs/72/tasks")
+            .then(response => {
+                if (Array.isArray(response.body)) {
+                    let entity: Task[] = [];
+                    try {
+                        response.body.map(item => {
+                            entity.push(new Task(item));
+                        })
+                    } catch (err) {
+                        enqueueErrorSnackbar("Invalid data types");
+                    }
+                    setTasks(entity);
+                    // console.log(entity);
+                }
+            })
+            .catch(err => {
+                enqueueErrorSnackbar("Can`t get tasks");
+            })
+    }
 
     const handleChangePage = (event: unknown, newPage: number) => {
         setPage(newPage);
@@ -178,7 +218,7 @@ const TasksTab = React.forwardRef((props: TasksTabProps, ref: Ref<any>) => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, key) => {
+                            {tasks.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((task, key) => {
                                 return (
                                     <TableRow
                                         hover
@@ -186,11 +226,11 @@ const TasksTab = React.forwardRef((props: TasksTabProps, ref: Ref<any>) => {
                                         tabIndex={-1}
                                         key={key}
                                     >
-                                        <TableCell component="th" scope="row">{row.idTable}</TableCell>
-                                        <TableCell align="left">{row.frame}</TableCell>
-                                        <TableCell align="left">{row.startTime}</TableCell>
-                                        <TableCell align="left">{row.slave}</TableCell>
-                                        <TableCell align="left">{row.elapsedTime}</TableCell>
+                                        <TableCell component="th" scope="row">{task.id}</TableCell>
+                                        <TableCell align="left">{task.frame}</TableCell>
+                                        <TableCell align="left">{format(task.createdAt, "dd.MM.yyyy hh:mm")}</TableCell>
+                                        <TableCell align="left">Slave</TableCell>
+                                        <TableCell align="left">{format(task.createdAt, "dd.MM.yyyy hh:mm")}</TableCell>
                                         <TableCell align="left">
                                             {isWidthUp('md', props.width) ? (<Progress />) : ("10%")}
                                         </TableCell>
