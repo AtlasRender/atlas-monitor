@@ -29,6 +29,7 @@ import UserData from "../../interfaces/UserData";
 import {useChangeRoute} from "routing-manager";
 import {Route, Switch, useRouteMatch} from "react-router-dom";
 import useConfirm from "../../hooks/useConfirm";
+import Loading from "../../components/Loading/Loading";
 
 /**
  * UserEditViewProps - interface for UserEditView
@@ -60,10 +61,19 @@ const UserEditView = React.forwardRef((props: UserEditViewProps, ref: Ref<any>) 
     const confirm = useConfirm();
 
     const [user, setUser] = useState<UserData | null>(null);
-    const [editedUser, setEditedUser] = useState({email: user?.email, username: user?.username, password: "123456"});
+    const [editedUser, setEditedUser] = useState({
+        email: user?.email,
+        username: user?.username,
+        password: "123456"
+    });
+    const [loaded, setLoaded] = useState(false);
 
     useEffect(() => {
-        handleGetUser();
+        Promise.all([
+            handleGetUser(),
+        ]).then(() => {
+            setLoaded(true);
+        })
     }, []);
 
     useEffect(() => {
@@ -77,20 +87,18 @@ const UserEditView = React.forwardRef((props: UserEditViewProps, ref: Ref<any>) 
 
     function handleChangeUser(event: React.ChangeEvent<HTMLInputElement>) {
         event.persist();
-        setEditedUser(prev => ({...prev, [event.target.name] : event.target.value}));
+        setEditedUser(prev => ({...prev, [event.target.name]: event.target.value}));
     }
 
-    function handleGetUser() {
+    async function handleGetUser() {
         const userId = getUser()?.id;
-        coreRequest()
-            .get(`users/${userId}`)
-            .then((response) => {
-                setUser(response.body);
-            })
-            .catch(err => {
-                //TODO handle errors
-                enqueueErrorSnackbar("No such user");
-            });
+        try {
+            const response = await coreRequest().get(`users/${userId}`);
+            setUser(response.body);
+        } catch (err) {
+            //TODO handle errors
+            enqueueErrorSnackbar("No such user");
+        }
     }
 
     function handleEditUser() {
@@ -122,94 +130,99 @@ const UserEditView = React.forwardRef((props: UserEditViewProps, ref: Ref<any>) 
     }
 
     return (
-        <Switch>
-            <Route path={path}>
-                <Grid container className={classes.firstLine} style={{marginTop: 16}}>
-                    <Grid item xs={10}>
-                        <Box className={classes.userContainer}>
-                            <Box className={classes.editFieldsContainer}>
-                                <TextField
-                                    className={classes.editField}
-                                    fullWidth
-                                    required
-                                    label="Username"
-                                    name="username"
-                                    value={editedUser?.username}
-                                    variant="outlined"
-                                    onChange={handleChangeUser}
-                                    InputLabelProps={{ shrink: true }}
-                                />
+        loaded ?
+            <Switch>
+                <Route path={path}>
+                    <Grid container className={classes.firstLine} style={{marginTop: 16}}>
+                        <Grid item xs={10}>
+                            <Box className={classes.userContainer}>
+                                <Box className={classes.editFieldsContainer}>
+                                    <TextField
+                                        className={classes.editField}
+                                        fullWidth
+                                        required
+                                        label="Username"
+                                        name="username"
+                                        value={editedUser?.username}
+                                        variant="outlined"
+                                        onChange={handleChangeUser}
+                                        InputLabelProps={{shrink: true}}
+                                    />
 
-                                <TextField
-                                    className={classes.editField}
-                                    fullWidth
-                                    required
-                                    label="Email"
-                                    name="email"
-                                    value={editedUser?.email}
-                                    variant="outlined"
-                                    onChange={handleChangeUser}
-                                    InputLabelProps={{ shrink: true }}
-                                />
+                                    <TextField
+                                        className={classes.editField}
+                                        fullWidth
+                                        required
+                                        label="Email"
+                                        name="email"
+                                        value={editedUser?.email}
+                                        variant="outlined"
+                                        onChange={handleChangeUser}
+                                        InputLabelProps={{shrink: true}}
+                                    />
 
-                                <TextField
-                                    className={classes.editField}
-                                    fullWidth
-                                    required
-                                    id="standard-required"
-                                    label="Department"
-                                    defaultValue="Department"
-                                    variant="outlined"
-                                    InputLabelProps={{ shrink: true }}
-                                />
-                            </Box>
-                            <Box className={classes.avatarContainer}>
-                                <Avatar
-                                    className={classes.avatar}
-                                    src="https://cdn.sportclub.ru/assets/2019-09-20/n97c311rvb.jpg"
-                                />
-                            </Box>
-                        </Box>
-
-                        <Box className={classes.dangerZoneHeader}>
-                            <Typography variant="h6">
-                                Danger Zone
-                            </Typography>
-
-                            <Divider className={classes.dangerZoneDivider}/>
-
-                            <Box className={classes.dangerZoneContainer}>
-                                <Button
-                                    className={classes.dangerZoneButton}
-                                    variant="contained"
-                                    color="secondary"
-                                    onClick={() => confirm(async () => handleDeleteUser(),
-                                        {title: `are you sure to delete user: ${user?.username} ?`})}
-                                >
-                                    Delete User
-                                </Button>
+                                    <TextField
+                                        className={classes.editField}
+                                        fullWidth
+                                        required
+                                        id="standard-required"
+                                        label="Department"
+                                        defaultValue="Department"
+                                        variant="outlined"
+                                        InputLabelProps={{shrink: true}}
+                                    />
+                                </Box>
+                                <Box className={classes.avatarContainer}>
+                                    <Avatar
+                                        className={classes.avatar}
+                                        src="https://cdn.sportclub.ru/assets/2019-09-20/n97c311rvb.jpg"
+                                    />
+                                </Box>
                             </Box>
 
-                            <Divider className={classes.dangerZoneDivider}/>
-                        </Box>
+                            <Box className={classes.dangerZoneHeader}>
+                                <Typography variant="h6">
+                                    Danger Zone
+                                </Typography>
 
-                        <Box className={classes.dangerZoneHeader}>
-                            <Box className={classes.dangerZoneContainer}>
-                                <Button
-                                    className={classes.dangerZoneButton}
-                                    variant="contained"
-                                    color="primary"
-                                    onClick={handleEditUser}
-                                >
-                                    Save changes
-                                </Button>
+                                <Divider className={classes.dangerZoneDivider}/>
+
+                                <Box className={classes.dangerZoneContainer}>
+                                    <Button
+                                        className={classes.dangerZoneButton}
+                                        variant="contained"
+                                        color="secondary"
+                                        onClick={() => confirm(async () => handleDeleteUser(),
+                                            {title: `are you sure to delete user: ${user?.username} ?`})}
+                                    >
+                                        Delete User
+                                    </Button>
+                                </Box>
+
+                                <Divider className={classes.dangerZoneDivider}/>
                             </Box>
-                        </Box>
 
+                            <Box className={classes.dangerZoneHeader}>
+                                <Box className={classes.dangerZoneContainer}>
+                                    <Button
+                                        className={classes.dangerZoneButton}
+                                        variant="contained"
+                                        color="primary"
+                                        onClick={handleEditUser}
+                                    >
+                                        Save changes
+                                    </Button>
+                                </Box>
+                            </Box>
+
+                        </Grid>
                     </Grid>
-                </Grid>
-            </Route>
-        </Switch>
+                </Route>
+            </Switch>
+            :
+            <Box className={classes.loading}>
+                <Loading/>
+            </Box>
     );
 
 });
