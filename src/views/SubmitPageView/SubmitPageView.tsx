@@ -14,6 +14,7 @@ import {
     Chip,
     Grid,
     IconButton,
+    InputLabel,
     List,
     ListItem,
     ListItemText,
@@ -31,6 +32,9 @@ import AddIcon from "@material-ui/icons/Add";
 import useAuth from "../../hooks/useAuth";
 import UserData from "../../interfaces/UserData";
 import useCoreRequest from "../../hooks/useCoreRequest";
+import useEnqueueSuccessSnackbar from "../../utils/EnqueSuccessSnackbar";
+import useEnqueueErrorSnackbar from "../../utils/enqueueErrorSnackbar";
+import Loading from "../../components/Loading/Loading";
 
 /**
  * SubmitPagePropsStyled - interface for SubmitPageView function
@@ -39,6 +43,14 @@ import useCoreRequest from "../../hooks/useCoreRequest";
  */
 interface SubmitPagePropsStyled extends Stylable {
 
+}
+
+interface FrameRange {
+    frameStart: number,
+    frameEnd: number,
+    step: number,
+    startFrom: number,
+    renumStep: number,
 }
 
 /**
@@ -53,20 +65,28 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
         className,
     } = props
 
+    const enqueueSuccessSnackbar = useEnqueueSuccessSnackbar();
+    const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
     const {getUser} = useAuth();
     const coreRequest = useCoreRequest();
+
     const [userData, setUserData] = useState<UserData>();
-    const [frameStart, setFrameStart] = useState<number>();
-    const [frameEnd, setFrameEnd] = useState<number>();
+    const [loaded, setLoaded] = useState<boolean>(false);
+    const [org, setOrg] = useState<string>();
+    const [frameRange, setFrameRange] = useState<FrameRange>();
     const [job, setJob] = useState({
         name: "",
         user: "",
         description: "smth",
-        orgId: null,
+        organization: null,
         frameRange: "2-10 11-100",
+        attempts_per_task_limit:1,
     })
     useEffect(() => {
-        handleGetUser();
+        Promise.all([
+            handleGetUser(),
+            userData && handleOrgChange(userData?.organizations[0]),
+        ]).then(()=>{setLoaded(true)})
     }, []);
 
     useEffect(() => {
@@ -75,11 +95,15 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
         }
     }, [userData]);
 
+    /**
+     * handleGetUser - function for taking info about authorized user
+     * @function
+     * @author Nikita Nesterov
+     */
     function handleGetUser() {
-        const user = getUser()?.id;
-        console.log(user);
+        const id = getUser()?.id;
         coreRequest()
-            .get(`users/${user}`)
+            .get(`users/${id}`)
             .then((response) => {
                 setUserData(response.body);
             })
@@ -89,10 +113,32 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
             });
     }
 
+    function handleOrgChange(item: any) {
+        setOrg(item.name);
+        setJob((prev) => ({...prev, organization: item.id}));
+    }
+
+    /**
+     * handleInput - used for writing info from TextFields to job state
+     * @function
+     * @author Nikita Nesterov
+     */
     function handleInput(event: React.ChangeEvent<HTMLInputElement>) {
         event.persist();
         setJob(prev => ({...prev, [event.target.name]: event.target.value}));
         console.log(job);
+    }
+
+    function handleSubmission() {
+        coreRequest()
+            .post("jobs")
+            .send(job)
+            .then(()=>{
+                enqueueSuccessSnackbar("successfully submitted")
+            })
+            .catch(()=>{
+               enqueueErrorSnackbar("Something went wrong");
+            })
     }
 
     const handleDelete = () => {
@@ -126,10 +172,23 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
                     />
                 </Grid>
                 <Grid item xs={3}>
-                    <Select value="pathfinder monitor" fullWidth>
-                        <MenuItem value="pathfinder monitor">Pathfinder Monitor</MenuItem>
-                        <MenuItem value="pathfinder core">Pathfinder Core</MenuItem>
-                        <MenuItem value="pathfinder slave">Pathfinder Slave</MenuItem>
+                    <InputLabel id="Organization">Organization</InputLabel>
+                    <Select
+                        value={org}
+                        fullWidth
+                        labelId="Organization"
+                        required
+                    >
+                        {userData?.organizations.map((item) => {
+                            return (
+                                <MenuItem
+                                    value={item.name}
+                                    onClick={() => handleOrgChange(item)}
+                                >
+                                    {item.name}
+                                </MenuItem>
+                            );
+                        })}
                     </Select>
                 </Grid>
             </React.Fragment>
@@ -185,7 +244,14 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
                 <Grid container xs={10} spacing={2} className={classes.flexItem}>
                     <Grid item xs={9}/>
                     <Grid item xs={3}>
-                        <Button fullWidth variant="contained" className={classes.submitButton}>Submit</Button>
+                        <Button
+                            fullWidth
+                            variant="contained"
+                            className={classes.submitButton}
+                            onClick={()=>handleSubmission()}
+                        >
+                            Submit
+                        </Button>
                     </Grid>
                 </Grid>
             </React.Fragment>
@@ -261,52 +327,57 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
     }
 
     return (
-        <Box className={className} style={style}>
-            <Grid container spacing={2} className={classes.container}>
-                <Grid item xs={10}>
-                    <Typography variant="h6">Submit info</Typography>
-                </Grid>
-                {submitInfo}
-                <Grid item xs={10} className={classes.flexItem}>
-                    <List disablePadding className={classes.fullWidth}>
-                        <ListItem disableGutters>
-                            <ListItemText
-                                primary={<Typography variant="h6">Render settings</Typography>}
-                            />
-                            {/*<ListItemSecondaryAction>*/}
-                            {/*    <IconButton><AddIcon/></IconButton>*/}
-                            {/*</ListItemSecondaryAction>*/}
-                        </ListItem>
-                    </List>
-                </Grid>
-                {renderSettings}
+            loaded ?
+                <Box className={className} style={style}>
+                    <Grid container spacing={2} className={classes.container}>
+                        <Grid item xs={10}>
+                            <Typography variant="h6">Submit info</Typography>
+                        </Grid>
+                        {submitInfo}
+                        <Grid item xs={10} className={classes.flexItem}>
+                            <List disablePadding className={classes.fullWidth}>
+                                <ListItem disableGutters>
+                                    <ListItemText
+                                        primary={<Typography variant="h6">Render settings</Typography>}
+                                    />
+                                    {/*<ListItemSecondaryAction>*/}
+                                    {/*    <IconButton><AddIcon/></IconButton>*/}
+                                    {/*</ListItemSecondaryAction>*/}
+                                </ListItem>
+                            </List>
+                        </Grid>
+                        {renderSettings}
 
-                <Grid item xs={10} className={classes.flexItem}>
-                    <Box>
-                        <Chip
-                            label="1000-1001 2 save as 10 Priority:1"
-                            onDelete={handleDelete}
-                            className={classes.chipStyle}
-                        />
-                        <Chip
-                            label="1002-1279 1 save as 1 Priority:3"
-                            onDelete={handleDelete}
-                            className={classes.chipStyle}
-                        />
-                        <Chip
-                            label="1279-1400 5 save as 1 Priority:2"
-                            onDelete={handleDelete}
-                            className={classes.chipStyle}
-                        />
-                    </Box>
-                </Grid>
-                <Grid item xs={10}>
-                    <Typography variant="h6">Plugin</Typography>
-                </Grid>
-                {plugin}
-                {submitButton}
-            </Grid>
-        </Box>
+                        <Grid item xs={10} className={classes.flexItem}>
+                            <Box>
+                                <Chip
+                                    label="1000-1001 2 save as 10 Priority:1"
+                                    onDelete={handleDelete}
+                                    className={classes.chipStyle}
+                                />
+                                <Chip
+                                    label="1002-1279 1 save as 1 Priority:3"
+                                    onDelete={handleDelete}
+                                    className={classes.chipStyle}
+                                />
+                                <Chip
+                                    label="1279-1400 5 save as 1 Priority:2"
+                                    onDelete={handleDelete}
+                                    className={classes.chipStyle}
+                                />
+                            </Box>
+                        </Grid>
+                        <Grid item xs={10}>
+                            <Typography variant="h6">Plugin</Typography>
+                        </Grid>
+                        {plugin}
+                        {submitButton}
+                    </Grid>
+                </Box>
+                :
+                <Box className={classes.loading}>
+                    <Loading/>
+                </Box>
     );
 });
 
