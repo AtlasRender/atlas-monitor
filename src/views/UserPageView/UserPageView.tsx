@@ -134,7 +134,9 @@ const UserPageView = React.forwardRef((props: UserPageViewProps, ref: Ref<any>) 
                     <Avatar alt="Who1sthat" src={githubAvatar} className={clsx(classes.avatar, className)}/>
                 </Grid>
                 <Grid item xs={4}>
-                    <Button>
+                    <Button
+                        onClick={() => changeRoute({page: `user/${getUser()?.id}/edit`})}
+                    >
                         Edit Profile
                     </Button>
                 </Grid>

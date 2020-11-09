@@ -7,7 +7,7 @@
  * All rights reserved.
  */
 
-import React, {Ref} from 'react';
+import React, {Ref, useEffect, useState} from 'react';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -25,13 +25,19 @@ import {useChangeRoute} from "routing-manager";
 import Stylable from "../../interfaces/Stylable";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import MoreVertIcon from '@material-ui/icons/MoreVert';
+import useCoreRequest from "../../hooks/useCoreRequest";
+
+import {format} from "date-fns";
+import ShortJobs from "../../entities/ShortJobs";
+import {instanceOf} from "prop-types";
+import useEnqueueErrorSnackbar from "../../utils/enqueueErrorSnackbar";
 
 /**
  * RenderJobsTableProps - interface for RenderJobsTable component
  * @interface
  * @author Andrii Demchyshyn
  */
-interface RenderJobsTableProps extends Stylable{
+interface RenderJobsTableProps extends Stylable {
     /**
      * width - screen width
      * @type "xs" | "sm" | "md" | "lg" | "xl"
@@ -126,10 +132,43 @@ const RenderJobsTable = React.forwardRef((props: RenderJobsTableProps, ref: Ref<
         className,
     } = props;
 
+
+    const coreRequest = useCoreRequest();
+    const {changeRoute} = useChangeRoute();
+    const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
+
+
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const [jobs, setJobs] = useState<ShortJobs[]>([]);
 
-    const {changeRoute} = useChangeRoute();
+
+    useEffect(() => {
+        handleGetJobs();
+    }, []);
+
+
+    function handleGetJobs() {
+        coreRequest()
+            .get("jobs")
+            .then(response => {
+                if (Array.isArray(response.body)) {
+                    let entity: ShortJobs[] = [];
+                    try {
+                        response.body.map(item => {
+                            entity.push(new ShortJobs(item));
+                        })
+                    } catch (err) {
+                        enqueueErrorSnackbar("Invalid data types");
+                    }
+                    setJobs(entity);
+                }
+            })
+            .catch(err => {
+                enqueueErrorSnackbar("Cant get render jobs");
+            })
+    }
+
 
     /**
      * handleChangePage - let go to next page
@@ -155,21 +194,21 @@ const RenderJobsTable = React.forwardRef((props: RenderJobsTableProps, ref: Ref<
 
     return (
         <Box className={className}>
-                <Grid container>
-                    <Grid item xs={11}>
-                        <Typography variant="h5" className={clsx(classes.textMain)}>
-                            Render Jobs
-                        </Typography>
-                    </Grid>
-                    <Grid item xs={1} className={clsx(classes.box, className)}>
-                        <IconButton className={clsx(classes.iconButton, className)}>
-                            <FilterListIcon/>
-                        </IconButton>
-                        <IconButton className={clsx(classes.iconButton, className)}>
-                            <MoreVertIcon/>
-                        </IconButton>
-                    </Grid>
+            <Grid container>
+                <Grid item xs={11}>
+                    <Typography variant="h5" className={clsx(classes.textMain)}>
+                        Render Jobs
+                    </Typography>
                 </Grid>
+                <Grid item xs={1} className={clsx(classes.box, className)}>
+                    <IconButton className={clsx(classes.iconButton, className)}>
+                        <FilterListIcon/>
+                    </IconButton>
+                    <IconButton className={clsx(classes.iconButton, className)}>
+                        <MoreVertIcon/>
+                    </IconButton>
+                </Grid>
+            </Grid>
             <Paper className={classes.root}>
                 <TableContainer className={classes.container}>
                     <Table stickyHeader aria-label="sticky table">
@@ -184,22 +223,22 @@ const RenderJobsTable = React.forwardRef((props: RenderJobsTableProps, ref: Ref<
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, key) => {
+                            {jobs.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((job, key) => {
                                 return (
                                     <TableRow
                                         hover
                                         role="checkbox"
                                         tabIndex={-1}
                                         key={key}
-                                        onClick={() => changeRoute({panel: "jobDetails"})}
+                                        onClick={() => changeRoute({panel: `${job.id}`})}
                                     >
-                                        <TableCell component="th" scope="row">{row.idTable}</TableCell>
-                                        <TableCell align="left">{row.name}</TableCell>
-                                        <TableCell align="left">{row.submitter}</TableCell>
-                                        <TableCell align="left">{row.organisation}</TableCell>
-                                        <TableCell align="left">{row.date}</TableCell>
-                                        <TableCell align="left" >
-                                            {isWidthUp('md', props.width) ? (<Progress />) : ("10%")}
+                                        <TableCell component="th" scope="row">{job.id}</TableCell>
+                                        <TableCell align="left">{job.name}</TableCell>
+                                        <TableCell align="left">{job.name}</TableCell>
+                                        <TableCell align="left">{job.organizationId}</TableCell>
+                                        <TableCell align="left">{format(job.createdAt, "dd.MM.yyyy hh:mm")}</TableCell>
+                                        <TableCell align="left">
+                                            {isWidthUp('md', props.width) ? (<Progress/>) : ("10%")}
                                         </TableCell>
                                     </TableRow>
                                 );

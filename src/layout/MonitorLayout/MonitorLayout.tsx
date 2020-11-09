@@ -25,7 +25,7 @@ import {
     Box,
     Dialog,
     Divider,
-    IconButton,
+    IconButton, Popover,
     Popper,
     SwipeableDrawer,
     useMediaQuery,
@@ -47,6 +47,7 @@ import useAuth from "../../hooks/useAuth";
 import CreateOrganizationPageView from "../../views/CreateOrganizationPageView";
 import AuthorizationPageView from "../../views/AuthorizationPageView/AuthorizationPageView";
 import UserEditView from "../../views/UserEditView/UserEditView";
+import AtlasLogo from "./images/AtlasSystemsLogo.svg";
 
 /**
  * MonitorLayoutProps - interface for MonitorLayout component
@@ -99,6 +100,10 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>
         setAnchorEl(anchorEl ? null : event.currentTarget);
     };
 
+    const handleClosePopover = () => {
+        setAnchorEl(null);
+    };
+
     const handleDrawerOpen = () => {
         setOpen(true);
     };
@@ -139,7 +144,7 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>
                     <ListItemIcon>
                         <InboxIcon/>
                     </ListItemIcon>
-                    <ListItemText primary="Render Jobs"/>
+                    <ListItemText primary="Render ShortJobs"/>
                 </ListItem>
             </List>
             <List>
@@ -195,6 +200,7 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>
                         >
                             <MenuIcon/>
                         </IconButton>
+                        <Avatar src={AtlasLogo} variant="square"/>
                         <Typography variant="h6" noWrap className={classes.typographyFlex}>
                             Atlas
                         </Typography>
@@ -205,11 +211,20 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>
                         >
                             <Avatar/>
                         </IconButton>
-                        <Popper
+                        <Popover
                             id={id}
                             open={openPopper}
                             anchorEl={anchorEl}
+                            onClose={handleClosePopover}
                             className={classes.popperTop}
+                            anchorOrigin={{
+                                vertical: 'bottom',
+                                horizontal: 'center',
+                            }}
+                            transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'center',
+                            }}
                         >
                             <Button
                                 type="submit"
@@ -219,7 +234,7 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>
                             >
                                 Logout
                             </Button>
-                        </Popper>
+                        </Popover>
                     </Toolbar>
                 </AppBar>
                 <Drawer
@@ -246,7 +261,7 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>
                             <ListItemIcon>
                                 <InboxIcon/>
                             </ListItemIcon>
-                            <ListItemText primary="Render Jobs"/>
+                            <ListItemText primary="Render ShortJobs"/>
                         </ListItem>
                     </List>
                     <List>
