@@ -28,6 +28,7 @@ import useCoreRequest from "../../hooks/useCoreRequest";
 import UserData from "../../interfaces/UserData";
 import {useChangeRoute} from "routing-manager";
 import {Route, Switch, useRouteMatch} from "react-router-dom";
+import useConfirm from "../../hooks/useConfirm";
 
 /**
  * UserEditViewProps - interface for UserEditView
@@ -55,15 +56,29 @@ const UserEditView = React.forwardRef((props: UserEditViewProps, ref: Ref<any>) 
     const coreRequest = useCoreRequest();
     const {changeRoute} = useChangeRoute();
     let {path} = useRouteMatch();
-
+    const {logout} = useAuth();
+    const confirm = useConfirm();
 
     const [user, setUser] = useState<UserData | null>(null);
-
+    const [editedUser, setEditedUser] = useState({email: user?.email, username: user?.username, password: "123456"});
 
     useEffect(() => {
         handleGetUser();
     }, []);
 
+    useEffect(() => {
+        setEditedUser({
+            email: user?.email,
+            username: user?.username,
+            password: "123456",
+        });
+    }, [user]);
+
+
+    function handleChangeUser(event: React.ChangeEvent<HTMLInputElement>) {
+        event.persist();
+        setEditedUser(prev => ({...prev, [event.target.name] : event.target.value}));
+    }
 
     function handleGetUser() {
         const userId = getUser()?.id;
@@ -82,17 +97,28 @@ const UserEditView = React.forwardRef((props: UserEditViewProps, ref: Ref<any>) 
         const userId = getUser()?.id;
         coreRequest()
             .post(`users/${userId}`)
-            .send()
-            .then()
-            .catch()
+            .send(editedUser)
+            .then(response => {
+                changeRoute({page: `user/${user?.id}`});
+            })
+            .catch(err => {
+                //TODO handle errors
+                enqueueErrorSnackbar("Can`t edit user");
+            })
     }
 
     function handleDeleteUser() {
         const userId = getUser()?.id;
         coreRequest()
             .delete(`users/${userId}`)
-            .then()
-            .catch()
+            .send({password: "123456"})
+            .then(response => {
+                logout();
+            })
+            .catch(err => {
+                //TODO handle errors
+                enqueueErrorSnackbar("Can`t delete user");
+            })
     }
 
     return (
@@ -106,20 +132,24 @@ const UserEditView = React.forwardRef((props: UserEditViewProps, ref: Ref<any>) 
                                     className={classes.editField}
                                     fullWidth
                                     required
-                                    id="standard-required"
                                     label="Username"
-                                    defaultValue="Username"
+                                    name="username"
+                                    value={editedUser?.username}
                                     variant="outlined"
+                                    onChange={handleChangeUser}
+                                    InputLabelProps={{ shrink: true }}
                                 />
 
                                 <TextField
                                     className={classes.editField}
                                     fullWidth
                                     required
-                                    id="standard-required"
                                     label="Email"
-                                    defaultValue="Email"
+                                    name="email"
+                                    value={editedUser?.email}
                                     variant="outlined"
+                                    onChange={handleChangeUser}
+                                    InputLabelProps={{ shrink: true }}
                                 />
 
                                 <TextField
@@ -130,6 +160,7 @@ const UserEditView = React.forwardRef((props: UserEditViewProps, ref: Ref<any>) 
                                     label="Department"
                                     defaultValue="Department"
                                     variant="outlined"
+                                    InputLabelProps={{ shrink: true }}
                                 />
                             </Box>
                             <Box className={classes.avatarContainer}>
@@ -152,6 +183,8 @@ const UserEditView = React.forwardRef((props: UserEditViewProps, ref: Ref<any>) 
                                     className={classes.dangerZoneButton}
                                     variant="contained"
                                     color="secondary"
+                                    onClick={() => confirm(async () => handleDeleteUser(),
+                                        {title: `are you sure to delete user: ${user?.username} ?`})}
                                 >
                                     Delete User
                                 </Button>
@@ -159,6 +192,20 @@ const UserEditView = React.forwardRef((props: UserEditViewProps, ref: Ref<any>) 
 
                             <Divider className={classes.dangerZoneDivider}/>
                         </Box>
+
+                        <Box className={classes.dangerZoneHeader}>
+                            <Box className={classes.dangerZoneContainer}>
+                                <Button
+                                    className={classes.dangerZoneButton}
+                                    variant="contained"
+                                    color="primary"
+                                    onClick={handleEditUser}
+                                >
+                                    Save changes
+                                </Button>
+                            </Box>
+                        </Box>
+
                     </Grid>
                 </Grid>
             </Route>

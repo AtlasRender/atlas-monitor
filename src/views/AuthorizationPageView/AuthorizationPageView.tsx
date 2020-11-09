@@ -96,7 +96,7 @@ const AuthorizationPageView = React.forwardRef((props: AuthorizationPageViewProp
                 }
 
                 login(user);
-                changeRoute({page: "user"});
+                changeRoute({page: `user/${user.id}`});
             })
             .catch(err => {
                 switch (err.status) {
