@@ -188,7 +188,7 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>
                         [classes.appBarShift]: open,
                     })}
                 >
-                    <Toolbar>
+                    <Toolbar className={classes.header}>
                         <IconButton
                             color="inherit"
                             aria-label="open drawer"
@@ -303,7 +303,7 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>
                         [classes.appBarShift]: open,
                     })}
                 >
-                    <Toolbar>
+                    <Toolbar className={classes.header}>
                         <IconButton
                             color="inherit"
                             aria-label="open drawer"

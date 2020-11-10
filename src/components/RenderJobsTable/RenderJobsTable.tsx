@@ -233,17 +233,17 @@ const RenderJobsTable = React.forwardRef((props: RenderJobsTableProps, ref: Ref<
                         <Table stickyHeader aria-label="sticky table">
                             <TableHead>
                                 <TableRow>
-                                    <TableCell align="left">Id</TableCell>
-                                    <TableCell align="left">Name</TableCell>
-                                    <TableCell align="left">Submitter</TableCell>
-                                    <TableCell align="left">Organisation</TableCell>
-                                    <TableCell align="left">Date</TableCell>
+                                    <TableCell className={classes.cell} align="left">Id</TableCell>
+                                    <TableCell className={classes.cell} align="left">Name</TableCell>
+                                    <TableCell className={classes.cell} align="left">Submitter</TableCell>
+                                    <TableCell className={classes.cell} align="left">Organisation</TableCell>
+                                    <TableCell className={classes.cell} align="left">Date</TableCell>
                                     <TableCell align="left" className={classes.progress}>Progress</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
                                 {jobs.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((job, key) => {
-                                    const color = handleSetStatusColor("inQueue");
+                                    const color = handleSetStatusColor("done");
                                     return (
                                         <TableRow
                                             style={{background: color}}

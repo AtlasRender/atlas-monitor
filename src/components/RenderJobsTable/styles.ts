@@ -23,6 +23,7 @@ const styles = (theme: Theme) => createStyles({
     },
     progress: {
         minWidth: 150,
+        background: "transparent",
         [theme.breakpoints.down('sm')]: {
             minWidth: 0,
         },
@@ -41,6 +42,9 @@ const styles = (theme: Theme) => createStyles({
         justifyContent: "center",
         alignItems: "center",
     },
+    cell: {
+        background: "transparent",
+    }
 });
 
 export default styles;

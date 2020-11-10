@@ -85,6 +85,10 @@ const styles = (theme: Theme) => createStyles({
     },
     typographyFlex: {
         flexGrow: 1,
+    },
+    header: {
+        background: theme.palette.header.dark,
+        color: theme.palette.common.white,
     }
 });
 

@@ -124,7 +124,7 @@ const InfoTab = React.forwardRef((props: InfoTabProps, ref: Ref<any>) => {
                         </IconButton>
                     </Grid>
                 </Grid>
-                <Paper className={classes.root}>
+                <Paper elevation={0} className={classes.root}>
                     <TableContainer className={classes.container}>
                         <Table stickyHeader aria-label="sticky table">
                             <TableBody>

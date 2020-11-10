@@ -1,26 +1,30 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import * as serviceWorker from './serviceWorker';
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
+import * as serviceWorker from "./serviceWorker";
 import {BrowserRouter} from "react-router-dom";
 import {AuthProvider} from "./hooks/useAuth";
 import {SnackbarProvider} from "notistack";
 import ChooseLayout from "./layout/ChooseLayout";
 import {ConfirmProvider} from "./hooks/useConfirm";
+import {ThemeProvider} from "@material-ui/core/styles";
+import theme from "./theme";
 
 ReactDOM.render(
     <React.StrictMode>
-        <ConfirmProvider>
-            <AuthProvider>
-                <BrowserRouter>
-                    <SnackbarProvider maxSnack={3}>
-                        <ChooseLayout/>
-                    </SnackbarProvider>
-                </BrowserRouter>
-            </AuthProvider>
-        </ConfirmProvider>
+        <AuthProvider>
+            <ThemeProvider theme={theme}>
+                <ConfirmProvider>
+                    <BrowserRouter>
+                        <SnackbarProvider maxSnack={3}>
+                            <ChooseLayout/>
+                        </SnackbarProvider>
+                    </BrowserRouter>
+                </ConfirmProvider>
+            </ThemeProvider>
+        </AuthProvider>
     </React.StrictMode>,
-    document.getElementById('root')
+    document.getElementById("root")
 );
 
 // If you want your app to work offline and load faster, you can change

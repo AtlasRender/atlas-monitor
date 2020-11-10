@@ -42,7 +42,7 @@ const Header = React.forwardRef((props: HeaderProps, ref: Ref<any>) => {
     return (
         <Box className={clsx(classes.root, className)}>
             <AppBar position="static">
-                <Toolbar>
+                <Toolbar className={classes.header}>
                     <Typography className={classes.title} variant="h6" noWrap>
                         Pathfinder
                     </Typography>
