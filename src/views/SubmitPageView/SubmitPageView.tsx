@@ -35,6 +35,8 @@ import useCoreRequest from "../../hooks/useCoreRequest";
 import useEnqueueSuccessSnackbar from "../../utils/EnqueSuccessSnackbar";
 import useEnqueueErrorSnackbar from "../../utils/enqueueErrorSnackbar";
 import Loading from "../../components/Loading";
+import Organization from "../../interfaces/Organization";
+import User from "../../interfaces/User";
 
 /**
  * SubmitPagePropsStyled - interface for SubmitPageView function
@@ -70,52 +72,53 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
     const {getUser} = useAuth();
     const coreRequest = useCoreRequest();
 
-    const [userData, setUserData] = useState<UserData>();
+    const user = getUser();
+    const [userOrgs, setUserOrgs] = useState<Organization[]>([]);
     const [loaded, setLoaded] = useState<boolean>(false);
     const [org, setOrg] = useState<string>();
     const [frameRange, setFrameRange] = useState<FrameRange>();
     const [job, setJob] = useState({
         name: "",
-        user: "",
+        user: getUser()?.username,
         description: "smth",
-        organization: null,
+        organization: userOrgs[0]?.id,
         frameRange: "2-10 11-100",
-        attempts_per_task_limit:1,
+        attempts_per_task_limit: 1,
     })
     useEffect(() => {
         Promise.all([
             handleGetUser(),
-            userData && handleOrgChange(userData?.organizations[0]),
-        ]).then(()=>{setLoaded(true)})
+        ]).then(() => {
+            setLoaded(true)
+        })
     }, []);
-
-    useEffect(() => {
-        if (userData) {
-            setJob((prev) => ({...prev, user: userData.username}));
-        }
-    }, [userData]);
+    useEffect(()=>{
+        setJob((prev) => ({...prev, organization: userOrgs[0]?.id}));
+    },[userOrgs]);
 
     /**
      * handleGetUser - function for taking info about authorized user
      * @function
      * @author Nikita Nesterov
      */
-    function handleGetUser() {
+    async function handleGetUser() {
         const id = getUser()?.id;
-        coreRequest()
-            .get(`users/${id}`)
-            .then((response) => {
-                setUserData(response.body);
-            })
-            .catch(err => {
-                //TODO handle errors
-                // enqueueErrorSnackbar("No such user");
-            });
+        try {
+            const response = await coreRequest().get(`users/${id}/organizations`);
+            // setUserData(response.body);
+            // const defaultUserOrgId = userData?.organizations[0].id;
+            // const orgResponse = await coreRequest().get(`organizations/${defaultUserOrgId}`);
+            setOrg(response.body[0].name);
+            setUserOrgs(response.body);
+        } catch (err) {
+            enqueueErrorSnackbar("No such user");
+        }
     }
 
     function handleOrgChange(item: any) {
         setOrg(item.name);
         setJob((prev) => ({...prev, organization: item.id}));
+        console.log(org);
     }
 
     /**
@@ -126,18 +129,17 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
     function handleInput(event: React.ChangeEvent<HTMLInputElement>) {
         event.persist();
         setJob(prev => ({...prev, [event.target.name]: event.target.value}));
-        console.log(job);
     }
 
     function handleSubmission() {
         coreRequest()
             .post("jobs")
             .send(job)
-            .then(()=>{
+            .then(() => {
                 enqueueSuccessSnackbar("successfully submitted")
             })
-            .catch(()=>{
-               enqueueErrorSnackbar("Something went wrong");
+            .catch(() => {
+                enqueueErrorSnackbar("Something went wrong");
             })
     }
 
@@ -179,7 +181,7 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
                         labelId="Organization"
                         required
                     >
-                        {userData?.organizations.map((item) => {
+                        {userOrgs.map((item) => {
                             return (
                                 <MenuItem
                                     value={item.name}
@@ -248,7 +250,7 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
                             fullWidth
                             variant="contained"
                             className={classes.submitButton}
-                            onClick={()=>handleSubmission()}
+                            onClick={() => handleSubmission()}
                         >
                             Submit
                         </Button>
@@ -327,57 +329,57 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
     }
 
     return (
-            loaded ?
-                <Box className={className} style={style}>
-                    <Grid container spacing={2} className={classes.container}>
-                        <Grid item xs={10}>
-                            <Typography variant="h6">Submit info</Typography>
-                        </Grid>
-                        {submitInfo}
-                        <Grid item xs={10} className={classes.flexItem}>
-                            <List disablePadding className={classes.fullWidth}>
-                                <ListItem disableGutters>
-                                    <ListItemText
-                                        primary={<Typography variant="h6">Render settings</Typography>}
-                                    />
-                                    {/*<ListItemSecondaryAction>*/}
-                                    {/*    <IconButton><AddIcon/></IconButton>*/}
-                                    {/*</ListItemSecondaryAction>*/}
-                                </ListItem>
-                            </List>
-                        </Grid>
-                        {renderSettings}
-
-                        <Grid item xs={10} className={classes.flexItem}>
-                            <Box>
-                                <Chip
-                                    label="1000-1001 2 save as 10 Priority:1"
-                                    onDelete={handleDelete}
-                                    className={classes.chipStyle}
-                                />
-                                <Chip
-                                    label="1002-1279 1 save as 1 Priority:3"
-                                    onDelete={handleDelete}
-                                    className={classes.chipStyle}
-                                />
-                                <Chip
-                                    label="1279-1400 5 save as 1 Priority:2"
-                                    onDelete={handleDelete}
-                                    className={classes.chipStyle}
-                                />
-                            </Box>
-                        </Grid>
-                        <Grid item xs={10}>
-                            <Typography variant="h6">Plugin</Typography>
-                        </Grid>
-                        {plugin}
-                        {submitButton}
+        loaded ?
+            <Box className={className} style={style}>
+                <Grid container spacing={2} className={classes.container}>
+                    <Grid item xs={10}>
+                        <Typography variant="h6">Submit info</Typography>
                     </Grid>
-                </Box>
-                :
-                <Box className={classes.loading}>
-                    <Loading/>
-                </Box>
+                    {submitInfo}
+                    <Grid item xs={10} className={classes.flexItem}>
+                        <List disablePadding className={classes.fullWidth}>
+                            <ListItem disableGutters>
+                                <ListItemText
+                                    primary={<Typography variant="h6">Render settings</Typography>}
+                                />
+                                {/*<ListItemSecondaryAction>*/}
+                                {/*    <IconButton><AddIcon/></IconButton>*/}
+                                {/*</ListItemSecondaryAction>*/}
+                            </ListItem>
+                        </List>
+                    </Grid>
+                    {renderSettings}
+
+                    <Grid item xs={10} className={classes.flexItem}>
+                        <Box>
+                            <Chip
+                                label="1000-1001 2 save as 10 Priority:1"
+                                onDelete={handleDelete}
+                                className={classes.chipStyle}
+                            />
+                            <Chip
+                                label="1002-1279 1 save as 1 Priority:3"
+                                onDelete={handleDelete}
+                                className={classes.chipStyle}
+                            />
+                            <Chip
+                                label="1279-1400 5 save as 1 Priority:2"
+                                onDelete={handleDelete}
+                                className={classes.chipStyle}
+                            />
+                        </Box>
+                    </Grid>
+                    <Grid item xs={10}>
+                        <Typography variant="h6">Plugin</Typography>
+                    </Grid>
+                    {plugin}
+                    {submitButton}
+                </Grid>
+            </Box>
+            :
+            <Box className={classes.loading}>
+                <Loading/>
+            </Box>
     );
 });
 
