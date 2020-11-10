@@ -34,6 +34,7 @@ import useCoreRequest from "../../hooks/useCoreRequest";
 import useEnqueueErrorSnackbar from "../../utils/enqueueErrorSnackbar";
 import RenderJob from "../../entities/RenderJob";
 import {format} from "date-fns";
+import Loading from "../../components/Loading";
 
 /**
  * RenderJobsDetailsViewProps - interface for RenderJobsDetailsView component
@@ -68,40 +69,41 @@ const RenderJobsDetailsView = React.forwardRef((props: RenderJobsDetailsViewProp
     const [isOpen, setIsOpen] = React.useState(false);
     const [tasks, setTasks] = useState();
     const [renderJob, setRenderJob] = useState<RenderJob>();
+    const [loaded, setLoaded] = useState(false);
+
 
     useEffect(() => {
-        handleGetJob();
-        handleGetTasks();
+        Promise.all([
+            handleGetJob(),
+            handleGetTasks(),
+        ]).then(() => {
+            setLoaded(true);
+        })
     }, []);
 
-    function handleGetJob() {
-        coreRequest()
-            .get(`jobs/72`)
-            .then(response => {
-                let entity: RenderJob = response.body;
-                try{
-                    entity = new ShortJobs(response.body);
-                } catch(err) {
-                    enqueueErrorSnackbar("Invalid data types");
-                }
-                setRenderJob(entity);
-                // console.log(response.body);
-            })
-            .catch(err => {
-                enqueueErrorSnackbar("Cant get job");
-            })
+
+    async function handleGetJob() {
+        try {
+            const response = await coreRequest().get(`jobs/72`);
+            let entity: RenderJob = response.body;
+            try {
+                entity = new ShortJobs(response.body);
+            } catch (err) {
+                enqueueErrorSnackbar("Invalid data types");
+            }
+            setRenderJob(entity);
+        } catch (err) {
+            enqueueErrorSnackbar("Cant get job");
+        }
     }
 
-    function handleGetTasks() {
-        coreRequest()
-            .get(`jobs/72/tasks`)
-            .then(response => {
-                setTasks(response.body);
-                // console.log(response.body);
-            })
-            .catch(err => {
-                enqueueErrorSnackbar("Cant get job");
-            })
+    async function handleGetTasks() {
+        try {
+            const response = await coreRequest().get(`jobs/72/tasks`);
+            setTasks(response.body);
+        } catch (err) {
+            enqueueErrorSnackbar("Cant get task");;
+        }
     }
 
     const handleClick = () => {
@@ -127,6 +129,7 @@ const RenderJobsDetailsView = React.forwardRef((props: RenderJobsDetailsViewProp
     let {path} = useRouteMatch();
 
     return (
+        loaded ?
         <Switch>
             <Route exact path={path}>
                 <Box>
@@ -235,6 +238,10 @@ const RenderJobsDetailsView = React.forwardRef((props: RenderJobsDetailsViewProp
                 </Box>
             </Route>
         </Switch>
+            :
+            <Box className={classes.loading}>
+                <Loading/>
+            </Box>
     );
 });
 RenderJobsDetailsView.displayName = "RenderJobsDetailsView";
