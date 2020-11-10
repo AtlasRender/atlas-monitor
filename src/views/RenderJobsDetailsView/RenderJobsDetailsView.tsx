@@ -7,7 +7,7 @@
  * All rights reserved.
  */
 
-import React, {Ref} from 'react';
+import React, {Ref, useEffect, useState} from 'react';
 import {Box, Typography, Divider, withStyles, Grid, useMediaQuery, IconButton} from "@material-ui/core";
 import styles from "./styles";
 import clsx from "clsx";
@@ -22,13 +22,19 @@ import StatisticsTab from "./Tabs/StatisticsTab";
 import SimpleList from "../../components/SimpleList";
 import Stylable from "../../interfaces/Stylable";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import {ChangeRouteProvider} from "routing-manager";
+import {ChangeRouteProvider, useChangeRoute} from "routing-manager";
 import Toolbar from "@material-ui/core/Toolbar";
 import {Route, Switch, useRouteMatch} from "react-router-dom";
 import RenderJobsView from "../RenderJobsView/RenderJobsView";
 import UserPageView from "../UserPageView/UserPageView";
 import OrganizationPageView from "../OrganizationPageView/OrganizationPageView";
 import SubmitPageView from "../SubmitPageView/SubmitPageView";
+import ShortJobs from "../../entities/ShortJobs";
+import useCoreRequest from "../../hooks/useCoreRequest";
+import useEnqueueErrorSnackbar from "../../utils/enqueueErrorSnackbar";
+import RenderJob from "../../entities/RenderJob";
+import {format} from "date-fns";
+import Loading from "../../components/Loading";
 
 /**
  * RenderJobsDetailsViewProps - interface for RenderJobsDetailsView component
@@ -49,9 +55,56 @@ const RenderJobsDetailsView = React.forwardRef((props: RenderJobsDetailsViewProp
         className,
     } = props;
 
+
+    const coreRequest = useCoreRequest();
     const theme = useTheme();
+    const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
+    const {getRouteParams} = useChangeRoute();
+    const {jobDetails} = getRouteParams();
+
+    // console.log(jobDetails);
+
+
     const [value, setValue] = React.useState(0);
     const [isOpen, setIsOpen] = React.useState(false);
+    const [tasks, setTasks] = useState();
+    const [renderJob, setRenderJob] = useState<RenderJob>();
+    const [loaded, setLoaded] = useState(false);
+
+
+    useEffect(() => {
+        Promise.all([
+            handleGetJob(),
+            handleGetTasks(),
+        ]).then(() => {
+            setLoaded(true);
+        })
+    }, []);
+
+
+    async function handleGetJob() {
+        try {
+            const response = await coreRequest().get(`jobs/72`);
+            let entity: RenderJob = response.body;
+            try {
+                entity = new ShortJobs(response.body);
+            } catch (err) {
+                enqueueErrorSnackbar("Invalid data types");
+            }
+            setRenderJob(entity);
+        } catch (err) {
+            enqueueErrorSnackbar("Cant get job");
+        }
+    }
+
+    async function handleGetTasks() {
+        try {
+            const response = await coreRequest().get(`jobs/72/tasks`);
+            setTasks(response.body);
+        } catch (err) {
+            enqueueErrorSnackbar("Cant get task");;
+        }
+    }
 
     const handleClick = () => {
         setIsOpen(!isOpen);
@@ -76,6 +129,7 @@ const RenderJobsDetailsView = React.forwardRef((props: RenderJobsDetailsViewProp
     let {path} = useRouteMatch();
 
     return (
+        loaded ?
         <Switch>
             <Route exact path={path}>
                 <Box>
@@ -94,7 +148,7 @@ const RenderJobsDetailsView = React.forwardRef((props: RenderJobsDetailsViewProp
                         <Grid container spacing={2}>
                             <Grid item xs={12} sm={6} md={4}>
                                 <DataTextField label="Name">
-                                    Pathfinder Logo
+                                    {renderJob?.name}
                                 </DataTextField>
                             </Grid>
                             <Grid item xs={12} sm={6} md={4}>
@@ -111,13 +165,17 @@ const RenderJobsDetailsView = React.forwardRef((props: RenderJobsDetailsViewProp
                                 <DataTextField label="Status" children="Done"/>
                             </Grid>
                             <Grid item xs={6} md={4}>
-                                <DataTextField label="Submission date" children="25.09.2020 12.59.20"/>
+                                <DataTextField label="Submission date">
+                                    {/*{renderJob && format(renderJob?.createdAt, "dd.MM.yyyy hh:mm")}*/}
+                                </DataTextField>
                             </Grid>
                             <Grid item xs={6} md={4}>
                                 <DataTextField label="Finish date" children="29.09.2020 12.59.20"/>
                             </Grid>
                             <Grid item xs={6} md={4}>
-                                <DataTextField label="Frames" children="400 - 800"/>
+                                <DataTextField label="Frames">
+                                    {renderJob?.frameRange}
+                                </DataTextField>
                             </Grid>
                             <Grid item xs={6} md={2}>
                                 <DataTextField label="Competing tasks" children="2"/>
@@ -126,10 +184,9 @@ const RenderJobsDetailsView = React.forwardRef((props: RenderJobsDetailsViewProp
                             <Grid item xs={12}>
                                 <DataTextField
                                     label="Description"
-                                    children="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed rutrum sodales risus vitae
-                                fermentum. Pellentesque hendrerit ultricies libero et lacinia. Integer sed ultricies velit.
-                                Sed dui orci, lacinia fermentum lacus vitae, maximus pretium ante."
-                                />
+                                >
+                                    {renderJob?.description}
+                                </DataTextField>
                             </Grid>
                         </Grid>
                         <Grid container>
@@ -181,6 +238,10 @@ const RenderJobsDetailsView = React.forwardRef((props: RenderJobsDetailsViewProp
                 </Box>
             </Route>
         </Switch>
+            :
+            <Box className={classes.loading}>
+                <Loading/>
+            </Box>
     );
 });
 RenderJobsDetailsView.displayName = "RenderJobsDetailsView";

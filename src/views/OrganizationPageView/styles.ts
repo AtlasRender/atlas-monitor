@@ -11,10 +11,20 @@ import {createStyles, fade, Theme} from "@material-ui/core";
 import { grey } from '@material-ui/core/colors'
 
 const styles =(theme: Theme) => createStyles({
+    loading: {
+        display: "flex",
+        height: "90vh",
+        justifyContent: "center",
+        alignItems: "center",
+    },
     firstLine:{
         justifyContent: "center",
         alignItems:"center",
         listStyleType:"none",
+        [theme.breakpoints.down('sm')]: {
+            paddingLeft: theme.spacing(2),
+            paddingRight: theme.spacing(2),
+        },
     },
     nameDescription:{
         justifyContent:"flex-begin",
@@ -49,5 +59,24 @@ const styles =(theme: Theme) => createStyles({
         width: 4,
         height: theme.spacing(7),
     },
+    rolesDescription: {
+        width: 500,
+        overflow: "hidden",
+        whiteSpace: "nowrap",
+        textOverflow: "ellipsis",
+        [theme.breakpoints.down('xs')]: {
+            width: "70%",
+        },
+    },
+    rolesPrimary: {
+        width: 500,
+        overflowWrap: "anywhere",
+        [theme.breakpoints.down('xs')]: {
+            width: "70%",
+        },
+    },
+    roleItem: {
+        paddingLeft: theme.spacing(2),
+    }
 })
 export default styles;

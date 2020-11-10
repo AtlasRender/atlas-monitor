@@ -25,6 +25,12 @@ const styles = (theme: Theme) => createStyles({
         justifyContent: "center",
         alignItems:"center"
     },
+    loading: {
+        display: "flex",
+        height: "90vh",
+        justifyContent: "center",
+        alignItems: "center",
+    },
 });
 
 export default styles;

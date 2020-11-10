@@ -7,7 +7,7 @@
  * All rights reserved.
  */
 
-import React, {Ref} from 'react';
+import React, {Ref, useEffect, useState} from 'react';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -16,7 +16,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow'
-import {Box, Grid, IconButton, Typography, withStyles} from "@material-ui/core";
+import {Box, Grid, IconButton, Typography, useTheme, withStyles} from "@material-ui/core";
 import withWidth, {isWidthUp} from '@material-ui/core/withWidth';
 import styles from "./styles";
 import clsx from "clsx";
@@ -25,13 +25,20 @@ import {useChangeRoute} from "routing-manager";
 import Stylable from "../../interfaces/Stylable";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import MoreVertIcon from '@material-ui/icons/MoreVert';
+import useCoreRequest from "../../hooks/useCoreRequest";
+
+import {format} from "date-fns";
+import ShortJobs from "../../entities/ShortJobs";
+import useEnqueueErrorSnackbar from "../../utils/enqueueErrorSnackbar";
+import Loading from "../Loading";
+import {blue, green, orange, red, yellow} from "@material-ui/core/colors";
 
 /**
  * RenderJobsTableProps - interface for RenderJobsTable component
  * @interface
  * @author Andrii Demchyshyn
  */
-interface RenderJobsTableProps extends Stylable{
+interface RenderJobsTableProps extends Stylable {
     /**
      * width - screen width
      * @type "xs" | "sm" | "md" | "lg" | "xl"
@@ -126,10 +133,60 @@ const RenderJobsTable = React.forwardRef((props: RenderJobsTableProps, ref: Ref<
         className,
     } = props;
 
+
+    const coreRequest = useCoreRequest();
+    const {changeRoute} = useChangeRoute();
+    const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
+    const theme = useTheme();
+
+
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const [jobs, setJobs] = useState<ShortJobs[]>([]);
+    const [loaded, setLoaded] = useState(false);
 
-    const {changeRoute} = useChangeRoute();
+
+    useEffect(() => {
+        Promise.all([
+            handleGetJobs(),
+        ]).then(() => {
+            setLoaded(true);
+        })
+    }, []);
+
+
+    async function handleGetJobs() {
+        try {
+            const response = await coreRequest().get("jobs");
+            if (Array.isArray(response.body)) {
+                let entity: ShortJobs[] = [];
+                try {
+                    response.body.map(item => {
+                        entity.push(new ShortJobs(item));
+                    })
+                } catch (err) {
+                    enqueueErrorSnackbar("Invalid data types");
+                }
+                setJobs(entity);
+            }
+        } catch (err) {
+            enqueueErrorSnackbar("Cant get render jobs");
+        }
+    }
+
+    function handleSetStatusColor(status: string) {
+        if(status === "done") {
+            return green[400];
+        } else if(status === "failed") {
+            return theme.palette.error.dark;
+        } else if(status === "inProgress") {
+            return blue[200];
+        } else if(status === "inQueue"){
+            return orange[300];
+        } else {
+            return "#fff";
+        }
+    }
 
     /**
      * handleChangePage - let go to next page
@@ -154,7 +211,8 @@ const RenderJobsTable = React.forwardRef((props: RenderJobsTableProps, ref: Ref<
     };
 
     return (
-        <Box className={className}>
+        loaded ?
+            <Box className={className}>
                 <Grid container>
                     <Grid item xs={11}>
                         <Typography variant="h5" className={clsx(classes.textMain)}>
@@ -170,54 +228,61 @@ const RenderJobsTable = React.forwardRef((props: RenderJobsTableProps, ref: Ref<
                         </IconButton>
                     </Grid>
                 </Grid>
-            <Paper className={classes.root}>
-                <TableContainer className={classes.container}>
-                    <Table stickyHeader aria-label="sticky table">
-                        <TableHead>
-                            <TableRow>
-                                <TableCell align="left">Id</TableCell>
-                                <TableCell align="left">Name</TableCell>
-                                <TableCell align="left">Submitter</TableCell>
-                                <TableCell align="left">Organisation</TableCell>
-                                <TableCell align="left">Date</TableCell>
-                                <TableCell align="left" className={classes.progress}>Progress</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, key) => {
-                                return (
-                                    <TableRow
-                                        hover
-                                        role="checkbox"
-                                        tabIndex={-1}
-                                        key={key}
-                                        onClick={() => changeRoute({panel: "jobDetails"})}
-                                    >
-                                        <TableCell component="th" scope="row">{row.idTable}</TableCell>
-                                        <TableCell align="left">{row.name}</TableCell>
-                                        <TableCell align="left">{row.submitter}</TableCell>
-                                        <TableCell align="left">{row.organisation}</TableCell>
-                                        <TableCell align="left">{row.date}</TableCell>
-                                        <TableCell align="left" >
-                                            {isWidthUp('md', props.width) ? (<Progress />) : ("10%")}
-                                        </TableCell>
-                                    </TableRow>
-                                );
-                            })}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-                <TablePagination
-                    rowsPerPageOptions={[10, 25, 100]}
-                    component="div"
-                    count={rows.length}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    onChangePage={handleChangePage}
-                    onChangeRowsPerPage={handleChangeRowsPerPage}
-                />
-            </Paper>
-        </Box>
+                <Paper className={classes.root}>
+                    <TableContainer className={classes.container}>
+                        <Table stickyHeader aria-label="sticky table">
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell align="left">Id</TableCell>
+                                    <TableCell align="left">Name</TableCell>
+                                    <TableCell align="left">Submitter</TableCell>
+                                    <TableCell align="left">Organisation</TableCell>
+                                    <TableCell align="left">Date</TableCell>
+                                    <TableCell align="left" className={classes.progress}>Progress</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {jobs.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((job, key) => {
+                                    const color = handleSetStatusColor("inQueue");
+                                    return (
+                                        <TableRow
+                                            style={{background: color}}
+                                            hover
+                                            role="checkbox"
+                                            tabIndex={-1}
+                                            key={key}
+                                            onClick={() => changeRoute({panel: `${job.id}`})}
+                                        >
+                                            <TableCell component="th" scope="row">{job.id}</TableCell>
+                                            <TableCell align="left">{job.name}</TableCell>
+                                            <TableCell align="left">{job.name}</TableCell>
+                                            <TableCell align="left">{job.organizationId}</TableCell>
+                                            <TableCell
+                                                align="left">{format(job.createdAt, "dd.MM.yyyy hh:mm")}</TableCell>
+                                            <TableCell align="left">
+                                                {isWidthUp('md', props.width) ? (<Progress/>) : ("10%")}
+                                            </TableCell>
+                                        </TableRow>
+                                    );
+                                })}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                    <TablePagination
+                        rowsPerPageOptions={[10, 25, 100]}
+                        component="div"
+                        count={rows.length}
+                        rowsPerPage={rowsPerPage}
+                        page={page}
+                        onChangePage={handleChangePage}
+                        onChangeRowsPerPage={handleChangeRowsPerPage}
+                    />
+                </Paper>
+            </Box>
+            :
+            <Box className={classes.loading}>
+                <Loading/>
+            </Box>
     );
 });
 RenderJobsTable.displayName = "RenderJobsTable";

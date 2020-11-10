@@ -7,7 +7,7 @@
  * All rights reserved.
  */
 
-import React, {Ref} from 'react';
+import React, {Ref, useEffect} from 'react';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -23,16 +23,17 @@ import styles from "./styles";
 import {
     Avatar,
     Box,
+    Dialog,
     Divider,
-    IconButton, Popper,
+    IconButton, Popover,
+    Popper,
     SwipeableDrawer,
     useMediaQuery,
     useTheme,
     withStyles
 } from "@material-ui/core";
-import {Route, Switch, useRouteMatch} from "react-router-dom";
+import {Route, Switch, useLocation, useRouteMatch} from "react-router-dom";
 import RenderJobsView from "../../views/RenderJobsView/RenderJobsView";
-import RenderJobsDetailsView from "../../views/RenderJobsDetailsView";
 import UserPageView from "../../views/UserPageView";
 import OrganizationPageView from "../../views/OrganizationPageView";
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
@@ -43,8 +44,10 @@ import Stylable from "../../interfaces/Stylable";
 import SubmitPageView from "../../views/SubmitPageView";
 import Button from "@material-ui/core/Button";
 import useAuth from "../../hooks/useAuth";
-import {func} from "prop-types";
 import CreateOrganizationPageView from "../../views/CreateOrganizationPageView";
+import AuthorizationPageView from "../../views/AuthorizationPageView/AuthorizationPageView";
+import UserEditView from "../../views/UserEditView/UserEditView";
+import AtlasLogo from "./images/AtlasSystemsLogo.svg";
 
 /**
  * MonitorLayoutProps - interface for MonitorLayout component
@@ -73,14 +76,32 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
     const [state, setState] = React.useState({left: false});
-    const {logout} = useAuth();
+    const {logout, isLogged} = useAuth();
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
     const openPopper = Boolean(anchorEl);
     const id = openPopper ? 'simple-popper' : undefined;
+    const location = useLocation();
+
+    useEffect(() => {
+        if(location.pathname === "/") {
+            changeRoute({page: "user", id: null});
+        }
+    }, []);
+
+    useEffect(() => {
+        if (!isLogged) {
+            changeRoute({page: `authorization`, panel: null});
+        }
+    }, [isLogged]);
+
 
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(anchorEl ? null : event.currentTarget);
+    };
+
+    const handleClosePopover = () => {
+        setAnchorEl(null);
     };
 
     const handleDrawerOpen = () => {
@@ -123,7 +144,7 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>
                     <ListItemIcon>
                         <InboxIcon/>
                     </ListItemIcon>
-                    <ListItemText primary="Render Jobs"/>
+                    <ListItemText primary="Render ShortJobs"/>
                 </ListItem>
             </List>
             <List>
@@ -135,7 +156,7 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>
                 </ListItem>
             </List>
             <List>
-                <ListItem button onClick={() => changeRoute({page: "organization", panel: null})}>
+                <ListItem button onClick={() => changeRoute({page: "organization/1", panel: null})}>
                     <ListItemIcon>
                         <InboxIcon/>
                     </ListItemIcon>
@@ -179,21 +200,31 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>
                         >
                             <MenuIcon/>
                         </IconButton>
+                        <Avatar src={AtlasLogo} variant="square"/>
                         <Typography variant="h6" noWrap className={classes.typographyFlex}>
-                            Pathfinder
+                            Atlas
                         </Typography>
                         <IconButton
                             aria-describedby={id}
                             type="button"
                             onClick={handleClick}
                         >
-                            <Avatar />
+                            <Avatar/>
                         </IconButton>
-                        <Popper
+                        <Popover
                             id={id}
                             open={openPopper}
                             anchorEl={anchorEl}
+                            onClose={handleClosePopover}
                             className={classes.popperTop}
+                            anchorOrigin={{
+                                vertical: 'bottom',
+                                horizontal: 'center',
+                            }}
+                            transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'center',
+                            }}
                         >
                             <Button
                                 type="submit"
@@ -203,7 +234,7 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>
                             >
                                 Logout
                             </Button>
-                        </Popper>
+                        </Popover>
                     </Toolbar>
                 </AppBar>
                 <Drawer
@@ -230,7 +261,7 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>
                             <ListItemIcon>
                                 <InboxIcon/>
                             </ListItemIcon>
-                            <ListItemText primary="Render Jobs"/>
+                            <ListItemText primary="Render ShortJobs"/>
                         </ListItem>
                     </List>
                     <List>
@@ -242,7 +273,7 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>
                         </ListItem>
                     </List>
                     <List>
-                        <ListItem button onClick={() => changeRoute({page: "organization", panel: null})}>
+                        <ListItem button onClick={() => changeRoute({page: "organization/1", id: null})}>
                             <ListItemIcon>
                                 <InboxIcon/>
                             </ListItemIcon>
@@ -293,7 +324,7 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>
                             {list("left")}
                         </SwipeableDrawer>
                         <Typography variant="h6" noWrap>
-                            Pathfinder
+                            Atlas
                         </Typography>
                     </Toolbar>
                 </AppBar>
@@ -311,6 +342,9 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>
             <main className={classes.content}>
                 <Toolbar/>
                 <Switch>
+                    <Route exact path="/user/:id/edit">
+                        <UserEditView/>
+                    </Route>
                     <Route path="/jobs">
                         <ChangeRouteProvider routeMask="(/:panel)">
                             <RenderJobsView/>
@@ -321,7 +355,7 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>
                             <UserPageView/>
                         </ChangeRouteProvider>
                     </Route>
-                    <Route path="/organization">
+                    <Route path="/organization/1">
                         <ChangeRouteProvider routeMask="(/:id)">
                             <OrganizationPageView/>
                         </ChangeRouteProvider>

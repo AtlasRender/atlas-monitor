@@ -16,6 +16,10 @@ const styles = (theme: Theme) => createStyles({
         alignItems:"center",
         marginTop: theme.spacing(2),
         marginBottom: theme.spacing(2),
+        [theme.breakpoints.down('sm')]: {
+            paddingLeft: theme.spacing(2),
+            paddingRight: theme.spacing(2),
+        },
 
     },
     box:{

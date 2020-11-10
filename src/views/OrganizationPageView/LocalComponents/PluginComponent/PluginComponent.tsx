@@ -88,7 +88,7 @@ const PluginComponent = React.forwardRef((props: PluginComponentProps, ref: Ref<
                             <MenuItem value={"v.1.0.3"}>v.1.0.3</MenuItem>
                         </Select>
                     </Grid>
-                    <Grid xs={1}>
+                    <Grid item xs={1}>
                         <IconButton>
                             <CloseIcon/>
                         </IconButton>

@@ -37,6 +37,9 @@ const styles = (theme: Theme) => createStyles({
     iconButton: {
         top: -8,
     },
+    iconVisible: {
+        padding: 0,
+    }
 });
 
 export default styles;

@@ -7,7 +7,7 @@
  * All rights reserved.
  */
 
-import React, {Ref} from "react";
+import React, {Ref, useEffect, useState} from "react";
 import {Box, Grid, IconButton, Typography, useMediaQuery, useTheme, withStyles} from "@material-ui/core";
 import styles from "./styles";
 import RenderJobsTable from "../../components/RenderJobsTable";
@@ -17,6 +17,11 @@ import Stylable from "../../interfaces/Stylable";
 import SearchIcon from "@material-ui/icons/Search";
 import {Route, Switch, useRouteMatch} from "react-router-dom";
 import RenderJobsDetailsView from "../RenderJobsDetailsView";
+import useAuth from "../../hooks/useAuth";
+import useCoreRequest from "../../hooks/useCoreRequest";
+import {Jobs} from "../../interfaces/Jobs";
+import useEnqueueErrorSnackbar from "../../utils/enqueueErrorSnackbar";
+import Loading from "../../components/Loading";
 
 /**
  * RenderJobsViewProps - interface for RenderJobsView component
@@ -37,6 +42,34 @@ const RenderJobsView = React.forwardRef((props: RenderJobsViewProps, ref: Ref<an
         classes,
         className,
     } = props;
+
+
+    const coreRequest = useCoreRequest();
+    const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
+
+
+    const [jobs, setJobs] = useState<Jobs[]>([]);
+    const [loaded, setLoaded] = useState(false);
+
+
+    useEffect(() => {
+        Promise.all([
+            handleGetJobs(),
+        ]).then(() => {
+            setLoaded(true);
+        })
+    }, []);
+
+
+    async function handleGetJobs() {
+        try {
+            const response = await coreRequest().get("jobs")
+            setJobs(response.body)
+        } catch (err) {
+            enqueueErrorSnackbar("Can`t get render jobs");
+        }
+    }
+
 
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up('md'));
@@ -66,18 +99,16 @@ const RenderJobsView = React.forwardRef((props: RenderJobsViewProps, ref: Ref<an
     let {path} = useRouteMatch();
 
     return (
-
         <Switch>
             <Route exact path={path}>
                 <Box>
                     {tableList}
                 </Box>
             </Route>
-            <Route exact path={`${path}/jobDetails`}>
+            <Route exact path={`${path}/:jobId`}>
                 <RenderJobsDetailsView/>
             </Route>
         </Switch>
-
     );
 });
 RenderJobsView.displayName = "RenderJobsView";

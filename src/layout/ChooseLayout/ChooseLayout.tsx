@@ -31,21 +31,20 @@ interface ChooseLayoutProps extends Stylable {
  * @author Andrii Demchyshyn
  */
 const ChooseLayout = React.forwardRef((props: ChooseLayoutProps, ref: Ref<any>) => {
-
-    const {getUser} = useAuth();
+    const {getUser, isLogged} = useAuth();
     const user = getUser();
+
+    console.log("1" + isLogged);
 
     return (
         <React.Fragment>
-            {user ?
-                <ChangeRouteProvider routeMask="(/:page)">
+            <ChangeRouteProvider routeMask="(/:page)">
+                {user ?
                     <MonitorLayout/>
-                </ChangeRouteProvider>
-                :
-                <ChangeRouteProvider routeMask="(/:page)">
+                    :
                     <MainPageLayout/>
-                </ChangeRouteProvider>
-            }
+                }
+            </ChangeRouteProvider>
         </React.Fragment>
     );
 });

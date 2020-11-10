@@ -62,13 +62,13 @@ const OrganizationsFieldsRow = React.forwardRef((props: OrganizationsFieldsRowPr
     } else {
         row = (
             <Grid container spacing={1} className={clsx(classes.container, classes.margins, className)} style={style}>
-                <Grid item xs={10}>
+                <Grid item xs={12} md={10}>
                     <DataTextField label="Organization" children={organization}/>
                 </Grid>
-                <Grid item xs={5}>
+                <Grid item xs={6}>
                     <DataTextField label="Role" children={role}/>
                 </Grid>
-                <Grid item xs={5}>
+                <Grid item xs={6}>
                     <DataTextField label="Status" children={status}/>
                 </Grid>
             </Grid>
