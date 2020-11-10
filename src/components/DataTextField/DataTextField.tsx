@@ -8,7 +8,7 @@
  */
 
 import React from "react";
-import {Box, Typography, withStyles} from "@material-ui/core";
+import {Box, Typography, useTheme, withStyles} from "@material-ui/core";
 import styles from "./styles";
 import clsx from "clsx";
 import Stylable from "../../interfaces/Stylable";
@@ -45,6 +45,8 @@ const DataTextField = React.forwardRef((props: DataTextFieldProps, ref: React.Re
         label,
         children,
     } = props;
+
+    const theme = useTheme();
 
     return (
         <Box className={clsx(classes.boxContainer, className)}>
