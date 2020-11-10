@@ -16,7 +16,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow'
-import {Box, Grid, IconButton, Typography, withStyles} from "@material-ui/core";
+import {Box, Grid, IconButton, Typography, useTheme, withStyles} from "@material-ui/core";
 import withWidth, {isWidthUp} from '@material-ui/core/withWidth';
 import styles from "./styles";
 import clsx from "clsx";
@@ -31,6 +31,7 @@ import {format} from "date-fns";
 import ShortJobs from "../../entities/ShortJobs";
 import useEnqueueErrorSnackbar from "../../utils/enqueueErrorSnackbar";
 import Loading from "../Loading";
+import {blue, green, orange, red, yellow} from "@material-ui/core/colors";
 
 /**
  * RenderJobsTableProps - interface for RenderJobsTable component
@@ -136,6 +137,7 @@ const RenderJobsTable = React.forwardRef((props: RenderJobsTableProps, ref: Ref<
     const coreRequest = useCoreRequest();
     const {changeRoute} = useChangeRoute();
     const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
+    const theme = useTheme();
 
 
     const [page, setPage] = React.useState(0);
@@ -172,6 +174,19 @@ const RenderJobsTable = React.forwardRef((props: RenderJobsTableProps, ref: Ref<
         }
     }
 
+    function handleSetStatusColor(status: string) {
+        if(status === "done") {
+            return green[400];
+        } else if(status === "failed") {
+            return theme.palette.error.dark;
+        } else if(status === "inProgress") {
+            return blue[200];
+        } else if(status === "inQueue"){
+            return orange[300];
+        } else {
+            return "#fff";
+        }
+    }
 
     /**
      * handleChangePage - let go to next page
@@ -228,9 +243,10 @@ const RenderJobsTable = React.forwardRef((props: RenderJobsTableProps, ref: Ref<
                             </TableHead>
                             <TableBody>
                                 {jobs.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((job, key) => {
+                                    const color = handleSetStatusColor("inQueue");
                                     return (
                                         <TableRow
-                                            style={{background: "wheat"}}
+                                            style={{background: color}}
                                             hover
                                             role="checkbox"
                                             tabIndex={-1}
