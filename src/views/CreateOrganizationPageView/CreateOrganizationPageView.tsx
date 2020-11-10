@@ -60,12 +60,14 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
     const confirm = useConfirm();
 
     const [addRoleButton, setAddRoleButton] = useState<boolean>(false);
+    const [modify, setModify] = useState<boolean>(false);
     const [name, setName] = useState<string>();
     const [description, setDescription] = useState<string>();
     const [descriptionError, setDescriptionError] = useState({error: false, message: ""});
     const [nameError, setNameError] = useState({error: false, message: ""});
     const [owner, setOwner] = useState<UserData>();
     const [roles, setRoles] = useState<Role[]>([]);
+    const [roleToModify, setRoleToModify] = useState<Role>();
     const [users, setUsers] = useState<UserData[]>([]);
     const [members, setMembers] = useState<UserData[]>([]);
     const [addMemberButton, setAddMemberButton] = useState<boolean>(false);
@@ -77,6 +79,13 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
     function addRole(role: Role) {
         setAddRoleButton(!addRoleButton);
         setRoles((prev) => ([...prev, role]));
+    }
+    console.log(roles);
+    function modifyRole(id: number, role: Role){
+        setAddRoleButton(!addRoleButton);
+        setRoles((prev) => ([...prev.filter(elem => elem.id != id)]));
+        setRoles((prev)=>([...prev, role]));
+        setModify(false);
     }
 
     function deleteRole(key: string) {
@@ -142,7 +151,7 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
     function createOrg() {
         coreRequest()
             .post("organizations")
-            .send({name: name, description: description, ownerUser: owner, users: members})
+            .send({name: name, description: description, users: members})
             .then()
             .catch(err => {
                 //TODO handle errors
@@ -221,7 +230,10 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
                     <ListItem className={clsx(classes.sidePaddingsNone, classes.listHeader)}>
                         <ListItemText primary="Roles" primaryTypographyProps={{variant: "h6"}}/>
                         <IconButton
-                            onClick={() => setAddRoleButton(!addRoleButton)}
+                            onClick={() => {
+                                setAddRoleButton(!addRoleButton);
+                                setRoleToModify(undefined);
+                            }}
                         >
                             <AddIcon/>
                         </IconButton>
@@ -242,9 +254,12 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
                                 <ListItemSecondaryAction>
                                     <IconButton
                                         edge="end"
-                                        aria-label="delete"
+                                        aria-label="edit"
                                         style={{marginRight: theme.spacing(0)}}
                                         onClick={() => {
+                                            setModify(true);
+                                            setAddRoleButton(!addRoleButton);
+                                            setRoleToModify(item);
                                         }}
                                     >
                                         <EditIcon/>
@@ -268,6 +283,9 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
                     open={addRoleButton}
                     onClose={() => setAddRoleButton(!addRoleButton)}
                     onAddRole={addRole}
+                    role={roleToModify}
+                    modify={modify}
+                    onModifyRole={modifyRole}
                 />
 
                 <List style={{marginTop: 16}}>
