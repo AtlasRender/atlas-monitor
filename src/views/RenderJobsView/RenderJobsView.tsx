@@ -20,6 +20,8 @@ import RenderJobsDetailsView from "../RenderJobsDetailsView";
 import useAuth from "../../hooks/useAuth";
 import useCoreRequest from "../../hooks/useCoreRequest";
 import {Jobs} from "../../interfaces/Jobs";
+import useEnqueueErrorSnackbar from "../../utils/enqueueErrorSnackbar";
+import Loading from "../../components/Loading";
 
 /**
  * RenderJobsViewProps - interface for RenderJobsView component
@@ -41,24 +43,31 @@ const RenderJobsView = React.forwardRef((props: RenderJobsViewProps, ref: Ref<an
         className,
     } = props;
 
+
     const coreRequest = useCoreRequest();
+    const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
 
 
     const [jobs, setJobs] = useState<Jobs[]>([]);
+    const [loaded, setLoaded] = useState(false);
 
 
     useEffect(() => {
-        handleGetJobs();
+        Promise.all([
+            handleGetJobs(),
+        ]).then(() => {
+            setLoaded(true);
+        })
     }, []);
 
 
-    function handleGetJobs() {
-        coreRequest()
-            .get("jobs")
-            .then(response => {
-                setJobs(response.body)
-            })
-            .catch()
+    async function handleGetJobs() {
+        try {
+            const response = await coreRequest().get("jobs")
+            setJobs(response.body)
+        } catch (err) {
+            enqueueErrorSnackbar("Can`t get render jobs");
+        }
     }
 
 
@@ -90,7 +99,6 @@ const RenderJobsView = React.forwardRef((props: RenderJobsViewProps, ref: Ref<an
     let {path} = useRouteMatch();
 
     return (
-
         <Switch>
             <Route exact path={path}>
                 <Box>
@@ -101,7 +109,6 @@ const RenderJobsView = React.forwardRef((props: RenderJobsViewProps, ref: Ref<an
                 <RenderJobsDetailsView/>
             </Route>
         </Switch>
-
     );
 });
 RenderJobsView.displayName = "RenderJobsView";
