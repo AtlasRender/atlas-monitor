@@ -35,6 +35,12 @@ const styles = (theme: Theme) => createStyles({
     iconButton: {
         top: -8,
     },
+    loading: {
+        display: "flex",
+        height: "90vh",
+        justifyContent: "center",
+        alignItems: "center",
+    },
 });
 
 export default styles;

@@ -171,6 +171,19 @@ const UserEditView = React.forwardRef((props: UserEditViewProps, ref: Ref<any>) 
                             </Box>
 
                             <Box className={classes.dangerZoneHeader}>
+                                <Box className={classes.dangerZoneContainer}>
+                                    <Button
+                                        className={classes.dangerZoneButton}
+                                        variant="contained"
+                                        color="primary"
+                                        onClick={handleEditUser}
+                                    >
+                                        Save changes
+                                    </Button>
+                                </Box>
+                            </Box>
+
+                            <Box className={classes.dangerZoneHeader}>
                                 <Typography variant="h6">
                                     Danger Zone
                                 </Typography>
@@ -190,19 +203,6 @@ const UserEditView = React.forwardRef((props: UserEditViewProps, ref: Ref<any>) 
                                 </Box>
 
                                 <Divider className={classes.dangerZoneDivider}/>
-                            </Box>
-
-                            <Box className={classes.dangerZoneHeader}>
-                                <Box className={classes.dangerZoneContainer}>
-                                    <Button
-                                        className={classes.dangerZoneButton}
-                                        variant="contained"
-                                        color="primary"
-                                        onClick={handleEditUser}
-                                    >
-                                        Save changes
-                                    </Button>
-                                </Box>
                             </Box>
 
                         </Grid>

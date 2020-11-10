@@ -37,7 +37,7 @@ import {format} from "date-fns";
  * @interface
  * @author Andrii Demchyshyn
  */
-interface TasksTabProps extends  Stylable{
+interface TasksTabProps extends Stylable {
     /**
      * width - screen width
      * @type "xs" | "sm" | "md" | "lg" | "xl"
@@ -232,10 +232,10 @@ const TasksTab = React.forwardRef((props: TasksTabProps, ref: Ref<any>) => {
                                         <TableCell align="left">Slave</TableCell>
                                         <TableCell align="left">{format(task.createdAt, "dd.MM.yyyy hh:mm")}</TableCell>
                                         <TableCell align="left">
-                                            {isWidthUp('md', props.width) ? (<Progress />) : ("10%")}
+                                            {isWidthUp('md', props.width) ? (<Progress/>) : ("10%")}
                                         </TableCell>
                                         <TableCell align="left">
-                                            <IconButton>
+                                            <IconButton className={classes.iconVisible}>
                                                 <VisibilityIcon />
                                             </IconButton>
                                         </TableCell>

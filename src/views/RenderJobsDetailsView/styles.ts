@@ -48,13 +48,19 @@ const styles = (theme: Theme) => createStyles({
             padding: theme.spacing(2),
         },
     },
-    box:{
+    box: {
         display: "flex",
         justifyContent: "flex-end",
-        alignItems:"center"
+        alignItems: "center"
     },
     iconButton: {
         top: 8,
+    },
+    loading: {
+        display: "flex",
+        height: "90vh",
+        justifyContent: "center",
+        alignItems: "center",
     },
 });
 

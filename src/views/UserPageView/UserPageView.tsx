@@ -36,6 +36,7 @@ import {Route, Switch, useRouteMatch} from "react-router-dom";
 import List from "@material-ui/core/List";
 import SettingsIcon from "@material-ui/icons/Settings";
 import UserEditView from "../UserEditView";
+import Loading from "../../components/Loading";
 
 /**
  * UserPageViewPropsStyled - interface for UserPageView
@@ -66,39 +67,41 @@ const UserPageView = React.forwardRef((props: UserPageViewProps, ref: Ref<any>) 
     const {id} = getRouteParams();
     const [tokens, setTokens] = useState<Token[]>([]);
     const [editedUser, setEditedUser] = useState();
+    const [loaded, setLoaded] = useState(false);
+
 
     useEffect(() => {
-        handleGetUser();
-        handleGetToken();
+        Promise.all([
+            handleGetUser(),
+            handleGetToken(),
+        ]).then(() => {
+            setLoaded(true);
+        })
     }, []);
 
-    function handleGetToken() {
-        coreRequest()
-            .get(`tokens`)
-            .then((response) => {
-                setTokens(response.body);
-            })
-            .catch(err => {
-                enqueueErrorSnackbar("No such token");
-            })
 
+    async function handleGetToken() {
+        try {
+            const response = await coreRequest().get(`tokens`);
+            setTokens(response.body);
+        } catch(err) {
+            enqueueErrorSnackbar("No such token");
+        }
     }
 
-    function handleGetUser() {
+    async function handleGetUser() {
         const user = getUser();
         let userId = id;
         if (!userId) {
             userId = user?.id;
         }
-        coreRequest()
-            .get(`users/${userId}`)
-            .then((response) => {
-                setUserData(response.body);
-            })
-            .catch(err => {
-                //TODO handle errors
-                enqueueErrorSnackbar("No such user");
-            });
+        try {
+            const response = await coreRequest().get(`users/${userId}`);
+            setUserData(response.body);
+        } catch (err) {
+            //TODO handle errors
+            enqueueErrorSnackbar("No such user");
+        }
     }
 
     function handleEditUser() {
@@ -161,6 +164,7 @@ const UserPageView = React.forwardRef((props: UserPageViewProps, ref: Ref<any>) 
     let {path} = useRouteMatch();
 
     return (
+        loaded ?
         <Switch>
             <Route path={path}>
                 <Box style={style} className={className}>
@@ -214,6 +218,10 @@ const UserPageView = React.forwardRef((props: UserPageViewProps, ref: Ref<any>) 
                 </Box>
             </Route>
         </Switch>
+            :
+            <Box className={classes.loading}>
+                <Loading/>
+            </Box>
     );
 });
 
