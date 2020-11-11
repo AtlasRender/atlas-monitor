@@ -93,7 +93,6 @@ const SignUpPage = React.forwardRef((props: SignUpPageProps, ref: Ref<any>) => {
                 changeRoute({page: `user/${user.id}`});
             })
             .catch(err => {
-                console.log("kuku");
                 switch (err.status) {
                     case 400:
                         err.response.body.response.errors.map((item: any) => {
