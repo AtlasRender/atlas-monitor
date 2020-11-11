@@ -48,6 +48,7 @@ import CreateOrganizationPageView from "../../views/CreateOrganizationPageView";
 import AuthorizationPageView from "../../views/AuthorizationPageView/AuthorizationPageView";
 import UserEditView from "../../views/UserEditView/UserEditView";
 import AtlasLogo from "./images/AtlasSystemsLogo.svg";
+import CreatePluginPageView from "../../views/CreatePluginPageView";
 
 /**
  * MonitorLayoutProps - interface for MonitorLayout component
@@ -368,6 +369,11 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>
                     <Route path="/createorganization">
                         <ChangeRouteProvider routeMask="(/:panel)">
                             <CreateOrganizationPageView/>
+                        </ChangeRouteProvider>
+                    </Route>
+                    <Route path="/plugin/create">
+                        <ChangeRouteProvider routeMask="(/:id)">
+                            <CreatePluginPageView/>
                         </ChangeRouteProvider>
                     </Route>
                 </Switch>

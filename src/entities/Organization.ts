@@ -104,7 +104,7 @@ export default class Organization extends BaseEntity {
 
         for (const key in validationMap) {
             if ((validationMap as any)[key] === true) {
-                throw new ValidationError<UserValidationMap>("Invalid types", validationMap);
+                throw new ValidationError<OrganizationValidationMap>("Invalid types", validationMap);
             }
         }
     }
