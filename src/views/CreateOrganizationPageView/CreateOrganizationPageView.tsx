@@ -63,8 +63,12 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
     const [modify, setModify] = useState<boolean>(false);
     const [name, setName] = useState<string>();
     const [description, setDescription] = useState<string>();
-    const [descriptionError, setDescriptionError] = useState({error: false, message: ""});
-    const [nameError, setNameError] = useState({error: false, message: ""});
+    const [errors, setErrors] = useState({
+        nameError:false,
+        nameMessage:"",
+        descriptionError:false,
+        descriptionMessage:"",
+    })
     const [owner, setOwner] = useState<UserData>();
     const [roles, setRoles] = useState<Role[]>([]);
     const [roleToModify, setRoleToModify] = useState<Role>();
@@ -104,21 +108,21 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
 
     function errorHandler(event: React.FocusEvent<HTMLInputElement>){
         if (name && name?.length <= 3) {
-            setNameError({error: true, message: "Should be more than 3 symbols"});
+            setErrors((prev)=>({...prev, nameError: true, nameMessage: "Should be more than 3 symbols"}));
         } else if(name && name.length > 50) {
-            setNameError({error: true, message: "Should be less than 50 symbols"});
+            setErrors((prev)=>({...prev, nameError: true, nameMessage: "Should be less than 50 symbols"}));
         }
         else{
-            setNameError({error:false, message:""});
+            setErrors((prev)=>({...prev, nameError:false, nameMessage:""}));
         }
 
         if (description && description?.length <= 3) {
-            setDescriptionError({error: true, message: "Should be more than 3 symbols"});
+            setErrors((prev)=>({...prev, descriptionError: true, descriptionMessage: "Should be more than 3 symbols"}));
         } else if(description && description.length > 50) {
-            setDescriptionError({error: true, message: "Should be less than 50 symbols"});
+            setErrors((prev)=>({...prev, descriptionError: true, descriptionMessage: "Should be less than 50 symbols"}));
         }
         else{
-            setDescriptionError({error:false, message:""});
+            setErrors((prev)=>({...prev, descriptionError:false, descriptionMessage:""}));
         }
     }
 
@@ -174,8 +178,8 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
                         fullWidth
                         label="Organization name"
                         onChange={handleInputName}
-                        error={nameError.error}
-                        helperText={nameError.message}
+                        error={errors.nameError}
+                        helperText={errors.nameMessage}
                         onBlur={errorHandler}
                     />
                 </Grid>
@@ -185,8 +189,8 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
                         fullWidth
                         label="Description"
                         onChange={handleInputDescription}
-                        error={descriptionError.error}
-                        helperText={descriptionError.message}
+                        error={errors.descriptionError}
+                        helperText={errors.descriptionMessage}
                         onBlur={errorHandler}
                     />
                 </Grid>
@@ -200,8 +204,8 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
                         margin="normal"
                         required fullWidth
                         label="Organization name"
-                        error={nameError.error}
-                        helperText={nameError.message}
+                        error={errors.nameError}
+                        helperText={errors.nameMessage}
                         onBlur={errorHandler}
                     />
                 </Grid>
@@ -210,8 +214,8 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
                         margin="normal"
                         fullWidth
                         label="Description"
-                        error={descriptionError.error}
-                        helperText={descriptionError.message}
+                        error={errors.descriptionError}
+                        helperText={errors.descriptionMessage}
                         onBlur={errorHandler}
                     />
                 </Grid>
