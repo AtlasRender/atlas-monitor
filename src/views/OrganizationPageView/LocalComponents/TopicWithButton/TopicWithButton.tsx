@@ -21,6 +21,7 @@ import Stylable from "../../../../interfaces/Stylable";
  */
 interface TopicWithButtonProps extends Stylable {
     children?: string,
+    onClick?(): void,
 }
 
 /**
@@ -33,7 +34,8 @@ const TopicWithButton = React.forwardRef((props: TopicWithButtonProps, ref: Ref<
         classes,
         style,
         className,
-        children
+        children,
+        onClick,
     } = props;
     return (
         <Grid container className={clsx(classes.container, className)} style={style}>
@@ -43,7 +45,7 @@ const TopicWithButton = React.forwardRef((props: TopicWithButtonProps, ref: Ref<
                         <Typography variant="h6">{children}</Typography>
                     </Grid>
                     <Grid item xs={1} className={classes.box}>
-                        <IconButton><AddIcon/></IconButton>
+                        <IconButton onClick={onClick}><AddIcon/></IconButton>
                     </Grid>
                 </Grid>
             </Grid>

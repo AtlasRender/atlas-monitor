@@ -586,7 +586,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                             onRemoveRole={handleRemoveRoleFromUser}
                         />
 
-                        <TopicWithButton children="Plugins"/>
+                        <TopicWithButton children="Plugins" onClick={()=>changeRoute({page:"plugin/create"})}/>
                         <PluginComponent plugin="GachiWork" description="best remixes of all time"/>
                     </Box>
                 </Route>
