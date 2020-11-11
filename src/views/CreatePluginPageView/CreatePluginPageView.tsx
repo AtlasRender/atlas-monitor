@@ -9,11 +9,13 @@
 
 import React, {Ref, useState} from "react";
 import {
+    Avatar,
     Box,
     Divider,
     Grid,
     IconButton,
     ListItem,
+    ListItemAvatar,
     ListItemSecondaryAction,
     ListItemText,
     TextField,
@@ -25,6 +27,8 @@ import List from "@material-ui/core/List";
 import AddIcon from "@material-ui/icons/Add";
 import InputField from "../../entities/InputField";
 import BasicPluginField from "../../entities/BasicPluginField";
+import DialogPlugin from "./LocalComponents/DialogPlugin";
+import DeleteIcon from "@material-ui/icons/Delete";
 
 /**
  * CreatePluginPageViewProps - interface for CreatePluginPageView
@@ -49,10 +53,21 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
 
 
     const [pluginFields, setPluginFields] = useState<(BasicPluginField | InputField)[]>([]);
+    const [isDialogPluginButtonActive, setIsDialogPluginButtonActive] = useState(false);
+
 
     function handleAddPluginField(event: any, field: BasicPluginField | InputField) {
         event.persist();
+        setIsDialogPluginButtonActive(false);
         setPluginFields(prev => ([...prev, field]));
+    }
+
+    function handleDeletePluginField(field: BasicPluginField | InputField) {
+        setPluginFields(pluginFields.filter(item => item.name !== field.name));
+    }
+
+    function handleSetIsDialogPluginButtonActive() {
+        setIsDialogPluginButtonActive(true);
     }
 
 
@@ -102,13 +117,7 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
                                 <IconButton
                                     edge="end"
                                     aria-label="delete"
-                                    onClick={(e) => handleAddPluginField(e, new InputField({
-                                        name: "name",
-                                        niceName: "niceName",
-                                        min: 0,
-                                        max: 10,
-                                        default: "Hello",
-                                    }))}
+                                    onClick={handleSetIsDialogPluginButtonActive}
                                 >
                                     <AddIcon/>
                                 </IconButton>
@@ -119,6 +128,13 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
                 </Grid>
             </Grid>
 
+            <DialogPlugin
+                open={isDialogPluginButtonActive}
+                onClose={() => setIsDialogPluginButtonActive(false)}
+                onAddField={handleAddPluginField}
+
+            />
+
             <Grid container className={classes.firstLine}>
                 <Grid item xs={12} md={10}>
                     <List>
@@ -126,13 +142,23 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
                             return (
                                 field instanceof InputField ?
                                     <ListItem key={field.name}>
-                                        <ListItemText>
-                                            <TextField
-                                                fullWidth
-                                                label={field.niceName}
-                                                defaultValue={field.default}
-                                            />
-                                        </ListItemText>
+                                        <ListItemAvatar>
+                                            <Avatar/>
+                                        </ListItemAvatar>
+                                        <ListItemText
+                                            primary={field.default}
+                                            secondary={field.niceName}
+                                        />
+                                        <ListItemSecondaryAction>
+                                            <IconButton
+                                                edge="end"
+                                                aria-label="delete"
+                                                onClick={() => handleDeletePluginField(field)}
+                                            >
+                                                <DeleteIcon/>
+                                            </IconButton>
+                                        </ListItemSecondaryAction>
+
                                     </ListItem>
                                     :
                                     <Divider/>

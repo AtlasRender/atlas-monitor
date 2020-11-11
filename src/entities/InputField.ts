@@ -35,8 +35,6 @@ export default class InputField extends BasicPluginField {
 
     constructor(field: any) {
 
-        debugger;
-
         super({name : field.name});
 
         this.niceName = field.niceName;
