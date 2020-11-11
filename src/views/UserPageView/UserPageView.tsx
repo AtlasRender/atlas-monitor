@@ -138,7 +138,7 @@ const UserPageView = React.forwardRef((props: UserPageViewProps, ref: Ref<any>) 
                 </Grid>
                 <Grid item xs={4}>
                     <Button
-                        onClick={() => changeRoute({page: `user/${getUser()?.id}/edit`})}
+                        onClick={() => changeRoute({page: `user`, id:getUser()?.id, actions:"edit"})}
                     >
                         Edit Profile
                     </Button>
