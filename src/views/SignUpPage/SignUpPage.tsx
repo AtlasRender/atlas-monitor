@@ -93,6 +93,7 @@ const SignUpPage = React.forwardRef((props: SignUpPageProps, ref: Ref<any>) => {
                 changeRoute({page: `user/${user.id}`});
             })
             .catch(err => {
+                console.log("kuku");
                 switch (err.status) {
                     case 400:
                         err.response.body.response.errors.map((item: any) => {
@@ -130,6 +131,9 @@ const SignUpPage = React.forwardRef((props: SignUpPageProps, ref: Ref<any>) => {
                                     break;
                             }
                         });
+                        break;
+                    case 401:
+                        enqueueErrorSnackbar(err.response.body.response.errors.message);
                         break;
                     default:
                         enqueueErrorSnackbar("Unrecognized Error");
