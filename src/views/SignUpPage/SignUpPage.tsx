@@ -131,6 +131,9 @@ const SignUpPage = React.forwardRef((props: SignUpPageProps, ref: Ref<any>) => {
                             }
                         });
                         break;
+                    case 401:
+                        enqueueErrorSnackbar(err.response.body.response.errors.message);
+                        break;
                     default:
                         enqueueErrorSnackbar("Unrecognized Error");
                 }

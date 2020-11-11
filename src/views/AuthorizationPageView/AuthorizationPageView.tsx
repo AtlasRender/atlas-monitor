@@ -69,6 +69,7 @@ const AuthorizationPageView = React.forwardRef((props: AuthorizationPageViewProp
     // TODO event type
     function handleInput(event: React.ChangeEvent<HTMLInputElement>) {
         event.persist();
+        setErrors(prev => ({...prev, [event.target.name+"Error"]: false}))
         setCredentials(prev => ({...prev, [event.target.name]: event.target.value}));
     }
 
@@ -136,6 +137,12 @@ const AuthorizationPageView = React.forwardRef((props: AuthorizationPageViewProp
                                     break;
                             }
                         });
+                        break;
+                    case 404:
+                        setErrors((prev)=>({...prev, usernameError:true, usernameMessage: "There is no such user"}));
+                        break;
+                    case 401:
+                        setErrors((prev)=>({...prev, passwordError:true, passwordMessage:"Incorrect passsword"}));
                         break;
                     default:
                         enqueueSnackbar("Unrecognized Error");
