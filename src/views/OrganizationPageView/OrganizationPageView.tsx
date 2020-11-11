@@ -79,10 +79,11 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
     //basic
     const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
     const coreRequest = useCoreRequest();
-    const {getRouteParams} = useChangeRoute();
+    const {getRouteParams, changeRoute} = useChangeRoute();
     const {id} = getRouteParams();
     const confirm = useConfirm();
     const [loaded, setLoaded] = useState(false);
+
 
     //roles
     const [isAddRoleButtonActive, setIsAddRoleButtonActive] = useState(false);
@@ -551,7 +552,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                             {organizationUsers.map((user: UserData, key: number) => {
                                 return (
                                     <Grid item xs={12} md={10} key={key}>
-                                        <ListItem>
+                                        <ListItem button onClick={()=>{changeRoute({page:"user", id: user.id})}}>
                                             <ListItemAvatar>
                                                 <Avatar
                                                     src="https://cdn.sportclub.ru/assets/2019-09-20/n97c311rvb.jpg"
