@@ -22,6 +22,7 @@ const styles = (theme: Theme) => createStyles({
     },
     progress: {
         minWidth: 150,
+        background: "transparent",
         [theme.breakpoints.down('md')]: {
             minWidth: 110,
         },
@@ -39,6 +40,9 @@ const styles = (theme: Theme) => createStyles({
     },
     iconVisible: {
         padding: 0,
+    },
+    cell: {
+        background: "transparent",
     }
 });
 

@@ -7,7 +7,7 @@
  * All rights reserved.
  */
 
-import {createStyles, fade, Theme} from "@material-ui/core";
+import {createStyles, Theme} from "@material-ui/core";
 
 const styles = (theme: Theme) => createStyles({
     root: {
@@ -16,6 +16,10 @@ const styles = (theme: Theme) => createStyles({
     title: {
         flexGrow: 1,
     },
+    header: {
+        background: theme.palette.header.dark,
+        color: theme.palette.common.white,
+    }
 });
 
 export default styles;

@@ -72,7 +72,7 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
     const [addRole, setAddRole] = useState({
         name: role?.name || "",
         description: role?.description || "",
-        color: role?.color || "#FFF",
+        color: role?.color || "FFF",
         permissionLevel: role?.permissionLevel || -1,
     });
 
@@ -87,7 +87,7 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
         setAddRole({
             name: role?.name || "",
             description: role?.description || "",
-            color: role?.color || "#FFF",
+            color: role?.color || "FFF",
             permissionLevel: role?.permissionLevel || -1,
         });
     },[role]);
@@ -152,7 +152,7 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
         if (!errors.noInputError && !errors.nameError && !errors.descriptionError && !errors.permissionLevelError) {
             modify ? onModifyRole && onModifyRole(role?.id, addRole) : onAddRole(addRole, errors);
             setAddRole({
-                name: "", description: "", color: "#fff", permissionLevel: -1,
+                name: "", description: "", color: "fff", permissionLevel: -1,
             })
             setErrors({
                 "noInputError": true,
@@ -165,7 +165,7 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
 
     function handleOnClose() {
         setAddRole({
-            name: "", description: "", color: "#fff", permissionLevel: -1,
+            name: "", description: "", color: "fff", permissionLevel: -1,
         })
         setErrors({
             "noInputError": true,

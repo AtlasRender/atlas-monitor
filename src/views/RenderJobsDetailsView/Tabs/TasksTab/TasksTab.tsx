@@ -203,18 +203,18 @@ const TasksTab = React.forwardRef((props: TasksTabProps, ref: Ref<any>) => {
                     </IconButton>
                 </Grid>
             </Grid>
-            <Paper className={classes.root}>
+            <Paper elevation={0} className={classes.root}>
                 <TableContainer className={classes.container}>
                     <Table stickyHeader aria-label="sticky table">
                         <TableHead>
                             <TableRow>
-                                <TableCell align="left">Id</TableCell>
-                                <TableCell align="left">Frame</TableCell>
-                                <TableCell align="left">Start Time</TableCell>
-                                <TableCell align="left">Slave</TableCell>
-                                <TableCell align="left">Elapsed Time</TableCell>
+                                <TableCell className={classes.cell} align="left">Id</TableCell>
+                                <TableCell className={classes.cell} align="left">Frame</TableCell>
+                                <TableCell className={classes.cell} align="left">Start Time</TableCell>
+                                <TableCell className={classes.cell} align="left">Slave</TableCell>
+                                <TableCell className={classes.cell} align="left">Elapsed Time</TableCell>
                                 <TableCell align="left" className={classes.progress}>Progress</TableCell>
-                                <TableCell align="left"> </TableCell>
+                                <TableCell className={classes.cell} align="left"> </TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>

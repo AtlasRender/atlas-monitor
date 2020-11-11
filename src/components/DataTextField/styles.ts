@@ -12,9 +12,9 @@ import grey from "@material-ui/core/colors/grey";
 
 const styles = (theme: Theme) => createStyles({
     boxContainer: {
-        backgroundColor: grey[200],
         borderRadius: 3,
         padding: theme.spacing(1),
+        background: theme.palette.baseDarkColors.main,
     },
     boxContainerTitle: {
         fontSize: 9,
