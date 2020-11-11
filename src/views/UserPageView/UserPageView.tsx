@@ -84,7 +84,7 @@ const UserPageView = React.forwardRef((props: UserPageViewProps, ref: Ref<any>) 
         try {
             const response = await coreRequest().get(`tokens`);
             setTokens(response.body);
-        } catch(err) {
+        } catch (err) {
             enqueueErrorSnackbar("No such token");
         }
     }
@@ -165,59 +165,65 @@ const UserPageView = React.forwardRef((props: UserPageViewProps, ref: Ref<any>) 
 
     return (
         loaded ?
-        <Switch>
-            <Route path={path}>
-                <Box style={style} className={className}>
-                    {mainInfo}
-                    <Grid container className={classes.firstLine}>
-                        <Grid item xs={12} md={10}>
-                            <List component="nav" aria-label="secondary mailbox folders">
-                                <ListItem className={classes.paddingNone}>
-                                    <ListItemText primary="Organizations" primaryTypographyProps={{variant: "h6"}}/>
-                                </ListItem>
-                                <Divider/>
-                            </List>
+            <Switch>
+                <Route path={path}>
+                    <Box style={style} className={className}>
+                        {mainInfo}
+                        <Grid container className={classes.firstLine}>
+                            <Grid item xs={12} md={10}>
+                                <List component="nav" aria-label="secondary mailbox folders">
+                                    <ListItem className={classes.paddingNone}>
+                                        <ListItemText primary="Organizations" primaryTypographyProps={{variant: "h6"}}/>
+                                    </ListItem>
+                                    <Divider/>
+                                </List>
+                            </Grid>
                         </Grid>
-                    </Grid>
 
-                    {/*TODO If no organisation print smth else*/}
+                        {/*TODO If no organisation print smth else*/}
 
-                    <Grid container className={classes.firstLine}>
-                        <Grid item xs={12} md={10}>
-                            <List>
-                                {userData?.organizations.map((organization) => {
-                                    return (
-                                        <ListItem key={organization.id}>
-                                            <ListItemAvatar>
-                                                <Avatar
-                                                    src="https://cdn.sportclub.ru/assets/2019-09-20/n97c311rvb.jpg"
+                        <Grid container className={classes.firstLine}>
+                            <Grid item xs={12} md={10}>
+                                <List>
+                                    {userData?.organizations.map((organization) => {
+                                        return (
+                                            <ListItem
+                                                key={organization.id}
+                                                button
+                                                onClick={() => {
+                                                    changeRoute({page: "organization", id: organization.id});
+                                                }}
+                                            >
+                                                <ListItemAvatar>
+                                                    <Avatar
+                                                        src="https://cdn.sportclub.ru/assets/2019-09-20/n97c311rvb.jpg"
+                                                    />
+                                                </ListItemAvatar>
+                                                <ListItemText
+                                                    primary={organization.name}
+                                                    secondary={organization.description}
                                                 />
-                                            </ListItemAvatar>
-                                            <ListItemText
-                                                primary={organization.name}
-                                                secondary={organization.description}
-                                            />
-                                            <ListItemSecondaryAction>
-                                                <Chip
-                                                    label={"MainRole"}
-                                                    style={{backgroundColor: `#f76`}}
-                                                />
-                                                <IconButton
-                                                    edge="end"
-                                                >
-                                                    <SettingsIcon/>
-                                                </IconButton>
-                                            </ListItemSecondaryAction>
-                                        </ListItem>
-                                    );
-                                })}
-                            </List>
+                                                <ListItemSecondaryAction>
+                                                    <Chip
+                                                        label={"MainRole"}
+                                                        style={{backgroundColor: `#f76`}}
+                                                    />
+                                                    <IconButton
+                                                        edge="end"
+                                                    >
+                                                        <SettingsIcon/>
+                                                    </IconButton>
+                                                </ListItemSecondaryAction>
+                                            </ListItem>
+                                        );
+                                    })}
+                                </List>
+                            </Grid>
                         </Grid>
-                    </Grid>
-                    <TokensViewer/>
-                </Box>
-            </Route>
-        </Switch>
+                        <TokensViewer/>
+                    </Box>
+                </Route>
+            </Switch>
             :
             <Box className={classes.loading}>
                 <Loading/>

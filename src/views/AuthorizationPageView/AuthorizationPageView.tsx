@@ -73,14 +73,6 @@ const AuthorizationPageView = React.forwardRef((props: AuthorizationPageViewProp
         setCredentials(prev => ({...prev, [event.target.name]: event.target.value}));
     }
 
-    function errorHandler(key:string, messageKey:string, message:string){
-        setErrors((prev) => ({
-            ...prev,
-            [key]: true,
-            [messageKey]: message,
-        }));
-    }
-
 
     function handleLogin(event: React.ChangeEvent<any>) {
 
