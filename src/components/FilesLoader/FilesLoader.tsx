@@ -8,18 +8,21 @@
  */
 
 import React from "react";
-import {Box, Input, InputBase, Typography, withStyles} from "@material-ui/core";
+import {Box, InputBase, Typography, withStyles} from "@material-ui/core";
 import styles from "./styles";
 import {useDropzone} from 'react-dropzone'
 import Stylable from "../../interfaces/Stylable";
 import clsx from "clsx";
 import request from "superagent";
 import TempFile from "../../entities/TempFile";
-import {coreRequest} from "../../utils/Rest";
 import useCoreRequest from "../../hooks/useCoreRequest";
 
 export const displayName = "FilesLoader";
 
+/**
+ * FilesLoaderProps - props for FilesLoader component.
+ * @author Danil Andreev
+ */
 export interface FilesLoaderProps extends Stylable {
     onBeforeLoad?(files: File[]): File[],
 
@@ -33,6 +36,11 @@ export interface FilesLoaderProps extends Stylable {
 
 }
 
+/**
+ * FilesLoader - React component for selecting one or several files and upload them to temp storage.
+ * @function
+ * @author Danil Andreev
+ */
 const FilesLoader = React.forwardRef((props: FilesLoaderProps, ref) => {
     const {
         classes,
@@ -62,8 +70,8 @@ const FilesLoader = React.forwardRef((props: FilesLoaderProps, ref) => {
                 .on("progress", (event: ProgressEvent): void => onProgress && onProgress(event))
                 .then((result: request.Response): void => {
                     try {
-                        const entity = new TempFile(result.body);
-                        setTempFiles(prev => ({...prev, entity}))
+                        const entity = new TempFile(result.body[0]); //TODO: change to body.
+                        setTempFiles(prev => ([...prev, entity]));
                         onLoaded && onLoaded(entity);
                     } catch (error) {
                         //TODO: handle
@@ -76,6 +84,11 @@ const FilesLoader = React.forwardRef((props: FilesLoaderProps, ref) => {
     }, [])
     const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop});
 
+    /**
+     * clearTempFiles - removes currently selected files from core origin temp storage.
+     * @function
+     * @author Danil Andreev
+     */
     async function clearTempFiles() {
         const targets = [...tempFiles];
         for (const target of targets) {
@@ -87,8 +100,6 @@ const FilesLoader = React.forwardRef((props: FilesLoaderProps, ref) => {
                 });
         }
     }
-
-    console.log(tempFiles);
 
     const selectedFile: TempFile | undefined = tempFiles[0];
     const showSelectedFile: boolean = !multiple && !!selectedFile;
