@@ -22,9 +22,13 @@ export const displayName = "FilesLoader";
 
 export interface FilesLoaderProps extends Stylable {
     onBeforeLoad?(files: File[]): File[],
+
     onLoaded?(files: TempFile): void;
+
     onError?(error: any): void;
+
     onProgress?(event: ProgressEvent): void;
+
     multiple?: boolean;
 
 }
@@ -32,6 +36,8 @@ export interface FilesLoaderProps extends Stylable {
 const FilesLoader = React.forwardRef((props: FilesLoaderProps, ref) => {
     const {
         classes,
+        className,
+        style,
         onBeforeLoad,
         onLoaded,
         onError,
@@ -59,7 +65,7 @@ const FilesLoader = React.forwardRef((props: FilesLoaderProps, ref) => {
                         const entity = new TempFile(result.body);
                         setTempFiles(prev => ({...prev, entity}))
                         onLoaded && onLoaded(entity);
-                    } catch(error) {
+                    } catch (error) {
                         //TODO: handle
                     }
                 })
@@ -69,8 +75,6 @@ const FilesLoader = React.forwardRef((props: FilesLoaderProps, ref) => {
         }
     }, [])
     const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop});
-
-    console.log(tempFiles);
 
     async function clearTempFiles() {
         const targets = [...tempFiles];
@@ -84,27 +88,42 @@ const FilesLoader = React.forwardRef((props: FilesLoaderProps, ref) => {
         }
     }
 
+    console.log(tempFiles);
+
+    const selectedFile: TempFile | undefined = tempFiles[0];
+    const showSelectedFile: boolean = !multiple && !!selectedFile;
 
     return (
-        <Box
-            className={clsx(classes.container, isDragActive && classes.containerDrag)}
-            {...getRootProps()}
-        >
-            <Box className={classes.textContainer}>
-                <Typography variant="h5">UPLOAD</Typography>
-                <Typography variant="body1" color="textSecondary">
-                    {isDragActive ? "Drop files here ..." : "Drag and drop or click to select files."}
-
-                </Typography>
+        <Box>
+            {showSelectedFile &&
+            <Box>
+                {selectedFile.name}
             </Box>
-            <InputBase
-                className={classes.input}
-                inputProps={{...getInputProps(), color: "primary", multiple: !!multiple}}
-            />
-            {/*{isDragActive ?*/}
-            {/*    <p>Drop the files here ...</p> :*/}
-            {/*    <p>Drag 'n' drop some files here, or click to select files</p>*/}
-            {/*}*/}
+            }
+            <Box
+                {...getRootProps()}
+                className={clsx(
+                    classes.root,
+                    classes.dropzone,
+                    classes.color,
+                    isDragActive && classes.dropzoneDrag,
+                    isDragActive && classes.rootDrag,
+                    className,
+                )}
+                style={style}
+            >
+                <Box className={classes.textContainer}>
+                    <Typography variant="h5">UPLOAD</Typography>
+                    <Typography variant="body1" color="textSecondary">
+                        {isDragActive ? "Drop files here ..." : "Drag and drop or click to select files."}
+
+                    </Typography>
+                </Box>
+                <InputBase
+                    className={classes.input}
+                    inputProps={{...getInputProps(), color: "primary", multiple: !!multiple}}
+                />
+            </Box>
         </Box>
     );
 });
