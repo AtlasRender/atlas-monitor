@@ -28,6 +28,7 @@ import InputField from "../../entities/InputField";
 import BasicPluginField from "../../entities/BasicPluginField";
 import DialogPlugin from "./LocalComponents/DialogPlugin";
 import DeleteIcon from "@material-ui/icons/Delete";
+import FilesLoader from "../../components/FilesLoader";
 
 /**
  * CreatePluginPageViewProps - interface for CreatePluginPageView
@@ -101,7 +102,7 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
                             />
                         </Grid>
                         <Grid item xs={12}>
-                            <Box style={{height: 100, background: "grey"}}/>
+                            <FilesLoader multiple/>
                         </Grid>
                     </Grid>
                 </Grid>
