@@ -47,6 +47,7 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import DialogAddRoles from "./LocalComponents/DialogAddRoles";
 import Loading from "../../components/Loading";
+import FilesLoader from "../../components/FilesLoader";
 
 /**
  * OrganizationPageViewPropsStyled - interface for OrganizationPageView function
@@ -441,6 +442,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                         </Grid>
 
                         <Grid container className={classes.firstLine}>
+                            <FilesLoader/>
                             <Grid item xs={12} md={10}>
                                 <List component="nav" aria-label="secondary mailbox folders">
                                     <ListItem className={classes.paddingNone}>
