@@ -8,7 +8,20 @@
  */
 
 import React, {Ref, useState} from "react";
-import {Button, Dialog, DialogTitle, Divider, Grid, List, ListItem, withStyles,} from "@material-ui/core";
+import {
+    Button,
+    Dialog,
+    DialogTitle,
+    Divider,
+    FormControl,
+    Grid,
+    InputLabel,
+    List,
+    ListItem,
+    MenuItem,
+    Select,
+    withStyles,
+} from "@material-ui/core";
 import Stylable from "../../../../interfaces/Stylable";
 import styles from "./styles";
 import TextField from "@material-ui/core/TextField";
@@ -35,6 +48,7 @@ const DialogPlugin = React.forwardRef((props: DialogPluginProps, ref: Ref<any>) 
     } = props;
 
 
+    const [fieldType, setFieldType] = useState("inputField");
     const [addField, setAddField] = useState({
         name: "",
         niceName: "",
@@ -42,6 +56,16 @@ const DialogPlugin = React.forwardRef((props: DialogPluginProps, ref: Ref<any>) 
         max: 255,
         default: ""
     });
+
+    function handleSetDefault() {
+        setAddField({
+            name: "",
+            niceName: "",
+            min: 1,
+            max: 255,
+            default: ""
+        });
+    }
 
     const handleInputField = (name: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
         event.persist();
@@ -52,12 +76,23 @@ const DialogPlugin = React.forwardRef((props: DialogPluginProps, ref: Ref<any>) 
         }
     };
 
+    const handleSetFieldType = (event: React.ChangeEvent<{ value: unknown }>) => {
+        setFieldType(event.target.value as string);
+    };
+
     function handleOnClose() {
         onClose();
+        handleSetDefault();
     }
 
     function handleAddFiled(event: any) {
-        onAddField(event, new InputField(addField));
+        if (fieldType === "inputField") {
+            onAddField(event, new InputField(addField));
+            handleSetDefault();
+        } else if (fieldType === "divider") {
+            onAddField(event, new BasicPluginField(addField));
+            handleSetDefault();
+        }
     }
 
 
@@ -70,9 +105,24 @@ const DialogPlugin = React.forwardRef((props: DialogPluginProps, ref: Ref<any>) 
                 Add new plugin field
             </DialogTitle>
             <Divider/>
-            <List>
+
+            <List className={classes.dialogSize}>
                 <ListItem>
                     <Grid container>
+                        <Grid item xs={12}>
+                            <FormControl fullWidth>
+                                <InputLabel>
+                                    Plugin Field
+                                </InputLabel>
+                                <Select
+                                    value={fieldType}
+                                    onChange={handleSetFieldType}
+                                >
+                                    <MenuItem value="inputField">Input Field</MenuItem>
+                                    <MenuItem value="divider">Divider</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </Grid>
                         <Grid item xs={12} className={classes.gridPadding}>
                             <TextField
                                 variant="standard"
@@ -84,52 +134,56 @@ const DialogPlugin = React.forwardRef((props: DialogPluginProps, ref: Ref<any>) 
                                 onChange={handleInputField("name")}
                             />
                         </Grid>
-                        <Grid item xs={12} className={classes.gridPadding}>
-                            <TextField
-                                variant="standard"
-                                required
-                                fullWidth
-                                name="niceName"
-                                label="Displayable name"
-                                defaultValue={addField.niceName}
-                                onChange={handleInputField("niceName")}
-                            />
-                        </Grid>
-                        <Grid item xs={12} className={classes.gridPadding}>
-                            <TextField
-                                type="number"
-                                variant="standard"
-                                required
-                                fullWidth
-                                name="min"
-                                label="Min number of elements"
-                                defaultValue={addField.min}
-                                onChange={handleInputField("min")}
-                            />
-                        </Grid>
-                        <Grid item xs={12} className={classes.gridPadding}>
-                            <TextField
-                                type="number"
-                                variant="standard"
-                                required
-                                fullWidth
-                                name="max"
-                                label="Max number of elements"
-                                defaultValue={addField.max}
-                                onChange={handleInputField("max")}
-                            />
-                        </Grid>
-                        <Grid item xs={12} className={classes.gridPadding}>
-                            <TextField
-                                variant="standard"
-                                required
-                                fullWidth
-                                name="default"
-                                label="Default Value"
-                                defaultValue={addField.default}
-                                onChange={handleInputField("default")}
-                            />
-                        </Grid>
+                        {fieldType === "inputField" &&
+                        <React.Fragment>
+                            <Grid item xs={12} className={classes.gridPadding}>
+                                <TextField
+                                    variant="standard"
+                                    required
+                                    fullWidth
+                                    name="niceName"
+                                    label="Displayable name"
+                                    defaultValue={addField.niceName}
+                                    onChange={handleInputField("niceName")}
+                                />
+                            </Grid>
+                            <Grid item xs={12} className={classes.gridPadding}>
+                                <TextField
+                                    type="number"
+                                    variant="standard"
+                                    required
+                                    fullWidth
+                                    name="min"
+                                    label="Min value"
+                                    defaultValue={addField.min}
+                                    onChange={handleInputField("min")}
+                                />
+                            </Grid>
+                            <Grid item xs={12} className={classes.gridPadding}>
+                                <TextField
+                                    type="number"
+                                    variant="standard"
+                                    required
+                                    fullWidth
+                                    name="max"
+                                    label="Max value"
+                                    defaultValue={addField.max}
+                                    onChange={handleInputField("max")}
+                                />
+                            </Grid>
+                            <Grid item xs={12} className={classes.gridPadding}>
+                                <TextField
+                                    variant="standard"
+                                    required
+                                    fullWidth
+                                    name="default"
+                                    label="Default Value"
+                                    defaultValue={addField.default}
+                                    onChange={handleInputField("default")}
+                                />
+                            </Grid>
+                        </React.Fragment>
+                        }
                         <Button
                             fullWidth
                             onClick={handleAddFiled}

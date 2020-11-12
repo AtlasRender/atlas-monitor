@@ -21,11 +21,11 @@ export default class InputField extends BasicPluginField {
      */
     public niceName: string;
     /**
-     * min - min elements to contain
+     * min - min value
      */
     public min: number;
     /**
-     * max - max elements to contain
+     * max - max value
      */
     public max: number;
     /**
@@ -35,12 +35,12 @@ export default class InputField extends BasicPluginField {
 
     constructor(field: any) {
 
-        super({name : field.name});
+        super({name: field.name});
 
         this.niceName = field.niceName;
-        this.max = field.max
-        this.min = field.min0;
-        this.default = field.default
+        this.max = field.max;
+        this.min = field.min;
+        this.default = field.default;
 
     }
 }

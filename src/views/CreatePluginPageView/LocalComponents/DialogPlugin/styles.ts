@@ -18,6 +18,12 @@ const styles =(theme: Theme) => createStyles({
     gridPadding: {
         marginBottom: theme.spacing(1),
     },
+    dialogSize: {
+        width: 536,
+        [theme.breakpoints.down('xs')]: {
+            width: "auto",
+        },
+    }
 });
 
 export default styles;

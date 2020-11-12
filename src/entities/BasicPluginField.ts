@@ -8,13 +8,6 @@
  */
 
 import BaseEntity from "../core/BaseEntity";
-import StringValidator from "../core/validators/StringValidator";
-import ValidationError from "../core/ValidationError";
-
-export interface BasicPluginFieldValidationMap {
-    name?: boolean;
-}
-
 
 /**
  * BasicPluginField - interface for Basic Plugin Field
@@ -29,15 +22,7 @@ export default class BasicPluginField extends BaseEntity {
 
     constructor(field: any) {
         super("Basic Plugin Field");
-        const validationMap: BasicPluginFieldValidationMap = {};
 
-        this.name = StringValidator(field.name).value || "";
-        validationMap.name = StringValidator(field.name).error;
-
-        for (const key in validationMap) {
-            if ((validationMap as any)[key] === true) {
-                throw new ValidationError<BasicPluginFieldValidationMap>("Invalid types", validationMap);
-            }
-        }
+        this.name = field.name;
     }
 }
