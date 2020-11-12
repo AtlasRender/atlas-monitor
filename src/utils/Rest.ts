@@ -80,7 +80,7 @@ export const request = (endPoint: string, middleware?: RequestMiddleware) : Requ
      * @author Danil Andreev
      */
     function defaultMiddleware(request: superagent.SuperAgentRequest): superagent.SuperAgentRequest {
-        return request.set('accept', 'application/json');
+        return request.accept('application/json');
     }
 
     const requestMiddleware = middleware || defaultMiddleware;
