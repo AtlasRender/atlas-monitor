@@ -441,7 +441,6 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                         </Grid>
 
                         <Grid container className={classes.firstLine}>
-                            <FilesLoader/>
                             <Grid item xs={12} md={10}>
                                 <List component="nav" aria-label="secondary mailbox folders">
                                     <ListItem className={classes.paddingNone}>
