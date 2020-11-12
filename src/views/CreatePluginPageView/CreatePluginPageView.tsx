@@ -131,6 +131,7 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
                 open={isDialogPluginButtonActive}
                 onClose={() => setIsDialogPluginButtonActive(false)}
                 onAddField={handleAddPluginField}
+                pluginFields={pluginFields}
             />
 
             <Grid container className={classes.firstLine}>
