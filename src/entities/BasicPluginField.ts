@@ -1,9 +1,8 @@
 /*
- * Copyright (c) 2020. This code created and belongs to Pathfinder render manager project.
+ * Copyright (c) 2020. This code created and belongs to Atlas render manager project.
  * Owner and project architect: Danil Andreev | danssg08@gmail.com |  https://github.com/DanilAndreev
- * File creator: Andrii Demchyshyn
  * Project: atlas-monitor
- * File last modified: 11.11.2020, 19:53
+ * File last modified: 12.11.2020, 18:37
  * All rights reserved.
  */
 
