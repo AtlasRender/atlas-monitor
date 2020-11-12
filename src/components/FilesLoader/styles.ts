@@ -22,6 +22,8 @@ const styles = (theme: Theme) => createStyles({
         backgroundColor: "rgba(255,255,255,0.05)",
     },
     dropzone: {
+        userSelect: "none",
+        cursor: "pointer",
         width: "100%",
         border: "2px solid transparent",
         display: "flex",
