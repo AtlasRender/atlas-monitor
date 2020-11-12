@@ -51,8 +51,8 @@ const FilesLoader = React.forwardRef((props: FilesLoaderProps, ref) => {
         for (const file of files) {
             coreRequest()
                 .post("file")
-                .attach("file", file)
-                .set("Content-Type", "multipart/form-data")
+                .attach(file.name, file)
+                //.set("Content-Type", "multipart/form-data;boundary=------WebKitFormBoundaryMz3X4OkgkDm4rYRB")
                 .on("progress", (event: ProgressEvent): void => onProgress && onProgress(event))
                 .then((result: request.Response): void => {
                     try {
