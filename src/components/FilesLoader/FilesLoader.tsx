@@ -8,7 +8,17 @@
  */
 
 import React from "react";
-import {Box, InputBase, Typography, withStyles} from "@material-ui/core";
+import {
+    Avatar,
+    Box, IconButton,
+    InputBase,
+    ListItem,
+    ListItemAvatar, ListItemSecondaryAction,
+    ListItemText,
+    Typography,
+    withStyles,
+    List, LinearProgress,
+} from "@material-ui/core";
 import styles from "./styles";
 import {useDropzone} from 'react-dropzone'
 import Stylable from "../../interfaces/Stylable";
@@ -16,6 +26,9 @@ import clsx from "clsx";
 import request from "superagent";
 import TempFile from "../../entities/TempFile";
 import useCoreRequest from "../../hooks/useCoreRequest";
+import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
+import DeleteIcon from '@material-ui/icons/Delete';
+import useEnqueueErrorSnackbar from "../../utils/enqueueErrorSnackbar";
 
 export const displayName = "FilesLoader";
 
@@ -37,6 +50,15 @@ export interface FilesLoaderProps extends Stylable {
 }
 
 /**
+ * UploadedFile - interface for local files accounting.
+ * @interface
+ */
+interface UploadedFile {
+    file: File;
+    temp: TempFile;
+}
+
+/**
  * FilesLoader - React component for selecting one or several files and upload them to temp storage.
  * @function
  * @author Danil Andreev
@@ -54,19 +76,18 @@ const FilesLoader = React.forwardRef((props: FilesLoaderProps, ref) => {
         ...other
     } = props;
     const coreRequest = useCoreRequest();
+    const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
 
     const [tempFiles, setTempFiles] = React.useState<TempFile[]>([]);
 
     const onDrop = React.useCallback((inputFiles: File[]) => {
-        clearTempFiles().then();
-        setTempFiles([]);
+        if (!multiple) clearTempFiles();
         let files = inputFiles;
         if (onBeforeLoad) files = onBeforeLoad(files);
         for (const file of files) {
             coreRequest()
                 .post("file")
                 .attach(file.name, file)
-                //.set("Content-Type", "multipart/form-data;boundary=------WebKitFormBoundaryMz3X4OkgkDm4rYRB")
                 .on("progress", (event: ProgressEvent): void => onProgress && onProgress(event))
                 .then((result: request.Response): void => {
                     try {
@@ -74,7 +95,7 @@ const FilesLoader = React.forwardRef((props: FilesLoaderProps, ref) => {
                         setTempFiles(prev => ([...prev, entity]));
                         onLoaded && onLoaded(entity);
                     } catch (error) {
-                        //TODO: handle
+                        enqueueErrorSnackbar("Error deleting file.");
                     }
                 })
                 .catch(error => {
@@ -89,27 +110,61 @@ const FilesLoader = React.forwardRef((props: FilesLoaderProps, ref) => {
      * @function
      * @author Danil Andreev
      */
-    async function clearTempFiles() {
+    function clearTempFiles() {
         const targets = [...tempFiles];
         for (const target of targets) {
-            coreRequest()
-                .delete(`/files/${target.id}`)
-                .then()
-                .catch(error => {
-                    //TODO: handle error
-                });
+            deleteFile(target.id).catch(error => {
+                enqueueErrorSnackbar(`Error deleting ${target.id}`);
+            }).finally(() => setTempFiles([]));
         }
     }
 
-    const selectedFile: TempFile | undefined = tempFiles[0];
-    const showSelectedFile: boolean = !multiple && !!selectedFile;
+    /**
+     * deleteFile - deletes file with selected id from core temp storage.
+     * @param id Id of the file in core storage
+     * @function
+     * @throws Error
+     * @author Danil Andreev
+     */
+    async function deleteFile(id: number): Promise<void> {
+        try {
+            await coreRequest().delete(`file/${id}`);
+        } catch (error) {
+            throw error;
+        } finally {
+            setTempFiles(prev => prev.filter(item => item.id !== id));
+        }
+    }
 
     return (
         <Box>
-            {showSelectedFile &&
-            <Box>
-                {selectedFile.name}
-            </Box>
+            {!!tempFiles.length &&
+            <List>
+                {tempFiles.map((file: TempFile) =>
+                    <ListItem key={`file-item-${file.id}`}>
+                        <ListItemAvatar>
+                            <Avatar>
+                                <InsertDriveFileIcon/>
+                            </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText
+                            primary={file.name}
+                            secondary={
+                                <LinearProgress variant="determinate" value={3} />
+                            }
+                        />
+                        <ListItemSecondaryAction>
+                            <IconButton
+                                edge="end"
+                                aria-label="delete"
+                                onClick={event => deleteFile(file.id)}
+                            >
+                                <DeleteIcon/>
+                            </IconButton>
+                        </ListItemSecondaryAction>
+                    </ListItem>
+                )}
+            </List>
             }
             <Box
                 {...getRootProps()}

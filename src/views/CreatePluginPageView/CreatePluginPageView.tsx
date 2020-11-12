@@ -103,7 +103,7 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
                             />
                         </Grid>
                         <Grid item xs={12}>
-                            <FilesLoader/>
+                            <FilesLoader multiple/>
                         </Grid>
                     </Grid>
                 </Grid>
