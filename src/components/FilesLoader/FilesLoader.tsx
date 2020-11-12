@@ -13,9 +13,10 @@ import styles from "./styles";
 import {useDropzone} from 'react-dropzone'
 import Stylable from "../../interfaces/Stylable";
 import clsx from "clsx";
-import {coreRequest} from "../../utils/Rest";
 import request from "superagent";
 import TempFile from "../../entities/TempFile";
+import {coreRequest} from "../../utils/Rest";
+import useCoreRequest from "../../hooks/useCoreRequest";
 
 export const displayName = "FilesLoader";
 
@@ -38,6 +39,7 @@ const FilesLoader = React.forwardRef((props: FilesLoaderProps, ref) => {
         multiple,
         ...other
     } = props;
+    const coreRequest = useCoreRequest();
 
     const [tempFiles, setTempFiles] = React.useState<TempFile[]>([]);
 
@@ -46,10 +48,11 @@ const FilesLoader = React.forwardRef((props: FilesLoaderProps, ref) => {
         setTempFiles([]);
         let files = inputFiles;
         if (onBeforeLoad) files = onBeforeLoad(files);
-        for (const file in files) {
+        for (const file of files) {
             coreRequest()
-                .post("/files")
-                .send(file)
+                .post("file")
+                .attach("file", file)
+                .set("Content-Type", "multipart/form-data")
                 .on("progress", (event: ProgressEvent): void => onProgress && onProgress(event))
                 .then((result: request.Response): void => {
                     try {
