@@ -27,6 +27,8 @@ export default class InputField extends BasicPluginField {
      * max - max value
      */
     public max: number;
+
+    public id: number;
     /**
      * default - default value
      */
@@ -40,6 +42,7 @@ export default class InputField extends BasicPluginField {
         this.max = field.max;
         this.min = field.min;
         this.default = field.default;
+        this.id = field.id;
 
     }
 }

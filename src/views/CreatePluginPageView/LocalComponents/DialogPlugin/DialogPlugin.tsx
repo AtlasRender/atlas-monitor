@@ -33,6 +33,8 @@ interface DialogPluginProps extends Stylable {
     onClose(): void;
 
     onAddField(event: any, field: BasicPluginField | InputField): void;
+
+    idGenerator(): number;
 }
 
 
@@ -44,6 +46,7 @@ const DialogPlugin = React.forwardRef((props: DialogPluginProps, ref: Ref<any>) 
         open,
         onClose,
         onAddField,
+        idGenerator,
     } = props;
 
 
@@ -53,7 +56,8 @@ const DialogPlugin = React.forwardRef((props: DialogPluginProps, ref: Ref<any>) 
         niceName: "",
         min: 1,
         max: 255,
-        default: ""
+        default: "",
+        id: 0,
     });
 
     function handleSetDefault() {
@@ -62,7 +66,8 @@ const DialogPlugin = React.forwardRef((props: DialogPluginProps, ref: Ref<any>) 
             niceName: "",
             min: 1,
             max: 255,
-            default: ""
+            default: "",
+            id: 0,
         });
     }
 
@@ -86,11 +91,15 @@ const DialogPlugin = React.forwardRef((props: DialogPluginProps, ref: Ref<any>) 
 
     function handleAddFiled(event: any) {
         if (fieldType === "inputField") {
+            console.log(idGenerator())
+            setAddField(prev=>({...prev, id: idGenerator()}));
+            console.log(addField);
             onAddField(event, new InputField(addField));
-            handleSetDefault();
+            // handleSetDefault();
         } else if (fieldType === "divider") {
+            setAddField(prev=>({...prev, id: idGenerator()}));
             onAddField(event, new BasicPluginField(addField));
-            handleSetDefault();
+            // handleSetDefault();
         }
     }
 

@@ -6,7 +6,7 @@
  * All rights reserved.
  */
 
-import React, {Ref, useState} from "react";
+import React, {Ref, useCallback, useState} from "react";
 import {
     Avatar,
     Box,
@@ -28,6 +28,13 @@ import InputField from "../../entities/InputField";
 import BasicPluginField from "../../entities/BasicPluginField";
 import DialogPlugin from "./LocalComponents/DialogPlugin";
 import DeleteIcon from "@material-ui/icons/Delete";
+import update from "immutability-helper"
+
+import DragableListItem from "./LocalComponents/DragableListItem";
+import IdGenerator from "../../utils/IdGenerator";
+import {DndProvider} from "react-dnd";
+import {HTML5Backend} from "react-dnd-html5-backend";
+
 
 /**
  * CreatePluginPageViewProps - interface for CreatePluginPageView
@@ -50,18 +57,37 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
         style,
     } = props;
 
-
-    const [pluginFields, setPluginFields] = useState<(BasicPluginField | InputField)[]>([]);
+    const [pluginFields, setPluginFields] = useState<InputField[]>([]);
     const [isDialogPluginButtonActive, setIsDialogPluginButtonActive] = useState(false);
 
+    const idGenerator = React.useRef(IdGenerator());
+    const getNextId = (): number => idGenerator.current.next().value;
 
-    function handleAddPluginField(event: any, field: BasicPluginField | InputField) {
+    const move = useCallback(
+        (dragIndex: number, hoverIndex: number) => {
+            const dragedField = pluginFields[dragIndex];
+            setPluginFields(
+                update(pluginFields, {
+                    $splice: [
+                        [dragIndex, 1],
+                        [hoverIndex, 0, dragedField],
+                    ],
+                }),
+            )
+            console.log(pluginFields);
+        },
+        [pluginFields],
+    )
+
+    function handleAddPluginField(event: any, field: InputField) {
         event.persist();
         setIsDialogPluginButtonActive(false);
         setPluginFields(prev => ([...prev, field]));
+        console.log("kuku");
+        console.log(pluginFields);
     }
 
-    function handleDeletePluginField(field: BasicPluginField | InputField) {
+    function handleDeletePluginField(field: InputField) {
         setPluginFields(pluginFields.filter(item => item.name !== field.name));
     }
 
@@ -69,6 +95,17 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
         setIsDialogPluginButtonActive(true);
     }
 
+    const renderField = (item: InputField, index: number) => {
+        return (
+            <DragableListItem
+                key={item.id}
+                field={item}
+                index={index}
+                moveCard={move}
+                onDelete={handleDeletePluginField}
+            />
+        )
+    }
 
     return (
         <React.Fragment>
@@ -131,37 +168,13 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
                 open={isDialogPluginButtonActive}
                 onClose={() => setIsDialogPluginButtonActive(false)}
                 onAddField={handleAddPluginField}
+                idGenerator={getNextId}
             />
 
             <Grid container className={classes.firstLine}>
                 <Grid item xs={12} md={10}>
                     <List>
-                        {pluginFields.map(field => {
-                            return (
-                                field instanceof InputField ?
-                                    <ListItem key={field.name}>
-                                        <ListItemAvatar>
-                                            <Avatar/>
-                                        </ListItemAvatar>
-                                        <ListItemText
-                                            primary={field.default}
-                                            secondary={field.niceName}
-                                        />
-                                        <ListItemSecondaryAction>
-                                            <IconButton
-                                                edge="end"
-                                                aria-label="delete"
-                                                onClick={() => handleDeletePluginField(field)}
-                                            >
-                                                <DeleteIcon/>
-                                            </IconButton>
-                                        </ListItemSecondaryAction>
-
-                                    </ListItem>
-                                    :
-                                    <Divider/>
-                            );
-                        })}
+                        {pluginFields.map((field, index) => renderField(field, index))}
                     </List>
                 </Grid>
             </Grid>
