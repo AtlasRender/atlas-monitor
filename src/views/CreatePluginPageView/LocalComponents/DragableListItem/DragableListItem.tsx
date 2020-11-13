@@ -38,7 +38,7 @@ interface DragItem{
 
 const DragableListItem : React.FC<DragableListItemProps> = ({ field, onDelete, moveCard, index}) => {
 
-    const refer = useRef<HTMLDivElement>(null);
+    const refer = useRef<HTMLLIElement>(null);
     const id = field.id;
 
 
@@ -89,27 +89,25 @@ const DragableListItem : React.FC<DragableListItemProps> = ({ field, onDelete, m
     const opacity = isDragging ? 0 : 1;
 
     return(
-            <div ref={refer} style={{opacity}}>
-                <ListItem>
-                    <ListItemAvatar>
-                        <Avatar/>
-                    </ListItemAvatar>
-                    <ListItemText
-                        primary={field.default}
-                        secondary={field.niceName}
-                    />
-                    <ListItemSecondaryAction>
-                        <IconButton
-                            edge="end"
-                            aria-label="delete"
-                            onClick={() => onDelete(field)}
-                        >
-                            <DeleteIcon/>
-                        </IconButton>
-                    </ListItemSecondaryAction>
+            <ListItem ref={refer} style={{opacity}}>
+                <ListItemAvatar>
+                    <Avatar/>
+                </ListItemAvatar>
+                <ListItemText
+                    primary={field.default}
+                    secondary={field.niceName}
+                />
+                <ListItemSecondaryAction>
+                    <IconButton
+                        edge="end"
+                        aria-label="delete"
+                        onClick={() => onDelete(field)}
+                    >
+                        <DeleteIcon/>
+                    </IconButton>
+                </ListItemSecondaryAction>
 
-                </ListItem>
-            </div>
+            </ListItem>
     );
 };
 

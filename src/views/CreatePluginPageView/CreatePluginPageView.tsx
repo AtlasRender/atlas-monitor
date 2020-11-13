@@ -92,15 +92,7 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
     }
 
     const renderField = (item: InputField, index: number) => {
-        return (
-            <DragableListItem
-                key={item.id}
-                field={item}
-                index={index}
-                moveCard={move}
-                onDelete={handleDeletePluginField}
-            />
-        )
+
     }
 
     return (
@@ -171,7 +163,15 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
             <Grid container className={classes.firstLine}>
                 <Grid item xs={12} md={10}>
                     <List>
-                        {pluginFields.map((field, index) => renderField(field, index))}
+                        {pluginFields.map((item, index) => (
+                            <DragableListItem
+                                key={item.id}
+                                field={item}
+                                index={index}
+                                moveCard={move}
+                                onDelete={handleDeletePluginField}
+                            />
+                        ))}
                     </List>
                 </Grid>
             </Grid>
