@@ -29,12 +29,11 @@ import BasicPluginField from "../../entities/BasicPluginField";
 import DialogPlugin from "./LocalComponents/DialogPlugin";
 import DeleteIcon from "@material-ui/icons/Delete";
 import update from "immutability-helper"
-
 import DragableListItem from "./LocalComponents/DragableListItem";
 import IdGenerator from "../../utils/IdGenerator";
 import {DndProvider} from "react-dnd";
 import {HTML5Backend} from "react-dnd-html5-backend";
-
+import FilesLoader from "../../components/FilesLoader";
 
 /**
  * CreatePluginPageViewProps - interface for CreatePluginPageView
@@ -135,7 +134,7 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
                             />
                         </Grid>
                         <Grid item xs={12}>
-                            <Box style={{height: 100, background: "grey"}}/>
+                            <FilesLoader multiple/>
                         </Grid>
                     </Grid>
                 </Grid>
@@ -166,6 +165,7 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
                 onClose={() => setIsDialogPluginButtonActive(false)}
                 onAddField={handleAddPluginField}
                 idGenerator={getNextId}
+                pluginFields={pluginFields}
             />
 
             <Grid container className={classes.firstLine}>

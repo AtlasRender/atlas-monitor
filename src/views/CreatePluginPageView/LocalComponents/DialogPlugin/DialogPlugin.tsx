@@ -27,8 +27,18 @@ import TextField from "@material-ui/core/TextField";
 import BasicPluginField from "../../../../entities/BasicPluginField";
 import InputField from "../../../../entities/InputField";
 
+interface ValidationErrors {
+    "noInputError": boolean;
+    "nameError": boolean;
+    "niceNameError": boolean;
+    "minError": boolean;
+    "maxError": boolean;
+    "defaultError": boolean;
+}
+
 interface DialogPluginProps extends Stylable {
     open: boolean;
+    pluginFields: (BasicPluginField | InputField)[];
 
     onClose(): void;
 
@@ -46,9 +56,19 @@ const DialogPlugin = React.forwardRef((props: DialogPluginProps, ref: Ref<any>) 
         open,
         onClose,
         onAddField,
+        pluginFields,
         idGenerator,
     } = props;
 
+
+    const [errors, setErrors] = useState<ValidationErrors>({
+        "noInputError": true,
+        "nameError": false,
+        "niceNameError": false,
+        "minError": false,
+        "maxError": false,
+        "defaultError": false,
+    });
     const [fieldType, setFieldType] = useState("inputField");
     const [addField, setAddField] = useState({
         name: "",
@@ -67,6 +87,14 @@ const DialogPlugin = React.forwardRef((props: DialogPluginProps, ref: Ref<any>) 
             max: 255,
             default: "",
             id: addField.id
+        });
+        setErrors({
+            "noInputError": true,
+            "nameError": false,
+            "niceNameError": false,
+            "minError": false,
+            "maxError": false,
+            "defaultError": false,
         });
     },[open])
 
@@ -88,14 +116,93 @@ const DialogPlugin = React.forwardRef((props: DialogPluginProps, ref: Ref<any>) 
     }
 
     function handleAddFiled(event: any) {
-        if (fieldType === "inputField") {
-            setAddField(prev=>({...prev, id: idGenerator()}));
-            onAddField(event, new InputField(addField));
+        if (!errors.noInputError &&
+            !errors.nameError &&
+            !errors.niceNameError &&
+            !errors.minError &&
+            !errors.maxError &&
+            !errors.defaultError) {
+            if (fieldType === "inputField") {
+                setAddField(prev=>({...prev, id: idGenerator()}));
+                onAddField(event, new InputField(addField));
 
-        } else if (fieldType === "divider") {
-            setAddField(prev=>({...prev, id: idGenerator()}));
-            onAddField(event, new BasicPluginField(addField));
+            } else if (fieldType === "divider") {
+                setAddField(prev=>({...prev, id: idGenerator()}));
+                onAddField(event, new BasicPluginField(addField));
 
+            }
+        }
+    }
+
+    function handleValidation(event: React.FocusEvent<HTMLInputElement>) {
+        setErrors(prev => ({
+            ...prev, "noInputError": false
+        }));
+        if (event.target.name === "name") {
+            if (!addField.name.match(/^[a-zA-Z]+$/) ||
+                !addField.name || addField.name.length < 3 ||
+                addField.name.length > 50 ||
+                pluginFields.find(field => field.name === addField.name)
+            ) {
+                setErrors(prev => ({
+                    ...prev, "nameError": true
+                }));
+            } else {
+                setErrors(prev => ({
+                    ...prev, "nameError": false
+                }));
+            }
+        } else if (event.target.name === "niceName") {
+            if (!addField.niceName.match(/^[a-zA-Z]+$/) || !addField.niceName || addField.niceName.length < 3 || addField.niceName.length > 50) {
+                setErrors(prev => ({
+                    ...prev, "niceNameError": true
+                }));
+            } else {
+                setErrors(prev => ({
+                    ...prev, "niceNameError": false
+                }));
+            }
+        } else if (event.target.name === "min") {
+            if (!addField.min || addField.min < 0) {
+                setErrors(prev => ({
+                    ...prev, "minError": true
+                }));
+            } else {
+                setErrors(prev => ({
+                    ...prev, "minError": false
+                }));
+            }
+        } else if (event.target.name === "max") {
+            if (!addField.min || addField.min < 0) {
+                setErrors(prev => ({
+                    ...prev, "maxError": true
+                }));
+            } else {
+                setErrors(prev => ({
+                    ...prev, "maxError": false
+                }));
+            }
+        } else if (event.target.name === "default") {
+            if (!addField.default.match(/^[a-zA-Z]+$/) || !addField.default || addField.default.length < 3 || addField.default.length > 50) {
+                setErrors(prev => ({
+                    ...prev, "defaultError": true
+                }));
+            } else {
+                setErrors(prev => ({
+                    ...prev, "defaultError": false
+                }));
+            }
+        }
+        if (event.target.name === "max" || event.target.name === "min") {
+            if (addField.min > addField.max) {
+                setErrors(prev => ({
+                    ...prev, "maxError": true, "minError": true
+                }));
+            } else {
+                setErrors(prev => ({
+                    ...prev, "maxError": false, "minError": false
+                }));
+            }
         }
     }
 
@@ -113,7 +220,7 @@ const DialogPlugin = React.forwardRef((props: DialogPluginProps, ref: Ref<any>) 
             <List className={classes.dialogSize}>
                 <ListItem>
                     <Grid container>
-                        <Grid item xs={12}>
+                        <Grid item xs={12} className={classes.gridPadding}>
                             <FormControl fullWidth>
                                 <InputLabel>
                                     Plugin Field
@@ -127,8 +234,10 @@ const DialogPlugin = React.forwardRef((props: DialogPluginProps, ref: Ref<any>) 
                                 </Select>
                             </FormControl>
                         </Grid>
+                        {fieldType === "divider" &&
                         <Grid item xs={12} className={classes.gridPadding}>
                             <TextField
+                                error={errors.nameError}
                                 variant="standard"
                                 required
                                 fullWidth
@@ -136,12 +245,29 @@ const DialogPlugin = React.forwardRef((props: DialogPluginProps, ref: Ref<any>) 
                                 label="Name"
                                 defaultValue={addField.name}
                                 onChange={handleInputField("name")}
+                                onBlur={handleValidation}
                             />
                         </Grid>
+                        }
                         {fieldType === "inputField" &&
                         <React.Fragment>
                             <Grid item xs={12} className={classes.gridPadding}>
                                 <TextField
+                                    error={errors.nameError}
+                                    variant="standard"
+                                    required
+                                    fullWidth
+                                    name="name"
+                                    label="Name"
+                                    defaultValue={addField.name}
+                                    onChange={handleInputField("name")}
+                                    onBlur={handleValidation}
+                                />
+                            </Grid>
+
+                            <Grid item xs={12} className={classes.gridPadding}>
+                                <TextField
+                                    error={errors.niceNameError}
                                     variant="standard"
                                     required
                                     fullWidth
@@ -149,10 +275,12 @@ const DialogPlugin = React.forwardRef((props: DialogPluginProps, ref: Ref<any>) 
                                     label="Displayable name"
                                     defaultValue={addField.niceName}
                                     onChange={handleInputField("niceName")}
+                                    onBlur={handleValidation}
                                 />
                             </Grid>
                             <Grid item xs={12} className={classes.gridPadding}>
                                 <TextField
+                                    error={errors.minError}
                                     type="number"
                                     variant="standard"
                                     required
@@ -161,10 +289,12 @@ const DialogPlugin = React.forwardRef((props: DialogPluginProps, ref: Ref<any>) 
                                     label="Min value"
                                     defaultValue={addField.min}
                                     onChange={handleInputField("min")}
+                                    onBlur={handleValidation}
                                 />
                             </Grid>
                             <Grid item xs={12} className={classes.gridPadding}>
                                 <TextField
+                                    error={errors.maxError}
                                     type="number"
                                     variant="standard"
                                     required
@@ -173,10 +303,12 @@ const DialogPlugin = React.forwardRef((props: DialogPluginProps, ref: Ref<any>) 
                                     label="Max value"
                                     defaultValue={addField.max}
                                     onChange={handleInputField("max")}
+                                    onBlur={handleValidation}
                                 />
                             </Grid>
                             <Grid item xs={12} className={classes.gridPadding}>
                                 <TextField
+                                    error={errors.defaultError}
                                     variant="standard"
                                     required
                                     fullWidth
@@ -184,6 +316,7 @@ const DialogPlugin = React.forwardRef((props: DialogPluginProps, ref: Ref<any>) 
                                     label="Default Value"
                                     defaultValue={addField.default}
                                     onChange={handleInputField("default")}
+                                    onBlur={handleValidation}
                                 />
                             </Grid>
                         </React.Fragment>
