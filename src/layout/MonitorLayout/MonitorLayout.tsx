@@ -48,6 +48,8 @@ import AuthorizationPageView from "../../views/AuthorizationPageView/Authorizati
 import UserEditView from "../../views/UserEditView/UserEditView";
 import AtlasLogo from "./images/AtlasSystemsLogo.svg";
 import CreatePluginPageView from "../../views/CreatePluginPageView";
+import {HTML5Backend} from "react-dnd-html5-backend";
+import {DndProvider} from "react-dnd";
 
 /**
  * MonitorLayoutProps - interface for MonitorLayout component
@@ -372,7 +374,9 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>
                     </Route>
                     <Route path="/plugin/create">
                         <ChangeRouteProvider routeMask="(/:id)">
-                            <CreatePluginPageView/>
+                            <DndProvider backend={HTML5Backend}>
+                                <CreatePluginPageView/>
+                            </DndProvider>
                         </ChangeRouteProvider>
                     </Route>
                 </Switch>

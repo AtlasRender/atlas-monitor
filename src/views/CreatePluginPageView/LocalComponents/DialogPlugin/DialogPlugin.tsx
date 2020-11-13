@@ -6,7 +6,7 @@
  * All rights reserved.
  */
 
-import React, {Ref, useState} from "react";
+import React, {Ref, useEffect, useState} from "react";
 import {
     Button,
     Dialog,
@@ -43,6 +43,8 @@ interface DialogPluginProps extends Stylable {
     onClose(): void;
 
     onAddField(event: any, field: BasicPluginField | InputField): void;
+
+    idGenerator(): number;
 }
 
 
@@ -55,6 +57,7 @@ const DialogPlugin = React.forwardRef((props: DialogPluginProps, ref: Ref<any>) 
         onClose,
         onAddField,
         pluginFields,
+        idGenerator,
     } = props;
 
 
@@ -72,16 +75,18 @@ const DialogPlugin = React.forwardRef((props: DialogPluginProps, ref: Ref<any>) 
         niceName: "",
         min: 1,
         max: 255,
-        default: ""
+        default: "",
+        id: 0,
     });
 
-    function handleSetDefault() {
+    useEffect(()=>{
         setAddField({
             name: "",
             niceName: "",
             min: 1,
             max: 255,
-            default: ""
+            default: "",
+            id: addField.id
         });
         setErrors({
             "noInputError": true,
@@ -91,7 +96,7 @@ const DialogPlugin = React.forwardRef((props: DialogPluginProps, ref: Ref<any>) 
             "maxError": false,
             "defaultError": false,
         });
-    }
+    },[open])
 
     const handleInputField = (name: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
         event.persist();
@@ -104,12 +109,10 @@ const DialogPlugin = React.forwardRef((props: DialogPluginProps, ref: Ref<any>) 
 
     const handleSetFieldType = (event: React.ChangeEvent<{ value: unknown }>) => {
         setFieldType(event.target.value as string);
-        handleSetDefault();
     };
 
     function handleOnClose() {
         onClose();
-        handleSetDefault();
     }
 
     function handleAddFiled(event: any) {
@@ -120,11 +123,13 @@ const DialogPlugin = React.forwardRef((props: DialogPluginProps, ref: Ref<any>) 
             !errors.maxError &&
             !errors.defaultError) {
             if (fieldType === "inputField") {
+                setAddField(prev=>({...prev, id: idGenerator()}));
                 onAddField(event, new InputField(addField));
-                handleSetDefault();
+
             } else if (fieldType === "divider") {
+                setAddField(prev=>({...prev, id: idGenerator()}));
                 onAddField(event, new BasicPluginField(addField));
-                handleSetDefault();
+
             }
         }
     }
