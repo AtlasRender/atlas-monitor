@@ -74,7 +74,6 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
                     ],
                 }),
             )
-            console.log(pluginFields);
         },
         [pluginFields],
     )
@@ -83,8 +82,6 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
         event.persist();
         setIsDialogPluginButtonActive(false);
         setPluginFields(prev => ([...prev, field]));
-        console.log("kuku");
-        console.log(pluginFields);
     }
 
     function handleDeletePluginField(field: InputField) {

@@ -6,7 +6,7 @@
  * All rights reserved.
  */
 
-import React, {Ref, useState} from "react";
+import React, {Ref, useEffect, useState} from "react";
 import {
     Button,
     Dialog,
@@ -49,7 +49,6 @@ const DialogPlugin = React.forwardRef((props: DialogPluginProps, ref: Ref<any>) 
         idGenerator,
     } = props;
 
-
     const [fieldType, setFieldType] = useState("inputField");
     const [addField, setAddField] = useState({
         name: "",
@@ -60,16 +59,16 @@ const DialogPlugin = React.forwardRef((props: DialogPluginProps, ref: Ref<any>) 
         id: 0,
     });
 
-    function handleSetDefault() {
+    useEffect(()=>{
         setAddField({
             name: "",
             niceName: "",
             min: 1,
             max: 255,
             default: "",
-            id: 0,
+            id: addField.id
         });
-    }
+    },[open])
 
     const handleInputField = (name: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
         event.persist();
@@ -86,20 +85,17 @@ const DialogPlugin = React.forwardRef((props: DialogPluginProps, ref: Ref<any>) 
 
     function handleOnClose() {
         onClose();
-        handleSetDefault();
     }
 
     function handleAddFiled(event: any) {
         if (fieldType === "inputField") {
-            console.log(idGenerator())
             setAddField(prev=>({...prev, id: idGenerator()}));
-            console.log(addField);
             onAddField(event, new InputField(addField));
-            // handleSetDefault();
+
         } else if (fieldType === "divider") {
             setAddField(prev=>({...prev, id: idGenerator()}));
             onAddField(event, new BasicPluginField(addField));
-            // handleSetDefault();
+
         }
     }
 
