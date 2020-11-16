@@ -188,7 +188,7 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>
                     position="fixed"
                     className={clsx(classes.appBar, {
                         [classes.appBarShift]: open,
-                    })}
+                    }, classes.header)}
                 >
                     <Toolbar className={classes.header}>
                         <IconButton

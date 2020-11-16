@@ -77,7 +77,7 @@ const TokensViewer = React.forwardRef((props: TokensViewerProps, ref: Ref<any>) 
         "noInputError": true,
         "nameError": false,
         "descriptionError": false,
-    })
+    });
     const enqueueSuccessSnackbar = useEnqueueSuccessSnackbar();
     const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
 
@@ -105,7 +105,7 @@ const TokensViewer = React.forwardRef((props: TokensViewerProps, ref: Ref<any>) 
     }
 
     function handleAddToken() {
-        if(!errors.noInputError && !errors.nameError && !errors.descriptionError) {
+        if (!errors.noInputError && !errors.nameError && !errors.descriptionError) {
             setIsButtonActive(false);
             coreRequest()
                 .post("tokens")
@@ -139,6 +139,10 @@ const TokensViewer = React.forwardRef((props: TokensViewerProps, ref: Ref<any>) 
 
     const handleClick = () => {
         setIsOpen(!isOpen);
+    };
+
+    function handleClose() {
+        setIsButtonActive(false);
     }
 
     function handleIsButtonActive() {
@@ -161,27 +165,27 @@ const TokensViewer = React.forwardRef((props: TokensViewerProps, ref: Ref<any>) 
     function handleValidation(event: React.FocusEvent<HTMLInputElement>) {
         setErrors(prev => ({
             ...prev, "noInputError": false
-        }))
+        }));
         if (event.target.name === "name") {
             if (!newToken.name.slice(0, 1).match(/^[a-zA-Z]+$/) || !newToken.name || newToken.name.length > 50) {
                 setErrors(prev => ({
                     ...prev, "nameError": true
-                }))
+                }));
             } else {
                 setErrors(prev => ({
                     ...prev, "nameError": false
-                }))
+                }));
             }
         }
         if (event.target.name === "description") {
             if (!newToken.description || newToken.description.length > 100) {
                 setErrors(prev => ({
                     ...prev, "descriptionError": true
-                }))
+                }));
             } else {
                 setErrors(prev => ({
                     ...prev, "descriptionError": false
-                }))
+                }));
             }
         }
     }
@@ -246,7 +250,11 @@ const TokensViewer = React.forwardRef((props: TokensViewerProps, ref: Ref<any>) 
                                     />
                                 </Grid>
                                 <Grid item xs={1} className={classes.createTokenControls}>
-                                    <IconButton><CloseIcon/></IconButton>
+                                    <IconButton
+                                        onClick={handleClose}
+                                    >
+                                        <CloseIcon/>
+                                    </IconButton>
                                     <IconButton onClick={handleAddToken}><CheckIcon/></IconButton>
                                 </Grid>
                             </Grid>
@@ -260,10 +268,10 @@ const TokensViewer = React.forwardRef((props: TokensViewerProps, ref: Ref<any>) 
                             onClick={() => {
                                 copyToClipboard(lastAddedToken?.token)
                                     .then(res => {
-                                        enqueueSuccessSnackbar("successfully copied")
+                                        enqueueSuccessSnackbar("successfully copied");
                                     })
                                     .catch(error => {
-                                        enqueueErrorSnackbar("failed to copy")
+                                        enqueueErrorSnackbar("failed to copy");
                                     });
                             }}
                         >
@@ -306,7 +314,7 @@ const TokensViewer = React.forwardRef((props: TokensViewerProps, ref: Ref<any>) 
                     </List>
                 </Grid>
             </Grid>
-        )
+        );
     } else {
         tokenView = (
             tokenView = (
@@ -383,10 +391,10 @@ const TokensViewer = React.forwardRef((props: TokensViewerProps, ref: Ref<any>) 
                                 onClick={() => {
                                     copyToClipboard(lastAddedToken?.token)
                                         .then(res => {
-                                            enqueueSuccessSnackbar("successfully copied")
+                                            enqueueSuccessSnackbar("successfully copied");
                                         })
                                         .catch(error => {
-                                            enqueueErrorSnackbar("failed to copy")
+                                            enqueueErrorSnackbar("failed to copy");
                                         });
                                 }}
                             >
@@ -434,7 +442,7 @@ const TokensViewer = React.forwardRef((props: TokensViewerProps, ref: Ref<any>) 
                     </Grid>
                 </Grid>
             )
-        )
+        );
     }
 
     return (
@@ -442,6 +450,6 @@ const TokensViewer = React.forwardRef((props: TokensViewerProps, ref: Ref<any>) 
             {tokenView}
         </Box>
     );
-})
+});
 
-export default withStyles(styles)(TokensViewer)
+export default withStyles(styles)(TokensViewer);
