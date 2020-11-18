@@ -29,18 +29,17 @@ import IdGenerator from "../../utils/IdGenerator";
 import FilesLoader from "../../components/FilesLoader";
 
 
-interface ContextProps {
+interface PluginContextProps {
     pluginFields: InputField[];
-    setPluginFields: Dispatch<SetStateAction<InputField[]>>,
+    handleAddPluginField: (event: any, field: InputField) => void,
     idGenerator: () => number;
 }
 
-export const PluginContext = React.createContext<ContextProps>({
+export const PluginContext = React.createContext<PluginContextProps>({
     pluginFields: [],
-    setPluginFields: () => {},
+    handleAddPluginField: (event: any, field: InputField) => {},
     idGenerator: (): number => { return 1},
 });
-
 
 /**
  * CreatePluginPageViewProps - interface for CreatePluginPageView
@@ -68,6 +67,7 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
 
     const idGenerator = React.useRef(IdGenerator());
     const getNextId = (): number => idGenerator.current.next().value;
+
 
     const move = useCallback(
         (dragIndex: number, hoverIndex: number) => {
@@ -163,7 +163,7 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
                 <Grid item xs={12} md={10}>
                     <PluginContext.Provider value={{
                         pluginFields: pluginFields,
-                        setPluginFields: setPluginFields,
+                        handleAddPluginField: handleAddPluginField,
                         idGenerator: getNextId,
                     }}>
                         <PluginCreation
