@@ -8,20 +8,25 @@
 
 import React from 'react'
 import { useDrag } from 'react-dnd'
-import {withStyles} from "@material-ui/core";
+import {Avatar, ListItem, ListItemAvatar, ListItemText, withStyles} from "@material-ui/core";
 import styles from "./styles";
 import Stylable from "../../../../../interfaces/Stylable";
 
 interface DragableSubjectProps extends Stylable{
-
+    name: string;
 }
 
-const DragableSubject: React.FC<DragableSubjectProps> = (classes) => {
+const DragableSubject: React.FC<DragableSubjectProps> = ({classes, className, style, name}) => {
+
     const [, drag] = useDrag({ item: { type: "box" } })
+
     return (
-        <div ref={drag}>
-            Drag me
-        </div>
+        <ListItem ref={drag} className={classes.container}>
+            <ListItemAvatar>
+                <Avatar/>
+            </ListItemAvatar>
+            <ListItemText primary={name}/>
+        </ListItem>
     )
 }
 

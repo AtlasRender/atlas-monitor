@@ -10,11 +10,7 @@ import {createStyles, Theme} from "@material-ui/core";
 
 const styles = (theme: Theme) => createStyles({
     container: {
-        display: 'inline-block',
-        border: '1px dashed gray',
-        padding: '0.5rem 1rem',
-        backgroundColor: 'white',
-        cursor: 'move',
+        padding: theme.spacing(0, 0, 2, 0),
     }
 });
 

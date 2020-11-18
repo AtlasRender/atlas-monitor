@@ -14,6 +14,7 @@ import TextField from "@material-ui/core/TextField";
 import BasicPluginField from "../../../../entities/BasicPluginField";
 import InputField from "../../../../entities/InputField";
 import {PluginContext} from "../../CreatePluginPageView";
+import DragableSubject from "../DragableComponents/DragableSubject";
 
 interface ValidationErrors {
     "noInputError": boolean;
@@ -205,10 +206,13 @@ const PluginCreation = React.forwardRef((props: PluginCreationProps, ref: Ref<an
             <List className={classes.dialogSize}>
                 <ListItem>
                     <Grid container spacing={0}>
-                        <Grid item xs={12} md={4} style={{padding: 16}}>
+                        <Grid item xs={12} md={4}>
                             <Grid container>
                                 <Grid item xs={12} className={classes.gridPadding}>
                                     <List>
+                                        <DragableSubject name="Integer Field"/>
+                                        <DragableSubject name="Folder"/>
+                                        <DragableSubject name="Divider"/>
                                     </List>
 
                                     {/*<FormControl fullWidth>*/}
