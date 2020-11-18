@@ -51,9 +51,9 @@ const PluginCreation = React.forwardRef((props: PluginCreationProps, ref: Ref<an
     } = props;
 
 
-    const value = useContext(PluginContext);
+    const context = useContext(PluginContext);
 
-    console.log(value);
+    console.log(context.idGenerator());
 
 
     const [errors, setErrors] = useState<ValidationErrors>({
@@ -244,7 +244,7 @@ const PluginCreation = React.forwardRef((props: PluginCreationProps, ref: Ref<an
 
                         <Grid item xs={12} md={4}>
                             <List>
-                                <ListItem>
+                                <ListItem style={{padding: 0}}>
                                     <Grid container>
                                         {fieldType === "divider" &&
                                         <Grid item xs={12} className={classes.gridPadding}>
@@ -339,8 +339,7 @@ const PluginCreation = React.forwardRef((props: PluginCreationProps, ref: Ref<an
                             </List>
                         </Grid>
                         <Grid item xs={12}>
-                            <Button fullWidth onClick={() => {
-                            }}>
+                            <Button fullWidth onClick={() => {}}>
                                 Save
                             </Button>
                         </Grid>

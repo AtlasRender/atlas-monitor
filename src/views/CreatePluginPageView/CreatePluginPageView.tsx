@@ -6,7 +6,7 @@
  * All rights reserved.
  */
 
-import React, {Ref, useCallback, useState} from "react";
+import React, {Dispatch, Ref, SetStateAction, useCallback, useState} from "react";
 import {
     Divider,
     Grid,
@@ -29,7 +29,17 @@ import IdGenerator from "../../utils/IdGenerator";
 import FilesLoader from "../../components/FilesLoader";
 
 
-export const PluginContext = React.createContext<InputField[]>([]);
+interface ContextProps {
+    pluginFields: InputField[];
+    setPluginFields: Dispatch<SetStateAction<InputField[]>>,
+    idGenerator: () => number;
+}
+
+export const PluginContext = React.createContext<ContextProps>({
+    pluginFields: [],
+    setPluginFields: () => {},
+    idGenerator: (): number => { return 1},
+});
 
 
 /**
@@ -151,7 +161,11 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
 
             <Grid container className={classes.firstLine}>
                 <Grid item xs={12} md={10}>
-                    <PluginContext.Provider value={pluginFields}>
+                    <PluginContext.Provider value={{
+                        pluginFields: pluginFields,
+                        setPluginFields: setPluginFields,
+                        idGenerator: getNextId,
+                    }}>
                         <PluginCreation
                             open={isDialogPluginButtonActive}
                             onClose={() => setIsDialogPluginButtonActive(false)}
