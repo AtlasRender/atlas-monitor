@@ -18,10 +18,10 @@ const styles =(theme: Theme) => createStyles({
         marginBottom: theme.spacing(1),
     },
     dialogSize: {
-        width: 536,
-        [theme.breakpoints.down('xs')]: {
-            width: "auto",
-        },
+        width: "100%",
+        // [theme.breakpoints.down('xs')]: {
+        //     width: "auto",
+        // },
     }
 });
 

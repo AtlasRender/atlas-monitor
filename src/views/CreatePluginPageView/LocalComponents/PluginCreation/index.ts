@@ -6,4 +6,4 @@
  * All rights reserved.
  */
 
-export {default} from "./DialogPlugin";
+export {default} from "./PluginCreation";

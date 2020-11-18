@@ -8,13 +8,10 @@
 
 import React, {Ref, useCallback, useState} from "react";
 import {
-    Avatar,
-    Box,
     Divider,
     Grid,
     IconButton,
     ListItem,
-    ListItemAvatar,
     ListItemSecondaryAction,
     ListItemText,
     TextField,
@@ -25,14 +22,10 @@ import Stylable from "../../interfaces/Stylable";
 import List from "@material-ui/core/List";
 import AddIcon from "@material-ui/icons/Add";
 import InputField from "../../entities/InputField";
-import BasicPluginField from "../../entities/BasicPluginField";
-import DialogPlugin from "./LocalComponents/DialogPlugin";
-import DeleteIcon from "@material-ui/icons/Delete";
+import PluginCreation from "./LocalComponents/PluginCreation";
 import update from "immutability-helper";
 import DragableListItem from "./LocalComponents/DragableListItem";
 import IdGenerator from "../../utils/IdGenerator";
-import {DndProvider} from "react-dnd";
-import {HTML5Backend} from "react-dnd-html5-backend";
 import FilesLoader from "../../components/FilesLoader";
 
 
@@ -156,15 +149,19 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
                 </Grid>
             </Grid>
 
-            <PluginContext.Provider value={pluginFields}>
-                <DialogPlugin
-                    open={isDialogPluginButtonActive}
-                    onClose={() => setIsDialogPluginButtonActive(false)}
-                    onAddField={handleAddPluginField}
-                    idGenerator={getNextId}
-                    pluginFields={pluginFields}
-                />
-            </PluginContext.Provider>
+            <Grid container className={classes.firstLine}>
+                <Grid item xs={12} md={10}>
+                    <PluginContext.Provider value={pluginFields}>
+                        <PluginCreation
+                            open={isDialogPluginButtonActive}
+                            onClose={() => setIsDialogPluginButtonActive(false)}
+                            onAddField={handleAddPluginField}
+                            idGenerator={getNextId}
+                            pluginFields={pluginFields}
+                        />
+                    </PluginContext.Provider>
+                </Grid>
+            </Grid>
 
             <Grid container className={classes.firstLine}>
                 <Grid item xs={12} md={10}>

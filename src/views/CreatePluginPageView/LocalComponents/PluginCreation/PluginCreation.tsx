@@ -7,20 +7,7 @@
  */
 
 import React, {Ref, useContext, useEffect, useState} from "react";
-import {
-    Button,
-    Dialog,
-    DialogTitle,
-    Divider,
-    FormControl,
-    Grid,
-    InputLabel,
-    List,
-    ListItem,
-    MenuItem,
-    Select,
-    withStyles,
-} from "@material-ui/core";
+import {Button, FormControl, Grid, InputLabel, List, ListItem, MenuItem, Select, withStyles,} from "@material-ui/core";
 import Stylable from "../../../../interfaces/Stylable";
 import styles from "./styles";
 import TextField from "@material-ui/core/TextField";
@@ -37,7 +24,7 @@ interface ValidationErrors {
     "defaultError": boolean;
 }
 
-interface DialogPluginProps extends Stylable {
+interface PluginCreationProps extends Stylable {
     open: boolean;
     pluginFields: (BasicPluginField | InputField)[];
 
@@ -49,7 +36,7 @@ interface DialogPluginProps extends Stylable {
 }
 
 
-const DialogPlugin = React.forwardRef((props: DialogPluginProps, ref: Ref<any>) => {
+const PluginCreation = React.forwardRef((props: PluginCreationProps, ref: Ref<any>) => {
     const {
         classes,
         style,
@@ -85,7 +72,7 @@ const DialogPlugin = React.forwardRef((props: DialogPluginProps, ref: Ref<any>) 
         id: 0,
     });
 
-    useEffect(()=>{
+    useEffect(() => {
         setAddField({
             name: "",
             niceName: "",
@@ -102,7 +89,7 @@ const DialogPlugin = React.forwardRef((props: DialogPluginProps, ref: Ref<any>) 
             "maxError": false,
             "defaultError": false,
         });
-    },[open])
+    }, [open]);
 
     const handleInputField = (name: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
         event.persist();
@@ -129,11 +116,11 @@ const DialogPlugin = React.forwardRef((props: DialogPluginProps, ref: Ref<any>) 
             !errors.maxError &&
             !errors.defaultError) {
             if (fieldType === "inputField") {
-                setAddField(prev=>({...prev, id: idGenerator()}));
+                setAddField(prev => ({...prev, id: idGenerator()}));
                 onAddField(event, new InputField(addField));
 
             } else if (fieldType === "divider") {
-                setAddField(prev=>({...prev, id: idGenerator()}));
+                setAddField(prev => ({...prev, id: idGenerator()}));
                 onAddField(event, new BasicPluginField(addField));
 
             }
@@ -214,15 +201,7 @@ const DialogPlugin = React.forwardRef((props: DialogPluginProps, ref: Ref<any>) 
 
 
     return (
-        <Dialog
-            open={open}
-            onClose={handleOnClose}
-        >
-            <DialogTitle className={classes.dialogRoles}>
-                Add new plugin field
-            </DialogTitle>
-            <Divider/>
-
+        <React.Fragment>
             <List className={classes.dialogSize}>
                 <ListItem>
                     <Grid container>
@@ -336,8 +315,8 @@ const DialogPlugin = React.forwardRef((props: DialogPluginProps, ref: Ref<any>) 
                     </Grid>
                 </ListItem>
             </List>
-        </Dialog>
+        </React.Fragment>
     );
 });
 
-export default withStyles(styles)(DialogPlugin);
+export default withStyles(styles)(PluginCreation);
