@@ -7,16 +7,17 @@
  */
 
 import React, {Ref, useContext, useEffect, useState} from "react";
-import {Button, FormControl, Grid, InputLabel, List, ListItem, MenuItem, Select, withStyles,} from "@material-ui/core";
+import {Button, Grid, List, ListItem, withStyles,} from "@material-ui/core";
 import Stylable from "../../../../interfaces/Stylable";
 import styles from "./styles";
 import TextField from "@material-ui/core/TextField";
-import BasicPluginField from "../../../../entities/BasicPluginField";
-import InputField from "../../../../entities/InputField";
 import {PluginContext} from "../../CreatePluginPageView";
 import DragableSubject from "../DragableComponents/DragableSubject";
 import Folder from "../DragableComponents/Folder";
 import DragableListItem from "../DragableListItem/DragableListItem";
+import GroupField from "../../../../entities/GroupField";
+import IntegerField from "../../../../entities/IntegerField";
+import BasicPluginField from "../../../../entities/BasicPluginField";
 
 interface ValidationErrors {
     "noInputError": boolean;
@@ -29,13 +30,13 @@ interface ValidationErrors {
 
 interface PluginCreationProps extends Stylable {
     open: boolean;
-    pluginFields: (BasicPluginField | InputField)[];
+    pluginFields: BasicPluginField[];
 
     onClose(): void;
 
-    onAddField(field: BasicPluginField | InputField): void;
+    onAddField(field: BasicPluginField): void;
 
-    move(dragIndex:number, hoverIndex: number): void;
+    move(dragIndex: number, hoverIndex: number): void;
 
     idGenerator(): number;
 }
@@ -54,11 +55,7 @@ const PluginCreation = React.forwardRef((props: PluginCreationProps, ref: Ref<an
         move,
     } = props;
 
-
     const context = useContext(PluginContext);
-
-    console.log(context.idGenerator());
-
 
     const [errors, setErrors] = useState<ValidationErrors>({
         "noInputError": true,
@@ -121,13 +118,13 @@ const PluginCreation = React.forwardRef((props: PluginCreationProps, ref: Ref<an
             !errors.minError &&
             !errors.maxError &&
             !errors.defaultError) {
-            if (fieldType === "inputField") {
+            if (fieldType === "integer") {
                 setAddField(prev => ({...prev, id: idGenerator()}));
-                onAddField(new InputField(addField));
+                onAddField(new IntegerField(addField));
 
-            } else if (fieldType === "divider") {
+            } else if (fieldType === "folder") {
                 setAddField(prev => ({...prev, id: idGenerator()}));
-                onAddField(new BasicPluginField(addField));
+                onAddField(new GroupField(addField));
 
             }
         }
@@ -215,9 +212,9 @@ const PluginCreation = React.forwardRef((props: PluginCreationProps, ref: Ref<an
                             <Grid container>
                                 <Grid item xs={12} className={classes.gridPadding}>
                                     <List>
-                                        <DragableSubject name="Integer Field"/>
-                                        <DragableSubject name="Folder"/>
-                                        <DragableSubject name="Divider"/>
+                                        <DragableSubject type="integer"/>
+                                        <DragableSubject type="folder"/>
+                                        <DragableSubject type="divider"/>
                                     </List>
 
                                     {/*<FormControl fullWidth>*/}
@@ -240,9 +237,24 @@ const PluginCreation = React.forwardRef((props: PluginCreationProps, ref: Ref<an
                         <Grid item xs={12} md={4} style={{padding: 16}}>
                             <Grid container className={classes.firstLine}>
                                 <Grid item xs={12}>
-                                    <Folder className={classes.rootFolder}>
-                                        {context.pluginFields.map((item,index)=>{
-                                            return(
+                                    {/*<Folder className={classes.rootFolder}>*/}
+                                        {context.pluginFields.map((item, index) => {
+                                            // if (item instanceof GroupField) {
+                                            //     const nested = item.nested?.map((item, index) => {
+                                            //         return (
+                                            //             <DragableListItem
+                                            //                 key={item.id}
+                                            //                 field={item}
+                                            //                 index={index}
+                                            //                 moveCard={move}
+                                            //                 onDelete={context.handleDeletePluginField}
+                                            //             />
+                                            //         );
+                                            //     });
+                                            //     return nested;
+                                            // }
+
+                                            return (
                                                 <DragableListItem
                                                     key={item.id}
                                                     field={item}
@@ -252,7 +264,7 @@ const PluginCreation = React.forwardRef((props: PluginCreationProps, ref: Ref<an
                                                 />
                                             );
                                         })}
-                                    </Folder>
+                                    {/*</Folder>*/}
                                 </Grid>
                             </Grid>
                         </Grid>
@@ -355,7 +367,8 @@ const PluginCreation = React.forwardRef((props: PluginCreationProps, ref: Ref<an
                             </List>
                         </Grid>
                         <Grid item xs={12}>
-                            <Button fullWidth onClick={() => {}}>
+                            <Button fullWidth onClick={() => {
+                            }}>
                                 Save
                             </Button>
                         </Grid>

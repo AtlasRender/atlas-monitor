@@ -14,18 +14,20 @@ import {
     ListItem,
     ListItemAvatar,
     ListItemSecondaryAction,
-    ListItemText,
+    ListItemText, Typography,
     withStyles,
 } from "@material-ui/core";
 import styles from "./styles";
-import InputField from "../../../../entities/InputField";
 import DeleteIcon from "@material-ui/icons/Delete";
 import {DropTargetMonitor, useDrag, useDrop, XYCoord} from "react-dnd";
 import BasicPluginField from "../../../../entities/BasicPluginField";
+import GroupField from "../../../../entities/GroupField";
+import IntegerField from "../../../../entities/IntegerField";
+import Folder from "../DragableComponents/Folder";
 
 interface DragableListItemProps extends Stylable{
-    field: InputField ,
-    onDelete(item: InputField | BasicPluginField): void,
+    field: BasicPluginField,
+    onDelete(item: BasicPluginField): void,
     moveCard: (dragIndex: number, hoverIndex: number) => void
     index: number,
 }
@@ -89,13 +91,14 @@ const DragableListItem : React.FC<DragableListItemProps> = ({ field, onDelete, m
     const opacity = isDragging ? 0 : 1;
 
     return(
+        field.type !== "folder" ?
             <ListItem ref={refer} style={{opacity}}>
                 <ListItemAvatar>
                     <Avatar/>
                 </ListItemAvatar>
                 <ListItemText
-                    primary={field.default}
-                    secondary={field.niceName}
+                    primary={field.label}
+                    // secondary={field.label}
                 />
                 <ListItemSecondaryAction>
                     <IconButton
@@ -108,6 +111,8 @@ const DragableListItem : React.FC<DragableListItemProps> = ({ field, onDelete, m
                 </ListItemSecondaryAction>
 
             </ListItem>
+            :
+            <Folder />
     );
 };
 

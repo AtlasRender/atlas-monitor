@@ -13,19 +13,19 @@ import styles from "./styles";
 import Stylable from "../../../../../interfaces/Stylable";
 
 interface DragableSubjectProps extends Stylable{
-    name: string;
+    type: string;
 }
 
-const DragableSubject: React.FC<DragableSubjectProps> = ({classes, className, style, name}) => {
+const DragableSubject: React.FC<DragableSubjectProps> = ({classes, className, style, type}) => {
 
-    const [, drag] = useDrag({ item: { type: "box" }})
+    const [, drag] = useDrag({ item: { type: type }})
 
     return (
         <ListItem ref={drag} className={classes.container}>
             <ListItemAvatar>
                 <Avatar/>
             </ListItemAvatar>
-            <ListItemText primary={name}/>
+            <ListItemText primary={type}/>
         </ListItem>
     )
 }

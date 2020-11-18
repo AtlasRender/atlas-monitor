@@ -6,7 +6,7 @@
  * All rights reserved.
  */
 
-import React, {Dispatch, Ref, SetStateAction, useCallback, useState} from "react";
+import React, {Ref, useCallback, useState} from "react";
 import {
     Divider,
     Grid,
@@ -21,26 +21,30 @@ import styles from "./styles";
 import Stylable from "../../interfaces/Stylable";
 import List from "@material-ui/core/List";
 import AddIcon from "@material-ui/icons/Add";
-import InputField from "../../entities/InputField";
 import PluginCreation from "./LocalComponents/PluginCreation";
 import update from "immutability-helper";
-import DragableListItem from "./LocalComponents/DragableListItem";
 import IdGenerator from "../../utils/IdGenerator";
 import FilesLoader from "../../components/FilesLoader";
+import BasicPluginField from "../../entities/BasicPluginField";
+import GroupField from "../../entities/GroupField";
 
 
 interface PluginContextProps {
-    pluginFields: InputField[];
-    handleAddPluginField: (field: InputField) => void,
-    handleDeletePluginField: (field: InputField) => void,
+    pluginFields: (BasicPluginField)[];
+    handleAddPluginField: (field: BasicPluginField) => void,
+    handleDeletePluginField: (field: BasicPluginField) => void,
     idGenerator: () => number;
 }
 
 export const PluginContext = React.createContext<PluginContextProps>({
     pluginFields: [],
-    handleAddPluginField: (field: InputField) => {},
-    handleDeletePluginField: (field: InputField) => {},
-    idGenerator: (): number => { return 1},
+    handleAddPluginField: (field: BasicPluginField) => {
+    },
+    handleDeletePluginField: (field: BasicPluginField) => {
+    },
+    idGenerator: (): number => {
+        return 1;
+    },
 });
 
 /**
@@ -64,11 +68,19 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
         style,
     } = props;
 
-    const [pluginFields, setPluginFields] = useState<InputField[]>([]);
-    const [isDialogPluginButtonActive, setIsDialogPluginButtonActive] = useState(false);
-
     const idGenerator = React.useRef(IdGenerator());
     const getNextId = (): number => idGenerator.current.next().value;
+
+    const [pluginFields, setPluginFields] = useState<BasicPluginField[]>([
+        new GroupField({
+            type: "folder",
+            name: "rootFolder",
+            label: "Root",
+            nested: [],
+            id: getNextId(),
+        })
+    ]);
+    const [isDialogPluginButtonActive, setIsDialogPluginButtonActive] = useState(false);
 
 
     const move = useCallback(
@@ -86,22 +98,18 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
         [pluginFields],
     );
 
-    function handleAddPluginField(field: InputField) {
+    function handleAddPluginField(field: BasicPluginField) {
         setIsDialogPluginButtonActive(false);
         setPluginFields(prev => ([...prev, field]));
     }
 
-    function handleDeletePluginField(field: InputField) {
+    function handleDeletePluginField(field: BasicPluginField) {
         setPluginFields(pluginFields.filter(item => item.id !== field.id));
     }
 
     function handleSetIsDialogPluginButtonActive() {
         setIsDialogPluginButtonActive(true);
     }
-
-    const renderField = (item: InputField, index: number) => {
-
-    };
 
     return (
         <React.Fragment>
