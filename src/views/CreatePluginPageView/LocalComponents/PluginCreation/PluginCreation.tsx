@@ -15,6 +15,7 @@ import BasicPluginField from "../../../../entities/BasicPluginField";
 import InputField from "../../../../entities/InputField";
 import {PluginContext} from "../../CreatePluginPageView";
 import DragableSubject from "../DragableComponents/DragableSubject";
+import Folder from "../DragableComponents/Folder";
 
 interface ValidationErrors {
     "noInputError": boolean;
@@ -235,17 +236,7 @@ const PluginCreation = React.forwardRef((props: PluginCreationProps, ref: Ref<an
                         <Grid item xs={12} md={4} style={{padding: 16}}>
                             <Grid container className={classes.firstLine}>
                                 <Grid item xs={12}>
-                                    <List>
-                                        {/*{pluginFields.map((item, index) => (*/}
-                                        {/*    <DragableListItem*/}
-                                        {/*        key={item.id}*/}
-                                        {/*        field={item}*/}
-                                        {/*        index={index}*/}
-                                        {/*        moveCard={moveCard}*/}
-                                        {/*        onDelete={onDeletePluginField}*/}
-                                        {/*    />*/}
-                                        {/*))}*/}
-                                    </List>
+                                    <Folder/>
                                 </Grid>
                             </Grid>
                         </Grid>
