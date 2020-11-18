@@ -18,7 +18,7 @@ interface DragableSubjectProps extends Stylable{
 
 const DragableSubject: React.FC<DragableSubjectProps> = ({classes, className, style, name}) => {
 
-    const [, drag] = useDrag({ item: { type: "box" } })
+    const [, drag] = useDrag({ item: { type: "box" }})
 
     return (
         <ListItem ref={drag} className={classes.container}>

@@ -16,6 +16,7 @@ import InputField from "../../../../entities/InputField";
 import {PluginContext} from "../../CreatePluginPageView";
 import DragableSubject from "../DragableComponents/DragableSubject";
 import Folder from "../DragableComponents/Folder";
+import DragableListItem from "../DragableListItem/DragableListItem";
 
 interface ValidationErrors {
     "noInputError": boolean;
@@ -32,7 +33,9 @@ interface PluginCreationProps extends Stylable {
 
     onClose(): void;
 
-    onAddField(event: any, field: BasicPluginField | InputField): void;
+    onAddField(field: BasicPluginField | InputField): void;
+
+    move(dragIndex:number, hoverIndex: number): void;
 
     idGenerator(): number;
 }
@@ -48,6 +51,7 @@ const PluginCreation = React.forwardRef((props: PluginCreationProps, ref: Ref<an
         onAddField,
         pluginFields,
         idGenerator,
+        move,
     } = props;
 
 
@@ -119,11 +123,11 @@ const PluginCreation = React.forwardRef((props: PluginCreationProps, ref: Ref<an
             !errors.defaultError) {
             if (fieldType === "inputField") {
                 setAddField(prev => ({...prev, id: idGenerator()}));
-                onAddField(event, new InputField(addField));
+                onAddField(new InputField(addField));
 
             } else if (fieldType === "divider") {
                 setAddField(prev => ({...prev, id: idGenerator()}));
-                onAddField(event, new BasicPluginField(addField));
+                onAddField(new BasicPluginField(addField));
 
             }
         }
@@ -236,7 +240,19 @@ const PluginCreation = React.forwardRef((props: PluginCreationProps, ref: Ref<an
                         <Grid item xs={12} md={4} style={{padding: 16}}>
                             <Grid container className={classes.firstLine}>
                                 <Grid item xs={12}>
-                                    <Folder className={classes.rootFolder}><Folder/></Folder>
+                                    <Folder className={classes.rootFolder}>
+                                        {context.pluginFields.map((item,index)=>{
+                                            return(
+                                                <DragableListItem
+                                                    key={item.id}
+                                                    field={item}
+                                                    index={index}
+                                                    moveCard={move}
+                                                    onDelete={context.handleDeletePluginField}
+                                                />
+                                            );
+                                        })}
+                                    </Folder>
                                 </Grid>
                             </Grid>
                         </Grid>
