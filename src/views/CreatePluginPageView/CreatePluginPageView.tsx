@@ -28,12 +28,16 @@ import InputField from "../../entities/InputField";
 import BasicPluginField from "../../entities/BasicPluginField";
 import DialogPlugin from "./LocalComponents/DialogPlugin";
 import DeleteIcon from "@material-ui/icons/Delete";
-import update from "immutability-helper"
+import update from "immutability-helper";
 import DragableListItem from "./LocalComponents/DragableListItem";
 import IdGenerator from "../../utils/IdGenerator";
 import {DndProvider} from "react-dnd";
 import {HTML5Backend} from "react-dnd-html5-backend";
 import FilesLoader from "../../components/FilesLoader";
+
+
+export const PluginContext = React.createContext<InputField[]>([]);
+
 
 /**
  * CreatePluginPageViewProps - interface for CreatePluginPageView
@@ -72,10 +76,10 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
                         [hoverIndex, 0, dragedField],
                     ],
                 }),
-            )
+            );
         },
         [pluginFields],
-    )
+    );
 
     function handleAddPluginField(event: any, field: InputField) {
         event.persist();
@@ -93,7 +97,7 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
 
     const renderField = (item: InputField, index: number) => {
 
-    }
+    };
 
     return (
         <React.Fragment>
@@ -152,13 +156,15 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
                 </Grid>
             </Grid>
 
-            <DialogPlugin
-                open={isDialogPluginButtonActive}
-                onClose={() => setIsDialogPluginButtonActive(false)}
-                onAddField={handleAddPluginField}
-                idGenerator={getNextId}
-                pluginFields={pluginFields}
-            />
+            <PluginContext.Provider value={pluginFields}>
+                <DialogPlugin
+                    open={isDialogPluginButtonActive}
+                    onClose={() => setIsDialogPluginButtonActive(false)}
+                    onAddField={handleAddPluginField}
+                    idGenerator={getNextId}
+                    pluginFields={pluginFields}
+                />
+            </PluginContext.Provider>
 
             <Grid container className={classes.firstLine}>
                 <Grid item xs={12} md={10}>

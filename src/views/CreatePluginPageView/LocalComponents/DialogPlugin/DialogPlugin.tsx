@@ -6,7 +6,7 @@
  * All rights reserved.
  */
 
-import React, {Ref, useEffect, useState} from "react";
+import React, {Ref, useContext, useEffect, useState} from "react";
 import {
     Button,
     Dialog,
@@ -26,6 +26,7 @@ import styles from "./styles";
 import TextField from "@material-ui/core/TextField";
 import BasicPluginField from "../../../../entities/BasicPluginField";
 import InputField from "../../../../entities/InputField";
+import {PluginContext} from "../../CreatePluginPageView";
 
 interface ValidationErrors {
     "noInputError": boolean;
@@ -59,6 +60,11 @@ const DialogPlugin = React.forwardRef((props: DialogPluginProps, ref: Ref<any>) 
         pluginFields,
         idGenerator,
     } = props;
+
+
+    const value = useContext(PluginContext);
+
+    console.log(value);
 
 
     const [errors, setErrors] = useState<ValidationErrors>({
