@@ -236,7 +236,7 @@ const PluginCreation = React.forwardRef((props: PluginCreationProps, ref: Ref<an
                         <Grid item xs={12} md={4} style={{padding: 16}}>
                             <Grid container className={classes.firstLine}>
                                 <Grid item xs={12}>
-                                    <Folder/>
+                                    <Folder className={classes.rootFolder}><Folder/></Folder>
                                 </Grid>
                             </Grid>
                         </Grid>

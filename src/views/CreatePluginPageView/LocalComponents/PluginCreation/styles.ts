@@ -7,6 +7,7 @@
  */
 
 import {createStyles, Theme} from "@material-ui/core";
+import grey from "@material-ui/core/colors/grey";
 
 const styles =(theme: Theme) => createStyles({
     dialogRoles: {
@@ -22,6 +23,11 @@ const styles =(theme: Theme) => createStyles({
         // [theme.breakpoints.down('xs')]: {
         //     width: "auto",
         // },
+    },
+    rootFolder:{
+        border: `1px solid ${grey[700]}`,
+        minHeight: 280,
+        padding:theme.spacing(2, 1, 2, 2),
     }
 });
 

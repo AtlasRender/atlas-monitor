@@ -13,7 +13,7 @@ const styles = (theme: Theme) => createStyles({
     folder:{
         border: `1px solid ${grey[700]}`,
         paddingLeft: 10,
-        minHeight: 280,
+        minHeight: 50,
     }
 });
 

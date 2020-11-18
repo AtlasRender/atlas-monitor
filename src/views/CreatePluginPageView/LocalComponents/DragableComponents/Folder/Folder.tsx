@@ -11,12 +11,13 @@ import {Box, withStyles} from "@material-ui/core";
 import Stylable from "../../../../../interfaces/Stylable";
 import styles from "./styles";
 import {useDrop} from "react-dnd";
+import {grey} from "@material-ui/core/colors";
 
 interface FolderProps extends Stylable{
 
 }
 
-const Folder: React.FC<FolderProps> = ({classes, className, style}) =>{
+const Folder: React.FC<FolderProps> = ({classes, className, children, style}) =>{
 
     const [{ isOver, isOverCurrent }, drop] = useDrop({
         accept: "box",
@@ -33,8 +34,8 @@ const Folder: React.FC<FolderProps> = ({classes, className, style}) =>{
     })
 
     return(
-        <div className={className ? className : classes.folder} ref={drop}>
-
+        <div className={className ? className : classes.folder} ref={drop} style={isOverCurrent ? {backgroundColor:grey[900]} : {backgroundColor:"transparent"} }>
+            <div>{children}</div>
         </div>
     );
 }
