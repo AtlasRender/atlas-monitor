@@ -18,7 +18,7 @@ export default class GroupField extends BasicPluginField {
     /**
      * nested - array inside of folder
      */
-    public nested?: number;
+    public nested?: BasicPluginField[];
 
     constructor(field: any) {
         super({id: field.id, type: field.type, name: field.name, label: field.label});
