@@ -6,22 +6,34 @@
  * All rights reserved.
  */
 
-import BaseEntity from "../core/BaseEntity";
-
 /**
  * BasicPluginField - interface for Basic Plugin Field
  * @interface
  * @author Andrii Demchyshyn
  */
-export default class BasicPluginField extends BaseEntity {
+export default class BasicPluginField {
+    /**
+     * id - unique value
+     */
+    public id?: number | string;
+    /**
+     * type - field type
+     */
+    public type: string;
     /**
      * name - name of plugin field
      */
     public name: string;
+    /**
+     * label - visual name
+     */
+    public label: string;
+
 
     constructor(field: any) {
-        super("Basic Plugin Field");
-
+        this.id = field.id;
+        this.type = field.type;
         this.name = field.name;
+        this.label = field.label;
     }
 }
