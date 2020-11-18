@@ -204,114 +204,151 @@ const PluginCreation = React.forwardRef((props: PluginCreationProps, ref: Ref<an
         <React.Fragment>
             <List className={classes.dialogSize}>
                 <ListItem>
-                    <Grid container>
-                        <Grid item xs={12} className={classes.gridPadding}>
-                            <FormControl fullWidth>
-                                <InputLabel>
-                                    Plugin Field
-                                </InputLabel>
-                                <Select
-                                    value={fieldType}
-                                    onChange={handleSetFieldType}
-                                >
-                                    <MenuItem value="inputField">Input Field</MenuItem>
-                                    <MenuItem value="divider">Divider</MenuItem>
-                                </Select>
-                            </FormControl>
-                        </Grid>
-                        {fieldType === "divider" &&
-                        <Grid item xs={12} className={classes.gridPadding}>
-                            <TextField
-                                error={errors.nameError}
-                                variant="standard"
-                                required
-                                fullWidth
-                                name="name"
-                                label="Name"
-                                defaultValue={addField.name}
-                                onChange={handleInputField("name")}
-                                onBlur={handleValidation}
-                            />
-                        </Grid>
-                        }
-                        {fieldType === "inputField" &&
-                        <React.Fragment>
-                            <Grid item xs={12} className={classes.gridPadding}>
-                                <TextField
-                                    error={errors.nameError}
-                                    variant="standard"
-                                    required
-                                    fullWidth
-                                    name="name"
-                                    label="Name"
-                                    defaultValue={addField.name}
-                                    onChange={handleInputField("name")}
-                                    onBlur={handleValidation}
-                                />
-                            </Grid>
+                    <Grid container spacing={0}>
+                        <Grid item xs={12} md={4} style={{padding: 16}}>
+                            <Grid container>
+                                <Grid item xs={12} className={classes.gridPadding}>
+                                    <List>
+                                    </List>
 
-                            <Grid item xs={12} className={classes.gridPadding}>
-                                <TextField
-                                    error={errors.niceNameError}
-                                    variant="standard"
-                                    required
-                                    fullWidth
-                                    name="niceName"
-                                    label="Displayable name"
-                                    defaultValue={addField.niceName}
-                                    onChange={handleInputField("niceName")}
-                                    onBlur={handleValidation}
-                                />
+                                    {/*<FormControl fullWidth>*/}
+                                    {/*    <InputLabel>*/}
+                                    {/*        Plugin Field*/}
+                                    {/*    </InputLabel>*/}
+                                    {/*    <Select*/}
+                                    {/*        value={fieldType}*/}
+                                    {/*        onChange={handleSetFieldType}*/}
+                                    {/*    >*/}
+                                    {/*        <MenuItem value="inputField">Input Field</MenuItem>*/}
+                                    {/*        <MenuItem value="divider">Divider</MenuItem>*/}
+                                    {/*    </Select>*/}
+                                    {/*</FormControl>*/}
+                                </Grid>
                             </Grid>
-                            <Grid item xs={12} className={classes.gridPadding}>
-                                <TextField
-                                    error={errors.minError}
-                                    type="number"
-                                    variant="standard"
-                                    required
-                                    fullWidth
-                                    name="min"
-                                    label="Min value"
-                                    defaultValue={addField.min}
-                                    onChange={handleInputField("min")}
-                                    onBlur={handleValidation}
-                                />
+                        </Grid>
+
+
+                        <Grid item xs={12} md={4} style={{padding: 16}}>
+                            <Grid container className={classes.firstLine}>
+                                <Grid item xs={12}>
+                                    <List>
+                                        {/*{pluginFields.map((item, index) => (*/}
+                                        {/*    <DragableListItem*/}
+                                        {/*        key={item.id}*/}
+                                        {/*        field={item}*/}
+                                        {/*        index={index}*/}
+                                        {/*        moveCard={moveCard}*/}
+                                        {/*        onDelete={onDeletePluginField}*/}
+                                        {/*    />*/}
+                                        {/*))}*/}
+                                    </List>
+                                </Grid>
                             </Grid>
-                            <Grid item xs={12} className={classes.gridPadding}>
-                                <TextField
-                                    error={errors.maxError}
-                                    type="number"
-                                    variant="standard"
-                                    required
-                                    fullWidth
-                                    name="max"
-                                    label="Max value"
-                                    defaultValue={addField.max}
-                                    onChange={handleInputField("max")}
-                                    onBlur={handleValidation}
-                                />
-                            </Grid>
-                            <Grid item xs={12} className={classes.gridPadding}>
-                                <TextField
-                                    error={errors.defaultError}
-                                    variant="standard"
-                                    required
-                                    fullWidth
-                                    name="default"
-                                    label="Default Value"
-                                    defaultValue={addField.default}
-                                    onChange={handleInputField("default")}
-                                    onBlur={handleValidation}
-                                />
-                            </Grid>
-                        </React.Fragment>
-                        }
-                        <Button
-                            fullWidth
-                            onClick={handleAddFiled}
-                        >
-                            Add field
-                        </Button>
+                        </Grid>
+
+
+                        <Grid item xs={12} md={4}>
+                            <List>
+                                <ListItem>
+                                    <Grid container>
+                                        {fieldType === "divider" &&
+                                        <Grid item xs={12} className={classes.gridPadding}>
+                                            <TextField
+                                                error={errors.nameError}
+                                                variant="standard"
+                                                required
+                                                fullWidth
+                                                name="name"
+                                                label="Name"
+                                                defaultValue={addField.name}
+                                                onChange={handleInputField("name")}
+                                                onBlur={handleValidation}
+                                            />
+                                        </Grid>
+                                        }
+                                        {fieldType === "inputField" &&
+                                        <React.Fragment>
+                                            <Grid item xs={12} className={classes.gridPadding}>
+                                                <TextField
+                                                    error={errors.nameError}
+                                                    variant="standard"
+                                                    required
+                                                    fullWidth
+                                                    name="name"
+                                                    label="Name"
+                                                    defaultValue={addField.name}
+                                                    onChange={handleInputField("name")}
+                                                    onBlur={handleValidation}
+                                                />
+                                            </Grid>
+
+                                            <Grid item xs={12} className={classes.gridPadding}>
+                                                <TextField
+                                                    error={errors.niceNameError}
+                                                    variant="standard"
+                                                    required
+                                                    fullWidth
+                                                    name="niceName"
+                                                    label="Displayable name"
+                                                    defaultValue={addField.niceName}
+                                                    onChange={handleInputField("niceName")}
+                                                    onBlur={handleValidation}
+                                                />
+                                            </Grid>
+                                            <Grid item xs={12} className={classes.gridPadding}>
+                                                <TextField
+                                                    error={errors.minError}
+                                                    type="number"
+                                                    variant="standard"
+                                                    required
+                                                    fullWidth
+                                                    name="min"
+                                                    label="Min value"
+                                                    defaultValue={addField.min}
+                                                    onChange={handleInputField("min")}
+                                                    onBlur={handleValidation}
+                                                />
+                                            </Grid>
+                                            <Grid item xs={12} className={classes.gridPadding}>
+                                                <TextField
+                                                    error={errors.maxError}
+                                                    type="number"
+                                                    variant="standard"
+                                                    required
+                                                    fullWidth
+                                                    name="max"
+                                                    label="Max value"
+                                                    defaultValue={addField.max}
+                                                    onChange={handleInputField("max")}
+                                                    onBlur={handleValidation}
+                                                />
+                                            </Grid>
+                                            <Grid item xs={12} className={classes.gridPadding}>
+                                                <TextField
+                                                    error={errors.defaultError}
+                                                    variant="standard"
+                                                    required
+                                                    fullWidth
+                                                    name="default"
+                                                    label="Default Value"
+                                                    defaultValue={addField.default}
+                                                    onChange={handleInputField("default")}
+                                                    onBlur={handleValidation}
+                                                />
+                                            </Grid>
+                                        </React.Fragment>
+                                        }
+
+                                    </Grid>
+                                </ListItem>
+                            </List>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Button fullWidth onClick={() => {
+                            }}>
+                                Save
+                            </Button>
+                        </Grid>
                     </Grid>
                 </ListItem>
             </List>
