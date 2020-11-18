@@ -31,13 +31,15 @@ import FilesLoader from "../../components/FilesLoader";
 
 interface PluginContextProps {
     pluginFields: InputField[];
-    handleAddPluginField: (event: any, field: InputField) => void,
+    handleAddPluginField: (field: InputField) => void,
+    handleDeletePluginField: (field: InputField) => void,
     idGenerator: () => number;
 }
 
 export const PluginContext = React.createContext<PluginContextProps>({
     pluginFields: [],
-    handleAddPluginField: (event: any, field: InputField) => {},
+    handleAddPluginField: (field: InputField) => {},
+    handleDeletePluginField: (field: InputField) => {},
     idGenerator: (): number => { return 1},
 });
 
@@ -84,14 +86,13 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
         [pluginFields],
     );
 
-    function handleAddPluginField(event: any, field: InputField) {
-        event.persist();
+    function handleAddPluginField(field: InputField) {
         setIsDialogPluginButtonActive(false);
         setPluginFields(prev => ([...prev, field]));
     }
 
     function handleDeletePluginField(field: InputField) {
-        setPluginFields(pluginFields.filter(item => item.name !== field.name));
+        setPluginFields(pluginFields.filter(item => item.id !== field.id));
     }
 
     function handleSetIsDialogPluginButtonActive() {
@@ -164,6 +165,7 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
                     <PluginContext.Provider value={{
                         pluginFields: pluginFields,
                         handleAddPluginField: handleAddPluginField,
+                        handleDeletePluginField: handleDeletePluginField,
                         idGenerator: getNextId,
                     }}>
                         <PluginCreation
@@ -172,26 +174,27 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
                             onAddField={handleAddPluginField}
                             idGenerator={getNextId}
                             pluginFields={pluginFields}
+                            move={move}
                         />
                     </PluginContext.Provider>
                 </Grid>
             </Grid>
 
-            <Grid container className={classes.firstLine}>
-                <Grid item xs={12} md={10}>
-                    <List>
-                        {pluginFields.map((item, index) => (
-                            <DragableListItem
-                                key={item.id}
-                                field={item}
-                                index={index}
-                                moveCard={move}
-                                onDelete={handleDeletePluginField}
-                            />
-                        ))}
-                    </List>
-                </Grid>
-            </Grid>
+            {/*<Grid container className={classes.firstLine}>*/}
+            {/*    <Grid item xs={12} md={10}>*/}
+            {/*        <List>*/}
+            {/*            {pluginFields.map((item, index) => (*/}
+            {/*                <DragableListItem*/}
+            {/*                    key={item.id}*/}
+            {/*                    field={item}*/}
+            {/*                    index={index}*/}
+            {/*                    moveCard={move}*/}
+            {/*                    onDelete={handleDeletePluginField}*/}
+            {/*                />*/}
+            {/*            ))}*/}
+            {/*        </List>*/}
+            {/*    </Grid>*/}
+            {/*</Grid>*/}
 
         </React.Fragment>
     );
