@@ -17,6 +17,7 @@ interface FolderProps extends Stylable{
 
 }
 
+
 const Folder: React.FC<FolderProps> = ({classes, className, children, style}) =>{
 
     const [{ isOver, isOverCurrent }, drop] = useDrop({
@@ -31,6 +32,7 @@ const Folder: React.FC<FolderProps> = ({classes, className, children, style}) =>
             isOver: monitor.isOver(),
             isOverCurrent: monitor.isOver({ shallow: true }),
         }),
+
     })
 
     return(
