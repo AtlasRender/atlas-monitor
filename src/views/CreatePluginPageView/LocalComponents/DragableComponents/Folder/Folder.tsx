@@ -32,6 +32,9 @@ const Folder: React.FC<FolderProps> = ({classes, className, children, style}) =>
             if (didDrop) {
                 return;
             }
+            if(isOverCurrent) {
+
+            }
             if (item.type === "folder") {
                 context.handleAddPluginField(new GroupField({
                     type: "folder",
@@ -67,7 +70,7 @@ const Folder: React.FC<FolderProps> = ({classes, className, children, style}) =>
 
     return (
         <div className={className ? className : classes.folder} ref={drop}
-             style={isOverCurrent ? {backgroundColor: grey[900]} : {backgroundColor: "transparent"}}>
+             style={isOverCurrent ? {backgroundColor: grey[900]} : {backgroundColor: grey[800]}}>
             <div>{children}</div>
         </div>
     );

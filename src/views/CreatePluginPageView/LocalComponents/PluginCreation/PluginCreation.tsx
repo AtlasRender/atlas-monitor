@@ -57,6 +57,8 @@ const PluginCreation = React.forwardRef((props: PluginCreationProps, ref: Ref<an
 
     const context = useContext(PluginContext);
 
+    console.log(context.pluginFields);
+
     const [errors, setErrors] = useState<ValidationErrors>({
         "noInputError": true,
         "nameError": false,
@@ -237,34 +239,36 @@ const PluginCreation = React.forwardRef((props: PluginCreationProps, ref: Ref<an
                         <Grid item xs={12} md={4} style={{padding: 16}}>
                             <Grid container className={classes.firstLine}>
                                 <Grid item xs={12}>
-                                    {/*<Folder className={classes.rootFolder}>*/}
-                                        {context.pluginFields.map((item, index) => {
-                                            // if (item instanceof GroupField) {
-                                            //     const nested = item.nested?.map((item, index) => {
-                                            //         return (
-                                            //             <DragableListItem
-                                            //                 key={item.id}
-                                            //                 field={item}
-                                            //                 index={index}
-                                            //                 moveCard={move}
-                                            //                 onDelete={context.handleDeletePluginField}
-                                            //             />
-                                            //         );
-                                            //     });
-                                            //     return nested;
-                                            // }
+                                    <Folder className={classes.rootFolder}>
+                                        <List>
+                                            {context.pluginFields.map((item, index) => {
+                                                // if (item instanceof GroupField) {
+                                                //     const nested = item.nested?.map((item, index) => {
+                                                //         return (
+                                                //             <DragableListItem
+                                                //                 key={item.id}
+                                                //                 field={item}
+                                                //                 index={index}
+                                                //                 moveCard={move}
+                                                //                 onDelete={context.handleDeletePluginField}
+                                                //             />
+                                                //         );
+                                                //     });
+                                                //     return nested;
+                                                // }
 
-                                            return (
-                                                <DragableListItem
-                                                    key={item.id}
-                                                    field={item}
-                                                    index={index}
-                                                    moveCard={move}
-                                                    onDelete={context.handleDeletePluginField}
-                                                />
-                                            );
-                                        })}
-                                    {/*</Folder>*/}
+                                                return (
+                                                    <DragableListItem
+                                                        key={item.id}
+                                                        field={item}
+                                                        index={index}
+                                                        moveCard={move}
+                                                        onDelete={context.handleDeletePluginField}
+                                                    />
+                                                );
+                                            })}
+                                        </List>
+                                    </Folder>
                                 </Grid>
                             </Grid>
                         </Grid>

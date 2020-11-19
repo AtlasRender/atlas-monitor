@@ -100,7 +100,7 @@ const DragableListItem : React.FC<DragableListItemProps> = ({ field, onDelete, m
                     primary={field.label}
                     // secondary={field.label}
                 />
-                <ListItemSecondaryAction>
+                <ListItemSecondaryAction style={{opacity}}>
                     <IconButton
                         edge="end"
                         aria-label="delete"
@@ -112,7 +112,10 @@ const DragableListItem : React.FC<DragableListItemProps> = ({ field, onDelete, m
 
             </ListItem>
             :
-            <Folder />
+            <ListItem ref={refer} style={{opacity}}>
+                <Folder />
+            </ListItem>
+
     );
 };
 

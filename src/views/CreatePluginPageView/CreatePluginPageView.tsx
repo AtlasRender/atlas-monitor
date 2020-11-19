@@ -71,15 +71,7 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
     const idGenerator = React.useRef(IdGenerator());
     const getNextId = (): number => idGenerator.current.next().value;
 
-    const [pluginFields, setPluginFields] = useState<BasicPluginField[]>([
-        new GroupField({
-            type: "folder",
-            name: "rootFolder",
-            label: "Root",
-            nested: [],
-            id: getNextId(),
-        })
-    ]);
+    const [pluginFields, setPluginFields] = useState<BasicPluginField[]>([]);
     const [isDialogPluginButtonActive, setIsDialogPluginButtonActive] = useState(false);
 
 
@@ -110,6 +102,73 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
     function handleSetIsDialogPluginButtonActive() {
         setIsDialogPluginButtonActive(true);
     }
+
+
+    // function findTargetFolder(array: BasicPluginField[], targetId: number, toId: number): BasicPluginField{
+    //     for(const field of array) {
+    //         if(field instanceof GroupField) {
+    //             if(field.id === targetId) {
+    //                 return field
+    //             } else if (field.nested) {
+    //                 const targetField = findTargetFolder(field.nested, targetId, toId);
+    //                 const newArray = array.filter(field => field.id !== targetField.id);
+    //                 const toField = findTargetFolder(array, toId, targetId);
+    //             }
+    //         }
+    //     }
+    // }
+
+    const a: any[] = [{id: 1}, {id: 2}, new GroupField({id: 3, nested: [{id: 4}, {id: 5}]}), new GroupField({
+        id: 6,
+        nested: [{id: 7}]
+    })];
+
+    function moveField(array: BasicPluginField[], targetId: number, toId: number): BasicPluginField[] {
+        let target: BasicPluginField | null = null;
+
+        function findField(callback: (array: BasicPluginField[], field: number) => BasicPluginField[]) {
+            return function findTarget(array: BasicPluginField[], id: number): BasicPluginField[] {
+                for (let i = 0; i < array.length; i++) {
+                    const field = array[i];
+                    if(field.id === id) {
+                        return callback(array, i);
+                    } else {
+                        if (field instanceof GroupField) {
+                            field.nested = findTarget(field.nested, id);
+                        }
+                    }
+                }
+                return array;
+            };
+        }
+
+        const newArray: BasicPluginField[] = findField((callbackArray, index) => {
+            target = callbackArray[index];
+            return callbackArray.filter(item => item.id !== callbackArray[index].id);
+        })(array, targetId);
+
+        if (!target)
+            throw new ReferenceError(`field with id ${targetId} does not exist in plugin`);
+
+        const finalArray: BasicPluginField[] = findField((callbackFinalArray, index) => {
+            if (callbackFinalArray[index] instanceof GroupField) {
+                console.log(target);
+                if (target) {
+                    (callbackFinalArray[index] as GroupField).nested.push(target);
+                }
+            } else {
+                throw new ReferenceError(`field with id ${targetId} is not instance of GroupField`);
+            }
+
+            return callbackFinalArray;
+        })(array, toId);
+
+
+        return finalArray;
+    }
+
+    console.log("delete", moveField(a, 4, 6));
+
 
     return (
         <React.Fragment>

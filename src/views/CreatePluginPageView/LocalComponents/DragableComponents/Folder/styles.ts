@@ -12,8 +12,9 @@ import grey from "@material-ui/core/colors/grey";
 const styles = (theme: Theme) => createStyles({
     folder:{
         border: `1px solid ${grey[700]}`,
-        paddingLeft: 10,
+        padding: theme.spacing(2, 2, 2, 2),
         minHeight: 50,
+        width: "100%",
     }
 });
 
