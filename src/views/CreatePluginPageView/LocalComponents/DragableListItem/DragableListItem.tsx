@@ -91,7 +91,7 @@ const DragableListItem : React.FC<DragableListItemProps> = ({ field, onDelete, m
     const opacity = isDragging ? 0 : 1;
 
     return(
-        field.type !== "folder" ?
+        // field.type !== "folder" ?
             <ListItem ref={refer} style={{opacity}}>
                 <ListItemAvatar>
                     <Avatar/>
@@ -111,8 +111,8 @@ const DragableListItem : React.FC<DragableListItemProps> = ({ field, onDelete, m
                 </ListItemSecondaryAction>
 
             </ListItem>
-            :
-            <Folder />
+            // :
+            // <Folder id={id}/>
     );
 };
 

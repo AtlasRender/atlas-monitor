@@ -18,10 +18,10 @@ import IntegerField from "../../../../../entities/IntegerField";
 import SeparatorField from "../../../../../entities/SeparatorField";
 
 interface FolderProps extends Stylable {
-
+    id:number,
 }
 
-const Folder: React.FC<FolderProps> = ({classes, className, children, style}) => {
+const Folder: React.FC<FolderProps> = ({classes, className, children, id, style}) => {
 
     const context = useContext(PluginContext);
 
@@ -39,7 +39,7 @@ const Folder: React.FC<FolderProps> = ({classes, className, children, style}) =>
                     label: "Folder",
                     nested: [],
                     id: context.idGenerator(),
-                }));
+                }), id, );
             } else if (item.type === "integer") {
                 context.handleAddPluginField(new IntegerField({
                     type: "integer",
@@ -49,14 +49,14 @@ const Folder: React.FC<FolderProps> = ({classes, className, children, style}) =>
                     max: 16,
                     default: 10,
                     id: context.idGenerator(),
-                }));
+                }), id);
             } else if (item.type === "divider") {
                 context.handleAddPluginField(new SeparatorField({
                     type: "divider",
                     name: "Divider",
                     label: "Divider",
                     id: context.idGenerator(),
-                }));
+                }), id);
             }
         },
         collect: (monitor) => ({

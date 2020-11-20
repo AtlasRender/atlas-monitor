@@ -27,18 +27,19 @@ import IdGenerator from "../../utils/IdGenerator";
 import FilesLoader from "../../components/FilesLoader";
 import BasicPluginField from "../../entities/BasicPluginField";
 import GroupField from "../../entities/GroupField";
+import {array} from "prop-types";
 
 
 interface PluginContextProps {
     pluginFields: (BasicPluginField)[];
-    handleAddPluginField: (field: BasicPluginField) => void,
+    handleAddPluginField: (field: BasicPluginField, id: number) => void,
     handleDeletePluginField: (field: BasicPluginField) => void,
     idGenerator: () => number;
 }
 
 export const PluginContext = React.createContext<PluginContextProps>({
     pluginFields: [],
-    handleAddPluginField: (field: BasicPluginField) => {
+    handleAddPluginField: (field: BasicPluginField, id: number) => {
     },
     handleDeletePluginField: (field: BasicPluginField) => {
     },
@@ -98,9 +99,101 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
         [pluginFields],
     );
 
-    function handleAddPluginField(field: BasicPluginField) {
-        setIsDialogPluginButtonActive(false);
-        setPluginFields(prev => ([...prev, field]));
+    // function findTargetFolder(array: (BasicPluginField)[], id: number):GroupField | undefined {
+    //     array.forEach((item) => {
+    //         if (item instanceof GroupField) {
+    //             const findId = item.id;
+    //             if (findId === id) {
+    //                 return item;
+    //             } else {
+    //                 if (item.nested) {
+    //                     findTargetFolder(item.nested, id);
+    //                 }
+    //             }
+    //             return;
+    //         }
+    //     });
+    // }
+
+    // function findTargetFolder(array: (BasicPluginField)[], id: number): number[] | undefined {
+    //     for(const item of array) {
+    //         if (item instanceof GroupField) {
+    //             const findId = item.id;
+    //             if (findId === id) {
+    //                 return [findId];
+    //             } else {
+    //                 if (item.nested) {
+    //                     let arrayId = findTargetFolder(item.nested, id);
+    //                     if (arrayId) {
+    //                         return [item.id, ...arrayId];
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
+
+    function moveField(array: BasicPluginField[], targetId: number, toId: number, objectToAdd: BasicPluginField): BasicPluginField[] {
+        let target: BasicPluginField | null = null;
+
+        function findField(callback: (array: BasicPluginField[], field: number) => BasicPluginField[]) {
+            return function findTarget(array: BasicPluginField[], id: number): BasicPluginField[] {
+                for (let i = 0; i < array.length; i++) {
+                    const field = array[i];
+                    if(field.id === id) {
+                        return callback(array, i);
+                    } else {
+                        if (field instanceof GroupField && field.nested) {
+                            field.nested = findTarget(field.nested, id);
+                        }
+                    }
+                }
+                return array;
+            };
+        }
+
+        const newArray: BasicPluginField[] = findField((callbackArray, index) => {
+            target = callbackArray[index];
+            return callbackArray.filter(item => item.id !== callbackArray[index].id);
+        })(array, targetId);
+
+        if (!target)
+            // throw new ReferenceError(`field with id ${targetId} does not exist in plugin`);
+            target = objectToAdd;
+        // console.log("target", target);
+
+        const finalArray: BasicPluginField[] = findField((callbackFinalArray, index) => {
+            if (callbackFinalArray[index] instanceof GroupField) {
+                // console.log(target);
+                if (target) {
+                    const callbackResult=(callbackFinalArray[index] as GroupField);
+                    if(callbackResult.nested){
+                        callbackResult.nested.push(target);
+                    }
+                }
+            } else {
+                throw new ReferenceError(`field with id ${targetId} is not instance of GroupField`);
+            }
+
+            return callbackFinalArray;
+        })(array, toId);
+        // console.log(finalArray);
+        return finalArray;
+    }
+
+    // function nameGetter(idArray: number[] | undefined): string{
+    //     let name="";
+    //     for(const i of idArray){
+    //         name += `[${i}].nested`;
+    //     }
+    //     return name;
+    // }
+
+    function handleAddPluginField(field: BasicPluginField, id: number) {
+        //setIsDialogPluginButtonActive(false);
+        //setPluginFields(prev => ([...prev, field]));
+        setPluginFields(moveField(pluginFields, field.id, id, field));
+        console.log("pluginFields", pluginFields);
     }
 
     function handleDeletePluginField(field: BasicPluginField) {

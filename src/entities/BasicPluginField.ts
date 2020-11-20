@@ -15,7 +15,7 @@ export default class BasicPluginField {
     /**
      * id - unique value
      */
-    public id?: number | string;
+    public id: number;
     /**
      * type - field type
      */
