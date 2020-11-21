@@ -6,7 +6,7 @@
  * All rights reserved.
  */
 
-import React, {Ref, useRef} from "react";
+import React, {Ref, useContext, useRef} from "react";
 import Stylable from "../../../../interfaces/Stylable";
 import {
     Avatar, Divider,
@@ -24,11 +24,12 @@ import BasicPluginField from "../../../../entities/BasicPluginField";
 import GroupField from "../../../../entities/GroupField";
 import IntegerField from "../../../../entities/IntegerField";
 import Folder from "../DragableComponents/Folder";
+import {PluginContext} from "../../CreatePluginPageView";
 
 interface DragableListItemProps extends Stylable{
     field: BasicPluginField,
     onDelete(item: BasicPluginField): void,
-    moveCard: (dragIndex: number, hoverIndex: number) => void
+    moveCard: (dragIndex: number, hoverIndex: number, targetId: number, toId: number) => void
     index: number,
 }
 
@@ -40,9 +41,12 @@ interface DragItem{
 
 const DragableListItem : React.FC<DragableListItemProps> = ({ field, onDelete, moveCard, index}) => {
 
+    const context = useContext(PluginContext);
+
     const refer = useRef<HTMLLIElement>(null);
     const id = field.id;
 
+    // console.log(field.id);
 
     const [, drop] = useDrop({
         accept: "InputField",
@@ -72,8 +76,13 @@ const DragableListItem : React.FC<DragableListItemProps> = ({ field, onDelete, m
                 return;
             }
 
+            console.log((context.pluginFields[0] as GroupField).nested[dragIndex].id);
+            console.log((context.pluginFields[0] as GroupField).nested[hoverIndex].id);
 
-            moveCard(dragIndex, hoverIndex);
+            moveCard(dragIndex, hoverIndex, (context.pluginFields[0] as GroupField).nested[dragIndex].id, (context.pluginFields[0] as GroupField).nested[hoverIndex].id);
+
+            // context.moveField(context.pluginFields, field.id, )
+
             item.index = hoverIndex;
         },
 

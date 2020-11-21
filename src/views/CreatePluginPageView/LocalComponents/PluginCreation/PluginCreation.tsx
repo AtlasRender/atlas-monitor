@@ -34,9 +34,9 @@ interface PluginCreationProps extends Stylable {
 
     onClose(): void;
 
-    onAddField(field: BasicPluginField, id:number): void;
+    onAddField(field: BasicPluginField, id: number): void;
 
-    move(dragIndex: number, hoverIndex: number): void;
+    move(dragIndex: number, hoverIndex: number, targetId: number, toId: number): void;
 
     idGenerator(): number;
 }
@@ -65,6 +65,7 @@ const PluginCreation = React.forwardRef((props: PluginCreationProps, ref: Ref<an
         "maxError": false,
         "defaultError": false,
     });
+    const [rootFolder, setRootFolder] = useState<GroupField>(new GroupField({id: 0, name: "", type: "folder", label: "", nested: []}));
     const [fieldType, setFieldType] = useState("inputField");
     const [addField, setAddField] = useState({
         name: "",
@@ -73,6 +74,13 @@ const PluginCreation = React.forwardRef((props: PluginCreationProps, ref: Ref<an
         max: 255,
         default: "",
         id: 0,
+    });
+
+    useEffect(() => {
+        const field = context.pluginFields[0];
+        if(field instanceof GroupField) {
+            setRootFolder(field);
+        }
     });
 
     useEffect(() => {
@@ -202,7 +210,36 @@ const PluginCreation = React.forwardRef((props: PluginCreationProps, ref: Ref<an
         }
     }
 
-    const rootFolder: GroupField = (context.pluginFields[0] as GroupField);
+
+   console.log(context.pluginFields);
+
+    function showPluginFields(array: GroupField) {
+        return (
+            array.nested.map((folder, index) => {
+
+                if (folder instanceof GroupField) {
+                    return (
+                        <Folder id={folder.id}>
+                            {showPluginFields(folder)}
+                        </Folder>
+                    );
+
+                }
+
+                return (
+                    <DragableListItem
+                        key={folder.id}
+                        field={folder}
+                        index={index}
+                        moveCard={move}
+                        onDelete={context.handleDeletePluginField}
+                    />
+                );
+            })
+        );
+    }
+
+
     return (
         <React.Fragment>
             <List className={classes.dialogSize}>
@@ -216,19 +253,6 @@ const PluginCreation = React.forwardRef((props: PluginCreationProps, ref: Ref<an
                                         <DragableSubject type="folder"/>
                                         <DragableSubject type="divider"/>
                                     </List>
-
-                                    {/*<FormControl fullWidth>*/}
-                                    {/*    <InputLabel>*/}
-                                    {/*        Plugin Field*/}
-                                    {/*    </InputLabel>*/}
-                                    {/*    <Select*/}
-                                    {/*        value={fieldType}*/}
-                                    {/*        onChange={handleSetFieldType}*/}
-                                    {/*    >*/}
-                                    {/*        <MenuItem value="inputField">Input Field</MenuItem>*/}
-                                    {/*        <MenuItem value="divider">Divider</MenuItem>*/}
-                                    {/*    </Select>*/}
-                                    {/*</FormControl>*/}
                                 </Grid>
                             </Grid>
                         </Grid>
@@ -237,36 +261,8 @@ const PluginCreation = React.forwardRef((props: PluginCreationProps, ref: Ref<an
                         <Grid item xs={12} md={4} style={{padding: 16}}>
                             <Grid container className={classes.firstLine}>
                                 <Grid item xs={12}>
-                                    <Folder className={classes.rootFolder} id={pluginFields[0].id}>
-                                        {
-                                            rootFolder.nested.map((item, index) => {
-                                                if (item instanceof GroupField) {
-                                                    return (
-                                                        <Folder id={item.id}>
-                                                            {item.nested.map((nestedItem, nestedIndex) => {
-                                                                return (
-                                                                    <DragableListItem
-                                                                        key={nestedItem.id}
-                                                                        field={nestedItem}
-                                                                        index={nestedIndex}
-                                                                        moveCard={move}
-                                                                        onDelete={context.handleDeletePluginField}
-                                                                    />
-                                                                )
-                                                            })}
-                                                        </Folder>
-                                                    )
-                                                }
-                                                return (
-                                                    <DragableListItem
-                                                        key={item.id}
-                                                        field={item}
-                                                        index={index}
-                                                        moveCard={move}
-                                                        onDelete={context.handleDeletePluginField}
-                                                    />
-                                                );
-                                            })}
+                                    <Folder className={classes.rootFolder} id={rootFolder.id}>
+                                        {showPluginFields(rootFolder)}
                                     </Folder>
                                 </Grid>
                             </Grid>

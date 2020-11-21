@@ -32,9 +32,9 @@ const Folder: React.FC<FolderProps> = ({classes, className, children, id, style}
             if (didDrop) {
                 return;
             }
-            if(isOverCurrent) {
-
-            }
+            // if(isOverCurrent) {
+            //
+            // }
             if (item.type === "folder") {
                 context.handleAddPluginField(new GroupField({
                     type: "folder",
@@ -42,7 +42,7 @@ const Folder: React.FC<FolderProps> = ({classes, className, children, id, style}
                     label: "Folder",
                     nested: [],
                     id: context.idGenerator(),
-                }), id, );
+                }), id);
             } else if (item.type === "integer") {
                 context.handleAddPluginField(new IntegerField({
                     type: "integer",
