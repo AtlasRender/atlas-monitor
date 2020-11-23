@@ -1,6 +1,6 @@
 <a href="#">
     <div align="center">
-        <img alt="Material Docs logo" height="150" src="https://avatars0.githubusercontent.com/u/71503317?s=400&u=7786114863bb0b505d06a0f563dbd6acbcfddc78&v=4"/>
+        <img alt="Atlas monitor logo" height="150" src="https://github.com/AtlasRender/atlas-media/blob/main/logos/AtlasMonitorLogo.svg"/>
     </div>
     <div align="center">
         <h1>Atlas Monitor system</h1>
@@ -15,7 +15,7 @@
 </a>
 
 ### Monitoring and management unit
-Pathfinder Monitor is a part of Pathfinder Render Manager, which allow user:
+Atlas Monitor is a part of Atlas Render Manager, which allow user:
 * to control render jobs
 * to manipulate tasks
 * to set up users and organization
@@ -30,4 +30,16 @@ Andreev Danil | danssg08@gmail.com | https://github.com/DanilAndreev
 * Demchyhsin Andrey | https://github.com/ZaykaNya
 * Nesterov Nikita | https://github.com/Who1sthatdude
 ### Repository
-You can fin GitHub repository of this project [here](https://github.com/Pathfinder-Systems/pathfinder-monitor)
+You can fin GitHub repository of this project [here](https://github.com/AtlasRender/atlas-monitor)
+
+<a>
+    <hr/>
+    <div align="center">
+        <img alt="Atlas Render logo" src="https://github.com/AtlasRender/atlas-media/blob/main/logos/AtlasRenderLogo.svg" height="100" /> 
+    </div>
+    <div align="center">
+        <h6>
+            Atlas Render Farm Manager
+        </h6>
+    </div>
+</a>
