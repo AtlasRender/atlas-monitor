@@ -33,7 +33,13 @@ Andreev Danil | danssg08@gmail.com | https://github.com/DanilAndreev
 You can fin GitHub repository of this project [here](https://github.com/Pathfinder-Systems/pathfinder-monitor)
 
 <a>
+    <hr/>
     <div align="center">
         <img alt="Atlas Render logo" src="https://github.com/AtlasRender/atlas-media/blob/main/logos/AtlasRenderLogo.svg" height="100" /> 
+    </div>
+    <div align="center">
+        <h6>
+            Atlas Render Farm Manager
+        </h6>
     </div>
 </a>
