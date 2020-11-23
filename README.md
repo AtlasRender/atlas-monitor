@@ -1,6 +1,6 @@
 <a href="#">
     <div align="center">
-        <img alt="Material Docs logo" height="150" src="https://avatars0.githubusercontent.com/u/71503317?s=400&u=7786114863bb0b505d06a0f563dbd6acbcfddc78&v=4"/>
+        <img alt="Atlas monitor logo" height="150" src="https://github.com/AtlasRender/atlas-media/blob/main/logos/AtlasMonitorLogo.svg"/>
     </div>
     <div align="center">
         <h1>Atlas Monitor system</h1>
