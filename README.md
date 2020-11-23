@@ -15,7 +15,7 @@
 </a>
 
 ### Monitoring and management unit
-Pathfinder Monitor is a part of Pathfinder Render Manager, which allow user:
+Atlas Monitor is a part of Atlas Render Manager, which allow user:
 * to control render jobs
 * to manipulate tasks
 * to set up users and organization
@@ -31,3 +31,9 @@ Andreev Danil | danssg08@gmail.com | https://github.com/DanilAndreev
 * Nesterov Nikita | https://github.com/Who1sthatdude
 ### Repository
 You can fin GitHub repository of this project [here](https://github.com/Pathfinder-Systems/pathfinder-monitor)
+
+<a>
+    <div align="center">
+        <img alt="Atlas Render logo" src="https://github.com/AtlasRender/atlas-media/blob/main/logos/AtlasRenderLogo.svg" height="100" /> 
+    </div>
+</a>
