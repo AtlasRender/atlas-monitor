@@ -31,6 +31,7 @@ interface DragableListItemProps extends Stylable{
     onDelete(item: BasicPluginField): void,
     moveCard: (dragIndex: number, hoverIndex: number, targetId: number, toId: number) => void
     index: number,
+    getIndex(index: number): void,
 }
 
 interface DragItem{
@@ -39,7 +40,7 @@ interface DragItem{
     type: string,
 }
 
-const DragableListItem : React.FC<DragableListItemProps> = ({ field, onDelete, moveCard, index}) => {
+const DragableListItem : React.FC<DragableListItemProps> = ({ field, onDelete, moveCard, index, getIndex}) => {
 
     const context = useContext(PluginContext);
 
@@ -101,7 +102,12 @@ const DragableListItem : React.FC<DragableListItemProps> = ({ field, onDelete, m
 
     return(
         // field.type !== "folder" ?
-            <ListItem ref={refer} style={{opacity}} button>
+            <ListItem
+                ref={refer}
+                style={{opacity}}
+                button
+                onClick={() => getIndex(index)}
+            >
                 <ListItemAvatar>
                     <Avatar/>
                 </ListItemAvatar>

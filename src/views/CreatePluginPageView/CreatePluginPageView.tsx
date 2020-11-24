@@ -37,6 +37,7 @@ interface PluginContextProps {
     pluginFields: (BasicPluginField)[];
     handleAddPluginField: (field: BasicPluginField, id: number) => void,
     handleDeletePluginField: (field: BasicPluginField) => void,
+    handleEditPluginField: (field: BasicPluginField, index: number) => void,
     idGenerator: () => number;
     moveField: (inputArray: BasicPluginField[], targetId: number, toId: number, objectToAdd: BasicPluginField, remove: boolean) => BasicPluginField[];
 }
@@ -46,6 +47,8 @@ export const PluginContext = React.createContext<PluginContextProps>({
     handleAddPluginField: (field: BasicPluginField, id: number) => {
     },
     handleDeletePluginField: (field: BasicPluginField) => {
+    },
+    handleEditPluginField: (field: BasicPluginField, index: number) => {
     },
     idGenerator: (): number => {
         return 1;
@@ -259,6 +262,12 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
         // console.log("pluginFields", pluginFields);
     }
 
+    function handleEditPluginField(field: BasicPluginField, index: number) {
+        const copy = [...pluginFields];
+        copy.splice(index, 1, field);
+        setPluginFields(copy);
+    }
+
     function handleDeletePluginField(field: BasicPluginField) {
         setPluginFields(pluginFields.filter(pluginField => pluginField.id !== field.id));
         // setPluginFields(moveField(pluginFields, field.id, 0, field, true));
@@ -382,6 +391,7 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
                         pluginFields: pluginFields,
                         handleAddPluginField: handleAddPluginField,
                         handleDeletePluginField: handleDeletePluginField,
+                        handleEditPluginField: handleEditPluginField,
                         idGenerator: getNextId,
                         moveField: moveField,
                     }}>

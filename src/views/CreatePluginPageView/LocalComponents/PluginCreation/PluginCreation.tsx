@@ -53,6 +53,7 @@ const PluginCreation = React.forwardRef((props: PluginCreationProps, ref: Ref<an
     const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
     const coreRequest = useCoreRequest();
 
+    const [fieldIndex, setFieldIndex] = useState(0);
     const [rootFolder, setRootFolder] = useState<GroupField>(new GroupField({id: 0, name: "", type: "folder", label: "", nested: []}));
     const [fieldType, setFieldType] = useState("inputField");
     const [addField, setAddField] = useState({
@@ -95,6 +96,10 @@ const PluginCreation = React.forwardRef((props: PluginCreationProps, ref: Ref<an
             });
     }
 
+    function getFieldIndex(index: number) {
+        setFieldIndex(index);
+    }
+
     // function handleAddFiled(event: any) {
     //     if (!errors.noInputError &&
     //         !errors.nameError &&
@@ -114,7 +119,7 @@ const PluginCreation = React.forwardRef((props: PluginCreationProps, ref: Ref<an
     //     }
     // }
 
-   // console.log(context.pluginFields);
+   console.log(context.pluginFields);
 
     function showPluginFields(array: BasicPluginField[]) {
         return (
@@ -135,6 +140,7 @@ const PluginCreation = React.forwardRef((props: PluginCreationProps, ref: Ref<an
                         field={folder}
                         index={index}
                         moveCard={move}
+                        getIndex={getFieldIndex}
                         onDelete={context.handleDeletePluginField}
                     />
                 );
@@ -173,12 +179,12 @@ const PluginCreation = React.forwardRef((props: PluginCreationProps, ref: Ref<an
 
 
                         <Grid item xs={12} md={4}>
-                            <PluginFieldSettings pluginField={context.pluginFields[0]}/>
+                            <PluginFieldSettings pluginField={context.pluginFields[fieldIndex]} index={fieldIndex}/>
                         </Grid>
 
 
                         <Grid item xs={12}>
-                            <Button fullWidth onClick={() => handleCreatePlugin()}>
+                            <Button fullWidth onClick={() => {console.log(context.pluginFields)}}>
                                 Save
                             </Button>
                         </Grid>

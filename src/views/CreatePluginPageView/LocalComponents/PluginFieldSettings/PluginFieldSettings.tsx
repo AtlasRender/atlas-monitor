@@ -7,12 +7,13 @@
  */
 
 import Stylable from "../../../../interfaces/Stylable";
-import React, {Ref, useState} from "react";
+import React, {Ref, useContext, useState} from "react";
 import {Grid, List, ListItem, withStyles} from "@material-ui/core";
 import TextField from "@material-ui/core/TextField";
 import styles from "../PluginCreation/styles";
 import BasicPluginField from "../../../../entities/BasicPluginField";
 import IntegerField from "../../../../entities/IntegerField";
+import {PluginContext} from "../../CreatePluginPageView";
 
 interface ValidationErrors {
     "noInputError": boolean;
@@ -25,6 +26,7 @@ interface ValidationErrors {
 
 interface PluginFieldSettingsProps extends Stylable {
     pluginField: BasicPluginField;
+    index: number;
 }
 
 
@@ -33,8 +35,11 @@ const PluginFieldSettings = React.forwardRef((props: PluginFieldSettingsProps, r
         classes,
         style,
         className,
-        pluginField
+        pluginField,
+        index
     } = props;
+
+    const context = useContext(PluginContext);
 
     const [errors, setErrors] = useState<ValidationErrors>({
         "noInputError": true,
@@ -45,14 +50,38 @@ const PluginFieldSettings = React.forwardRef((props: PluginFieldSettingsProps, r
         "defaultError": false,
     });
 
-    const [field, setField] = useState(pluginField);
+    // console.log(index);
 
     const handleInputField = (name: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
         event.persist();
-        if (name === "min" || name === "max") {
-            setField(prev => (prev && {...prev, [name]: +event.target.value}));
-        } else {
-            setField(prev => (prev && {...prev, [name]: event.target.value}));
+        if (pluginField instanceof IntegerField) {
+            context.handleEditPluginField(new IntegerField({
+                type: pluginField.type,
+                name: name === "name" ? event.target.value : pluginField.name,
+                label: name === "label" ? event.target.value : pluginField.label,
+                min: name === "min" ? +event.target.value : pluginField.min,
+                max: name === "max" ? +event.target.value : pluginField.max,
+                default: name === "default" ? event.target.value : pluginField.default,
+                id: pluginField.id,
+            }), index);
+            // context.handleDeletePluginField(new IntegerField({
+            //     type: pluginField.type,
+            //     name: name === "name" ? event.target.value : pluginField.name,
+            //     label: name === "label" ? event.target.value : pluginField.label,
+            //     min: name === "min" ? +event.target.value : pluginField.min,
+            //     max: name === "max" ? +event.target.value : pluginField.max,
+            //     default: name === "default" ? event.target.value : pluginField.default,
+            //     id: pluginField.id,
+            // }));
+            // context.handleAddPluginField(new IntegerField({
+            //     type: pluginField.type,
+            //     name: name === "name" ? event.target.value : pluginField.name,
+            //     label: name === "label" ? event.target.value : pluginField.label,
+            //     min: name === "min" ? +event.target.value : pluginField.min,
+            //     max: name === "max" ? +event.target.value : pluginField.max,
+            //     default: name === "default" ? event.target.value : pluginField.default,
+            //     id: pluginField.id,
+            // }), index);
         }
     };
 
@@ -61,7 +90,7 @@ const PluginFieldSettings = React.forwardRef((props: PluginFieldSettingsProps, r
             ...prev, "noInputError": false
         }));
         if (event.target.name === "name") {
-            if (!field.name.match(/^[a-zA-Z]+$/) || !field.name || field.name.length < 3 || field.name.length > 50) {
+            if (!pluginField.name.match(/^[a-zA-Z]+$/) || !pluginField.name || pluginField.name.length < 3 || pluginField.name.length > 50) {
                 setErrors(prev => ({
                     ...prev, "nameError": true
                 }));
@@ -87,7 +116,7 @@ const PluginFieldSettings = React.forwardRef((props: PluginFieldSettingsProps, r
                             fullWidth
                             name="name"
                             label="Name"
-                            defaultValue={field.name}
+                            value={pluginField.name}
                             onChange={handleInputField("name")}
                             onBlur={handleValidation}
                         />
@@ -100,12 +129,12 @@ const PluginFieldSettings = React.forwardRef((props: PluginFieldSettingsProps, r
                             fullWidth
                             name="label"
                             label="Label"
-                            defaultValue={field.label}
+                            value={pluginField.label}
                             onChange={handleInputField("label")}
                             onBlur={handleValidation}
                         />
                     </Grid>
-                    {field instanceof IntegerField &&
+                    {pluginField instanceof IntegerField &&
                     <React.Fragment>
                         <Grid item xs={12} className={classes.gridPadding}>
                             <TextField
@@ -116,7 +145,7 @@ const PluginFieldSettings = React.forwardRef((props: PluginFieldSettingsProps, r
                                 fullWidth
                                 name="min"
                                 label="Min value"
-                                defaultValue={field.min}
+                                value={pluginField.min}
                                 onChange={handleInputField("min")}
                                 onBlur={handleValidation}
                             />
@@ -130,7 +159,7 @@ const PluginFieldSettings = React.forwardRef((props: PluginFieldSettingsProps, r
                                 fullWidth
                                 name="max"
                                 label="Max value"
-                                defaultValue={field.max}
+                                value={pluginField.max}
                                 onChange={handleInputField("max")}
                                 onBlur={handleValidation}
                             />
@@ -143,7 +172,7 @@ const PluginFieldSettings = React.forwardRef((props: PluginFieldSettingsProps, r
                                 fullWidth
                                 name="default"
                                 label="Default Value"
-                                defaultValue={field.default}
+                                value={pluginField.default}
                                 onChange={handleInputField("default")}
                                 onBlur={handleValidation}
                             />
