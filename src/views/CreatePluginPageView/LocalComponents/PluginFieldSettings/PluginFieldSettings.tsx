@@ -8,7 +8,7 @@
 
 import Stylable from "../../../../interfaces/Stylable";
 import React, {Ref, useContext, useState} from "react";
-import {Grid, List, ListItem, withStyles} from "@material-ui/core";
+import {Grid, List, ListItem, Typography, withStyles} from "@material-ui/core";
 import TextField from "@material-ui/core/TextField";
 import styles from "../PluginCreation/styles";
 import BasicPluginField from "../../../../entities/BasicPluginField";
@@ -50,7 +50,7 @@ const PluginFieldSettings = React.forwardRef((props: PluginFieldSettingsProps, r
         "defaultError": false,
     });
 
-    // console.log(index);
+    console.log(index);
 
     const handleInputField = (name: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
         event.persist();
@@ -104,85 +104,90 @@ const PluginFieldSettings = React.forwardRef((props: PluginFieldSettingsProps, r
 
 
     return (
-        <List>
-            <ListItem style={{padding: 0}}>
+        pluginField ?
+            <List>
+                <ListItem style={{padding: 0}}>
 
-                <Grid container>
-                    <Grid item xs={12} className={classes.gridPadding}>
-                        <TextField
-                            error={errors.nameError}
-                            variant="standard"
-                            required
-                            fullWidth
-                            name="name"
-                            label="Name"
-                            value={pluginField.name}
-                            onChange={handleInputField("name")}
-                            onBlur={handleValidation}
-                        />
+                    <Grid container>
+                        <Grid item xs={12} className={classes.gridPadding}>
+                            <TextField
+                                error={errors.nameError}
+                                variant="standard"
+                                required
+                                fullWidth
+                                name="name"
+                                label="Name"
+                                value={pluginField.name}
+                                onChange={handleInputField("name")}
+                                onBlur={handleValidation}
+                            />
+                        </Grid>
+                        <Grid item xs={12} className={classes.gridPadding}>
+                            <TextField
+                                error={errors.niceNameError}
+                                variant="standard"
+                                required
+                                fullWidth
+                                name="label"
+                                label="Label"
+                                value={pluginField.label}
+                                onChange={handleInputField("label")}
+                                onBlur={handleValidation}
+                            />
+                        </Grid>
+                        {pluginField instanceof IntegerField &&
+                        <React.Fragment>
+                            <Grid item xs={12} className={classes.gridPadding}>
+                                <TextField
+                                    error={errors.minError}
+                                    type="number"
+                                    variant="standard"
+                                    required
+                                    fullWidth
+                                    name="min"
+                                    label="Min value"
+                                    value={pluginField.min}
+                                    onChange={handleInputField("min")}
+                                    onBlur={handleValidation}
+                                />
+                            </Grid>
+                            <Grid item xs={12} className={classes.gridPadding}>
+                                <TextField
+                                    error={errors.maxError}
+                                    type="number"
+                                    variant="standard"
+                                    required
+                                    fullWidth
+                                    name="max"
+                                    label="Max value"
+                                    value={pluginField.max}
+                                    onChange={handleInputField("max")}
+                                    onBlur={handleValidation}
+                                />
+                            </Grid>
+                            <Grid item xs={12} className={classes.gridPadding}>
+                                <TextField
+                                    error={errors.defaultError}
+                                    variant="standard"
+                                    required
+                                    fullWidth
+                                    name="default"
+                                    label="Default Value"
+                                    value={pluginField.default}
+                                    onChange={handleInputField("default")}
+                                    onBlur={handleValidation}
+                                />
+                            </Grid>
+                        </React.Fragment>
+                        }
                     </Grid>
-                    <Grid item xs={12} className={classes.gridPadding}>
-                        <TextField
-                            error={errors.niceNameError}
-                            variant="standard"
-                            required
-                            fullWidth
-                            name="label"
-                            label="Label"
-                            value={pluginField.label}
-                            onChange={handleInputField("label")}
-                            onBlur={handleValidation}
-                        />
-                    </Grid>
-                    {pluginField instanceof IntegerField &&
-                    <React.Fragment>
-                        <Grid item xs={12} className={classes.gridPadding}>
-                            <TextField
-                                error={errors.minError}
-                                type="number"
-                                variant="standard"
-                                required
-                                fullWidth
-                                name="min"
-                                label="Min value"
-                                value={pluginField.min}
-                                onChange={handleInputField("min")}
-                                onBlur={handleValidation}
-                            />
-                        </Grid>
-                        <Grid item xs={12} className={classes.gridPadding}>
-                            <TextField
-                                error={errors.maxError}
-                                type="number"
-                                variant="standard"
-                                required
-                                fullWidth
-                                name="max"
-                                label="Max value"
-                                value={pluginField.max}
-                                onChange={handleInputField("max")}
-                                onBlur={handleValidation}
-                            />
-                        </Grid>
-                        <Grid item xs={12} className={classes.gridPadding}>
-                            <TextField
-                                error={errors.defaultError}
-                                variant="standard"
-                                required
-                                fullWidth
-                                name="default"
-                                label="Default Value"
-                                value={pluginField.default}
-                                onChange={handleInputField("default")}
-                                onBlur={handleValidation}
-                            />
-                        </Grid>
-                    </React.Fragment>
-                    }
-                </Grid>
 
-            </ListItem>
-        </List>
+                </ListItem>
+            </List>
+            :
+            <Typography variant="h6">
+                Nothing selected
+            </Typography>
     );
 });
 
