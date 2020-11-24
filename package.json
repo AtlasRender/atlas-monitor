@@ -59,7 +59,7 @@
     "react-dropzone": "^11.2.4",
     "react-number-format": "^4.4.1",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "3.4.4",
+    "react-scripts": "4.0.1",
     "react-swipeable-views": "^0.13.9",
     "react-window": "^1.8.6",
     "routing-manager": "^2.2.0",
