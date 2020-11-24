@@ -33,8 +33,6 @@ const ChooseLayout = React.forwardRef((props: ChooseLayoutProps, ref: Ref<any>) 
     const {getUser, isLogged} = useAuth();
     const user = getUser();
 
-    console.log("1" + isLogged);
-
     return (
         <React.Fragment>
             <ChangeRouteProvider routeMask="(/:page)">

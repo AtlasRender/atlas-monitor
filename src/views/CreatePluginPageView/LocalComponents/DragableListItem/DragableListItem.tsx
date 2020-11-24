@@ -43,7 +43,7 @@ const DragableListItem : React.FC<DragableListItemProps> = ({ field, onDelete, m
 
     const context = useContext(PluginContext);
 
-    const refer = useRef<HTMLLIElement>(null);
+    const refer = useRef<HTMLDivElement>(null);
     const id = field.id;
 
     // console.log(field.id);
@@ -76,10 +76,10 @@ const DragableListItem : React.FC<DragableListItemProps> = ({ field, onDelete, m
                 return;
             }
 
-            console.log((context.pluginFields[0] as GroupField).nested[dragIndex].id);
-            console.log((context.pluginFields[0] as GroupField).nested[hoverIndex].id);
+            // console.log((context.pluginFields[0] as GroupField).nested[dragIndex].id);
+            // console.log((context.pluginFields[0] as GroupField).nested[hoverIndex].id);
 
-            moveCard(dragIndex, hoverIndex, (context.pluginFields[0] as GroupField).nested[dragIndex].id, (context.pluginFields[0] as GroupField).nested[hoverIndex].id);
+            moveCard(dragIndex, hoverIndex, 1, 1);
 
             // context.moveField(context.pluginFields, field.id, )
 
@@ -101,7 +101,7 @@ const DragableListItem : React.FC<DragableListItemProps> = ({ field, onDelete, m
 
     return(
         // field.type !== "folder" ?
-            <ListItem ref={refer} style={{opacity}}>
+            <ListItem ref={refer} style={{opacity}} button>
                 <ListItemAvatar>
                     <Avatar/>
                 </ListItemAvatar>

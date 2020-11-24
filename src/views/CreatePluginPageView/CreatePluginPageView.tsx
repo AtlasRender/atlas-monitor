@@ -28,6 +28,9 @@ import FilesLoader from "../../components/FilesLoader";
 import BasicPluginField from "../../entities/BasicPluginField";
 import GroupField from "../../entities/GroupField";
 import {array} from "prop-types";
+import useEnqueueErrorSnackbar from "../../utils/enqueueErrorSnackbar";
+import useCoreRequest from "../../hooks/useCoreRequest";
+import IntegerField from "../../entities/IntegerField";
 
 
 interface PluginContextProps {
@@ -74,36 +77,41 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
         style,
     } = props;
 
+    const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
+    const coreRequest = useCoreRequest();
     const idGenerator = React.useRef(IdGenerator());
     const getNextId = (): number => idGenerator.current.next().value;
 
-    const [pluginFields, setPluginFields] = useState<BasicPluginField[]>([new GroupField({
-        type: "folder",
-        name: "rootFolder",
-        label: "Root",
-        nested: [],
-        id: getNextId(),
-    })]);
+    const [pluginFields, setPluginFields] = useState<BasicPluginField[]>([
+        new IntegerField({
+            type: "integer",
+            name: "",
+            label: "Integer Field",
+            min: 1,
+            max: 255,
+            id: getNextId(),
+        })
+    ]);
     const [isDialogPluginButtonActive, setIsDialogPluginButtonActive] = useState(false);
 
 
     const move = useCallback(
         (dragIndex: number, hoverIndex: number, targetId: number, toId: number) => {
-            // const draggedField = pluginFields[dragIndex];
-            // setPluginFields(
-            //     update(pluginFields, {
-            //         $splice: [
-            //             [dragIndex, 1],
-            //             [hoverIndex, 0, draggedField],
-            //         ],
-            //     }),
-            // );
-            setPluginFields(moveField(pluginFields, targetId, toId, new BasicPluginField({
-                type: "integer",
-                name: "name",
-                label: "label",
-                id: 1000,
-            })));
+            const draggedField = pluginFields[dragIndex];
+            setPluginFields(
+                update(pluginFields, {
+                    $splice: [
+                        [dragIndex, 1],
+                        [hoverIndex, 0, draggedField],
+                    ],
+                }),
+            );
+            // setPluginFields(moveField(pluginFields, targetId, toId, new BasicPluginField({
+            //     type: "integer",
+            //     name: "name",
+            //     label: "label",
+            //     id: 1000,
+            // })));
         },
         [pluginFields],
     );
@@ -193,7 +201,7 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
                     }
                 }
             } else {
-                console.log(target);
+                // console.log(target);
 
                 let saveFieldTo: BasicPluginField = new BasicPluginField({
                     type: "integer",
@@ -234,7 +242,7 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
 
     }
 
-    console.log("delete", moveField(a, 4, 3, {id: 8, type: "", name: "", label: ""}));
+    // console.log("delete", moveField(a, 4, 3, {id: 8, type: "", name: "", label: ""}));
 
     // function nameGetter(idArray: number[] | undefined): string{
     //     let name="";
@@ -246,14 +254,14 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
 
     function handleAddPluginField(field: BasicPluginField, id: number) {
         //setIsDialogPluginButtonActive(false);
-        //setPluginFields(prev => ([...prev, field]));
-        setPluginFields(moveField(pluginFields, field.id, id, field));
+        setPluginFields(prev => ([...prev, field]));
+        // setPluginFields(moveField(pluginFields, field.id, id, field));
         // console.log("pluginFields", pluginFields);
     }
 
     function handleDeletePluginField(field: BasicPluginField) {
-
-        setPluginFields(moveField(pluginFields, field.id, 0, field, true));
+        setPluginFields(pluginFields.filter(pluginField => pluginField.id !== field.id));
+        // setPluginFields(moveField(pluginFields, field.id, 0, field, true));
     }
 
     function handleSetIsDialogPluginButtonActive() {
