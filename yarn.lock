@@ -2,6 +2,11 @@
 # yarn lockfile v1
 
 
+"@atlasrender/render-plugin@^0.1.1":
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/@atlasrender/render-plugin/-/render-plugin-0.1.1.tgz#8f672fd29fbb508a488c15ac686430822c3661ab"
+  integrity sha512-d3VgYQmrcvl8T+K9a4zmwSY26qPBrC0DviiqQOGdlZs8O2CudRHn/kLj31/IpV7gQ3LSSVfXLeCT0eRHKSlbyw==
+
 "@babel/code-frame@7.8.3":
   version "7.8.3"
   resolved "https://registry.yarnpkg.com/@babel/code-frame/-/code-frame-7.8.3.tgz#33e25903d7481181534e12ec0a25f16b6fcf419e"

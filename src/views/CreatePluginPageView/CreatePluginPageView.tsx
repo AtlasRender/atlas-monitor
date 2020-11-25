@@ -68,6 +68,16 @@ interface CreatePluginPageViewProps extends Stylable {
 
 }
 
+interface Plugin{
+    name: string,
+    version: string,
+    note?:string,
+    description?:string,
+    file: number,
+    organization: number,
+    fields: BasicPluginField[],
+}
+
 /**
  * UserPageView - function for showing create plugin page
  * @function
@@ -84,6 +94,7 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
     const coreRequest = useCoreRequest();
     const idGenerator = React.useRef(IdGenerator());
     const getNextId = (): number => idGenerator.current.next().value;
+    const [plugin, setPlugin] = useState<Plugin>()
 
     const [pluginFields, setPluginFields] = useState<BasicPluginField[]>([
         new IntegerField({

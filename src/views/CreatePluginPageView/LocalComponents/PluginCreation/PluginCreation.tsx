@@ -21,6 +21,7 @@ import BasicPluginField from "../../../../entities/BasicPluginField";
 import useEnqueueErrorSnackbar from "../../../../utils/enqueueErrorSnackbar";
 import useCoreRequest from "../../../../hooks/useCoreRequest";
 import PluginFieldSettings from "../PluginFieldSettings";
+import {PluginSettingsSpec, ValidationError} from "@atlasrender/render-plugin";
 
 interface PluginCreationProps extends Stylable {
     open: boolean;
@@ -85,9 +86,22 @@ const PluginCreation = React.forwardRef((props: PluginCreationProps, ref: Ref<an
 
     function handleCreatePlugin() {
         console.log("hi");
+        let validated;
+        try{
+            validated = new PluginSettingsSpec(pluginFields);
+        }catch (error){
+            if(error instanceof ValidationError){
+                enqueueErrorSnackbar(error.message);
+                console.log(error);
+            }
+            else{
+                enqueueErrorSnackbar("Unrecognized error");
+            }
+            return;
+        }
         coreRequest()
             .post("/plugins")
-            .send(context.pluginFields)
+            .send(validated)
             .then(response => {
                 console.log("done");
             })
@@ -184,7 +198,7 @@ const PluginCreation = React.forwardRef((props: PluginCreationProps, ref: Ref<an
 
 
                         <Grid item xs={12}>
-                            <Button fullWidth onClick={() => {console.log(context.pluginFields)}}>
+                            <Button fullWidth onClick={handleCreatePlugin}>
                                 Save
                             </Button>
                         </Grid>
