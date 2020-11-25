@@ -84,31 +84,7 @@ const PluginCreation = React.forwardRef((props: PluginCreationProps, ref: Ref<an
         });
     }, [open]);
 
-    function handleCreatePlugin() {
-        console.log("hi");
-        let validated;
-        try{
-            validated = new PluginSettingsSpec(pluginFields);
-        }catch (error){
-            if(error instanceof ValidationError){
-                enqueueErrorSnackbar(error.message);
-                console.log(error);
-            }
-            else{
-                enqueueErrorSnackbar("Unrecognized error");
-            }
-            return;
-        }
-        coreRequest()
-            .post("/plugins")
-            .send(validated)
-            .then(response => {
-                console.log("done");
-            })
-            .catch(err => {
-                enqueueErrorSnackbar("Can`t create plugin");
-            });
-    }
+
 
     function getFieldIndex(index: number) {
         setFieldIndex(index);
@@ -195,10 +171,6 @@ const PluginCreation = React.forwardRef((props: PluginCreationProps, ref: Ref<an
                         <Grid item xs={12} md={3}>
                             <PluginFieldSettings pluginField={context.pluginFields[fieldIndex]} index={fieldIndex}/>
                         </Grid>
-
-                        <Button fullWidth onClick={handleCreatePlugin}>
-                            Save
-                        </Button>
 
                     </Grid>
 

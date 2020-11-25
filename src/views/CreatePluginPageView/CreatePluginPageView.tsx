@@ -6,8 +6,9 @@
  * All rights reserved.
  */
 
-import React, {Ref, useCallback, useState} from "react";
+import React, {Ref, useCallback, useEffect, useState} from "react";
 import {
+    Button,
     Divider,
     Grid,
     IconButton,
@@ -31,6 +32,8 @@ import {array} from "prop-types";
 import useEnqueueErrorSnackbar from "../../utils/enqueueErrorSnackbar";
 import useCoreRequest from "../../hooks/useCoreRequest";
 import IntegerField from "../../entities/IntegerField";
+import {useChangeRoute} from "routing-manager";
+import {PluginSettingsSpec, ValidationError} from "@atlasrender/render-plugin";
 
 
 interface PluginContextProps {
@@ -68,11 +71,11 @@ interface CreatePluginPageViewProps extends Stylable {
 
 }
 
-interface Plugin{
+interface Plugin {
     name: string,
     version: string,
-    note?:string,
-    description?:string,
+    note?: string,
+    description?: string,
     file: number,
     organization: number,
     fields: BasicPluginField[],
@@ -94,7 +97,10 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
     const coreRequest = useCoreRequest();
     const idGenerator = React.useRef(IdGenerator());
     const getNextId = (): number => idGenerator.current.next().value;
-    const [plugin, setPlugin] = useState<Plugin>()
+    const {getRouteParams} = useChangeRoute();
+    const {id} = getRouteParams();
+    console.log(id);
+
 
     const [pluginFields, setPluginFields] = useState<BasicPluginField[]>([
         new IntegerField({
@@ -106,7 +112,56 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
             id: getNextId(),
         })
     ]);
+
+    const [plugin, setPlugin] = useState<Plugin>({
+        name: "",
+        version: "",
+        note: "",
+        description: "",
+        file: 0,
+        organization: id,
+        fields: pluginFields,
+    });
+
+    useEffect(()=>{
+        setPlugin((prev) => ({...prev, fields: pluginFields}))
+    },[pluginFields])
+
     const [isDialogPluginButtonActive, setIsDialogPluginButtonActive] = useState(false);
+
+    function handlePluginChange(event: React.ChangeEvent<HTMLInputElement>) {
+        event.persist();
+        setPlugin((prev) => ({...prev, [event.target.name]: event.target.value}));
+        console.log(plugin);
+    }
+
+    function handleCreatePlugin() {
+        console.log("hi");
+        let validated;
+        try{
+            validated = new PluginSettingsSpec(pluginFields);
+        }catch (error){
+            if(error instanceof ValidationError){
+                enqueueErrorSnackbar(error.message);
+                console.log(error);
+            }
+            else{
+                enqueueErrorSnackbar("Unrecognized error");
+            }
+            return;
+        }
+        coreRequest()
+            .post("/plugins")
+            .send(validated)
+            .then(response => {
+                console.log("done");
+            })
+            .catch(err => {
+                enqueueErrorSnackbar("Can`t create plugin");
+            });
+    }
+
+
 
 
     const move = useCallback(
@@ -120,49 +175,9 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
                     ],
                 }),
             );
-            // setPluginFields(moveField(pluginFields, targetId, toId, new BasicPluginField({
-            //     type: "integer",
-            //     name: "name",
-            //     label: "label",
-            //     id: 1000,
-            // })));
         },
         [pluginFields],
     );
-
-    // function findTargetFolder(array: (BasicPluginField)[], id: number):GroupField | undefined {
-    //     array.forEach((item) => {
-    //         if (item instanceof GroupField) {
-    //             const findId = item.id;
-    //             if (findId === id) {
-    //                 return item;
-    //             } else {
-    //                 if (item.nested) {
-    //                     findTargetFolder(item.nested, id);
-    //                 }
-    //             }
-    //             return;
-    //         }
-    //     });
-    // }
-
-    // function findTargetFolder(array: (BasicPluginField)[], id: number): number[] | undefined {
-    //     for(const item of array) {
-    //         if (item instanceof GroupField) {
-    //             const findId = item.id;
-    //             if (findId === id) {
-    //                 return [findId];
-    //             } else {
-    //                 if (item.nested) {
-    //                     let arrayId = findTargetFolder(item.nested, id);
-    //                     if (arrayId) {
-    //                         return [item.id, ...arrayId];
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
 
     const a: any[] = [new GroupField({id: 3, nested: [{id: 4}, {id: 5}]}), new GroupField({
         id: 6,
@@ -201,13 +216,12 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
         }
 
         if (!target)
-            // throw new ReferenceError(`field with id ${targetId} does not exist in plugin`);
             target = objectToAdd;
-        // console.log("target", target);
+
 
         const finalArray: BasicPluginField[] = findField((callbackFinalArray, index) => {
             if (callbackFinalArray[index] instanceof GroupField) {
-                // console.log(target);
+
                 if (target) {
                     const callbackResult = (callbackFinalArray[index] as GroupField);
                     if (callbackResult.nested) {
@@ -215,7 +229,6 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
                     }
                 }
             } else {
-                // console.log(target);
 
                 let saveFieldTo: BasicPluginField = new BasicPluginField({
                     type: "integer",
@@ -229,9 +242,6 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
                         saveFieldTo = callbackFinalArray[i];
                     }
                 }
-
-
-                //toId = 7 targetId = 10
 
                 for (let i = 0; i < callbackFinalArray.length; i++) {
                     if (callbackFinalArray[i].id === toId && target) {
@@ -251,7 +261,7 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
 
             return callbackFinalArray;
         })(array, toId);
-        // console.log(finalArray);
+
         return finalArray;
 
     }
@@ -349,24 +359,36 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
                             <TextField
                                 fullWidth
                                 label="Name"
+                                name="name"
+                                value={plugin.name}
+                                onChange={handlePluginChange}
                             />
                         </Grid>
                         <Grid item xs={6}>
                             <TextField
                                 fullWidth
                                 label="Version"
+                                name="version"
+                                value={plugin.version}
+                                onChange={handlePluginChange}
                             />
                         </Grid>
                         <Grid item xs={12}>
                             <TextField
                                 fullWidth
                                 label="Note"
+                                name="note"
+                                value={plugin.note}
+                                onChange={handlePluginChange}
                             />
                         </Grid>
                         <Grid item xs={12}>
                             <TextField
                                 fullWidth
                                 label="Description"
+                                name="description"
+                                value={plugin.description}
+                                onChange={handlePluginChange}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -416,6 +438,10 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
                         />
                     </PluginContext.Provider>
                 </Grid>
+
+                <Button fullWidth onClick={handleCreatePlugin}>
+                    Save
+                </Button>
             </Grid>
 
             {/*<Grid container className={classes.firstLine}>*/}
