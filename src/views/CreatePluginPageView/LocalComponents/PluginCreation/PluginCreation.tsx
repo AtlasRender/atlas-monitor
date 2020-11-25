@@ -167,8 +167,8 @@ const PluginCreation = React.forwardRef((props: PluginCreationProps, ref: Ref<an
         <React.Fragment>
             <List className={classes.dialogSize}>
                 <ListItem>
-                    <Grid container spacing={0}>
-                        <Grid item xs={12} md={4}>
+                    <Grid container spacing={4}>
+                        <Grid item xs={12} md={3}>
                             <Grid container>
                                 <Grid item xs={12} className={classes.gridPadding}>
                                     <List>
@@ -181,7 +181,7 @@ const PluginCreation = React.forwardRef((props: PluginCreationProps, ref: Ref<an
                         </Grid>
 
 
-                        <Grid item xs={12} md={4} style={{padding: 16}}>
+                        <Grid item xs={12} md={6}>
                             <Grid container className={classes.firstLine}>
                                 <Grid item xs={12}>
                                     <Folder className={classes.rootFolder} id={rootFolder.id}>
@@ -192,17 +192,16 @@ const PluginCreation = React.forwardRef((props: PluginCreationProps, ref: Ref<an
                         </Grid>
 
 
-                        <Grid item xs={12} md={4}>
+                        <Grid item xs={12} md={3}>
                             <PluginFieldSettings pluginField={context.pluginFields[fieldIndex]} index={fieldIndex}/>
                         </Grid>
 
+                        <Button fullWidth onClick={handleCreatePlugin}>
+                            Save
+                        </Button>
 
-                        <Grid item xs={12}>
-                            <Button fullWidth onClick={handleCreatePlugin}>
-                                Save
-                            </Button>
-                        </Grid>
                     </Grid>
+
                 </ListItem>
             </List>
         </React.Fragment>

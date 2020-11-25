@@ -8,8 +8,16 @@
 
 import {createStyles, Theme} from "@material-ui/core";
 
-const styles =(theme: Theme) => createStyles({
-
+const styles = (theme: Theme) => createStyles({
+    typographyText: {
+        textAlign: "center",
+    },
+    gridPadding: {
+        marginBottom: theme.spacing(1),
+    },
+    listPadding: {
+        padding: 0,
+    }
 });
 
 export default styles;

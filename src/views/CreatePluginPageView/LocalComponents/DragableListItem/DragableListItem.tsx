@@ -104,7 +104,7 @@ const DragableListItem : React.FC<DragableListItemProps> = ({ field, onDelete, m
         // field.type !== "folder" ?
             <ListItem
                 ref={refer}
-                style={{opacity}}
+                style={{opacity, paddingLeft: 0}}
                 button
                 onClick={() => getIndex(index)}
             >
