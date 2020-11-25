@@ -33,7 +33,7 @@ import useEnqueueErrorSnackbar from "../../utils/enqueueErrorSnackbar";
 import useCoreRequest from "../../hooks/useCoreRequest";
 import IntegerField from "../../entities/IntegerField";
 import {useChangeRoute} from "routing-manager";
-import {PluginSettingsSpec, ValidationError} from "@atlasrender/render-plugin";
+import {PluginSetting, PluginSettingsSpec, ValidationError} from "@atlasrender/render-plugin";
 
 
 interface PluginContextProps {
@@ -78,7 +78,7 @@ interface Plugin {
     description?: string,
     file: number,
     organization: number,
-    fields: BasicPluginField[],
+    fields: BasicPluginField[] | PluginSetting[],
 }
 
 /**
@@ -101,6 +101,9 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
     const {id} = getRouteParams();
     console.log(id);
 
+    function getFileId(id:number){
+        setPlugin((prev)=>({...prev, file: id}));
+    }
 
     const [pluginFields, setPluginFields] = useState<BasicPluginField[]>([
         new IntegerField({
@@ -137,9 +140,9 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
 
     function handleCreatePlugin() {
         console.log("hi");
-        let validated;
         try{
-            validated = new PluginSettingsSpec(pluginFields);
+            const validated = new PluginSettingsSpec(pluginFields);
+            // setPlugin((prev)=>({...prev, fields: validated}))
         }catch (error){
             if(error instanceof ValidationError){
                 enqueueErrorSnackbar(error.message);
@@ -152,7 +155,7 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
         }
         coreRequest()
             .post("/plugins")
-            .send(validated)
+            .send(plugin)
             .then(response => {
                 console.log("done");
             })
@@ -392,7 +395,7 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
                             />
                         </Grid>
                         <Grid item xs={12}>
-                            <FilesLoader multiple/>
+                            <FilesLoader multiple getFileId={getFileId}/>
                         </Grid>
                     </Grid>
                 </Grid>

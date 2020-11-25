@@ -48,6 +48,8 @@ export interface FilesLoaderProps extends Stylable {
 
     multiple?: boolean;
 
+    getFileId(id: number): void;
+
 }
 
 /**
@@ -91,7 +93,9 @@ const FilesLoader = React.forwardRef((props: FilesLoaderProps, ref) => {
         onError,
         onProgress,
         multiple,
+        getFileId,
         ...other
+
     } = props;
     const coreRequest = useCoreRequest();
     const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
@@ -128,6 +132,7 @@ const FilesLoader = React.forwardRef((props: FilesLoaderProps, ref) => {
                         next[targetId].progress = progress;
                         return next;
                     });
+
                     onProgress && onProgress(event)
                 })
                 .then((result: request.Response): void => {
