@@ -90,39 +90,11 @@ const PluginCreation = React.forwardRef((props: PluginCreationProps, ref: Ref<an
         setFieldIndex(index);
     }
 
-    // function handleAddFiled(event: any) {
-    //     if (!errors.noInputError &&
-    //         !errors.nameError &&
-    //         !errors.niceNameError &&
-    //         !errors.minError &&
-    //         !errors.maxError &&
-    //         !errors.defaultError) {
-    //         if (fieldType === "integer") {
-    //             setAddField(prev => ({...prev, id: idGenerator()}));
-    //             onAddField(new IntegerField(addField), id);
-    //
-    //         } else if (fieldType === "folder") {
-    //             setAddField(prev => ({...prev, id: idGenerator()}));
-    //             onAddField(new GroupField(addField));
-    //
-    //         }
-    //     }
-    // }
-
    console.log(context.pluginFields);
 
     function showPluginFields(array: BasicPluginField[]) {
         return (
             array.map((folder, index) => {
-
-                // if (folder instanceof GroupField) {
-                //     return (
-                //         <Folder id={folder.id}>
-                //             {showPluginFields(folder)}
-                //         </Folder>
-                //     );
-                //
-                // }
 
                 return (
                     <DragableListItem

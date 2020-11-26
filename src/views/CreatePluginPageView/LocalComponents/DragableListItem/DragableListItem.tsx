@@ -6,24 +6,21 @@
  * All rights reserved.
  */
 
-import React, {Ref, useContext, useRef} from "react";
+import React, {useContext, useRef} from "react";
 import Stylable from "../../../../interfaces/Stylable";
 import {
-    Avatar, Divider,
+    Avatar,
     IconButton,
     ListItem,
     ListItemAvatar,
     ListItemSecondaryAction,
-    ListItemText, Typography,
+    ListItemText,
     withStyles,
 } from "@material-ui/core";
 import styles from "./styles";
 import DeleteIcon from "@material-ui/icons/Delete";
 import {DropTargetMonitor, useDrag, useDrop, XYCoord} from "react-dnd";
 import BasicPluginField from "../../../../entities/BasicPluginField";
-import GroupField from "../../../../entities/GroupField";
-import IntegerField from "../../../../entities/IntegerField";
-import Folder from "../DragableComponents/Folder";
 import {PluginContext} from "../../CreatePluginPageView";
 
 interface DragableListItemProps extends Stylable{
@@ -64,8 +61,6 @@ const DragableListItem : React.FC<DragableListItemProps> = ({ field, onDelete, m
 
             const hoveredRect = refer.current.getBoundingClientRect();
             const hoverMiddleY = (hoveredRect.bottom - hoveredRect.top) / 2;
-            // const mousePosition = monitor.getClientOffset();
-            // const hoveredClientY = mousePosition && mousePosition.y - hoveredRect.top;
             const clientOffset = monitor.getClientOffset()
             const hoveredClientY = (clientOffset as XYCoord).y - hoveredRect.top
 
@@ -76,9 +71,6 @@ const DragableListItem : React.FC<DragableListItemProps> = ({ field, onDelete, m
             if (dragIndex > hoverIndex && hoveredClientY > hoverMiddleY) {
                 return;
             }
-
-            // console.log((context.pluginFields[0] as GroupField).nested[dragIndex].id);
-            // console.log((context.pluginFields[0] as GroupField).nested[hoverIndex].id);
 
             moveCard(dragIndex, hoverIndex, 1, 1);
 
@@ -101,7 +93,6 @@ const DragableListItem : React.FC<DragableListItemProps> = ({ field, onDelete, m
     const opacity = isDragging ? 0 : 1;
 
     return(
-        // field.type !== "folder" ?
             <ListItem
                 ref={refer}
                 style={{opacity, paddingLeft: 0}}
@@ -126,11 +117,6 @@ const DragableListItem : React.FC<DragableListItemProps> = ({ field, onDelete, m
                 </ListItemSecondaryAction>
 
             </ListItem>
-            // :
-            // <ListItem id={id} ref={refer} style={{opacity}}>
-            //     <Folder />
-            // </ListItem>
-
     );
 };
 

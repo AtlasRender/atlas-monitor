@@ -28,7 +28,6 @@ import IdGenerator from "../../utils/IdGenerator";
 import FilesLoader from "../../components/FilesLoader";
 import BasicPluginField from "../../entities/BasicPluginField";
 import GroupField from "../../entities/GroupField";
-import {array} from "prop-types";
 import useEnqueueErrorSnackbar from "../../utils/enqueueErrorSnackbar";
 import useCoreRequest from "../../hooks/useCoreRequest";
 import IntegerField from "../../entities/IntegerField";
@@ -78,7 +77,7 @@ interface Plugin {
     description?: string,
     file: number,
     organization: number,
-    fields: BasicPluginField[] | PluginSetting[],
+    settings: BasicPluginField[] | PluginSetting[],
 }
 
 /**
@@ -101,10 +100,6 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
     const {id} = getRouteParams();
     console.log(id);
 
-    function getFileId(id:number){
-        setPlugin((prev)=>({...prev, file: id}));
-    }
-
     const [pluginFields, setPluginFields] = useState<BasicPluginField[]>([
         new IntegerField({
             type: "integer",
@@ -122,12 +117,17 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
         note: "",
         description: "",
         file: 0,
-        organization: id,
-        fields: pluginFields,
+        organization: +id,
+        settings: pluginFields,
     });
 
+    function getFileId(id:number){
+        setPlugin((prev)=>({...prev, file: id}));
+        console.log("file id", id);
+    }
+
     useEffect(()=>{
-        setPlugin((prev) => ({...prev, fields: pluginFields}))
+        setPlugin((prev) => ({...prev, settings: pluginFields}))
     },[pluginFields])
 
     const [isDialogPluginButtonActive, setIsDialogPluginButtonActive] = useState(false);
@@ -142,7 +142,8 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
         console.log("hi");
         try{
             const validated = new PluginSettingsSpec(pluginFields);
-            // setPlugin((prev)=>({...prev, fields: validated}))
+            console.log("kuku validate", validated);
+            setPlugin((prev)=>({...prev, fields: validated}))
         }catch (error){
             if(error instanceof ValidationError){
                 enqueueErrorSnackbar(error.message);
@@ -253,13 +254,6 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
                     }
                 }
 
-                // callbackFinalArray.map(field => {
-                //     if(targetId === field.id) {
-                //         saveField = field;
-                //     }
-                // });
-
-                // throw new ReferenceError(`field with id ${targetId} is not instance of GroupField`);
             }
 
             return callbackFinalArray;
@@ -269,21 +263,8 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
 
     }
 
-    // console.log("delete", moveField(a, 4, 3, {id: 8, type: "", name: "", label: ""}));
-
-    // function nameGetter(idArray: number[] | undefined): string{
-    //     let name="";
-    //     for(const i of idArray){
-    //         name += `[${i}].nested`;
-    //     }
-    //     return name;
-    // }
-
     function handleAddPluginField(field: BasicPluginField, id: number) {
-        //setIsDialogPluginButtonActive(false);
         setPluginFields(prev => ([...prev, field]));
-        // setPluginFields(moveField(pluginFields, field.id, id, field));
-        // console.log("pluginFields", pluginFields);
     }
 
     function handleEditPluginField(field: BasicPluginField, index: number) {
@@ -294,63 +275,11 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
 
     function handleDeletePluginField(field: BasicPluginField) {
         setPluginFields(pluginFields.filter(pluginField => pluginField.id !== field.id));
-        // setPluginFields(moveField(pluginFields, field.id, 0, field, true));
     }
 
     function handleSetIsDialogPluginButtonActive() {
         setIsDialogPluginButtonActive(true);
     }
-
-    // const a: any[] = [{id: 1}, {id: 2}, new GroupField({id: 3, nested: [{id: 4}, {id: 5}]}), new GroupField({
-    //     id: 6,
-    //     nested: [{id: 7}]
-    // })];
-    //
-    // function moveField(array: BasicPluginField[], targetId: number, toId: number): BasicPluginField[] {
-    //     let target: BasicPluginField | null = null;
-    //
-    //     function findField(callback: (array: BasicPluginField[], field: number) => BasicPluginField[]) {
-    //         return function findTarget(array: BasicPluginField[], id: number): BasicPluginField[] {
-    //             for (let i = 0; i < array.length; i++) {
-    //                 const field = array[i];
-    //                 if(field.id === id) {
-    //                     return callback(array, i);
-    //                 } else {
-    //                     if (field instanceof GroupField) {
-    //                         field.nested = findTarget(field.nested, id);
-    //                     }
-    //                 }
-    //             }
-    //             return array;
-    //         };
-    //     }
-    //
-    //     const newArray: BasicPluginField[] = findField((callbackArray, index) => {
-    //         target = callbackArray[index];
-    //         return callbackArray.filter(item => item.id !== callbackArray[index].id);
-    //     })(array, targetId);
-    //
-    //     if (!target)
-    //         throw new ReferenceError(`field with id ${targetId} does not exist in plugin`);
-    //
-    //     const finalArray: BasicPluginField[] = findField((callbackFinalArray, index) => {
-    //         if (callbackFinalArray[index] instanceof GroupField) {
-    //             console.log(target);
-    //             if (target) {
-    //                 (callbackFinalArray[index] as GroupField).nested.push(target);
-    //             }
-    //         } else {
-    //             throw new ReferenceError(`field with id ${targetId} is not instance of GroupField`);
-    //         }
-    //
-    //         return callbackFinalArray;
-    //     })(array, toId);
-    //
-    //     return finalArray;
-    // }
-    //
-    // console.log("delete", moveField(a, 4, 6));
-
 
     return (
         <React.Fragment>
@@ -446,23 +375,6 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
                     Save
                 </Button>
             </Grid>
-
-            {/*<Grid container className={classes.firstLine}>*/}
-            {/*    <Grid item xs={12} md={10}>*/}
-            {/*        <List>*/}
-            {/*            {pluginFields.map((item, index) => (*/}
-            {/*                <DragableListItem*/}
-            {/*                    key={item.id}*/}
-            {/*                    field={item}*/}
-            {/*                    index={index}*/}
-            {/*                    moveCard={move}*/}
-            {/*                    onDelete={handleDeletePluginField}*/}
-            {/*                />*/}
-            {/*            ))}*/}
-            {/*        </List>*/}
-            {/*    </Grid>*/}
-            {/*</Grid>*/}
-
         </React.Fragment>
     );
 });
