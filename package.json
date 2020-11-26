@@ -60,7 +60,7 @@
     "react-dropzone": "^11.2.4",
     "react-number-format": "^4.4.1",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "3.4.4",
+    "react-scripts": "4.0.1",
     "react-swipeable-views": "^0.13.9",
     "react-window": "^1.8.6",
     "routing-manager": "^2.2.0",
@@ -68,16 +68,16 @@
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.11.6",
-    "@testing-library/react": "^11.1.2",
+    "@testing-library/react": "^11.2.2",
     "@testing-library/user-event": "^12.2.2",
     "@types/enzyme": "^3.10.8",
     "@types/enzyme-adapter-react-16": "^1.0.6",
     "@types/jest": "^26.0.15",
     "@types/lodash": "^4.14.165",
-    "@types/node": "^14.14.7",
+    "@types/node": "^14.14.9",
     "@types/prop-types": "^15.7.3",
-    "@types/react": "^16.9.56",
-    "@types/react-dom": "^16.9.9",
+    "@types/react-dom": "^17.0.0",
+    "@types/react": "^17.0.0",
     "@types/react-dropzone": "^5.1.0",
     "@types/react-router-dom": "^5.1.6",
     "@types/react-swipeable-views": "^0.13.0",
@@ -87,7 +87,7 @@
     "craco-raw-loader": "^1.0.1",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.5",
-    "typescript": "^4.0.5"
+    "typescript": "^4.1.2"
   },
   "scripts": {
     "start": "react-scripts start",
