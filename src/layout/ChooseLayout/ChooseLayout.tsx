@@ -38,11 +38,12 @@ const ChooseLayout = React.forwardRef((props: ChooseLayoutProps, ref: Ref<any>) 
     return (
         <React.Fragment>
             <ChangeRouteProvider routeMask="(/:page)">
-                {user ?
-                    <MonitorLayout/>
-                    :
-                    <MainPageLayout/>
-                }
+                {/*{user ?*/}
+                {/*    <MonitorLayout/>*/}
+                {/*    :*/}
+                {/*    <MainPageLayout/>*/}
+                {/*}*/}
+                <MainPageLayout/>
             </ChangeRouteProvider>
         </React.Fragment>
     );
