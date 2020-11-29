@@ -159,8 +159,10 @@ const RenderJobsTable = React.forwardRef((props: RenderJobsTableProps, ref: Ref<
             const response = await coreRequest().get("jobs");
             if (Array.isArray(response.body)) {
                 let entity: ShortJobs[] = [];
+                console.log(response.body);
                 try {
                     response.body.map(item => {
+                        console.log(item);
                         entity.push(new ShortJobs(item));
                     })
                 } catch (err) {
@@ -235,7 +237,7 @@ const RenderJobsTable = React.forwardRef((props: RenderJobsTableProps, ref: Ref<
                                     <TableCell className={classes.cell} align="left">Id</TableCell>
                                     <TableCell className={classes.cell} align="left">Name</TableCell>
                                     <TableCell className={classes.cell} align="left">Submitter</TableCell>
-                                    <TableCell className={classes.cell} align="left">Organisation</TableCell>
+                                    <TableCell className={classes.cell} align="left">Org(frameRange)</TableCell>
                                     <TableCell className={classes.cell} align="left">Date</TableCell>
                                     <TableCell align="left" className={classes.progress}>Progress</TableCell>
                                 </TableRow>
@@ -254,12 +256,14 @@ const RenderJobsTable = React.forwardRef((props: RenderJobsTableProps, ref: Ref<
                                         >
                                             <TableCell component="th" scope="row">{job.id}</TableCell>
                                             <TableCell align="left">{job.name}</TableCell>
-                                            <TableCell align="left">{job.name}</TableCell>
-                                            <TableCell align="left">{job.organizationId}</TableCell>
+                                            <TableCell align="left">{job.submitter.username}</TableCell>
+                                            <TableCell align="left">{job.frameRange}</TableCell>
                                             <TableCell
                                                 align="left">{format(job.createdAt, "dd.MM.yyyy hh:mm")}</TableCell>
                                             <TableCell align="left">
-                                                {isWidthUp('md', props.width) ? (<Progress/>) : ("10%")}
+                                                {isWidthUp('md', props.width) ? (<Progress progress={
+                                                    ((job.doneTasks) / (job.doneTasks + job.pendingTasks + job.failedTasks + job.processingTasks)) * 100
+                                                }/>) : ("10%")}
                                             </TableCell>
                                         </TableRow>
                                     );

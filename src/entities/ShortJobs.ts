@@ -14,17 +14,23 @@ import DateValidator from "../core/validators/DateValidator";
 import ValidationError from "../core/ValidationError";
 import {UserValidationMap} from "./User";
 import {instanceOf} from "prop-types";
+import User from "../interfaces/User";
 
 export interface ShortJobsValidationMap {
     id?: boolean;
     name?: boolean;
-    organizationId?: boolean;
     attemptsPerTaskLimit?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
     description?: boolean;
     failed?: boolean;
     frameRange?: boolean;
+    doneTasks?: boolean;
+    failedTasks?: boolean;
+    pendingTasks?: boolean;
+    processingTasks?: boolean;
+    pluginSettings?: boolean;
+    submitter?: boolean;
 }
 
 
@@ -43,17 +49,13 @@ export default class ShortJobs extends BaseEntity{
      */
     public name: string;
     /**
-     * organizationId - organization unique number
-     */
-    public organizationId: number;
-    /**
      * attemptsPerTaskLimit - limit of render attempts
      */
     public attemptsPerTaskLimit: number;
     /**
      * createdAt - date of creation
      */
-   public  createdAt: Date;
+    public  createdAt: Date;
     /**
      * updatedAt - date of last update
      */
@@ -71,6 +73,14 @@ export default class ShortJobs extends BaseEntity{
      */
     public frameRange: string;
 
+    public doneTasks: number;
+    public failedTasks: number;
+    public pendingTasks: number;
+    public processingTasks: number;
+    public pluginSettings: {value1: number, value2: string};
+    public submitter: User;
+
+
     constructor(job: any) {
         super("ShortJobs");
         const validationMap: ShortJobsValidationMap = {};
@@ -80,9 +90,6 @@ export default class ShortJobs extends BaseEntity{
 
         this.name = StringValidator(job.name).value || "";
         validationMap.name = StringValidator(job.name).error;
-
-        this.organizationId = NumberValidator(job.organizationId).value || 0;
-        validationMap.organizationId = NumberValidator(job.organizationId).error;
 
         this.attemptsPerTaskLimit = NumberValidator(job.attempts_per_task_limit).value || 0;
         validationMap.attemptsPerTaskLimit = NumberValidator(job.attempts_per_task_limit).error;
@@ -100,6 +107,22 @@ export default class ShortJobs extends BaseEntity{
 
         this.frameRange = StringValidator(job.frameRange).value || "";
         validationMap.frameRange = StringValidator(job.frameRange).error;
+
+        this.doneTasks = NumberValidator(job.doneTasks).value || 0;
+        validationMap.doneTasks = NumberValidator(job.doneTasks).error;
+
+        this.failedTasks = NumberValidator(job.failedTasks).value || 0;
+        validationMap.failedTasks = NumberValidator(job.failedTasks).error;
+
+        this.pendingTasks = NumberValidator(job.pendingTasks).value || 0;
+        validationMap.pendingTasks = NumberValidator(job.pendingTasks).error;
+
+        this.processingTasks = NumberValidator(job.processingTasks).value || 0;
+        validationMap.processingTasks = NumberValidator(job.processingTasks).error;
+
+        this.pluginSettings = job.pluginSettings;
+
+        this.submitter = job.submitter;
 
         for (const key in validationMap) {
             if ((validationMap as any)[key] === true) {
