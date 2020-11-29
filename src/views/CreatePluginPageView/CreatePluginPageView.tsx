@@ -6,15 +6,13 @@
  * All rights reserved.
  */
 
-import React, {Ref, useCallback, useState} from "react";
+import React, {Ref, useCallback, useEffect, useState} from "react";
 import {
-    Avatar,
-    Box,
+    Button,
     Divider,
     Grid,
     IconButton,
     ListItem,
-    ListItemAvatar,
     ListItemSecondaryAction,
     ListItemText,
     TextField,
@@ -24,16 +22,44 @@ import styles from "./styles";
 import Stylable from "../../interfaces/Stylable";
 import List from "@material-ui/core/List";
 import AddIcon from "@material-ui/icons/Add";
-import InputField from "../../entities/InputField";
-import BasicPluginField from "../../entities/BasicPluginField";
-import DialogPlugin from "./LocalComponents/DialogPlugin";
-import DeleteIcon from "@material-ui/icons/Delete";
-import update from "immutability-helper"
-import DragableListItem from "./LocalComponents/DragableListItem";
+import PluginCreation from "./LocalComponents/PluginCreation";
+import update from "immutability-helper";
 import IdGenerator from "../../utils/IdGenerator";
-import {DndProvider} from "react-dnd";
-import {HTML5Backend} from "react-dnd-html5-backend";
 import FilesLoader from "../../components/FilesLoader";
+import BasicPluginField from "../../entities/BasicPluginField";
+import GroupField from "../../entities/GroupField";
+import useEnqueueErrorSnackbar from "../../utils/enqueueErrorSnackbar";
+import useCoreRequest from "../../hooks/useCoreRequest";
+import IntegerField from "../../entities/IntegerField";
+import {useChangeRoute} from "routing-manager";
+import {PluginSetting, PluginSettingsSpec, ValidationError} from "@atlasrender/render-plugin";
+
+
+interface PluginContextProps {
+    pluginFields: (BasicPluginField)[];
+    handleAddPluginField: (field: BasicPluginField, id: number) => void,
+    handleDeletePluginField: (field: BasicPluginField) => void,
+    handleEditPluginField: (field: BasicPluginField, index: number) => void,
+    idGenerator: () => number;
+    moveField: (inputArray: BasicPluginField[], targetId: number, toId: number, objectToAdd: BasicPluginField, remove: boolean) => BasicPluginField[];
+}
+
+export const PluginContext = React.createContext<PluginContextProps>({
+    pluginFields: [],
+    handleAddPluginField: (field: BasicPluginField, id: number) => {
+    },
+    handleDeletePluginField: (field: BasicPluginField) => {
+    },
+    handleEditPluginField: (field: BasicPluginField, index: number) => {
+    },
+    idGenerator: (): number => {
+        return 1;
+    },
+    moveField: (inputArray: BasicPluginField[], targetId: number, toId: number, objectToAdd: BasicPluginField, remove: boolean = false) => {
+        return [];
+    }
+});
+
 
 /**
  * CreatePluginPageViewProps - interface for CreatePluginPageView
@@ -42,6 +68,16 @@ import FilesLoader from "../../components/FilesLoader";
  */
 interface CreatePluginPageViewProps extends Stylable {
 
+}
+
+interface Plugin {
+    name: string,
+    version: string,
+    note?: string,
+    description?: string,
+    file: number,
+    organization: number,
+    settings: BasicPluginField[] | PluginSetting[],
 }
 
 /**
@@ -56,43 +92,193 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
         style,
     } = props;
 
-    const [pluginFields, setPluginFields] = useState<InputField[]>([]);
-    const [isDialogPluginButtonActive, setIsDialogPluginButtonActive] = useState(false);
-
+    const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
+    const coreRequest = useCoreRequest();
     const idGenerator = React.useRef(IdGenerator());
     const getNextId = (): number => idGenerator.current.next().value;
+    const {getRouteParams} = useChangeRoute();
+    const {id} = getRouteParams();
+    console.log(id);
+
+    const [pluginFields, setPluginFields] = useState<BasicPluginField[]>([
+        new IntegerField({
+            type: "integer",
+            name: "",
+            label: "Integer Field",
+            min: 1,
+            max: 255,
+            id: getNextId(),
+        })
+    ]);
+
+    const [plugin, setPlugin] = useState<Plugin>({
+        name: "",
+        version: "",
+        note: "",
+        description: "",
+        file: 0,
+        organization: +id,
+        settings: pluginFields,
+    });
+
+    function getFileId(id:number){
+        setPlugin((prev)=>({...prev, file: id}));
+        console.log("file id", id);
+    }
+
+    useEffect(()=>{
+        setPlugin((prev) => ({...prev, settings: pluginFields}))
+    },[pluginFields])
+
+    const [isDialogPluginButtonActive, setIsDialogPluginButtonActive] = useState(false);
+
+    function handlePluginChange(event: React.ChangeEvent<HTMLInputElement>) {
+        event.persist();
+        setPlugin((prev) => ({...prev, [event.target.name]: event.target.value}));
+        console.log(plugin);
+    }
+
+    function handleCreatePlugin() {
+        console.log("hi");
+        try{
+            const validated = new PluginSettingsSpec(pluginFields);
+            console.log("kuku validate", validated);
+            setPlugin((prev)=>({...prev, fields: validated}))
+        }catch (error){
+            if(error instanceof ValidationError){
+                enqueueErrorSnackbar(error.message);
+                console.log(error);
+            }
+            else{
+                enqueueErrorSnackbar("Unrecognized error");
+            }
+            return;
+        }
+        coreRequest()
+            .post("/plugins")
+            .send(plugin)
+            .then(response => {
+                console.log("done");
+            })
+            .catch(err => {
+                enqueueErrorSnackbar("Can`t create plugin");
+            });
+    }
+
+
+
 
     const move = useCallback(
-        (dragIndex: number, hoverIndex: number) => {
-            const dragedField = pluginFields[dragIndex];
+        (dragIndex: number, hoverIndex: number, targetId: number, toId: number) => {
+            const draggedField = pluginFields[dragIndex];
             setPluginFields(
                 update(pluginFields, {
                     $splice: [
                         [dragIndex, 1],
-                        [hoverIndex, 0, dragedField],
+                        [hoverIndex, 0, draggedField],
                     ],
                 }),
-            )
+            );
         },
         [pluginFields],
-    )
+    );
 
-    function handleAddPluginField(event: any, field: InputField) {
-        event.persist();
-        setIsDialogPluginButtonActive(false);
+    const a: any[] = [new GroupField({id: 3, nested: [{id: 4}, {id: 5}]}), new GroupField({
+        id: 6,
+        nested: [{id: 7}]
+    })];
+
+    function moveField(inputArray: BasicPluginField[], targetId: number, toId: number, objectToAdd: BasicPluginField, remove: boolean = false): BasicPluginField[] {
+
+        const array = [...inputArray];
+
+        let target: BasicPluginField | null = null;
+
+        function findField(callback: (array: BasicPluginField[], field: number) => BasicPluginField[]) {
+            return function findTarget(array: BasicPluginField[], id: number): BasicPluginField[] {
+                for (let i = 0; i < array.length; i++) {
+                    const field = array[i];
+                    if (field.id === id) {
+                        return callback(array, i);
+                    } else {
+                        if (field instanceof GroupField && field.nested) {
+                            field.nested = findTarget(field.nested, id);
+                        }
+                    }
+                }
+                return array;
+            };
+        }
+
+        const newArray: BasicPluginField[] = findField((callbackArray, index) => {
+            target = callbackArray[index];
+            return callbackArray.filter(item => item.id !== callbackArray[index].id);
+        })(array, targetId);
+
+        if (remove) {
+            return newArray;
+        }
+
+        if (!target)
+            target = objectToAdd;
+
+
+        const finalArray: BasicPluginField[] = findField((callbackFinalArray, index) => {
+            if (callbackFinalArray[index] instanceof GroupField) {
+
+                if (target) {
+                    const callbackResult = (callbackFinalArray[index] as GroupField);
+                    if (callbackResult.nested) {
+                        callbackResult.nested.push(target);
+                    }
+                }
+            } else {
+
+                let saveFieldTo: BasicPluginField = new BasicPluginField({
+                    type: "integer",
+                    name: "name",
+                    label: "label",
+                    id: 1000,
+                });
+
+                for (let i = 0; i < callbackFinalArray.length; i++) {
+                    if (callbackFinalArray[i].id === toId) {
+                        saveFieldTo = callbackFinalArray[i];
+                    }
+                }
+
+                for (let i = 0; i < callbackFinalArray.length; i++) {
+                    if (callbackFinalArray[i].id === toId && target) {
+                        callbackFinalArray[i] = target;
+                        callbackFinalArray.push(saveFieldTo);
+                    }
+                }
+
+            }
+
+            return callbackFinalArray;
+        })(array, toId);
+
+        return finalArray;
+
+    }
+
+    function handleAddPluginField(field: BasicPluginField, id: number) {
         setPluginFields(prev => ([...prev, field]));
     }
 
-    function handleDeletePluginField(field: InputField) {
-        setPluginFields(pluginFields.filter(item => item.name !== field.name));
+    function handleEditPluginField(field: BasicPluginField, index: number) {
+        const copy = [...pluginFields];
+        copy.splice(index, 1, field);
+        setPluginFields(copy);
+    }
+
+    function handleDeletePluginField(field: BasicPluginField) {
+        setPluginFields(pluginFields.filter(pluginField => pluginField.id !== field.id));
     }
 
     function handleSetIsDialogPluginButtonActive() {
         setIsDialogPluginButtonActive(true);
-    }
-
-    const renderField = (item: InputField, index: number) => {
-
     }
 
     return (
@@ -105,28 +291,40 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
                             <TextField
                                 fullWidth
                                 label="Name"
+                                name="name"
+                                value={plugin.name}
+                                onChange={handlePluginChange}
                             />
                         </Grid>
                         <Grid item xs={6}>
                             <TextField
                                 fullWidth
                                 label="Version"
+                                name="version"
+                                value={plugin.version}
+                                onChange={handlePluginChange}
                             />
                         </Grid>
                         <Grid item xs={12}>
                             <TextField
                                 fullWidth
                                 label="Note"
+                                name="note"
+                                value={plugin.note}
+                                onChange={handlePluginChange}
                             />
                         </Grid>
                         <Grid item xs={12}>
                             <TextField
                                 fullWidth
                                 label="Description"
+                                name="description"
+                                value={plugin.description}
+                                onChange={handlePluginChange}
                             />
                         </Grid>
                         <Grid item xs={12}>
-                            <FilesLoader multiple/>
+                            <FilesLoader multiple getFileId={getFileId}/>
                         </Grid>
                     </Grid>
                 </Grid>
@@ -152,30 +350,31 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
                 </Grid>
             </Grid>
 
-            <DialogPlugin
-                open={isDialogPluginButtonActive}
-                onClose={() => setIsDialogPluginButtonActive(false)}
-                onAddField={handleAddPluginField}
-                idGenerator={getNextId}
-                pluginFields={pluginFields}
-            />
-
             <Grid container className={classes.firstLine}>
                 <Grid item xs={12} md={10}>
-                    <List>
-                        {pluginFields.map((item, index) => (
-                            <DragableListItem
-                                key={item.id}
-                                field={item}
-                                index={index}
-                                moveCard={move}
-                                onDelete={handleDeletePluginField}
-                            />
-                        ))}
-                    </List>
+                    <PluginContext.Provider value={{
+                        pluginFields: pluginFields,
+                        handleAddPluginField: handleAddPluginField,
+                        handleDeletePluginField: handleDeletePluginField,
+                        handleEditPluginField: handleEditPluginField,
+                        idGenerator: getNextId,
+                        moveField: moveField,
+                    }}>
+                        <PluginCreation
+                            open={isDialogPluginButtonActive}
+                            onClose={() => setIsDialogPluginButtonActive(false)}
+                            onAddField={handleAddPluginField}
+                            idGenerator={getNextId}
+                            pluginFields={pluginFields}
+                            move={move}
+                        />
+                    </PluginContext.Provider>
                 </Grid>
-            </Grid>
 
+                <Button fullWidth onClick={handleCreatePlugin}>
+                    Save
+                </Button>
+            </Grid>
         </React.Fragment>
     );
 });

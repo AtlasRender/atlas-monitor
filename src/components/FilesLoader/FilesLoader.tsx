@@ -9,26 +9,28 @@
 import React from "react";
 import {
     Avatar,
-    Box, IconButton,
+    Box,
+    IconButton,
     InputBase,
+    LinearProgress,
+    List,
     ListItem,
-    ListItemAvatar, ListItemSecondaryAction,
+    ListItemAvatar,
+    ListItemSecondaryAction,
     ListItemText,
     Typography,
     withStyles,
-    List, LinearProgress,
 } from "@material-ui/core";
 import styles from "./styles";
-import {useDropzone} from 'react-dropzone'
+import {useDropzone} from "react-dropzone"
 import Stylable from "../../interfaces/Stylable";
 import clsx from "clsx";
 import request from "superagent";
 import TempFile from "../../entities/TempFile";
 import useCoreRequest from "../../hooks/useCoreRequest";
-import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
-import DeleteIcon from '@material-ui/icons/Delete';
+import InsertDriveFileIcon from "@material-ui/icons/InsertDriveFile";
+import DeleteIcon from "@material-ui/icons/Delete";
 import useEnqueueErrorSnackbar from "../../utils/enqueueErrorSnackbar";
-import {element} from "prop-types";
 
 
 export const displayName = "FilesLoader";
@@ -47,6 +49,8 @@ export interface FilesLoaderProps extends Stylable {
     onProgress?(event: ProgressEvent): void;
 
     multiple?: boolean;
+
+    getFileId(id: number): void;
 
 }
 
@@ -91,7 +95,9 @@ const FilesLoader = React.forwardRef((props: FilesLoaderProps, ref) => {
         onError,
         onProgress,
         multiple,
+        getFileId,
         ...other
+
     } = props;
     const coreRequest = useCoreRequest();
     const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
@@ -128,6 +134,7 @@ const FilesLoader = React.forwardRef((props: FilesLoaderProps, ref) => {
                         next[targetId].progress = progress;
                         return next;
                     });
+
                     onProgress && onProgress(event)
                 })
                 .then((result: request.Response): void => {
@@ -139,6 +146,7 @@ const FilesLoader = React.forwardRef((props: FilesLoaderProps, ref) => {
                             if (targetId < 0) return next;
                             next[targetId].temp = entity;
                             next[targetId].progress = 1000;
+                            getFileId(entity.id);
                             return next;
                         });
                         onLoaded && onLoaded(entity);

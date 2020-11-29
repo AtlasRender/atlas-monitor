@@ -6,10 +6,10 @@
  * All rights reserved.
  */
 
-import React, {Ref, useRef} from "react";
+import React, {useContext, useRef} from "react";
 import Stylable from "../../../../interfaces/Stylable";
 import {
-    Avatar, Divider,
+    Avatar,
     IconButton,
     ListItem,
     ListItemAvatar,
@@ -18,16 +18,17 @@ import {
     withStyles,
 } from "@material-ui/core";
 import styles from "./styles";
-import InputField from "../../../../entities/InputField";
 import DeleteIcon from "@material-ui/icons/Delete";
 import {DropTargetMonitor, useDrag, useDrop, XYCoord} from "react-dnd";
 import BasicPluginField from "../../../../entities/BasicPluginField";
+import {PluginContext} from "../../CreatePluginPageView";
 
 interface DragableListItemProps extends Stylable{
-    field: InputField ,
-    onDelete(item: InputField | BasicPluginField): void,
-    moveCard: (dragIndex: number, hoverIndex: number) => void
+    field: BasicPluginField,
+    onDelete(item: BasicPluginField): void,
+    moveCard: (dragIndex: number, hoverIndex: number, targetId: number, toId: number) => void
     index: number,
+    getIndex(index: number): void,
 }
 
 interface DragItem{
@@ -36,11 +37,14 @@ interface DragItem{
     type: string,
 }
 
-const DragableListItem : React.FC<DragableListItemProps> = ({ field, onDelete, moveCard, index}) => {
+const DragableListItem : React.FC<DragableListItemProps> = ({ field, onDelete, moveCard, index, getIndex}) => {
 
-    const refer = useRef<HTMLLIElement>(null);
+    const context = useContext(PluginContext);
+
+    const refer = useRef<HTMLDivElement>(null);
     const id = field.id;
 
+    // console.log(field.id);
 
     const [, drop] = useDrop({
         accept: "InputField",
@@ -57,8 +61,6 @@ const DragableListItem : React.FC<DragableListItemProps> = ({ field, onDelete, m
 
             const hoveredRect = refer.current.getBoundingClientRect();
             const hoverMiddleY = (hoveredRect.bottom - hoveredRect.top) / 2;
-            // const mousePosition = monitor.getClientOffset();
-            // const hoveredClientY = mousePosition && mousePosition.y - hoveredRect.top;
             const clientOffset = monitor.getClientOffset()
             const hoveredClientY = (clientOffset as XYCoord).y - hoveredRect.top
 
@@ -70,8 +72,10 @@ const DragableListItem : React.FC<DragableListItemProps> = ({ field, onDelete, m
                 return;
             }
 
+            moveCard(dragIndex, hoverIndex, 1, 1);
 
-            moveCard(dragIndex, hoverIndex);
+            // context.moveField(context.pluginFields, field.id, )
+
             item.index = hoverIndex;
         },
 
@@ -89,15 +93,20 @@ const DragableListItem : React.FC<DragableListItemProps> = ({ field, onDelete, m
     const opacity = isDragging ? 0 : 1;
 
     return(
-            <ListItem ref={refer} style={{opacity}}>
+            <ListItem
+                ref={refer}
+                style={{opacity, paddingLeft: 0}}
+                button
+                onClick={() => getIndex(index)}
+            >
                 <ListItemAvatar>
                     <Avatar/>
                 </ListItemAvatar>
                 <ListItemText
-                    primary={field.default}
-                    secondary={field.niceName}
+                    primary={field.label}
+                    // secondary={field.label}
                 />
-                <ListItemSecondaryAction>
+                <ListItemSecondaryAction style={{opacity}}>
                     <IconButton
                         edge="end"
                         aria-label="delete"

@@ -2,26 +2,21 @@
  * Copyright (c) 2020. This code created and belongs to Atlas render manager project.
  * Owner and project architect: Danil Andreev | danssg08@gmail.com |  https://github.com/DanilAndreev
  * Project: atlas-monitor
- * File last modified: 12.11.2020, 18:37
+ * File last modified: 24.11.2020, 18:20
  * All rights reserved.
  */
 
 import {createStyles, Theme} from "@material-ui/core";
 
-const styles =(theme: Theme) => createStyles({
-    dialogRoles: {
-        width : "100%",
+const styles = (theme: Theme) => createStyles({
+    typographyText: {
         textAlign: "center",
-        paddingBottom: theme.spacing(2),
     },
     gridPadding: {
         marginBottom: theme.spacing(1),
     },
-    dialogSize: {
-        width: 536,
-        [theme.breakpoints.down('xs')]: {
-            width: "auto",
-        },
+    listPadding: {
+        padding: 0,
     }
 });
 

@@ -105,7 +105,7 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
         console.log(description);
     }
 
-    function errorHandler(event: React.FocusEvent<HTMLInputElement>){
+    function errorHandler(){
         if (name && name?.length <= 3) {
             setErrors((prev)=>({...prev, nameError: true, nameMessage: "Should be more than 3 symbols"}));
         } else if(name && name.length > 50) {
