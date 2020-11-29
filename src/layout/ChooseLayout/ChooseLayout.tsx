@@ -11,9 +11,9 @@ import styles from "./styles";
 import {withStyles} from "@material-ui/core";
 import Stylable from "../../interfaces/Stylable";
 import useAuth from "../../hooks/useAuth";
+import MonitorLayout from "../MonitorLayout";
 import MainPageLayout from "../MainPageLayout";
 import {ChangeRouteProvider} from "routing-manager";
-import MonitorLayout from "../MonitorLayout";
 
 /**
  * ChooseLayoutProps - interface for ChooseLayout component
@@ -32,6 +32,7 @@ interface ChooseLayoutProps extends Stylable {
 const ChooseLayout = React.forwardRef((props: ChooseLayoutProps, ref: Ref<any>) => {
     const {getUser, isLogged} = useAuth();
     const user = getUser();
+
     return (
         <React.Fragment>
             <ChangeRouteProvider routeMask="(/:page)">
@@ -41,7 +42,6 @@ const ChooseLayout = React.forwardRef((props: ChooseLayoutProps, ref: Ref<any>) 
                     <MainPageLayout/>
                 }
             </ChangeRouteProvider>
-            {/*<MonitorLayout/>*/}
         </React.Fragment>
     );
 });

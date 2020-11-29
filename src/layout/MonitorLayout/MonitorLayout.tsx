@@ -372,8 +372,8 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<HTML
                             <CreateOrganizationPageView/>
                         </ChangeRouteProvider>
                     </Route>
-                    <Route path="/plugin/create">
-                        <ChangeRouteProvider routeMask="(/:id)">
+                    <Route path="/plugin">
+                        <ChangeRouteProvider routeMask="(/:create(/:id))">
                             <DndProvider backend={HTML5Backend}>
                                 <CreatePluginPageView/>
                             </DndProvider>
