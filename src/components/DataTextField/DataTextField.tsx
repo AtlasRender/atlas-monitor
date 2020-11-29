@@ -29,7 +29,7 @@ interface DataTextFieldProps extends Stylable, Containerable {
      * children - main text of element
      * @type string
      */
-    children?: string | null;
+    children?: string | null | never[];
 }
 
 /**
