@@ -67,7 +67,7 @@ type Anchor = "left";
  * @function
  * @author Andrii Demchyshyn
  */
-const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<any>) => {
+const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<HTMLElement>): JSX.Element => {
     const {
         classes,
         className,

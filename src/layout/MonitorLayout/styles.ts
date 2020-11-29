@@ -61,10 +61,10 @@ const styles = (theme: Theme) => createStyles({
     toolbar: {
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'flex-end',
         padding: theme.spacing(0, 1),
         // necessary for content to be below app bar
-        ...theme.mixins.toolbar,
+        // ...theme.mixins.toolbar,
+        justifyContent: 'flex-end',
     },
     content: {
         flexGrow: 1,
