@@ -50,6 +50,7 @@ import {HTML5Backend} from "react-dnd-html5-backend";
 import {DndProvider} from "react-dnd";
 import CoreEventDispatcher from "../../core/WebSocketCore";
 import User from "../../entities/User";
+import {WS_RENDER_JOB_UPDATE} from "../../globals";
 
 /**
  * MonitorLayoutProps - interface for MonitorLayout component
@@ -93,7 +94,7 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<HTML
         const listener = (message: any) => {
             console.log("recieved11 ", message);
         }
-        CoreEventDispatcher.getInstance().addListener("ping", listener);
+        CoreEventDispatcher.getInstance().addListener(WS_RENDER_JOB_UPDATE, listener);
 
         if(location.pathname === "/") {
             changeRoute({page: "user", id: null});
