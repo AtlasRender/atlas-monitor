@@ -139,7 +139,7 @@ const RenderJobsDetailsView = React.forwardRef((props: RenderJobsDetailsViewProp
                         <Typography variant="h4" className={clsx(classes.mainText, className)}>
                             Pathfinder Logo
                         </Typography>
-                        <Progress className={clsx(classes.progressMargin, className)}/>
+                        <Progress progress={10} className={clsx(classes.progressMargin, className)}/>
                         <Typography variant="h6">
                             General
                         </Typography>

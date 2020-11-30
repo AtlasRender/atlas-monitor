@@ -6,7 +6,7 @@
  * All rights reserved.
  */
 
-import React, {Ref} from 'react';
+import React, {Ref, useEffect, useState} from "react";
 import {withStyles} from '@material-ui/core/styles';
 import LinearProgress, {LinearProgressProps} from '@material-ui/core/LinearProgress';
 import Typography from '@material-ui/core/Typography';
@@ -21,6 +21,7 @@ import Stylable from "../../interfaces/Stylable";
  * @author Andrii Demchyshyn
  */
 interface ProgressProps extends Stylable {
+    progress: number;
 }
 
 /**
@@ -53,27 +54,24 @@ const Progress = React.forwardRef((props: ProgressProps, ref: Ref<any>) => {
     const {
         classes,
         className,
+        progress,
     } = props;
 
-    const [progress, setProgress] = React.useState(10);
+    const [jobProgress, setJobProgress] = useState(0);
+
+    useEffect(() => {
+        setJobProgress(progress);
+    }, [progress])
 
     /**
      * React.useEffect - forces progress bar to move
      * @function
      * @author Andrii Demchyshyn
      */
-    React.useEffect(() => {
-        const timer = setInterval(() => {
-            setProgress((prevProgress) => (prevProgress >= 100 ? 1 : prevProgress + 1));
-        }, 100);
-        return () => {
-            clearInterval(timer);
-        };
-    }, []);
 
     return (
         <Box className={clsx(classes.root, className)}>
-            <LinearProgressWithLabel value={progress}/>
+            <LinearProgressWithLabel value={jobProgress}/>
         </Box>
     );
 });
