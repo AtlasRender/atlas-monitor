@@ -48,7 +48,7 @@ import AtlasLogo from "./images/AtlasSystemsLogo.svg";
 import CreatePluginPageView from "../../views/CreatePluginPageView";
 import {HTML5Backend} from "react-dnd-html5-backend";
 import {DndProvider} from "react-dnd";
-import CoreEventDispatcher from "../../core/WebSocketCore";
+import CoreEventDispatcher from "../../core/CoreEventDispatcher";
 import User from "../../entities/User";
 import {WS_RENDER_JOB_UPDATE} from "../../globals";
 
