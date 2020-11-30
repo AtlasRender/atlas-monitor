@@ -10,14 +10,14 @@ import React, {Ref, useEffect, useState} from "react";
 import {
     Box,
     Button,
-    Chip,
+    Chip, FormControl,
     Grid,
     IconButton,
     InputLabel,
     List,
     ListItem,
     ListItemText,
-    MenuItem,
+    MenuItem, Popover,
     Select,
     TextField,
     Typography,
@@ -35,7 +35,10 @@ import useEnqueueSuccessSnackbar from "../../utils/EnqueSuccessSnackbar";
 import useEnqueueErrorSnackbar from "../../utils/enqueueErrorSnackbar";
 import Loading from "../../components/Loading";
 import Organization from "../../interfaces/Organization";
-import User from "../../interfaces/User";
+import Plugin from "../../interfaces/Plugin";
+import PluginInput from "./LocalComponents/PluginInput";
+import PluginPreview from "../../interfaces/PluginPreview";
+import DialogPlugin from "./LocalComponents/DialogPlugin";
 
 /**
  * SubmitPagePropsStyled - interface for SubmitPageView function
@@ -64,7 +67,7 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
         classes,
         style,
         className,
-    } = props
+    } = props;
 
     const enqueueSuccessSnackbar = useEnqueueSuccessSnackbar();
     const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
@@ -83,17 +86,27 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
         organization: userOrgs[0]?.id,
         frameRange: "2-10 11-100",
         attempts_per_task_limit: 1,
-    })
+    });
+    const [plugins, setPlugins] = useState<Plugin[]>([]);
+    const [chosenPluginName, setChosenPluginName] = useState<string>("");
+    const [chosenPlugin, setChosenPlugin] = useState<PluginPreview | null>(null);
+    const [openDialog, setOpenDialog] = useState(false);
+
+
     useEffect(() => {
         Promise.all([
             handleGetUser(),
+            handleGetPlugins(),
         ]).then(() => {
-            setLoaded(true)
-        })
+            setLoaded(true);
+        });
     }, []);
-    useEffect(()=>{
+
+
+    useEffect(() => {
         setJob((prev) => ({...prev, organization: userOrgs[0]?.id}));
-    },[userOrgs]);
+    }, [userOrgs]);
+
 
     /**
      * handleGetUser - function for taking info about authorized user
@@ -114,10 +127,43 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
         }
     }
 
+    async function handleGetPlugins() {
+        const id = getUser()?.id;
+        try {
+            const userOrganizations = await coreRequest().get(`users/${id}/organizations`);
+            const response = await coreRequest().get("plugins").query({organization: userOrganizations.body[0].id});
+            setPlugins(response.body);
+        } catch (err) {
+            enqueueErrorSnackbar("Cant get plugins");
+        }
+    }
+
+    const handleGetPlugin = (pluginId: number) => {
+        coreRequest()
+            .get(`/plugins/${pluginId}/preview`)
+            .then(response => {
+                console.log(response.body);
+                setChosenPlugin(response.body);
+            })
+            .catch(err => {
+                enqueueErrorSnackbar("Cant get plugin");
+            });
+    };
+
+    const handleChangePlugin = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setChosenPluginName(event.target.value);
+        const plugin = plugins.filter(item => item.name === event.target.value);
+        handleGetPlugin(plugin[0].id);
+    };
+
     function handleOrgChange(item: any) {
         setOrg(item.name);
         setJob((prev) => ({...prev, organization: item.id}));
         console.log(org);
+    }
+
+    function handleGetChosenPlugin(plugin: PluginPreview) {
+        setChosenPlugin(plugin);
     }
 
     /**
@@ -135,16 +181,24 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
             .post("jobs")
             .send(job)
             .then(() => {
-                enqueueSuccessSnackbar("successfully submitted")
+                enqueueSuccessSnackbar("successfully submitted");
             })
             .catch(() => {
                 enqueueErrorSnackbar("Something went wrong");
-            })
+            });
     }
 
     const handleDelete = () => {
         console.info("You clicked the delete icon.");
     };
+
+    const handleOpenDialog = () => {
+        setOpenDialog(true);
+    }
+
+    const handleCloseDialog = () => {
+        setOpenDialog(false);
+    }
 
     const matches = useMediaQuery("(min-width:800px)");
     let submitInfo;
@@ -183,6 +237,7 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
                         {userOrgs.map((item) => {
                             return (
                                 <MenuItem
+                                    key={item.id}
                                     value={item.name}
                                     onClick={() => handleOrgChange(item)}
                                 >
@@ -225,11 +280,21 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
         plugin = (
             <React.Fragment>
                 <Grid item xs={8} className={classes.flexItem}>
-                    <Select value={1} fullWidth>
-                        <MenuItem value={1}>
-                            Arnold Shwarznegger and Silvestr s talonom
-                        </MenuItem>
-                    </Select>
+
+                    <Button
+                        fullWidth
+                        variant="outlined"
+                        onClick={handleOpenDialog}
+                    >
+                        Select Plugin
+                    </Button>
+
+                    <DialogPlugin
+                        open={openDialog}
+                        onClose={handleCloseDialog}
+                        getPlugin={handleGetChosenPlugin}
+                    />
+
                 </Grid>
                 <Grid item xs={2}>
                     <Select value="1.01" fullWidth>
@@ -303,11 +368,42 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
         plugin = (
             <React.Fragment>
                 <Grid item xs={10} className={classes.flexItem}>
-                    <Select value={1} fullWidth>
-                        <MenuItem value={1}>
-                            Arnold Shwarznegger and Silvestr s talonom
-                        </MenuItem>
-                    </Select>
+                    {/*<Button fullWidth variant="contained" color="primary" onClick={handleOpenPopover}>*/}
+                    {/*    {chosenPlugin ? chosenPlugin.name : "Choose Plugin"}*/}
+                    {/*</Button>*/}
+                    {/*<Popover*/}
+                    {/*    open={open}*/}
+                    {/*    anchorEl={anchorEl}*/}
+                    {/*    onClose={handleClosePopover}*/}
+                    {/*    anchorOrigin={{*/}
+                    {/*        vertical: "bottom",*/}
+                    {/*        horizontal: "left",*/}
+                    {/*    }}*/}
+                    {/*    transformOrigin={{*/}
+                    {/*        vertical: "top",*/}
+                    {/*        horizontal: "left",*/}
+                    {/*    }}*/}
+                    {/*>*/}
+                    {/*    <List>*/}
+                    {/*        {plugins.map((plugin) => {*/}
+                    {/*            return (*/}
+                    {/*                <ListItem*/}
+                    {/*                    button*/}
+                    {/*                    key={plugin.id}*/}
+                    {/*                >*/}
+                    {/*                    <Grid container spacing={2}>*/}
+                    {/*                        <Grid item xs={4}>*/}
+                    {/*                            {plugin.name}*/}
+                    {/*                        </Grid>*/}
+                    {/*                        <Grid item xs={8}>*/}
+                    {/*                            {plugin.description}*/}
+                    {/*                        </Grid>*/}
+                    {/*                    </Grid>*/}
+                    {/*                </ListItem>*/}
+                    {/*            );*/}
+                    {/*        })}*/}
+                    {/*    </List>*/}
+                    {/*</Popover>*/}
                 </Grid>
                 <Grid item xs={10}>
                     <Select value="1.01" fullWidth>
@@ -324,7 +420,7 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
                     <Button fullWidth variant="contained" className={classes.submitButton}>Submit</Button>
                 </Grid>
             </React.Fragment>
-        )
+        );
     }
 
     return (
@@ -371,8 +467,20 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
                     <Grid item xs={10}>
                         <Typography variant="h6">Plugin</Typography>
                     </Grid>
+
+
                     {plugin}
+
+                    <Grid item xs={10}>
+                        {chosenPlugin &&
+                        <PluginInput pluginId={chosenPlugin.id}/>
+                        }
+                    </Grid>
+
+
                     {submitButton}
+
+
                 </Grid>
             </Box>
             :
