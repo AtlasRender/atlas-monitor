@@ -7,11 +7,13 @@
  */
 
 import React, {Ref, useEffect, useState} from "react";
-import {withStyles} from "@material-ui/core";
+import {Box, Typography, withStyles} from "@material-ui/core";
 import styles from "./styles";
 import Stylable from "../../../../interfaces/Stylable";
 import useCoreRequest from "../../../../hooks/useCoreRequest";
 import useEnqueueErrorSnackbar from "../../../../utils/enqueueErrorSnackbar";
+import PluginFull from "../../../../interfaces/PluginFull";
+import {PluginSettingsSpec} from "@atlasrender/render-plugin";
 
 
 /**
@@ -41,30 +43,42 @@ const PluginInput = React.forwardRef((props: PluginInputProps, ref: Ref<any>) =>
     const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
 
 
-    const [plugin, setPlugin] = useState();
+    const [plugin, setPlugin] = useState<PluginFull | null>(null);
+    const [loaded, setLoaded] = useState<boolean>(false);
+
+    console.log(plugin);
 
 
     useEffect(() => {
-        handleGetPlugin();
-    }, []);
+        Promise.all([
+            handleGetPlugin(),
+        ]).then(() => {
+            setLoaded(true);
+        });
+    }, [pluginId]);
 
 
-    const handleGetPlugin = () => {
-        coreRequest()
-            .get(`/plugins/${pluginId}/preview`)
-            .then(response => {
-                console.log(response.body)
-                setPlugin(response.body);
-            })
-            .catch(err => {
-                enqueueErrorSnackbar("Cant get plugin")
-            })
+    async function handleGetPlugin() {
+        try {
+            const response = await coreRequest().get(`/plugins/${pluginId}`);
+            const temp = {...response.body, rules: new PluginSettingsSpec(response.body.rules)};
+            setPlugin(temp);
+        } catch (err) {
+            enqueueErrorSnackbar("Cant get plugin");
+        }
+
     }
 
+
     return (
-        <div>
-            hello
-        </div>
+        (loaded && plugin) ?
+            <Box>
+                <Typography variant="h6" className={classes.header}>
+                    {plugin.name} settings
+                </Typography>
+            </Box>
+            :
+            <Box/>
     );
 });
 

@@ -112,7 +112,6 @@ const DialogPlugin = React.forwardRef((props: DialogPluginProps, ref: Ref<any>) 
             getPlugin(chosenPlugin);
         }
         onClose();
-        console.log("kuku");
     }
 
     return (
@@ -128,7 +127,6 @@ const DialogPlugin = React.forwardRef((props: DialogPluginProps, ref: Ref<any>) 
                     </DialogTitle>
 
                     <List>
-
 
                         <Grid container>
                             <Grid item xs={5}>
@@ -199,14 +197,16 @@ const DialogPlugin = React.forwardRef((props: DialogPluginProps, ref: Ref<any>) 
                                 }
 
                             </Grid>
-                        </Grid>
 
+                            <Button fullWidth onClick={() => handleSubmit()}>
+                                Submit
+                            </Button>
+
+                        </Grid>
 
                     </List>
 
-                    <Button fullWidth onClick={() => handleSubmit()}>
-                        Submit
-                    </Button>
+
 
                 </Box>
                 :
