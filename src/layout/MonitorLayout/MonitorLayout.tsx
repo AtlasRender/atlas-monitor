@@ -50,6 +50,7 @@ import AtlasLogo from "./images/AtlasSystemsLogo.svg";
 import CreatePluginPageView from "../../views/CreatePluginPageView";
 import {HTML5Backend} from "react-dnd-html5-backend";
 import {DndProvider} from "react-dnd";
+import WebSocketCore from "../../core/WebSocketCore";
 
 /**
  * MonitorLayoutProps - interface for MonitorLayout component
@@ -78,12 +79,14 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<HTML
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
     const [state, setState] = React.useState({left: false});
-    const {logout, isLogged} = useAuth();
+    const {logout, isLogged, getUser} = useAuth();
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
     const openPopper = Boolean(anchorEl);
     const id = openPopper ? 'simple-popper' : undefined;
     const location = useLocation();
+
+    const ws = new WebSocketCore(() => getUser()?.bearer || "");
 
     useEffect(() => {
         if(location.pathname === "/") {
