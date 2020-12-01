@@ -22,10 +22,9 @@ import styles from "./styles";
 import {
     Avatar,
     Box,
-    Dialog,
     Divider,
-    IconButton, Popover,
-    Popper,
+    IconButton,
+    Popover,
     SwipeableDrawer,
     useMediaQuery,
     useTheme,
@@ -44,12 +43,14 @@ import SubmitPageView from "../../views/SubmitPageView";
 import Button from "@material-ui/core/Button";
 import useAuth from "../../hooks/useAuth";
 import CreateOrganizationPageView from "../../views/CreateOrganizationPageView";
-import AuthorizationPageView from "../../views/AuthorizationPageView/AuthorizationPageView";
 import UserEditView from "../../views/UserEditView/UserEditView";
 import AtlasLogo from "./images/AtlasSystemsLogo.svg";
 import CreatePluginPageView from "../../views/CreatePluginPageView";
 import {HTML5Backend} from "react-dnd-html5-backend";
 import {DndProvider} from "react-dnd";
+import CoreEventDispatcher from "../../core/CoreEventDispatcher";
+import User from "../../entities/User";
+import {WS_RENDER_JOB_UPDATE} from "../../globals";
 
 /**
  * MonitorLayoutProps - interface for MonitorLayout component
@@ -78,7 +79,7 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<HTML
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
     const [state, setState] = React.useState({left: false});
-    const {logout, isLogged} = useAuth();
+    const {logout, isLogged, getUser} = useAuth();
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
     const openPopper = Boolean(anchorEl);
@@ -86,9 +87,23 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<HTML
     const location = useLocation();
 
     useEffect(() => {
+        const user: User | null = getUser();
+        if (user)
+            CoreEventDispatcher.connect(user.bearer);
+
+        const listener = (message: any) => {
+            console.log("recieved11 ", message);
+        }
+        CoreEventDispatcher.getInstance().addListener(WS_RENDER_JOB_UPDATE, listener);
+
         if(location.pathname === "/") {
             changeRoute({page: "user", id: null});
         }
+
+        return () => {
+            //CoreEventDispatcher.disconnect()
+            CoreEventDispatcher.getInstance().removeListener("ping", listener);
+        };
     }, []);
 
     useEffect(() => {
