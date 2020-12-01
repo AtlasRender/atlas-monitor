@@ -62,8 +62,8 @@ const RenderJobsView = React.forwardRef((props: RenderJobsViewProps, ref: Ref<an
 
     async function handleGetJobs() {
         try {
-            const response = await coreRequest().get("jobs")
-            setJobs(response.body)
+            const response = await coreRequest().get("jobs");
+            setJobs(response.body);
         } catch (err) {
             enqueueErrorSnackbar("Can`t get render jobs");
         }

@@ -10,7 +10,7 @@ import BasicPluginField from "./BasicPluginField";
 
 
 /**
- * BooleanField - interface for Boolean Plugin Field
+ * BooleanPluginField - interface for Boolean Plugin Field
  * @interface
  * @author Andrii Demchyshyn
  */

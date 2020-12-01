@@ -39,7 +39,7 @@
   },
   "proxy": "http://api.atlasrender.com:3002",
   "dependencies": {
-    "@atlasrender/render-plugin": "^0.1.1",
+    "@atlasrender/render-plugin": "^0.1.2",
     "@date-io/date-fns": "2.x",
     "@devexpress/dx-react-chart": "^2.7.2",
     "@devexpress/dx-react-chart-material-ui": "^2.7.2",
@@ -68,7 +68,8 @@
     "react-window": "^1.8.6",
     "redux": "^4.0.5",
     "routing-manager": "^2.2.0",
-    "superagent": "^6.1.0"
+    "superagent": "^6.1.0",
+    "validate.js": "^0.13.1"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.11.6",
