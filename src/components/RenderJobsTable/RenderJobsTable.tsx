@@ -6,24 +6,24 @@
  * All rights reserved.
  */
 
-import React, {Ref, useEffect, useState} from 'react';
-import Paper from '@material-ui/core/Paper';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TablePagination from '@material-ui/core/TablePagination';
-import TableRow from '@material-ui/core/TableRow'
+import React, {Ref, useEffect, useState} from "react";
+import Paper from "@material-ui/core/Paper";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TablePagination from "@material-ui/core/TablePagination";
+import TableRow from "@material-ui/core/TableRow";
 import {Box, Grid, IconButton, Typography, useTheme, withStyles} from "@material-ui/core";
-import withWidth, {isWidthUp} from '@material-ui/core/withWidth';
+import withWidth, {isWidthUp} from "@material-ui/core/withWidth";
 import styles from "./styles";
 import clsx from "clsx";
 import Progress from "../Progress";
 import {useChangeRoute} from "routing-manager";
 import Stylable from "../../interfaces/Stylable";
 import FilterListIcon from "@material-ui/icons/FilterList";
-import MoreVertIcon from '@material-ui/icons/MoreVert';
+import MoreVertIcon from "@material-ui/icons/MoreVert";
 import useCoreRequest from "../../hooks/useCoreRequest";
 
 import {format} from "date-fns";
@@ -99,29 +99,6 @@ function createData(idTable: number, name: string, submitter: string, organisati
 }
 
 /**
- * rows - array of table rows
- * @type string
- * @type number
- */
-const rows = [
-    createData(1, 'Pathfinder Logo', 'Danil Andreev', "Blizzard Entertainment", "24.09.2020 12:59:59", 0.6),
-    createData(2, 'Pathfinder Logo', 'Danil Andreev', "Blizzard Entertainment", "24.09.2020 12:59:59", 0.6),
-    createData(3, 'Pathfinder Logo', 'Danil Andreev', "Blizzard Entertainment", "24.09.2020 12:59:59", 0.6),
-    createData(4, 'Pathfinder Logo', 'Danil Andreev', "Blizzard Entertainment", "24.09.2020 12:59:59", 0.6),
-    createData(5, 'Pathfinder Logo', 'Danil Andreev', "Blizzard Entertainment", "24.09.2020 12:59:59", 0.6),
-    createData(6, 'Pathfinder Logo', 'Danil Andreev', "Blizzard Entertainment", "24.09.2020 12:59:59", 0.6),
-    createData(7, 'Pathfinder Logo', 'Danil Andreev', "Blizzard Entertainment", "24.09.2020 12:59:59", 0.6),
-    createData(8, 'Pathfinder Logo', 'Danil Andreev', "Blizzard Entertainment", "24.09.2020 12:59:59", 0.6),
-    createData(9, 'Pathfinder Logo', 'Danil Andreev', "Blizzard Entertainment", "24.09.2020 12:59:59", 0.6),
-    createData(10, 'Pathfinder Logo', 'Danil Andreev', "Blizzard Entertainment", "24.09.2020 12:59:59", 0.6),
-    createData(11, 'Pathfinder Logo', 'Danil Andreev', "Blizzard Entertainment", "24.09.2020 12:59:59", 0.6),
-    createData(12, 'Pathfinder Logo', 'Danil Andreev', "Blizzard Entertainment", "24.09.2020 12:59:59", 0.6),
-    createData(13, 'Pathfinder Logo', 'Danil Andreev', "Blizzard Entertainment", "24.09.2020 12:59:59", 0.6),
-    createData(14, 'Pathfinder Logo', 'Danil Andreev', "Blizzard Entertainment", "24.09.2020 12:59:59", 0.6),
-    createData(15, 'Pathfinder Logo', 'Danil Andreev', "Blizzard Entertainment", "24.09.2020 12:59:59", 0.6),
-];
-
-/**
  * RenderJobsTable - creates table with render jobs
  * @function
  * @author Andrii Demchyshyn
@@ -150,7 +127,7 @@ const RenderJobsTable = React.forwardRef((props: RenderJobsTableProps, ref: Ref<
             handleGetJobs(),
         ]).then(() => {
             setLoaded(true);
-        })
+        });
     }, []);
 
 
@@ -161,10 +138,10 @@ const RenderJobsTable = React.forwardRef((props: RenderJobsTableProps, ref: Ref<
                 let entity: ShortJobs[] = [];
                 console.log(response.body);
                 try {
-                    response.body.map(item => {
+                    response.body.forEach(item => {
                         console.log(item);
                         entity.push(new ShortJobs(item));
-                    })
+                    });
                 } catch (err) {
                     enqueueErrorSnackbar("Invalid data types");
                 }
@@ -176,13 +153,13 @@ const RenderJobsTable = React.forwardRef((props: RenderJobsTableProps, ref: Ref<
     }
 
     function handleSetStatusColor(status: string) {
-        if(status === "done") {
+        if (status === "done") {
             return green[400];
-        } else if(status === "failed") {
+        } else if (status === "failed") {
             return theme.palette.error.dark;
-        } else if(status === "inProgress") {
+        } else if (status === "inProgress") {
             return blue[200];
-        } else if(status === "inQueue"){
+        } else if (status === "inQueue") {
             return orange[300];
         } else {
             return "#fff";
@@ -261,7 +238,7 @@ const RenderJobsTable = React.forwardRef((props: RenderJobsTableProps, ref: Ref<
                                             <TableCell
                                                 align="left">{format(job.createdAt, "dd.MM.yyyy hh:mm")}</TableCell>
                                             <TableCell align="left">
-                                                {isWidthUp('md', props.width) ? (<Progress progress={
+                                                {isWidthUp("md", props.width) ? (<Progress progress={
                                                     ((job.doneTasks) / (job.doneTasks + job.pendingTasks + job.failedTasks + job.processingTasks)) * 100
                                                 }/>) : ("10%")}
                                             </TableCell>
@@ -274,7 +251,7 @@ const RenderJobsTable = React.forwardRef((props: RenderJobsTableProps, ref: Ref<
                     <TablePagination
                         rowsPerPageOptions={[10, 25, 100]}
                         component="div"
-                        count={rows.length}
+                        count={jobs.length}
                         rowsPerPage={rowsPerPage}
                         page={page}
                         onChangePage={handleChangePage}
@@ -289,6 +266,6 @@ const RenderJobsTable = React.forwardRef((props: RenderJobsTableProps, ref: Ref<
     );
 });
 RenderJobsTable.displayName = "RenderJobsTable";
-RenderJobsTable.propTypes = {}
+RenderJobsTable.propTypes = {};
 
 export default withWidth()(withStyles(styles)(RenderJobsTable));
