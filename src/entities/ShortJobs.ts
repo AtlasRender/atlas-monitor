@@ -12,8 +12,6 @@ import NumberValidator from "../core/validators/NumberValidator";
 import StringValidator from "../core/validators/StringValidator";
 import DateValidator from "../core/validators/DateValidator";
 import ValidationError from "../core/ValidationError";
-import {UserValidationMap} from "./User";
-import {instanceOf} from "prop-types";
 import User from "../interfaces/User";
 
 export interface ShortJobsValidationMap {
@@ -39,7 +37,7 @@ export interface ShortJobsValidationMap {
  * @interface
  * @author Andrii Demchyshyn
  */
-export default class ShortJobs extends BaseEntity{
+export default class ShortJobs extends BaseEntity {
     /**
      * id - unique number of job
      */
@@ -55,7 +53,7 @@ export default class ShortJobs extends BaseEntity{
     /**
      * createdAt - date of creation
      */
-    public  createdAt: Date;
+    public createdAt: Date;
     /**
      * updatedAt - date of last update
      */
@@ -77,7 +75,7 @@ export default class ShortJobs extends BaseEntity{
     public failedTasks: number;
     public pendingTasks: number;
     public processingTasks: number;
-    public pluginSettings: {value1: number, value2: string};
+    public pluginSettings: { value1: number, value2: string };
     public submitter: User;
 
 

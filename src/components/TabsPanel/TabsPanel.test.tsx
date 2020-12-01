@@ -8,7 +8,7 @@
 
 import React from "react";
 import ReactDOM from "react-dom";
-import {render, cleanup} from '@testing-library/react';
+import {cleanup, render} from "@testing-library/react";
 import TabsPanel from "../TabsPanel/TabsPanel";
 
 afterEach(cleanup);
@@ -20,13 +20,13 @@ describe("ListItemProgress", () => {
     });
 
     test("Render without input", () => {
-        const container:any = document.createElement("div");
+        const container: any = document.createElement("div");
         render(<TabsPanel value={0} index={0}/>, container);
         expect(container.textContent).toBe("");
     });
 
     test("Render with input", () => {
-        const { getByText } = render(<TabsPanel value={0} index={0}>Hello</TabsPanel>);
+        const {getByText} = render(<TabsPanel value={0} index={0}>Hello</TabsPanel>);
         expect(getByText("Hello")).not.toBe(null);
     });
 });

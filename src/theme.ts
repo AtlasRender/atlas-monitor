@@ -11,17 +11,17 @@ import {blueGrey, grey, lightBlue} from "@material-ui/core/colors";
 
 declare module "@material-ui/core/styles/createPalette" {
     interface Palette {
-        header: Palette['primary'];
-        baseColors: Palette['primary'];
-        baseLightColors: Palette['primary'];
-        baseDarkColors: Palette['primary'];
+        header: Palette["primary"];
+        baseColors: Palette["primary"];
+        baseLightColors: Palette["primary"];
+        baseDarkColors: Palette["primary"];
     }
 
     interface PaletteOptions {
-        header: PaletteOptions['primary'];
-        baseColors: PaletteOptions['primary'];
-        baseLightColors: PaletteOptions['primary'];
-        baseDarkColors: PaletteOptions['primary'];
+        header: PaletteOptions["primary"];
+        baseColors: PaletteOptions["primary"];
+        baseLightColors: PaletteOptions["primary"];
+        baseDarkColors: PaletteOptions["primary"];
     }
 }
 

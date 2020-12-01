@@ -19,12 +19,12 @@ const styles = (theme: Theme) => createStyles({
         marginTop: theme.spacing(2),
     },
     chartHeight: {
-      height: 300
+        height: 300
     },
-    box:{
+    box: {
         display: "flex",
         justifyContent: "flex-end",
-        alignItems:"center"
+        alignItems: "center"
     },
     iconButton: {
         top: 8,

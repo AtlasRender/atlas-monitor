@@ -9,9 +9,9 @@
 import {createStyles, Theme} from "@material-ui/core";
 import grey from "@material-ui/core/colors/grey";
 
-const styles =(theme: Theme) => createStyles({
+const styles = (theme: Theme) => createStyles({
     dialogRoles: {
-        width : "100%",
+        width: "100%",
         textAlign: "center",
         paddingBottom: theme.spacing(2),
     },
@@ -24,10 +24,10 @@ const styles =(theme: Theme) => createStyles({
         //     width: "auto",
         // },
     },
-    rootFolder:{
+    rootFolder: {
         border: `1px solid ${grey[700]}`,
         minHeight: 300,
-        padding:theme.spacing(2, 1, 2, 2),
+        padding: theme.spacing(2, 1, 2, 2),
     },
 
 });

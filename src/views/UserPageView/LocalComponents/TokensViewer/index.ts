@@ -6,4 +6,4 @@
  * All rights reserved.
  */
 
-export {default} from "./TokensViewer"
+export {default} from "./TokensViewer";

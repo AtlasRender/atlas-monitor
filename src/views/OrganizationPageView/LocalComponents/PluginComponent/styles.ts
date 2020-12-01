@@ -8,30 +8,30 @@
 
 import {createStyles, Theme} from "@material-ui/core";
 
-const styles =(theme: Theme) => createStyles({
-    container:{
-        display:"flex",
+const styles = (theme: Theme) => createStyles({
+    container: {
+        display: "flex",
         alignItems: "center",
-        justifyContent:"center",
+        justifyContent: "center",
         margin: 0,
     },
-    containerItem:{
-        justifyContent:"space-between",
+    containerItem: {
+        justifyContent: "space-between",
         display: "flex",
         // backgroundColor: grey[200],
-        borderRadius:"5px",
-        padding:theme.spacing(0),
+        borderRadius: "5px",
+        padding: theme.spacing(0),
         // paddingTop:theme.spacing(0.5),
         // paddingBottom: theme.spacing(0.5)
     },
-    dataTextFieldFix:{
+    dataTextFieldFix: {
         padding: 0,
         //paddingLeft:theme.spacing(1),
-        backgroundColor:"inherit",
+        backgroundColor: "inherit",
     },
-    selectAlignment:{
-        display:"flex",
-        justifyContent:"flex-end",
+    selectAlignment: {
+        display: "flex",
+        justifyContent: "flex-end",
     }
 
 });

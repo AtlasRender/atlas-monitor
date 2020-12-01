@@ -11,7 +11,7 @@ import {createStyles, Theme} from "@material-ui/core";
 
 const styles = (theme: Theme) => createStyles({
     root: {
-        width: '100%',
+        width: "100%",
         height: 400,
         maxWidth: 300,
         backgroundColor: theme.palette.background.paper,

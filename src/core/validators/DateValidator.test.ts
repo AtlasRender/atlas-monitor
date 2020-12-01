@@ -7,7 +7,6 @@
  */
 
 import DateValidator from "./DateValidator";
-import {instanceOf} from "prop-types";
 
 describe("core/validators/DateValidator", () => {
     test("Input number", () => {
@@ -21,13 +20,13 @@ describe("core/validators/DateValidator", () => {
         expect(result.error).toBe(true);
     });
     test("Correct date string", () => {
-        const date = new Date("December 17, 1995 03:24:00")
+        const date = new Date("December 17, 1995 03:24:00");
         const result = DateValidator("December 17, 1995 03:24:00");
         expect(result.value).toMatchObject(date);
         expect(result.error).toBe(false);
     });
     test("Date object", () => {
-        const date = new Date()
+        const date = new Date();
         const result = DateValidator(date);
         expect(result.value).toBe(date);
         expect(result.error).toBe(false);

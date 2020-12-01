@@ -7,9 +7,7 @@
  */
 
 import React from "react";
-import ReactDOM from "react-dom";
-import {render, cleanup} from '@testing-library/react';
-import RenderJobsTable from "./RenderJobsTable";
+import {cleanup} from "@testing-library/react";
 
 afterEach(cleanup);
 

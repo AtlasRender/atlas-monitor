@@ -69,7 +69,7 @@ const PluginComponent = React.forwardRef((props: PluginComponentProps, ref: Ref<
                     </Grid>
                 </Grid>
             </Grid>
-        )
+        );
     } else {
         item = (
             <Grid container spacing={0} className={classes.container}>
@@ -94,7 +94,7 @@ const PluginComponent = React.forwardRef((props: PluginComponentProps, ref: Ref<
                     </Grid>
                 </Grid>
             </Grid>
-        )
+        );
     }
 
     return (

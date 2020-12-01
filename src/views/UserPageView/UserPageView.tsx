@@ -8,11 +8,14 @@
 import React, {Ref, useEffect, useState} from "react";
 import {
     Avatar,
-    Box, Button, Chip,
+    Box,
+    Button,
+    Chip,
     Divider,
     Grid,
     IconButton,
-    ListItem, ListItemAvatar,
+    ListItem,
+    ListItemAvatar,
     ListItemSecondaryAction,
     ListItemText,
     useMediaQuery,
@@ -34,7 +37,6 @@ import Token from "../../interfaces/Token";
 import {Route, Switch, useRouteMatch} from "react-router-dom";
 import List from "@material-ui/core/List";
 import SettingsIcon from "@material-ui/icons/Settings";
-import UserEditView from "../UserEditView";
 import Loading from "../../components/Loading";
 
 /**
@@ -75,7 +77,7 @@ const UserPageView = React.forwardRef((props: UserPageViewProps, ref: Ref<any>) 
             handleGetToken(),
         ]).then(() => {
             setLoaded(true);
-        })
+        });
     }, []);
 
 
@@ -109,7 +111,7 @@ const UserPageView = React.forwardRef((props: UserPageViewProps, ref: Ref<any>) 
             .post(`users/${userId}`)
             .send()
             .then()
-            .catch()
+            .catch();
     }
 
     function handleDeleteUser() {
@@ -117,7 +119,7 @@ const UserPageView = React.forwardRef((props: UserPageViewProps, ref: Ref<any>) 
         coreRequest()
             .delete(`users/${userId}`)
             .then()
-            .catch()
+            .catch();
     }
 
     const theme = useTheme();
@@ -137,7 +139,7 @@ const UserPageView = React.forwardRef((props: UserPageViewProps, ref: Ref<any>) 
                 </Grid>
                 <Grid item xs={4}>
                     <Button
-                        onClick={() => changeRoute({page: `user`, id:getUser()?.id, actions:"edit"})}
+                        onClick={() => changeRoute({page: `user`, id: getUser()?.id, actions: "edit"})}
                     >
                         Edit Profile
                     </Button>
@@ -157,7 +159,7 @@ const UserPageView = React.forwardRef((props: UserPageViewProps, ref: Ref<any>) 
                     <DataTextField label="Department" children="Pathfinder team crew"/>
                 </Grid>
             </Grid>
-        )
+        );
     }
 
     let {path} = useRouteMatch();

@@ -6,23 +6,10 @@
  * All rights reserved.
  */
 
-import React, {ChangeEvent, Ref, useState} from "react";
-import {
-    Box,
-    Button,
-    Grid,
-    InputBase,
-    ListItem,
-    ListItemText,
-    Slider,
-    TextField,
-    Typography,
-    withStyles
-} from "@material-ui/core";
+import React, {Ref} from "react";
+import {Button, Grid, InputBase, Slider, withStyles} from "@material-ui/core";
 import Stylable from "../../../interfaces/Stylable";
 import styles from "./styles";
-import validate from "validate.js";
-import {number} from "prop-types";
 import {IntegerField} from "@atlasrender/render-plugin";
 
 interface IntegerPluginFieldProps extends Stylable {
@@ -123,6 +110,6 @@ const FloatPluginField = React.forwardRef((props: IntegerPluginFieldProps, ref: 
             }
         </Grid>
     );
-})
+});
 
 export default withStyles(styles)(FloatPluginField);

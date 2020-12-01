@@ -62,7 +62,7 @@ const UserEditView = React.forwardRef((props: UserEditViewProps, ref: Ref<any>) 
             handleGetUser(),
         ]).then(() => {
             setLoaded(true);
-        })
+        });
     }, []);
 
     useEffect(() => {
@@ -101,7 +101,7 @@ const UserEditView = React.forwardRef((props: UserEditViewProps, ref: Ref<any>) 
             .catch(err => {
                 //TODO handle errors
                 enqueueErrorSnackbar("Can`t edit user");
-            })
+            });
     }
 
     function handleDeleteUser() {
@@ -115,7 +115,7 @@ const UserEditView = React.forwardRef((props: UserEditViewProps, ref: Ref<any>) 
             .catch(err => {
                 //TODO handle errors
                 enqueueErrorSnackbar("Can`t delete user");
-            })
+            });
     }
 
     return (

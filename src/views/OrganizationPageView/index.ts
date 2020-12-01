@@ -6,4 +6,4 @@
  * All rights reserved.
  */
 
-export {default} from "./OrganizationPageView"
+export {default} from "./OrganizationPageView";

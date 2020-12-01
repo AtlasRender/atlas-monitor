@@ -7,10 +7,10 @@
  */
 
 import React, {Ref, useEffect, useState} from "react";
-import {withStyles} from '@material-ui/core/styles';
-import LinearProgress, {LinearProgressProps} from '@material-ui/core/LinearProgress';
-import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
+import {withStyles} from "@material-ui/core/styles";
+import LinearProgress, {LinearProgressProps} from "@material-ui/core/LinearProgress";
+import Typography from "@material-ui/core/Typography";
+import Box from "@material-ui/core/Box";
 import clsx from "clsx";
 import styles from "./styles";
 import Stylable from "../../interfaces/Stylable";
@@ -61,7 +61,7 @@ const Progress = React.forwardRef((props: ProgressProps, ref: Ref<any>) => {
 
     useEffect(() => {
         setJobProgress(progress);
-    }, [progress])
+    }, [progress]);
 
     /**
      * React.useEffect - forces progress bar to move

@@ -10,15 +10,14 @@ import React, {Ref, useEffect, useState} from "react";
 import {
     Box,
     Button,
-    Chip, FormControl,
-    Container,
+    Chip,
     Grid,
     IconButton,
     InputLabel,
     List,
     ListItem,
     ListItemText,
-    MenuItem, Popover,
+    MenuItem,
     Select,
     TextField,
     Typography,
@@ -30,7 +29,6 @@ import styles from "./styles";
 import Stylable from "../../interfaces/Stylable";
 import AddIcon from "@material-ui/icons/Add";
 import useAuth from "../../hooks/useAuth";
-import UserData from "../../interfaces/UserData";
 import useCoreRequest from "../../hooks/useCoreRequest";
 import useEnqueueSuccessSnackbar from "../../utils/EnqueSuccessSnackbar";
 import useEnqueueErrorSnackbar from "../../utils/enqueueErrorSnackbar";
@@ -40,9 +38,7 @@ import Plugin from "../../interfaces/Plugin";
 import PluginInput from "./LocalComponents/PluginInput";
 import PluginPreview from "../../interfaces/PluginPreview";
 import DialogPlugin from "./LocalComponents/DialogPlugin";
-import User from "../../interfaces/User";
-import IntegerPluginField from "../../components/RenderJobCustomFields/IntegerPluginField";
-import {IntegerField, PluginSetting, PluginSettingsSpec} from "@atlasrender/render-plugin";
+import {IntegerField, PluginSetting} from "@atlasrender/render-plugin";
 import validate from "validate.js";
 import {useChangeRoute} from "routing-manager";
 
@@ -133,7 +129,7 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
         //uncomment when frame range as object will be ready
         //setJob((prev) => ({...prev, ["frameRange"]: frameRange}));
         console.log(job.frameRange);
-    }, [frameRange])
+    }, [frameRange]);
 
 
     useEffect(() => {
@@ -238,7 +234,7 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
             .send(job)
             .then(() => {
                 enqueueSuccessSnackbar("successfully submitted");
-                changeRoute({page:"jobs"});
+                changeRoute({page: "jobs"});
             })
             .catch(() => {
                 enqueueErrorSnackbar("Something went wrong");
@@ -251,11 +247,11 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
 
     const handleOpenDialog = () => {
         setOpenDialog(true);
-    }
+    };
 
     const handleCloseDialog = () => {
         setOpenDialog(false);
-    }
+    };
 
     const matches = useMediaQuery("(min-width:800px)");
     let submitInfo;

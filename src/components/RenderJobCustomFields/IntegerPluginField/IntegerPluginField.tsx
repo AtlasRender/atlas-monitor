@@ -6,30 +6,17 @@
  * All rights reserved.
  */
 
-import React, {ChangeEvent, Ref, useState} from "react";
-import {
-    Box,
-    Button,
-    Grid,
-    InputBase,
-    ListItem,
-    ListItemText,
-    Slider,
-    TextField,
-    Typography,
-    withStyles
-} from "@material-ui/core";
+import React, {Ref} from "react";
+import {Button, Grid, InputBase, Slider, withStyles} from "@material-ui/core";
 import Stylable from "../../../interfaces/Stylable";
 import styles from "./styles";
-import validate from "validate.js";
-import {number} from "prop-types";
 import {IntegerField, PluginSetting} from "@atlasrender/render-plugin";
 
 interface IntegerPluginFieldProps extends Stylable {
     field: IntegerField;
     value?: number,
 
-    setPluginSetting(field: PluginSetting, value: number | string | null):void,
+    setPluginSetting(field: PluginSetting, value: number | string | null): void,
 }
 
 const IntegerPluginField = React.forwardRef((props: IntegerPluginFieldProps, ref: Ref<HTMLElement>) => {
@@ -122,6 +109,6 @@ const IntegerPluginField = React.forwardRef((props: IntegerPluginFieldProps, ref
             }
         </Grid>
     );
-})
+});
 
 export default withStyles(styles)(IntegerPluginField);

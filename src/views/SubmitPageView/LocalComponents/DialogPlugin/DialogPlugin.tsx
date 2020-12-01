@@ -8,7 +8,8 @@
 
 import React, {Ref, useEffect, useState} from "react";
 import {
-    Box, Button,
+    Box,
+    Button,
     Dialog,
     DialogTitle,
     Grid,
@@ -108,7 +109,7 @@ const DialogPlugin = React.forwardRef((props: DialogPluginProps, ref: Ref<any>) 
     }
 
     function handleSubmit() {
-        if(chosenPlugin) {
+        if (chosenPlugin) {
             getPlugin(chosenPlugin);
         }
         onClose();
@@ -151,22 +152,22 @@ const DialogPlugin = React.forwardRef((props: DialogPluginProps, ref: Ref<any>) 
                                 </ListItem>
                                 <Grid container className={classes.pluginContainer}>
                                     {filterPlugins.length !== 0 ? filterPlugins.map(plugin => {
-                                        return (
-                                            <Grid item xs={12} key={plugin.id}>
-                                                <ListItem
-                                                    button
-                                                    onClick={() => handleGetPlugin(plugin.id)}
-                                                >
-                                                    {plugin.name}
-                                                </ListItem>
-                                            </Grid>
-                                        );
-                                    }) :
-                                    <Box className={classes.notFound}>
-                                        <Typography variant="h5" color="textSecondary">
-                                            No plugins found
-                                        </Typography>
-                                    </Box>
+                                            return (
+                                                <Grid item xs={12} key={plugin.id}>
+                                                    <ListItem
+                                                        button
+                                                        onClick={() => handleGetPlugin(plugin.id)}
+                                                    >
+                                                        {plugin.name}
+                                                    </ListItem>
+                                                </Grid>
+                                            );
+                                        }) :
+                                        <Box className={classes.notFound}>
+                                            <Typography variant="h5" color="textSecondary">
+                                                No plugins found
+                                            </Typography>
+                                        </Box>
                                     }
                                 </Grid>
                             </Grid>
@@ -205,7 +206,6 @@ const DialogPlugin = React.forwardRef((props: DialogPluginProps, ref: Ref<any>) 
                         </Grid>
 
                     </List>
-
 
 
                 </Box>

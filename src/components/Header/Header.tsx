@@ -7,13 +7,7 @@
  */
 
 import React, {Ref} from "react";
-import {AppBar, Badge, Box, IconButton, InputBase, Menu, MenuItem, Toolbar, Typography, withStyles} from "@material-ui/core";
-import MenuIcon from '@material-ui/icons/Menu';
-import SearchIcon from '@material-ui/icons/Search';
-import AccountCircle from '@material-ui/icons/AccountCircle';
-import MailIcon from '@material-ui/icons/Mail';
-import NotificationsIcon from '@material-ui/icons/Notifications';
-import MoreIcon from '@material-ui/icons/MoreVert';
+import {AppBar, Box, Toolbar, Typography, withStyles} from "@material-ui/core";
 import styles from "./styles";
 import clsx from "clsx";
 import Stylable from "../../interfaces/Stylable";
@@ -52,6 +46,6 @@ const Header = React.forwardRef((props: HeaderProps, ref: Ref<any>) => {
     );
 });
 Header.displayName = "Header";
-Header.propTypes = {}
+Header.propTypes = {};
 
 export default withStyles(styles)(Header);

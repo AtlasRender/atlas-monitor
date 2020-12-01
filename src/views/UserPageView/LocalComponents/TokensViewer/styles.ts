@@ -10,72 +10,72 @@ import {createStyles, Theme} from "@material-ui/core";
 import {grey, red} from "@material-ui/core/colors";
 
 const styles = (theme: Theme) => createStyles({
-    container:{
-        justifyContent:"center",
-        alignItems:"center",
+    container: {
+        justifyContent: "center",
+        alignItems: "center",
         marginTop: theme.spacing(2),
         marginBottom: theme.spacing(2),
-        [theme.breakpoints.down('sm')]: {
+        [theme.breakpoints.down("sm")]: {
             paddingLeft: theme.spacing(2),
             paddingRight: theme.spacing(2),
         },
 
     },
-    box:{
+    box: {
         display: "flex",
         justifyContent: "flex-begin",
-        alignItems:"flex-end"
+        alignItems: "flex-end"
     },
     lastToken: {
         color: theme.palette.common.white,
         backgroundColor: theme.palette.error.light,
     },
-    paddingNone:{
+    paddingNone: {
         paddingLeft: 0,
-        paddingBottom:0,
+        paddingBottom: 0,
     },
-    newToken:{
-        paddingLeft:0,
-        paddingRight:0,
+    newToken: {
+        paddingLeft: 0,
+        paddingRight: 0,
     },
-    tokenAdd:{
-        paddingLeft:0,
-        paddingRight:0,
+    tokenAdd: {
+        paddingLeft: 0,
+        paddingRight: 0,
     },
-    spacingInNewToken:{
-        paddingRight:theme.spacing(2),
+    spacingInNewToken: {
+        paddingRight: theme.spacing(2),
     },
-    topMargin:{
-        marginTop:theme.spacing(1),
+    topMargin: {
+        marginTop: theme.spacing(1),
     },
     generatedToken: {
         display: "flex",
         flexGrow: 1,
         alignItems: "flex-begin",
-        justifyContent:"flex-begin",
-        textWrap:"wrap",
-        flexDirection:"column",
-        marginTop:theme.spacing(1),
-        marginBottom:theme.spacing(1),
-        marginLeft:theme.spacing(2),
+        justifyContent: "flex-begin",
+        textWrap: "wrap",
+        flexDirection: "column",
+        marginTop: theme.spacing(1),
+        marginBottom: theme.spacing(1),
+        marginLeft: theme.spacing(2),
     },
     noWrap: {
-        flexWrap:"nowrap",
+        flexWrap: "nowrap",
     },
-    createTokenControls:{
-        display:"flex",
-        justifyContent:"flex-end",
-        alignItems:"center",
+    createTokenControls: {
+        display: "flex",
+        justifyContent: "flex-end",
+        alignItems: "center",
     },
     wrapWord: {
         whiteSpace: "pre-wrap",
         wordWrap: "break-word",
         wordBreak: "break-all",
     },
-    closeButtonColor:{
-        color:grey[50],
+    closeButtonColor: {
+        color: grey[50],
     },
-    copyClipboardHover:{
+    copyClipboardHover: {
         "&:hover": {
             backgroundColor: red[400],
         },
@@ -84,4 +84,4 @@ const styles = (theme: Theme) => createStyles({
 
 });
 
-export default styles
+export default styles;

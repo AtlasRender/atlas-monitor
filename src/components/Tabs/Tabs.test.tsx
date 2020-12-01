@@ -8,9 +8,9 @@
 
 import React from "react";
 import ReactDOM from "react-dom";
-import {render, cleanup} from '@testing-library/react';
+import {cleanup, render} from "@testing-library/react";
 import MyTabs from "./Tabs";
-import {Box, Tabs} from "@material-ui/core";
+import {Box} from "@material-ui/core";
 import ListItemProgress from "../ListItemProgress/ListItemProgress";
 import TabsPanel from "../TabsPanel/TabsPanel";
 
@@ -23,13 +23,13 @@ describe("ListItemProgress", () => {
     });
 
     test("Render without input", () => {
-        const container:any = document.createElement("div");
-        render(<MyTabs value={0}><TabsPanel value={0} index={0} /></MyTabs>, container);
+        const container: any = document.createElement("div");
+        render(<MyTabs value={0}><TabsPanel value={0} index={0}/></MyTabs>, container);
         expect(container.textContent).toBe("");
     });
 
     test("Render with input", () => {
-        const { getByText } = render(<MyTabs value={0}><TabsPanel value={0} index={0}>Hello</TabsPanel></MyTabs>);
+        const {getByText} = render(<MyTabs value={0}><TabsPanel value={0} index={0}>Hello</TabsPanel></MyTabs>);
         expect(getByText("Hello")).not.toBe(null);
     });
 });

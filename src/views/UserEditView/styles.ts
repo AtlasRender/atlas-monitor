@@ -9,11 +9,11 @@
 import {createStyles, Theme} from "@material-ui/core";
 
 const styles = (theme: Theme) => createStyles({
-    firstLine:{
+    firstLine: {
         justifyContent: "center",
-        alignItems:"center",
-        listStyleType:"none",
-        [theme.breakpoints.down('sm')]: {
+        alignItems: "center",
+        listStyleType: "none",
+        [theme.breakpoints.down("sm")]: {
             paddingLeft: theme.spacing(2),
             paddingRight: theme.spacing(2),
         },

@@ -6,18 +6,18 @@
  * All rights reserved.
  */
 
-import React, {Ref, useEffect} from 'react';
-import Drawer from '@material-ui/core/Drawer';
-import AppBar from '@material-ui/core/AppBar';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Toolbar from '@material-ui/core/Toolbar';
-import List from '@material-ui/core/List';
-import Typography from '@material-ui/core/Typography';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import MenuIcon from '@material-ui/icons/Menu';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
+import React, {Ref, useEffect} from "react";
+import Drawer from "@material-ui/core/Drawer";
+import AppBar from "@material-ui/core/AppBar";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import Toolbar from "@material-ui/core/Toolbar";
+import List from "@material-ui/core/List";
+import Typography from "@material-ui/core/Typography";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
+import MenuIcon from "@material-ui/icons/Menu";
+import InboxIcon from "@material-ui/icons/MoveToInbox";
 import styles from "./styles";
 import {
     Avatar,
@@ -34,8 +34,8 @@ import {Route, Switch, useLocation, useRouteMatch} from "react-router-dom";
 import RenderJobsView from "../../views/RenderJobsView/RenderJobsView";
 import UserPageView from "../../views/UserPageView";
 import OrganizationPageView from "../../views/OrganizationPageView";
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import clsx from "clsx";
 import {ChangeRouteProvider, useChangeRoute} from "routing-manager";
 import Stylable from "../../interfaces/Stylable";
@@ -83,7 +83,7 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<HTML
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
     const openPopper = Boolean(anchorEl);
-    const id = openPopper ? 'simple-popper' : undefined;
+    const id = openPopper ? "simple-popper" : undefined;
     const location = useLocation();
 
     useEffect(() => {
@@ -93,10 +93,10 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<HTML
 
         const listener = (message: any) => {
             console.log("recieved11 ", message);
-        }
+        };
         CoreEventDispatcher.getInstance().addListener(WS_RENDER_JOB_UPDATE, listener);
 
-        if(location.pathname === "/") {
+        if (location.pathname === "/") {
             changeRoute({page: "user", id: null});
         }
 
@@ -134,9 +134,9 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<HTML
     ) => {
         if (
             event &&
-            event.type === 'keydown' &&
-            ((event as React.KeyboardEvent).key === 'Tab' ||
-                (event as React.KeyboardEvent).key === 'Shift')
+            event.type === "keydown" &&
+            ((event as React.KeyboardEvent).key === "Tab" ||
+                (event as React.KeyboardEvent).key === "Shift")
         ) {
             return;
         }
@@ -191,7 +191,7 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<HTML
         </Box>
     );
 
-    const matches = useMediaQuery(theme.breakpoints.up('md'));
+    const matches = useMediaQuery(theme.breakpoints.up("md"));
 
     let drawer;
     if (matches) {
@@ -235,12 +235,12 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<HTML
                             onClose={handleClosePopover}
                             className={classes.popperTop}
                             anchorOrigin={{
-                                vertical: 'bottom',
-                                horizontal: 'center',
+                                vertical: "bottom",
+                                horizontal: "center",
                             }}
                             transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'center',
+                                vertical: "top",
+                                horizontal: "center",
                             }}
                         >
                             <Button
@@ -269,7 +269,7 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<HTML
                 >
                     <Box className={classes.toolbar}>
                         <IconButton onClick={handleDrawerClose}>
-                            {theme.direction === 'rtl' ? <ChevronRightIcon/> : <ChevronLeftIcon/>}
+                            {theme.direction === "rtl" ? <ChevronRightIcon/> : <ChevronLeftIcon/>}
                         </IconButton>
                     </Box>
                     <Divider/>

@@ -15,30 +15,30 @@ const styles = (theme: Theme) => createStyles({
         justifyContent: "center",
         alignItems: "flex-end",
     },
-    flexNoWrap:{
-        flexWrap:"nowrap",
+    flexNoWrap: {
+        flexWrap: "nowrap",
     },
-    flexItem:{
+    flexItem: {
         display: "flex",
         //justifyContent: "space-between",
-        alignItems:"center",
+        alignItems: "center",
         listStyleType: "none",
     },
-    buttonAdd:{
-        backgroundColor:grey[200],
+    buttonAdd: {
+        backgroundColor: grey[200],
     },
-    fullWidth:{
-        width:"100%",
+    fullWidth: {
+        width: "100%",
     },
-    submitButton:{
+    submitButton: {
         backgroundColor: blue[500],
     },
-    chipStyle:{
+    chipStyle: {
         marginRight: theme.spacing(1),
         marginBottom: theme.spacing(1),
     },
-    selectMargin:{
-        marginTop:theme.spacing(2),
+    selectMargin: {
+        marginTop: theme.spacing(2),
     },
     gridContainer: {
         display: "flex",

@@ -8,7 +8,7 @@
 
 import React from "react";
 import ReactDOM from "react-dom";
-import {render, cleanup} from '@testing-library/react';
+import {cleanup, render} from "@testing-library/react";
 import Progress from "./Progress";
 import ListItemProgress from "../ListItemProgress/ListItemProgress";
 
@@ -21,8 +21,8 @@ describe("ListItemProgress", () => {
     });
 
     test("Render without input", () => {
-        const container:any = document.createElement("div");
-        render(<Progress />, container);
+        const container: any = document.createElement("div");
+        render(<Progress/>, container);
         expect(container.textContent).toBe("");
     });
 });

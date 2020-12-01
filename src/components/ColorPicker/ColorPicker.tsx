@@ -29,13 +29,13 @@ const ColorPicker = React.forwardRef((props: ColorPickerProps, ref: React.Ref<an
     } = props;
 
     const theme = useTheme();
-    const defaultColors = ['FF6900', 'FCB900', '00D084', '8ED1FC', '0693E3', 'ABB8C3', 'EB144C', 'F78DA7', '9900EF'];
+    const defaultColors = ["FF6900", "FCB900", "00D084", "8ED1FC", "0693E3", "ABB8C3", "EB144C", "F78DA7", "9900EF"];
     const [color, setColor] = useState(inputColor || "FFF");
     const [error, setError] = useState(false);
 
     useEffect(() => {
         inputColor && setColor(inputColor);
-    }, [inputColor])
+    }, [inputColor]);
 
     function handleChangeColor(newColor: string, id: number) {
         !inputColor && setColor(newColor);
@@ -51,7 +51,7 @@ const ColorPicker = React.forwardRef((props: ColorPickerProps, ref: React.Ref<an
     function isValidHex(color: string) {
         if (!color) return false;
 
-        if (color.substring(0, 1) === '#') color = color.substring(1);
+        if (color.substring(0, 1) === "#") color = color.substring(1);
 
         switch (color.length) {
             case 3:
@@ -65,8 +65,6 @@ const ColorPicker = React.forwardRef((props: ColorPickerProps, ref: React.Ref<an
             default:
                 return false;
         }
-
-        return false;
     }
 
     function handleCheckError(event: React.FocusEvent<HTMLInputElement>) {
@@ -81,9 +79,9 @@ const ColorPicker = React.forwardRef((props: ColorPickerProps, ref: React.Ref<an
     const matches = useMediaQuery(theme.breakpoints.up("sm"));
     let width;
     if (matches) {
-        width = "auto"
+        width = "auto";
     } else {
-        width = "100%"
+        width = "100%";
     }
 
     return (

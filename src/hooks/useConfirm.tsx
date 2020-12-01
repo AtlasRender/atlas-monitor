@@ -97,7 +97,7 @@ export const ConfirmProvider = React.forwardRef((props: ConfirmProviderProps, re
                 <DialogActions>
                     <Button
                         onClick={event => {
-                            content && content.onAccept().then()
+                            content && content.onAccept().then();
                             setOpen(false);
                         }}
                     >

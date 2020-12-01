@@ -24,11 +24,9 @@ import Stylable from "../../interfaces/Stylable";
 import styles from "./styles";
 import useAuth from "../../hooks/useAuth";
 import useCoreRequest from "../../hooks/useCoreRequest";
-import {ChangeRouteProvider, useChangeRoute} from "routing-manager";
-import {useSnackbar} from "notistack";
+import {useChangeRoute} from "routing-manager";
 import useEnqueueErrorSnackbar from "../../utils/enqueueErrorSnackbar";
 import User from "../../entities/User";
-import {Route, Switch, useRouteMatch} from "react-router-dom";
 
 interface SignUpPageProps extends Stylable {
 
@@ -94,7 +92,7 @@ const SignUpPage = React.forwardRef((props: SignUpPageProps, ref: Ref<any>) => {
             .catch(err => {
                 switch (err.status) {
                     case 400:
-                        err.response.body.response.errors.map((item: any) => {
+                        err.response.body.response.errors.forEach((item: any) => {
                             console.log(item);
                             const keyError = item.dataPath.substr(1) + "Error";
                             const keyMessage = item.dataPath.substr(1) + "Message";
@@ -222,6 +220,6 @@ const SignUpPage = React.forwardRef((props: SignUpPageProps, ref: Ref<any>) => {
     );
 });
 SignUpPage.displayName = "SignUpPage";
-SignUpPage.propTypes = {}
+SignUpPage.propTypes = {};
 
 export default withStyles(styles)(SignUpPage);

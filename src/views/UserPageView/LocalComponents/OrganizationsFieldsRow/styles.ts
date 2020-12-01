@@ -9,16 +9,16 @@
 import {createStyles, Theme} from "@material-ui/core";
 
 const styles = (theme: Theme) => createStyles({
-    container:{
+    container: {
         justifyContent: "center",
         alignItems: "center",
-        [theme.breakpoints.down('sm')]: {
+        [theme.breakpoints.down("sm")]: {
             paddingLeft: theme.spacing(2),
             paddingRight: theme.spacing(2),
         },
 
     },
-    margins:{
+    margins: {
         marginBottom: theme.spacing(2),
     }
 });

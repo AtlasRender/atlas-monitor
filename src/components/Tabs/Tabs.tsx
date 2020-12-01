@@ -6,13 +6,13 @@
  * All rights reserved.
  */
 
-import React, {Ref} from 'react';
-import SwipeableViews from 'react-swipeable-views';
-import {useTheme, withStyles} from '@material-ui/core/styles';
-import Toolbar from '@material-ui/core/Toolbar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import Box from '@material-ui/core/Box';
+import React, {Ref} from "react";
+import SwipeableViews from "react-swipeable-views";
+import {useTheme, withStyles} from "@material-ui/core/styles";
+import Toolbar from "@material-ui/core/Toolbar";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
+import Box from "@material-ui/core/Box";
 import styles from "./styles";
 import clsx from "clsx";
 import Stylable from "../../interfaces/Stylable";
@@ -39,7 +39,7 @@ interface CustomTabsProps extends Stylable, Containerable {
 function a11yProps(index: number) {
     return {
         id: `full-width-tab-${index}`,
-        'aria-controls': `full-width-tabpanel-${index}`,
+        "aria-controls": `full-width-tabpanel-${index}`,
     };
 }
 
@@ -78,7 +78,7 @@ const CustomTabs = React.forwardRef((props: CustomTabsProps, ref: Ref<any>) => {
                 </Tabs>
             </Toolbar>
             <SwipeableViews
-                axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+                axis={theme.direction === "rtl" ? "x-reverse" : "x"}
                 index={value}
                 onChangeIndex={onChangeIndex}
             >

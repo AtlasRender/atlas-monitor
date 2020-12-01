@@ -25,30 +25,34 @@ export interface RequestMethods {
      * @function
      */
     endPoint(): string;
+
     /**
      * post - function, designed to create HTTP request with method POST.
      * @author Danil Andreev
      * @function
      */
     post(route: string): superagent.SuperAgentRequest;
+
     /**
      * put - function, designed to create HTTP request with method PUT.
      * @author Danil Andreev
      * @function
      */
-    put(route: string):  superagent.SuperAgentRequest;
+    put(route: string): superagent.SuperAgentRequest;
+
     /**
      * delete - function, designed to create HTTP request with method DELETE.
      * @author Danil Andreev
      * @function
      */
-    delete(route: string):  superagent.SuperAgentRequest;
+    delete(route: string): superagent.SuperAgentRequest;
+
     /**
      * get - function, designed to create HTTP request with method GET.
      * @author Danil Andreev
      * @function
      */
-    get(route: string):  superagent.SuperAgentRequest;
+    get(route: string): superagent.SuperAgentRequest;
 }
 
 /**
@@ -71,7 +75,7 @@ export declare type RequestMiddleware = (request: superagent.SuperAgentRequest) 
  *     .then(response => {...})
  *     .catch(error => {...});
  */
-export const request = (endPoint: string, middleware?: RequestMiddleware) : RequestMethods => {
+export const request = (endPoint: string, middleware?: RequestMiddleware): RequestMethods => {
     /**
      * defaultMiddleware - request middleware by default.
      * @function
@@ -79,7 +83,7 @@ export const request = (endPoint: string, middleware?: RequestMiddleware) : Requ
      * @author Danil Andreev
      */
     function defaultMiddleware(request: superagent.SuperAgentRequest): superagent.SuperAgentRequest {
-        return request.accept('application/json');
+        return request.accept("application/json");
     }
 
     const requestMiddleware = middleware || defaultMiddleware;
@@ -88,28 +92,28 @@ export const request = (endPoint: string, middleware?: RequestMiddleware) : Requ
         endPoint: () => endPoint,
         post: (route: string): superagent.SuperAgentRequest => {
             const url = `${endPoint}/${route}`;
-            requestLog('post', url);
+            requestLog("post", url);
             return requestMiddleware(superagent.post(url));
         },
 
         put: (route: string): superagent.SuperAgentRequest => {
             const url = `${endPoint}/${route}`;
-            requestLog('put', url);
+            requestLog("put", url);
             return requestMiddleware(superagent.put(url));
         },
 
         delete: (route: string): superagent.SuperAgentRequest => {
             const url = `${endPoint}/${route}`;
-            requestLog('delete', url);
+            requestLog("delete", url);
             return requestMiddleware(superagent.delete(url));
         },
 
         get: (route: string): superagent.SuperAgentRequest => {
             const url = `${endPoint}/${route}`;
-            requestLog('get', url);
+            requestLog("get", url);
             return requestMiddleware(superagent.get(url));
         }
-    }
+    };
 };
 
 /**

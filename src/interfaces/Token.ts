@@ -12,7 +12,7 @@
  * @interface
  * @author Andrii Demchyshyn
  */
-export default interface Token{
+export default interface Token {
     /**
      * id - token id
      */

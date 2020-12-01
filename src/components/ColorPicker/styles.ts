@@ -18,12 +18,12 @@ const styles = (theme: Theme) => createStyles({
         width: "100%",
         padding: theme.spacing(1),
     },
-    defaultContainer:{
+    defaultContainer: {
         display: "flex",
         flexDirection: "row",
         flexWrap: "wrap",
     },
-    color:{
+    color: {
         width: 30,
         height: 30,
         borderRadius: 5,
@@ -53,7 +53,7 @@ const styles = (theme: Theme) => createStyles({
     },
     input: {
         maxWidth: 110,
-        [theme.breakpoints.down('xs')]: {
+        [theme.breakpoints.down("xs")]: {
             maxWidth: "100%",
             minWidth: "80%",
             width: "90%",

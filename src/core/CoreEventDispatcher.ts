@@ -69,20 +69,19 @@ export default class CoreEventDispatcher extends EventEmitter {
 
         CoreEventDispatcher.ws.onopen = (event: Event) => {
             console.log("Connected to web socket");
-        }
+        };
 
         CoreEventDispatcher.ws.onclose = (event: CloseEvent) => {
             if (event.wasClean) {
                 console.log("Disconnected from web socket.");
-            }
-            else {
+            } else {
                 console.error("Web socket connection terminated.", event.code, "Reason: ", event.reason);
             }
-        }
+        };
 
         CoreEventDispatcher.ws.onerror = (error: Event) => {
             console.error("Web socket error:", error);
-        }
+        };
 
         CoreEventDispatcher.ws.onmessage = (event: MessageEvent) => {
             try {
@@ -97,7 +96,7 @@ export default class CoreEventDispatcher extends EventEmitter {
                 else
                     console.error(error);
             }
-        }
+        };
     }
 
     /**

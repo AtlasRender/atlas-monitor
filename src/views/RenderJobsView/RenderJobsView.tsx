@@ -16,11 +16,9 @@ import Stylable from "../../interfaces/Stylable";
 import SearchIcon from "@material-ui/icons/Search";
 import {Route, Switch, useRouteMatch} from "react-router-dom";
 import RenderJobsDetailsView from "../RenderJobsDetailsView";
-import useAuth from "../../hooks/useAuth";
 import useCoreRequest from "../../hooks/useCoreRequest";
 import {Jobs} from "../../interfaces/Jobs";
 import useEnqueueErrorSnackbar from "../../utils/enqueueErrorSnackbar";
-import Loading from "../../components/Loading";
 
 /**
  * RenderJobsViewProps - interface for RenderJobsView component
@@ -56,7 +54,7 @@ const RenderJobsView = React.forwardRef((props: RenderJobsViewProps, ref: Ref<an
             handleGetJobs(),
         ]).then(() => {
             setLoaded(true);
-        })
+        });
     }, []);
 
 
@@ -71,7 +69,7 @@ const RenderJobsView = React.forwardRef((props: RenderJobsViewProps, ref: Ref<an
 
 
     const theme = useTheme();
-    const matches = useMediaQuery(theme.breakpoints.up('md'));
+    const matches = useMediaQuery(theme.breakpoints.up("md"));
     let tableList;
     if (matches) {
         tableList = (<RenderJobsTable/>);
@@ -111,6 +109,6 @@ const RenderJobsView = React.forwardRef((props: RenderJobsViewProps, ref: Ref<an
     );
 });
 RenderJobsView.displayName = "RenderJobsView";
-RenderJobsView.propTypes = {}
+RenderJobsView.propTypes = {};
 
 export default withStyles(styles)(RenderJobsView);

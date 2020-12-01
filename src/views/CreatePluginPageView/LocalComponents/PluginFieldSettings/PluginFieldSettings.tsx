@@ -141,6 +141,7 @@ const PluginFieldSettings = React.forwardRef((props: PluginFieldSettingsProps, r
                     }));
                 }
             } else if (event.target.name === "default") {
+                // TODO: lookup logic and set up parenthesis (skobo4ki)
                 if (!pluginField.default || pluginField.min && pluginField.default < pluginField.min || pluginField.max && pluginField.default > pluginField.max) {
                     setErrors(prev => ({
                         ...prev, "defaultError": true
@@ -150,15 +151,15 @@ const PluginFieldSettings = React.forwardRef((props: PluginFieldSettingsProps, r
                         ...prev, "defaultError": false
                     }));
                 }
-                if(!pluginField.default) {
+                if (!pluginField.default) {
                     setErrors(prev => ({
                         ...prev, "defaultError": false
                     }));
                 }
             }
-            if(event.target.name === "min" || event.target.name === "max") {
-                if(pluginField.min && pluginField.max) {
-                    if(pluginField.min > pluginField.max) {
+            if (event.target.name === "min" || event.target.name === "max") {
+                if (pluginField.min && pluginField.max) {
+                    if (pluginField.min > pluginField.max) {
                         setErrors(prev => ({
                             ...prev, "maxError": true, "minError": true,
                         }));

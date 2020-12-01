@@ -9,8 +9,8 @@
 import React, {Ref} from "react";
 import {Divider, Grid, IconButton, Typography, withStyles} from "@material-ui/core";
 import styles from "./styles";
-import AddIcon from '@material-ui/icons/Add';
-import clsx from "clsx"
+import AddIcon from "@material-ui/icons/Add";
+import clsx from "clsx";
 import Stylable from "../../../../interfaces/Stylable";
 
 /**
@@ -20,6 +20,7 @@ import Stylable from "../../../../interfaces/Stylable";
  */
 interface TopicWithButtonProps extends Stylable {
     children?: string,
+
     onClick?(): void,
 }
 
@@ -53,7 +54,7 @@ const TopicWithButton = React.forwardRef((props: TopicWithButtonProps, ref: Ref<
             </Grid>
         </Grid>
     );
-})
+});
 
 
-export default withStyles(styles)(TopicWithButton)
+export default withStyles(styles)(TopicWithButton);

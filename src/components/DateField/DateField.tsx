@@ -6,10 +6,10 @@
  * All rights reserved.
  */
 
-import 'date-fns';
-import React from 'react';
-import DateFnsUtils from '@date-io/date-fns';
-import {KeyboardDatePicker, MuiPickersUtilsProvider} from '@material-ui/pickers';
+import "date-fns";
+import React from "react";
+import DateFnsUtils from "@date-io/date-fns";
+import {KeyboardDatePicker, MuiPickersUtilsProvider} from "@material-ui/pickers";
 import Stylable from "../../interfaces/Stylable";
 import {withStyles} from "@material-ui/core";
 import styles from "./styles";
@@ -34,7 +34,7 @@ const DateField = React.forwardRef((props: DateFieldProps, ref: React.Ref<any>) 
     } = props;
 
     const [selectedDate, setSelectedDate] = React.useState<Date | null>(
-        new Date('2014-08-18T21:11:54'),
+        new Date("2014-08-18T21:11:54"),
     );
 
     const handleDateChange = (date: Date | null) => {
@@ -53,7 +53,7 @@ const DateField = React.forwardRef((props: DateFieldProps, ref: React.Ref<any>) 
                 value={selectedDate}
                 onChange={handleDateChange}
                 KeyboardButtonProps={{
-                    'aria-label': 'change date',
+                    "aria-label": "change date",
                 }}
             />
         </MuiPickersUtilsProvider>

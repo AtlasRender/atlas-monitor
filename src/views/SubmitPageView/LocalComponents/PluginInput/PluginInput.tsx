@@ -18,7 +18,6 @@ import SeparatorPluginField from "../../../../components/SeparatorPluginField";
 import BooleanPluginField from "../../../../components/BooleanPluginField";
 import StringPluginField from "../../../../components/RenderJobCustomFields/StringPluginField";
 import IntegerPluginField from "../../../../components/RenderJobCustomFields/IntegerPluginField";
-import {number} from "prop-types";
 
 
 /**
@@ -28,7 +27,8 @@ import {number} from "prop-types";
  */
 interface PluginInputProps extends Stylable {
     pluginId: number;
-    setPluginSetting(field: PluginSetting, value: number | string | null):void,
+
+    setPluginSetting(field: PluginSetting, value: number | string | null): void,
 }
 
 /**
@@ -109,13 +109,15 @@ const PluginInput = React.forwardRef((props: PluginInputProps, ref: Ref<any>) =>
                             case "integer" :
                                 return (
                                     <Grid item xs={12}>
-                                        <IntegerPluginField field={field as IntegerField} setPluginSetting={setPluginSetting}/>
+                                        <IntegerPluginField field={field as IntegerField}
+                                                            setPluginSetting={setPluginSetting}/>
                                     </Grid>
                                 );
                             case "string" :
                                 return (
                                     <Grid item xs={12}>
-                                        <StringPluginField field={field as StringField} setPluginSetting={setPluginSetting}/>
+                                        <StringPluginField field={field as StringField}
+                                                           setPluginSetting={setPluginSetting}/>
                                     </Grid>
                                 );
                             case "float" :
