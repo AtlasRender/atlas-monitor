@@ -36,6 +36,7 @@ import useEnqueueErrorSnackbar from "../../utils/enqueueErrorSnackbar";
 import Loading from "../../components/Loading";
 import Organization from "../../interfaces/Organization";
 import User from "../../interfaces/User";
+import IntegerPluginField from "../../components/IntegerPluginField";
 
 /**
  * SubmitPagePropsStyled - interface for SubmitPageView function
@@ -374,6 +375,7 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
                     {plugin}
                     {submitButton}
                 </Grid>
+                <IntegerPluginField/>
             </Box>
             :
             <Box className={classes.loading}>
