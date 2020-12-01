@@ -6,7 +6,7 @@
  * All rights reserved.
  */
 
-import React from 'react';
+import React from "react";
 import Stylable from "../../interfaces/Stylable";
 import {Box, Button, FormLabel, InputBase, withStyles} from "@material-ui/core";
 import styles from "./styles";

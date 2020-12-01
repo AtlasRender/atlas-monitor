@@ -18,7 +18,7 @@ import IntegerField from "../../../../../entities/IntegerField";
 import SeparatorField from "../../../../../entities/SeparatorField";
 
 interface FolderProps extends Stylable {
-    id:number,
+    id: number,
 }
 
 const Folder: React.FC<FolderProps> = ({classes, className, children, id, style}) => {

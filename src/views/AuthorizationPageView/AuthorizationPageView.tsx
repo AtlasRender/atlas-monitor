@@ -21,12 +21,11 @@ import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import Stylable from "../../interfaces/Stylable";
 import {withStyles} from "@material-ui/core";
-import styles from "./style"
+import styles from "./style";
 import useCoreRequest from "../../hooks/useCoreRequest";
 import useAuth from "../../hooks/useAuth";
-import {ChangeRouteProvider, useChangeRoute} from "routing-manager";
+import {useChangeRoute} from "routing-manager";
 import {useSnackbar} from "notistack";
-import {Route, Switch, useRouteMatch} from "react-router-dom";
 
 interface AuthorizationPageViewProps extends Stylable {
 
@@ -68,7 +67,7 @@ const AuthorizationPageView = React.forwardRef((props: AuthorizationPageViewProp
     // TODO event type
     function handleInput(event: React.ChangeEvent<HTMLInputElement>) {
         event.persist();
-        setErrors(prev => ({...prev, [event.target.name+"Error"]: false}))
+        setErrors(prev => ({...prev, [event.target.name + "Error"]: false}));
         setCredentials(prev => ({...prev, [event.target.name]: event.target.value}));
     }
 
@@ -101,7 +100,7 @@ const AuthorizationPageView = React.forwardRef((props: AuthorizationPageViewProp
             .catch(err => {
                 switch (err.status) {
                     case 400:
-                        err.response.body.response.errors.map((item: any) => {
+                        err.response.body.response.errors.forEach((item: any) => {
                             console.log(item);
                             const keyError = item.dataPath.substr(1) + "Error";
                             const keyMessage = item.dataPath.substr(1) + "Message";
@@ -138,10 +137,10 @@ const AuthorizationPageView = React.forwardRef((props: AuthorizationPageViewProp
                         });
                         break;
                     case 404:
-                        setErrors((prev)=>({...prev, usernameError:true, usernameMessage: "There is no such user"}));
+                        setErrors((prev) => ({...prev, usernameError: true, usernameMessage: "There is no such user"}));
                         break;
                     case 401:
-                        setErrors((prev)=>({...prev, passwordError:true, passwordMessage:"Incorrect passsword"}));
+                        setErrors((prev) => ({...prev, passwordError: true, passwordMessage: "Incorrect passsword"}));
                         break;
                     default:
                         enqueueSnackbar("Unrecognized Error");

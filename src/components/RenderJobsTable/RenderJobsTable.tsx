@@ -30,7 +30,7 @@ import {format} from "date-fns";
 import ShortJobs from "../../entities/ShortJobs";
 import useEnqueueErrorSnackbar from "../../utils/enqueueErrorSnackbar";
 import Loading from "../Loading";
-import {blue, green, orange, red, yellow} from "@material-ui/core/colors";
+import {blue, green, orange} from "@material-ui/core/colors";
 
 /**
  * RenderJobsTableProps - interface for RenderJobsTable component
@@ -135,17 +135,12 @@ const RenderJobsTable = React.forwardRef((props: RenderJobsTableProps, ref: Ref<
         try {
             const response = await coreRequest().get("jobs");
             if (Array.isArray(response.body)) {
-                let entity: ShortJobs[] = [];
                 console.log(response.body);
                 try {
-                    response.body.forEach(item => {
-                        console.log(item);
-                        entity.push(new ShortJobs(item));
-                    });
+                    setJobs(response.body.map(item => new ShortJobs(item)));
                 } catch (err) {
                     enqueueErrorSnackbar("Invalid data types");
                 }
-                setJobs(entity);
             }
         } catch (err) {
             enqueueErrorSnackbar("Cant get render jobs");

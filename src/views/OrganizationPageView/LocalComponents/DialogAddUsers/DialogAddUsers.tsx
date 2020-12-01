@@ -74,7 +74,7 @@ const DialogAddUsers = React.forwardRef((props: DialogAddUsersProps, ref: Ref<an
                                 root: classes.inputRoot,
                                 input: classes.inputInput,
                             }}
-                            inputProps={{'aria-label': 'search'}}
+                            inputProps={{"aria-label": "search"}}
                         />
                     </div>
                     <IconButton>
@@ -97,7 +97,7 @@ const DialogAddUsers = React.forwardRef((props: DialogAddUsersProps, ref: Ref<an
                             <Checkbox
                                 checked={newUsers.includes(user.id)}
                                 color="primary"
-                                inputProps={{'aria-label': 'secondary checkbox'}}
+                                inputProps={{"aria-label": "secondary checkbox"}}
                             />
                         </ListItemSecondaryAction>
                     </ListItem>

@@ -6,7 +6,7 @@
  * All rights reserved.
  */
 
-import React, {Ref} from 'react';
+import React, {Ref} from "react";
 import styles from "./styles";
 import {withStyles} from "@material-ui/core";
 import Stylable from "../../interfaces/Stylable";

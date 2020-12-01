@@ -8,10 +8,11 @@
 
 import ShortJobs from "./ShortJobs";
 
-export interface RenderJobValidationMap {}
+export interface RenderJobValidationMap {
+}
 
 
-export default class RenderJob extends ShortJobs{
+export default class RenderJob extends ShortJobs {
     constructor(job: any, shortJob: any) {
         super(shortJob);
     }

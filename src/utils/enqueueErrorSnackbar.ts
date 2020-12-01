@@ -9,9 +9,9 @@
 import {useSnackbar} from "notistack";
 
 export default function useEnqueueErrorSnackbar() {
-    const { enqueueSnackbar } = useSnackbar();
+    const {enqueueSnackbar} = useSnackbar();
 
-    return (message:string) => enqueueSnackbar(message, {
+    return (message: string) => enqueueSnackbar(message, {
         anchorOrigin: {
             vertical: "bottom",
             horizontal: "center",

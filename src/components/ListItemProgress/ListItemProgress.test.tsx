@@ -8,7 +8,7 @@
 
 import React from "react";
 import ReactDOM from "react-dom";
-import {render, cleanup} from '@testing-library/react';
+import {cleanup, render} from "@testing-library/react";
 import ListItemProgress from "./ListItemProgress";
 import ListItemText from "@material-ui/core/ListItemText";
 
@@ -21,18 +21,19 @@ describe("ListItemProgress", () => {
     });
 
     test("Render without input", () => {
-        const container:any = document.createElement("div");
-        render(<ListItemProgress />, container);
+        const container: any = document.createElement("div");
+        render(<ListItemProgress/>, container);
         expect(container.textContent).toBe("");
     });
 
     test("Render with input", () => {
-        const { getByText } = render(<ListItemProgress>Hello</ListItemProgress>);
+        const {getByText} = render(<ListItemProgress>Hello</ListItemProgress>);
         expect(getByText("Hello")).not.toBe(null);
     });
 
     test("Render with other component", () => {
-        const { getByText } = render(<ListItemProgress><ListItemText primary="Hi" secondary="people"/></ListItemProgress>);
+        const {getByText} = render(<ListItemProgress><ListItemText primary="Hi"
+                                                                   secondary="people"/></ListItemProgress>);
         expect(getByText("Hi")).not.toBe(null);
         expect(getByText("people")).not.toBe(null);
     });

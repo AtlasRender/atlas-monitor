@@ -7,21 +7,18 @@
  */
 
 import React, {Ref, useContext, useEffect, useState} from "react";
-import {Button, Grid, List, ListItem, Typography, withStyles,} from "@material-ui/core";
+import {Grid, List, ListItem, withStyles,} from "@material-ui/core";
 import Stylable from "../../../../interfaces/Stylable";
 import styles from "./styles";
-import TextField from "@material-ui/core/TextField";
 import {PluginContext} from "../../CreatePluginPageView";
 import DragableSubject from "../DragableComponents/DragableSubject";
 import Folder from "../DragableComponents/Folder";
 import DragableListItem from "../DragableListItem/DragableListItem";
 import GroupField from "../../../../entities/GroupField";
-import IntegerField from "../../../../entities/IntegerField";
 import BasicPluginField from "../../../../entities/BasicPluginField";
 import useEnqueueErrorSnackbar from "../../../../utils/enqueueErrorSnackbar";
 import useCoreRequest from "../../../../hooks/useCoreRequest";
 import PluginFieldSettings from "../PluginFieldSettings";
-import {PluginSettingsSpec, ValidationError} from "@atlasrender/render-plugin";
 
 interface PluginCreationProps extends Stylable {
     open: boolean;
@@ -55,7 +52,13 @@ const PluginCreation = React.forwardRef((props: PluginCreationProps, ref: Ref<an
     const coreRequest = useCoreRequest();
 
     const [fieldIndex, setFieldIndex] = useState(0);
-    const [rootFolder, setRootFolder] = useState<GroupField>(new GroupField({id: 0, name: "", type: "folder", label: "", nested: []}));
+    const [rootFolder, setRootFolder] = useState<GroupField>(new GroupField({
+        id: 0,
+        name: "",
+        type: "folder",
+        label: "",
+        nested: []
+    }));
     const [fieldType, setFieldType] = useState("inputField");
     const [addField, setAddField] = useState({
         name: "",
@@ -68,7 +71,7 @@ const PluginCreation = React.forwardRef((props: PluginCreationProps, ref: Ref<an
 
     useEffect(() => {
         const field = context.pluginFields[0];
-        if(field instanceof GroupField) {
+        if (field instanceof GroupField) {
             setRootFolder(field);
         }
     });
@@ -85,12 +88,11 @@ const PluginCreation = React.forwardRef((props: PluginCreationProps, ref: Ref<an
     }, [open]);
 
 
-
     function getFieldIndex(index: number) {
         setFieldIndex(index);
     }
 
-   console.log(context.pluginFields);
+    console.log(context.pluginFields);
 
     function showPluginFields(array: BasicPluginField[]) {
         return (

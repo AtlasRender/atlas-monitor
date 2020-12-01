@@ -10,12 +10,14 @@ import React, {Ref, useEffect, useState} from "react";
 import {
     Button,
     Dialog,
-    DialogTitle, Divider,
+    DialogTitle,
+    Divider,
     Grid,
     ListItem,
     ListItemSecondaryAction,
     ListItemText,
-    Switch, useTheme,
+    Switch,
+    useTheme,
     withStyles,
 } from "@material-ui/core";
 import Stylable from "../../../../interfaces/Stylable";
@@ -63,7 +65,7 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
         {
             flag: false,
         }
-    ]
+    ];
 
 
     const theme = useTheme();
@@ -82,14 +84,14 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
         "permissionLevelError": false,
     });
 
-    useEffect(()=>{
+    useEffect(() => {
         setAddRole({
             name: role?.name || "",
             description: role?.description || "",
             color: role?.color || "FFF",
             permissionLevel: role?.permissionLevel || -1,
         });
-    },[role]);
+    }, [role]);
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (activeIds.includes(+event.target.id)) {
@@ -102,7 +104,7 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
     const handleInputRole = (name: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
         event.persist();
         setAddRole(prev => (prev && {...prev, [name]: event.target.value}));
-    }
+    };
 
     function handleGetColor(inputColor: string) {
         setAddRole((prev) => (prev && {...prev, color: inputColor}));
@@ -111,48 +113,48 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
     const handleValidation = (event: React.FocusEvent<HTMLInputElement>) => {
         setErrors(prev => ({
             ...prev, "noInputError": false
-        }))
+        }));
         if (event.target.name === "name") {
             if (!addRole.name.match(/^[a-zA-Z]+$/) || !addRole.name || addRole.name.length < 3 || addRole.name.length > 50) {
                 setErrors(prev => ({
                     ...prev, "nameError": true
-                }))
+                }));
             } else {
                 setErrors(prev => ({
                     ...prev, "nameError": false
-                }))
+                }));
             }
         }
         if (event.target.name === "description") {
             if (!addRole.description || addRole.name.length > 500) {
                 setErrors(prev => ({
                     ...prev, "descriptionError": true
-                }))
+                }));
             } else {
                 setErrors(prev => ({
                     ...prev, "descriptionError": false
-                }))
+                }));
             }
         }
         if (event.target.name === "permissionLevel") {
             if (!addRole.permissionLevel || addRole.permissionLevel < 0 || addRole.permissionLevel > 1000) {
                 setErrors(prev => ({
                     ...prev, "permissionLevelError": true
-                }))
+                }));
             } else {
                 setErrors(prev => ({
                     ...prev, "permissionLevelError": false
-                }))
+                }));
             }
         }
-    }
+    };
 
     function handleClick() {
         if (!errors.noInputError && !errors.nameError && !errors.descriptionError && !errors.permissionLevelError) {
             modify ? onModifyRole && onModifyRole(role?.id, addRole) : onAddRole(addRole, errors);
             setAddRole({
                 name: "", description: "", color: "fff", permissionLevel: -1,
-            })
+            });
             setErrors({
                 "noInputError": true,
                 "nameError": false,
@@ -165,7 +167,7 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
     function handleOnClose() {
         setAddRole({
             name: "", description: "", color: "fff", permissionLevel: -1,
-        })
+        });
         setErrors({
             "noInputError": true,
             "nameError": false,

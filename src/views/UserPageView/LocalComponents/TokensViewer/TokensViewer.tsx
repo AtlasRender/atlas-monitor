@@ -9,14 +9,16 @@
 import React, {Ref, useEffect, useState} from "react";
 import {
     Box,
+    Collapse,
     Divider,
     Grid,
     IconButton,
+    ListItem,
+    ListItemSecondaryAction,
     Typography,
-    withStyles,
-    useTheme,
     useMediaQuery,
-    ListItem, ListItemSecondaryAction, Collapse
+    useTheme,
+    withStyles
 } from "@material-ui/core";
 import clsx from "clsx";
 import styles from "./styles";

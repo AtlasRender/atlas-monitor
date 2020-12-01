@@ -10,7 +10,7 @@ import {createStyles, Theme} from "@material-ui/core";
 
 const styles = (theme: Theme) => createStyles({
     root: {
-        width: '100%',
+        width: "100%",
     },
     container: {
         maxHeight: "74vh",
@@ -22,10 +22,10 @@ const styles = (theme: Theme) => createStyles({
     progress: {
         minWidth: 150,
         background: "transparent",
-        [theme.breakpoints.down('md')]: {
+        [theme.breakpoints.down("md")]: {
             minWidth: 110,
         },
-        [theme.breakpoints.down('sm')]: {
+        [theme.breakpoints.down("sm")]: {
             minWidth: 0,
         },
     },

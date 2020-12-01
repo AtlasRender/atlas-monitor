@@ -6,30 +6,18 @@
  * All rights reserved.
  */
 
-import React, {ChangeEvent, Ref, useState} from "react";
-import {
-    Box,
-    Button,
-    Grid,
-    InputBase,
-    ListItem,
-    ListItemText,
-    Slider,
-    TextField,
-    Typography,
-    withStyles
-} from "@material-ui/core";
+import React, {Ref, useState} from "react";
+import {Button, Grid, TextField, withStyles} from "@material-ui/core";
 import Stylable from "../../../interfaces/Stylable";
 import styles from "./styles";
-import validate from "validate.js";
-import {number} from "prop-types";
 import {PluginSetting, StringField} from "@atlasrender/render-plugin";
 
 interface StringPluginFieldProps extends Stylable {
     field: StringField;
+
     // value?: string | null,
 
-    setPluginSetting(field: PluginSetting, value: number | string | null):void,
+    setPluginSetting(field: PluginSetting, value: number | string | null): void,
 }
 
 const StringPluginField = React.forwardRef((props: StringPluginFieldProps, ref: Ref<HTMLElement>) => {
@@ -59,12 +47,12 @@ const StringPluginField = React.forwardRef((props: StringPluginFieldProps, ref: 
                     value={value}
                     onChange={handleChange}
                     onBlur={() => {
-                         setPluginSetting(field, value);
+                        setPluginSetting(field, value);
                     }}
                 />
             </Grid>
         </Grid>
     );
-})
+});
 
 export default withStyles(styles)(StringPluginField);

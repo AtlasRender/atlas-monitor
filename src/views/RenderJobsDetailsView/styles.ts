@@ -7,7 +7,7 @@
  */
 
 import {createStyles, Theme} from "@material-ui/core";
-import grey from '@material-ui/core/colors/grey';
+import grey from "@material-ui/core/colors/grey";
 
 const styles = (theme: Theme) => createStyles({
     pathText: {
@@ -43,7 +43,7 @@ const styles = (theme: Theme) => createStyles({
         marginTop: theme.spacing(2),
     },
     normalContent: {
-        [theme.breakpoints.down('sm')]: {
+        [theme.breakpoints.down("sm")]: {
             padding: theme.spacing(2),
         },
     },

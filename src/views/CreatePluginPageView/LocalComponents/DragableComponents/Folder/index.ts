@@ -6,4 +6,4 @@
  * All rights reserved.
  */
 
-export {default} from "./Folder"
+export {default} from "./Folder";

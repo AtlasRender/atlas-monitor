@@ -14,15 +14,15 @@ import ValidatorResult from "../../interfaces/ValidatorResult";
  * @function
  * @author Andrii Demchyshyn
  */
-export default function StringValidator(value: any): ValidatorResult<string>{
+export default function StringValidator(value: any): ValidatorResult<string> {
     let stringValue = value;
-    if(typeof stringValue === "number") {
+    if (typeof stringValue === "number") {
         stringValue = "" + stringValue;
     }
-    if(stringValue === null) {
+    if (stringValue === null) {
         return {value: stringValue, error: false};
     }
-    if(typeof stringValue !== "string") {
+    if (typeof stringValue !== "string") {
         return {value: undefined, error: true};
     }
     return {value: stringValue, error: false};

@@ -32,6 +32,6 @@ export default function useCoreRequest(defaultPath?: string): CoreRequestHooked 
     const middleware: RequestMiddleware = (request: SuperAgentRequest): SuperAgentRequest => {
         if (isLogged && user && user.bearer) request.set("Authorization", "Bearer " + user.bearer);
         return request;
-    }
+    };
     return (path: string | undefined = defaultPath): RequestMethods => coreRequest(path, middleware);
 }

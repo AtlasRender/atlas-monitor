@@ -7,4 +7,4 @@
  */
 
 export {default, displayName} from "./FilesLoader";
-export type { FilesLoaderProps } from "./FilesLoader";
+export type {FilesLoaderProps} from "./FilesLoader";

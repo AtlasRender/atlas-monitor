@@ -11,8 +11,6 @@ import NumberValidator from "../core/validators/NumberValidator";
 import StringValidator from "../core/validators/StringValidator";
 import DateValidator from "../core/validators/DateValidator";
 import ValidationError from "../core/ValidationError";
-import {UserValidationMap} from "./User";
-import {instanceOf} from "prop-types";
 
 export interface TaskValidationMap {
     id?: boolean;
@@ -28,7 +26,7 @@ export interface TaskValidationMap {
  * @interface
  * @author Andrii Demchyshyn
  */
-export default class Task extends BaseEntity{
+export default class Task extends BaseEntity {
     /**
      * id - unique number of job
      */
@@ -44,7 +42,7 @@ export default class Task extends BaseEntity{
     /**
      * createdAt - date of creation
      */
-    public  createdAt: Date;
+    public createdAt: Date;
     /**
      * updatedAt - date of last update
      */

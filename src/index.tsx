@@ -17,9 +17,6 @@ import ChooseLayout from "./layout/ChooseLayout";
 import {ConfirmProvider} from "./hooks/useConfirm";
 import {ThemeProvider} from "@material-ui/core/styles";
 import theme from "./theme";
-import { DndProvider } from 'react-dnd'
-import { HTML5Backend } from 'react-dnd-html5-backend'
-import WebSocketCore from "./core/CoreEventDispatcher";
 
 ReactDOM.render(
     <React.StrictMode>

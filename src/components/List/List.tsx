@@ -6,12 +6,12 @@
  * All rights reserved.
  */
 
-import React, {Ref} from 'react';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import Box from '@material-ui/core/Box';
-import {FixedSizeList, ListChildComponentProps} from 'react-window';
-import {withStyles} from '@material-ui/core/styles';
+import React, {Ref} from "react";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
+import Box from "@material-ui/core/Box";
+import {FixedSizeList, ListChildComponentProps} from "react-window";
+import {withStyles} from "@material-ui/core/styles";
 import clsx from "clsx";
 import styles from "./styles";
 import Stylable from "../../interfaces/Stylable";

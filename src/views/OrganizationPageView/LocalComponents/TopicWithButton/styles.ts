@@ -8,7 +8,7 @@
 
 import {createStyles, Theme} from "@material-ui/core";
 
-const styles =(theme: Theme) => createStyles({
+const styles = (theme: Theme) => createStyles({
     container: {
         justifyContent: "center",
         alignItems: "center",
@@ -21,9 +21,9 @@ const styles =(theme: Theme) => createStyles({
         justifyContent: "flex-end",
         alignItems: "center"
     },
-    childAlign:{
-        alignItems:"center",
+    childAlign: {
+        alignItems: "center",
     }
-})
+});
 
 export default styles;

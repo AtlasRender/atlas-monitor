@@ -7,7 +7,6 @@
  */
 
 import {createStyles, fade, Theme} from "@material-ui/core";
-import {red} from "@material-ui/core/colors";
 
 const styles = (theme: Theme) => createStyles({
     dialog: {
@@ -30,7 +29,7 @@ const styles = (theme: Theme) => createStyles({
         width: 100,
         height: 100,
     },
-    notFound:{
+    notFound: {
         display: "flex",
         width: "100%",
         height: 250,
@@ -55,7 +54,7 @@ const styles = (theme: Theme) => createStyles({
     menuPaper: {
         height: 400,
         width: 346,
-        [theme.breakpoints.down('xs')]: {
+        [theme.breakpoints.down("xs")]: {
             height: 300,
             width: 215,
         },
@@ -91,35 +90,35 @@ const styles = (theme: Theme) => createStyles({
         backgroundColor: theme.palette.error.dark,
     },
     search: {
-        position: 'relative',
+        position: "relative",
         borderRadius: theme.shape.borderRadius,
         backgroundColor: fade(theme.palette.common.white, 0.15),
-        '&:hover': {
+        "&:hover": {
             backgroundColor: fade(theme.palette.common.white, 0.25),
         },
         marginLeft: 0,
-        width: '100%',
+        width: "100%",
         marginTop: theme.spacing(1),
     },
     searchIcon: {
         padding: theme.spacing(0, 2),
-        height: '100%',
-        position: 'absolute',
-        pointerEvents: 'none',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
+        height: "100%",
+        position: "absolute",
+        pointerEvents: "none",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
     },
     inputRoot: {
-        color: 'inherit',
+        color: "inherit",
     },
     inputInput: {
         padding: theme.spacing(1, 1, 1, 0),
         paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
-        transition: theme.transitions.create('width'),
-        width: '11ch',
-        [theme.breakpoints.up('sm')]: {
-            width: '25ch',
+        transition: theme.transitions.create("width"),
+        width: "11ch",
+        [theme.breakpoints.up("sm")]: {
+            width: "25ch",
         },
     },
     paddingNoneBottom: {

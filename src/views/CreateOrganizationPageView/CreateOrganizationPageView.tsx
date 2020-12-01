@@ -10,25 +10,29 @@ import React, {Ref, useEffect, useState} from "react";
 import {
     Avatar,
     Box,
+    Button,
+    Chip,
+    Dialog,
+    DialogTitle,
+    Divider,
     Grid,
-    withStyles,
-    TextField,
     IconButton,
     List,
     ListItem,
+    ListItemAvatar,
+    ListItemSecondaryAction,
     ListItemText,
-    ListItemSecondaryAction, Typography,
-    Divider, ListItemIcon, ListItemAvatar,
-    Select, useMediaQuery, useTheme, Dialog, DialogTitle, Button, Chip,
+    TextField,
+    Typography,
+    useMediaQuery,
+    useTheme,
+    withStyles,
 } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
-import BuildIcon from "@material-ui/icons/Build";
-import CloseIcon from "@material-ui/icons/Close";
 import clsx from "clsx";
 import Stylable from "../../interfaces/Stylable";
 import styles from "./styles";
 import DialogAddRoles from "../OrganizationPageView/LocalComponents/DialogAddRoles/DialogAddRoles";
-import {coreRequest} from "../../utils/Rest";
 import Role from "../../interfaces/Role";
 import {useChangeRoute} from "routing-manager";
 import useEnqueueErrorSnackbar from "../../utils/enqueueErrorSnackbar";
@@ -38,7 +42,6 @@ import useConfirm from "../../hooks/useConfirm";
 import UserData from "../../interfaces/UserData";
 import useCoreRequest from "../../hooks/useCoreRequest";
 import useAuth from "../../hooks/useAuth";
-import User from "../../interfaces/User";
 
 
 interface CreateOrganizationPageProps extends Stylable {
@@ -63,11 +66,11 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
     const [name, setName] = useState<string>();
     const [description, setDescription] = useState<string>();
     const [errors, setErrors] = useState({
-        nameError:false,
-        nameMessage:"",
-        descriptionError:false,
-        descriptionMessage:"",
-    })
+        nameError: false,
+        nameMessage: "",
+        descriptionError: false,
+        descriptionMessage: "",
+    });
     const [owner, setOwner] = useState<UserData>();
     const [roles, setRoles] = useState<Role[]>([]);
     const [roleToModify, setRoleToModify] = useState<Role>();
@@ -83,45 +86,53 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
         setAddRoleButton(!addRoleButton);
         setRoles((prev) => ([...prev, role]));
     }
+
     console.log(roles);
-    function modifyRole(id: number, role: Role){
+
+    function modifyRole(id: number, role: Role) {
         setAddRoleButton(!addRoleButton);
-        setRoles((prev) => ([...prev.filter(elem => elem.id != id)]));
-        setRoles((prev)=>([...prev, role]));
+        setRoles((prev) => ([...prev.filter(elem => elem.id !== id)]));
+        setRoles((prev) => ([...prev, role]));
         setModify(false);
     }
 
     function deleteRole(key: string) {
-        setRoles((prev) => ([...prev.filter(elem => elem.name != key)]));
+        setRoles((prev) => ([...prev.filter(elem => elem.name !== key)]));
     }
 
     const handleInputName = (event: React.ChangeEvent<HTMLInputElement>) => {
         setName(event.target.value);
         console.log(name);
-    }
+    };
 
     const handleInputDescription = (event: React.ChangeEvent<HTMLInputElement>) => {
         setDescription(event.target.value);
         console.log(description);
-    }
+    };
 
-    function errorHandler(){
+    function errorHandler() {
         if (name && name?.length <= 3) {
-            setErrors((prev)=>({...prev, nameError: true, nameMessage: "Should be more than 3 symbols"}));
-        } else if(name && name.length > 50) {
-            setErrors((prev)=>({...prev, nameError: true, nameMessage: "Should be less than 50 symbols"}));
-        }
-        else{
-            setErrors((prev)=>({...prev, nameError:false, nameMessage:""}));
+            setErrors((prev) => ({...prev, nameError: true, nameMessage: "Should be more than 3 symbols"}));
+        } else if (name && name.length > 50) {
+            setErrors((prev) => ({...prev, nameError: true, nameMessage: "Should be less than 50 symbols"}));
+        } else {
+            setErrors((prev) => ({...prev, nameError: false, nameMessage: ""}));
         }
 
         if (description && description?.length <= 3) {
-            setErrors((prev)=>({...prev, descriptionError: true, descriptionMessage: "Should be more than 3 symbols"}));
-        } else if(description && description.length > 50) {
-            setErrors((prev)=>({...prev, descriptionError: true, descriptionMessage: "Should be less than 50 symbols"}));
-        }
-        else{
-            setErrors((prev)=>({...prev, descriptionError:false, descriptionMessage:""}));
+            setErrors((prev) => ({
+                ...prev,
+                descriptionError: true,
+                descriptionMessage: "Should be more than 3 symbols"
+            }));
+        } else if (description && description.length > 50) {
+            setErrors((prev) => ({
+                ...prev,
+                descriptionError: true,
+                descriptionMessage: "Should be less than 50 symbols"
+            }));
+        } else {
+            setErrors((prev) => ({...prev, descriptionError: false, descriptionMessage: ""}));
         }
     }
 
@@ -159,13 +170,13 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
             .catch(err => {
                 //TODO handle errors
                 enqueueErrorSnackbar("couldn't create org");
-            })
+            });
     }
 
     useEffect(() => {
         handleGetAllUsers();
         handleGetOwner();
-    }, [])
+    }, []);
 
     if (matches) {
         info = (
@@ -318,7 +329,7 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
                                 <ListItemSecondaryAction>
                                     {/*chips here*/}
                                     <IconButton
-                                        onClick={() => setMembers(prev => [...prev.filter(mem => person.id != mem.id)])}
+                                        onClick={() => setMembers(prev => [...prev.filter(mem => person.id !== mem.id)])}
                                     >
                                         <DeleteIcon/>
                                     </IconButton>
@@ -340,7 +351,7 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
                     <Divider/>
                     <List className={classes.minWidthList}>
                         {users.map((user) => {
-                            if(user.id === owner?.id){
+                            if (user.id === owner?.id) {
                                 return;
                             }
                             return (
@@ -355,7 +366,7 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
                                         </IconButton>
                                     </ListItemSecondaryAction>
                                 </ListItem>
-                            )
+                            );
                         })}
                     </List>
                     <Button

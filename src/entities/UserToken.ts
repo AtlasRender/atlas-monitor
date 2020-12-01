@@ -7,7 +7,6 @@
  */
 
 import BaseEntity from "../core/BaseEntity";
-import {UserValidationMap} from "./User";
 import NumberValidator from "../core/validators/NumberValidator";
 import StringValidator from "../core/validators/StringValidator";
 import DateValidator from "../core/validators/DateValidator";
@@ -62,7 +61,7 @@ export default class UserToken extends BaseEntity {
      */
     constructor(userToken: any) {
         super("User Token");
-        const validationMap: UserTokensValidationMap = {}
+        const validationMap: UserTokensValidationMap = {};
 
         this.id = NumberValidator(userToken.id).value || 0;
         validationMap.id = NumberValidator(userToken.id).error;
@@ -77,7 +76,7 @@ export default class UserToken extends BaseEntity {
         validationMap.token = StringValidator(userToken.token).error;
 
         this.createdAt = DateValidator(userToken.createdAt).value || new Date();
-        validationMap.createdAt = DateValidator(userToken.createdAt).error
+        validationMap.createdAt = DateValidator(userToken.createdAt).error;
 
         for (const key in validationMap) {
             if ((validationMap as any)[key] === true) {

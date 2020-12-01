@@ -6,20 +6,20 @@
  * All rights reserved.
  */
 
-import {createStyles, fade, Theme} from "@material-ui/core";
+import {createStyles, Theme} from "@material-ui/core";
 
-const styles =(theme: Theme) => createStyles({
-    newRole:{
-        paddingLeft:0,
-        paddingRight:0,
+const styles = (theme: Theme) => createStyles({
+    newRole: {
+        paddingLeft: 0,
+        paddingRight: 0,
     },
-    roleAdd:{
-        paddingLeft:0,
-        paddingRight:0,
+    roleAdd: {
+        paddingLeft: 0,
+        paddingRight: 0,
         marginBottom: theme.spacing(2),
     },
-    spacingInNewRole:{
-        paddingRight:theme.spacing(2),
+    spacingInNewRole: {
+        paddingRight: theme.spacing(2),
     },
 });
 

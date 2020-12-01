@@ -11,7 +11,7 @@ import NumberValidator from "../core/validators/NumberValidator";
 import StringValidator from "../core/validators/StringValidator";
 import DateValidator from "../core/validators/DateValidator";
 import ValidationError from "../core/ValidationError";
-import User, {UserValidationMap} from "./User";
+import User from "./User";
 
 /**
  * OrganizationValidationMap - interface for Organization input fields validation.

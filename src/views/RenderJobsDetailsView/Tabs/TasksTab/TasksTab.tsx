@@ -6,16 +6,16 @@
  * All rights reserved.
  */
 
-import React, {Ref, useEffect, useState} from 'react';
-import Paper from '@material-ui/core/Paper';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TablePagination from '@material-ui/core/TablePagination';
-import TableRow from '@material-ui/core/TableRow';
-import VisibilityIcon from '@material-ui/icons/Visibility';
+import React, {Ref, useEffect, useState} from "react";
+import Paper from "@material-ui/core/Paper";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TablePagination from "@material-ui/core/TablePagination";
+import TableRow from "@material-ui/core/TableRow";
+import VisibilityIcon from "@material-ui/icons/Visibility";
 import {Box, Grid, IconButton, Typography, withStyles} from "@material-ui/core";
 import styles from "./styles";
 import clsx from "clsx";
@@ -27,8 +27,6 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Task from "../../../../entities/Task";
 import useCoreRequest from "../../../../hooks/useCoreRequest";
 import useEnqueueErrorSnackbar from "../../../../utils/enqueueErrorSnackbar";
-import RenderJob from "../../../../entities/RenderJob";
-import ShortJobs from "../../../../entities/ShortJobs";
 import {format} from "date-fns";
 
 /**
@@ -88,47 +86,6 @@ interface Data {
 }
 
 /**
- * createData - creates table row
- * @param idTable
- * @param frame
- * @param startTime
- * @param slave
- * @param elapsedTime
- * @param progress
- * @param icon
- * @function
- * @author Andrii Demchyshyn
- */
-function createData(idTable: number, frame: string, startTime: string, slave: string, elapsedTime: string, progress: number, icon: any): Data {
-    return {idTable, frame, startTime, slave, elapsedTime, progress, icon};
-}
-
-/**
- * rows - array of table rows
- * @type string
- * @type number
- */
-const rows = [
-    createData(1, '1001', '24.09.2020 12:59:59', "kievHosting", "1:59:59", 0.6, 'eye'),
-    createData(2, '1002', '24.09.2020 12:59:59', "kievHosting", "1:59:59", 0.6, 'eye'),
-    createData(3, '1003', '24.09.2020 12:59:59', "kievHosting", "1:59:59", 0.6, 'eye'),
-    createData(4, '1004', '24.09.2020 12:59:59', "kievHosting", "1:59:59", 0.6, 'eye'),
-    createData(5, '1005', '24.09.2020 12:59:59', "kievHosting", "1:59:59", 0.6, 'eye'),
-    createData(6, '1006', '24.09.2020 12:59:59', "kievHosting", "1:59:59", 0.6, 'eye'),
-    createData(7, '1007', '24.09.2020 12:59:59', "kievHosting", "1:59:59", 0.6, 'eye'),
-    createData(8, '1008', '24.09.2020 12:59:59', "kievHosting", "1:59:59", 0.6, 'eye'),
-    createData(9, '1009', '24.09.2020 12:59:59', "kievHosting", "1:59:59", 0.6, 'eye'),
-    createData(10, '1010', '24.09.2020 12:59:59', "kievHosting", "1:59:59", 0.6, 'eye'),
-    createData(11, '1011', '24.09.2020 12:59:59', "kievHosting", "1:59:59", 0.6, 'eye'),
-    createData(12, '1012', '24.09.2020 12:59:59', "kievHosting", "1:59:59", 0.6, 'eye'),
-    createData(13, '1013', '24.09.2020 12:59:59', "kievHosting", "1:59:59", 0.6, 'eye'),
-    createData(14, '1014', '24.09.2020 12:59:59', "kievHosting", "1:59:59", 0.6, 'eye'),
-    createData(15, '1015', '24.09.2020 12:59:59', "kievHosting", "1:59:59", 0.6, 'eye'),
-
-
-];
-
-/**
  * TasksTab - creates table with current render job details
  * @function
  * @author Andrii Demchyshyn
@@ -159,22 +116,18 @@ const TasksTab = React.forwardRef((props: TasksTabProps, ref: Ref<any>) => {
             .get("jobs/72/tasks")
             .then(response => {
                 if (Array.isArray(response.body)) {
-                    let entity: Task[] = [];
                     try {
-                        response.body.map(item => {
-                            entity.push(new Task(item));
-                        })
+                        setTasks(response.body.map(item => new Task(item)));
                     } catch (err) {
                         enqueueErrorSnackbar("Invalid data types");
                     }
-                    setTasks(entity);
                     // console.log(entity);
                 }
             })
             .catch(err => {
                 enqueueErrorSnackbar("Can`t get tasks");
-            })
-    }
+            });
+    };
 
     const handleChangePage = (event: unknown, newPage: number) => {
         setPage(newPage);
@@ -231,11 +184,11 @@ const TasksTab = React.forwardRef((props: TasksTabProps, ref: Ref<any>) => {
                                         <TableCell align="left">Slave</TableCell>
                                         <TableCell align="left">{format(task.createdAt, "dd.MM.yyyy hh:mm")}</TableCell>
                                         <TableCell align="left">
-                                            {isWidthUp('md', props.width) ? (<Progress progress={10}/>) : ("10%")}
+                                            {isWidthUp("md", props.width) ? (<Progress progress={10}/>) : ("10%")}
                                         </TableCell>
                                         <TableCell align="left">
                                             <IconButton className={classes.iconVisible}>
-                                                <VisibilityIcon />
+                                                <VisibilityIcon/>
                                             </IconButton>
                                         </TableCell>
                                     </TableRow>
@@ -247,7 +200,7 @@ const TasksTab = React.forwardRef((props: TasksTabProps, ref: Ref<any>) => {
                 <TablePagination
                     rowsPerPageOptions={[10, 25, 100]}
                     component="div"
-                    count={rows.length}
+                    count={tasks.length}
                     rowsPerPage={rowsPerPage}
                     page={page}
                     onChangePage={handleChangePage}
@@ -258,6 +211,6 @@ const TasksTab = React.forwardRef((props: TasksTabProps, ref: Ref<any>) => {
     );
 });
 TasksTab.displayName = "TasksTable";
-TasksTab.propTypes = {}
+TasksTab.propTypes = {};
 
 export default withWidth()(withStyles(styles)(TasksTab));

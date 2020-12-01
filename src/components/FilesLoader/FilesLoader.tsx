@@ -22,7 +22,7 @@ import {
     withStyles,
 } from "@material-ui/core";
 import styles from "./styles";
-import {useDropzone} from "react-dropzone"
+import {useDropzone} from "react-dropzone";
 import Stylable from "../../interfaces/Stylable";
 import clsx from "clsx";
 import request from "superagent";
@@ -109,7 +109,7 @@ const FilesLoader = React.forwardRef((props: FilesLoaderProps, ref) => {
      * onDrop - event handler for files upload.
      * @function
      * @callback
-     * @author Danil Andreev
+        * @author Danil Andreev
      */
     const onDrop = React.useCallback((inputFiles: File[]) => {
         if (!multiple) clearTempFiles();
@@ -135,7 +135,7 @@ const FilesLoader = React.forwardRef((props: FilesLoaderProps, ref) => {
                         return next;
                     });
 
-                    onProgress && onProgress(event)
+                    onProgress && onProgress(event);
                 })
                 .then((result: request.Response): void => {
                     try {
@@ -158,7 +158,7 @@ const FilesLoader = React.forwardRef((props: FilesLoaderProps, ref) => {
                     onError && onError(error);
                 });
         }
-    }, [])
+    }, []);
     const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop});
 
     /**
@@ -197,9 +197,9 @@ const FilesLoader = React.forwardRef((props: FilesLoaderProps, ref) => {
         const target: UploadedFile | undefined = tempFiles.find((candidate: UploadedFile) => candidate.id === id);
         if (!target) return false;
         if (target.temp)
-            await deleteFile(target.temp.id)
+            await deleteFile(target.temp.id);
         else
-            setTempFiles(prev => prev.filter((candidate: UploadedFile) => candidate.id !== id))
+            setTempFiles(prev => prev.filter((candidate: UploadedFile) => candidate.id !== id));
         return true;
     }
 

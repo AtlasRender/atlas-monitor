@@ -6,8 +6,8 @@
  * All rights reserved.
  */
 
-import React, {Ref} from 'react';
-import {withStyles} from '@material-ui/core/styles';
+import React, {Ref} from "react";
+import {withStyles} from "@material-ui/core/styles";
 import styles from "./styles";
 import {CircularProgress} from "@material-ui/core";
 import Stylable from "../../interfaces/Stylable";

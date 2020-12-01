@@ -18,7 +18,7 @@ export default class BooleanField extends BasicPluginField {
     /**
      * default - default value
      */
-    public default?: boolean
+    public default?: boolean;
 
     constructor(field: any) {
         super({id: field.id, type: field.type, name: field.name, label: field.label});

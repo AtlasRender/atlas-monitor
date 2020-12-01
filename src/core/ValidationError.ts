@@ -16,6 +16,7 @@ export default class ValidationError<T = any> extends Error {
      * validation - validation map of an error.
      */
     public readonly validation: T;
+
     /**
      * Creates ValidationError instance.
      * @constructor

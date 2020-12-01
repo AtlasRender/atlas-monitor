@@ -121,14 +121,14 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
         settings: pluginFields,
     });
 
-    function getFileId(id:number){
-        setPlugin((prev)=>({...prev, file: id}));
+    function getFileId(id: number) {
+        setPlugin((prev) => ({...prev, file: id}));
         console.log("file id", id);
     }
 
-    useEffect(()=>{
-        setPlugin((prev) => ({...prev, settings: pluginFields}))
-    },[pluginFields])
+    useEffect(() => {
+        setPlugin((prev) => ({...prev, settings: pluginFields}));
+    }, [pluginFields]);
 
     const [isDialogPluginButtonActive, setIsDialogPluginButtonActive] = useState(false);
 
@@ -140,16 +140,15 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
 
     function handleCreatePlugin() {
         console.log("hi");
-        try{
+        try {
             const validated = new PluginSettingsSpec(pluginFields);
             console.log("kuku validate", validated);
-            setPlugin((prev)=>({...prev, fields: validated}))
-        }catch (error){
-            if(error instanceof ValidationError){
+            setPlugin((prev) => ({...prev, fields: validated}));
+        } catch (error) {
+            if (error instanceof ValidationError) {
                 enqueueErrorSnackbar(error.message);
                 console.log(error);
-            }
-            else{
+            } else {
                 enqueueErrorSnackbar("Unrecognized error");
             }
             return;
@@ -164,8 +163,6 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
                 enqueueErrorSnackbar("Can`t create plugin");
             });
     }
-
-
 
 
     const move = useCallback(
@@ -183,10 +180,6 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
         [pluginFields],
     );
 
-    const a: any[] = [new GroupField({id: 3, nested: [{id: 4}, {id: 5}]}), new GroupField({
-        id: 6,
-        nested: [{id: 7}]
-    })];
 
     function moveField(inputArray: BasicPluginField[], targetId: number, toId: number, objectToAdd: BasicPluginField, remove: boolean = false): BasicPluginField[] {
 

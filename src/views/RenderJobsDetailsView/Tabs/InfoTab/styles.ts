@@ -11,7 +11,7 @@ import {createStyles, Theme} from "@material-ui/core";
 
 const styles = (theme: Theme) => createStyles({
     root: {
-        width: '100%',
+        width: "100%",
     },
     container: {
         maxHeight: "74vh",
@@ -20,10 +20,10 @@ const styles = (theme: Theme) => createStyles({
         marginBottom: theme.spacing(2),
         fontWeight: 500,
     },
-    box:{
+    box: {
         display: "flex",
         justifyContent: "flex-end",
-        alignItems:"center"
+        alignItems: "center"
     },
     iconButton: {
         top: -8,

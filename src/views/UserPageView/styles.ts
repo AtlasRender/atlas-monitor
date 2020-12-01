@@ -9,9 +9,9 @@
 import {createStyles, Theme} from "@material-ui/core";
 
 const styles = (theme: Theme) => createStyles({
-    containerToken:{
-        justifyContent:"center",
-        alignItems:"center",
+    containerToken: {
+        justifyContent: "center",
+        alignItems: "center",
         marginTop: theme.spacing(2),
         marginBottom: theme.spacing(2),
     },
@@ -24,39 +24,39 @@ const styles = (theme: Theme) => createStyles({
         height: theme.spacing(25),
         width: theme.spacing(25),
     },
-    container:{
+    container: {
         alignItems: "center",
-        justifyContent:"center",
-        [theme.breakpoints.down('sm')]: {
+        justifyContent: "center",
+        [theme.breakpoints.down("sm")]: {
             paddingLeft: theme.spacing(2),
             paddingRight: theme.spacing(2),
         },
     },
-    topic:{
+    topic: {
         marginTop: theme.spacing(2),
         marginBottom: theme.spacing(2),
     },
-    box:{
+    box: {
         display: "flex",
         justifyContent: "flex-end",
-        alignItems:"center"
+        alignItems: "center"
     },
-    typographyToken:{
-        display:"flex",
-        alignItems:"flex-end",
+    typographyToken: {
+        display: "flex",
+        alignItems: "flex-end",
     },
-    firstLine:{
+    firstLine: {
         justifyContent: "center",
-        alignItems:"center",
-        listStyleType:"none",
-        [theme.breakpoints.down('sm')]: {
+        alignItems: "center",
+        listStyleType: "none",
+        [theme.breakpoints.down("sm")]: {
             paddingLeft: theme.spacing(2),
             paddingRight: theme.spacing(2),
         },
     },
-    paddingNone:{
+    paddingNone: {
         paddingLeft: 0,
-        paddingBottom:0,
+        paddingBottom: 0,
     },
     loading: {
         display: "flex",

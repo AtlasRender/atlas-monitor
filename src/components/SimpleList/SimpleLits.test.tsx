@@ -7,15 +7,13 @@
  */
 
 import React from "react";
-import ReactDOM from "react-dom";
-import {render, cleanup} from '@testing-library/react';
-import SimpleList from "./SimpleList";
+import {cleanup} from "@testing-library/react";
 
 afterEach(cleanup);
 
 //TODO make normal test (routing-manager compile error)
 describe("ListItemProgress", () => {
     test("empty test", () => {
-       expect(1).toBe(1);
+        expect(1).toBe(1);
     });
 });

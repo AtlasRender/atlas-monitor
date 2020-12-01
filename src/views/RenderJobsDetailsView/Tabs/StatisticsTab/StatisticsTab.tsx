@@ -6,7 +6,7 @@
  * All rights reserved.
  */
 
-import React, {Ref} from 'react';
+import React, {Ref} from "react";
 import styles from "./styles";
 import {Box, Divider, Grid, IconButton, Typography, useMediaQuery, useTheme, withStyles} from "@material-ui/core";
 import clsx from "clsx";
@@ -18,19 +18,19 @@ import {
     LineSeries,
     Title,
     ValueAxis,
-} from '@devexpress/dx-react-chart-material-ui';
-import {Animation} from '@devexpress/dx-react-chart';
+} from "@devexpress/dx-react-chart-material-ui";
+import {Animation} from "@devexpress/dx-react-chart";
 import Stylable from "../../../../interfaces/Stylable";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 const data = [
-    {time: '1', slaves: 10},
-    {time: '2', slaves: 30},
-    {time: '3', slaves: 20},
-    {time: '4', slaves: 56},
-    {time: '5', slaves: 0},
-    {time: '6', slaves: 101},
-    {time: '7', slaves: 32},
+    {time: "1", slaves: 10},
+    {time: "2", slaves: 30},
+    {time: "3", slaves: 20},
+    {time: "4", slaves: 56},
+    {time: "5", slaves: 0},
+    {time: "6", slaves: 101},
+    {time: "7", slaves: 32},
 ];
 
 /**
@@ -53,13 +53,13 @@ const StatisticsTab = React.forwardRef((props: StatisticsTabProps, ref: Ref<any>
     } = props;
 
     const theme = useTheme();
-    const matches = useMediaQuery(theme.breakpoints.up('sm'));
+    const matches = useMediaQuery(theme.breakpoints.up("sm"));
     let height;
 
     if (matches) {
-        height = 400
+        height = 400;
     } else {
-        height = 300
+        height = 300;
     }
 
     return (
@@ -201,6 +201,6 @@ const StatisticsTab = React.forwardRef((props: StatisticsTabProps, ref: Ref<any>
     );
 });
 StatisticsTab.displayName = "StatisticsTab";
-StatisticsTab.propTypes = {}
+StatisticsTab.propTypes = {};
 
 export default withStyles(styles)(StatisticsTab);

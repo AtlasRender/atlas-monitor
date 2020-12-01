@@ -8,7 +8,7 @@
 
 import React from "react";
 import ReactDOM from "react-dom";
-import {render, cleanup} from '@testing-library/react';
+import {cleanup, render} from "@testing-library/react";
 import DataTextField from "./DataTextField";
 import {ThemeProvider} from "@material-ui/core/styles";
 import theme from "../../theme";
@@ -22,13 +22,13 @@ describe("DataTextField", () => {
     });
 
     test("Render without input", () => {
-        const container:any = document.createElement("div");
+        const container: any = document.createElement("div");
         render(<ThemeProvider theme={theme}><DataTextField/></ThemeProvider>, container);
         expect(container.textContent).toBe("");
     });
 
     test("Render with input", () => {
-        const { getByText } = render(<ThemeProvider theme={theme}><DataTextField label="Name" children="Pathfinder Logo"/></ThemeProvider>);
+        const {getByText} = render(<ThemeProvider theme={theme}><DataTextField label="Name" children="Pathfinder Logo"/></ThemeProvider>);
         expect(getByText("Name")).not.toBe(null);
         expect(getByText("Pathfinder Logo")).not.toBe(null);
     });

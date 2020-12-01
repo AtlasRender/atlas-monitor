@@ -6,28 +6,28 @@
  * All rights reserved.
  */
 
-import {createStyles, fade, Theme} from "@material-ui/core";
+import {createStyles, Theme} from "@material-ui/core";
 
-const styles =(theme: Theme) => createStyles({
-    firstLine:{
+const styles = (theme: Theme) => createStyles({
+    firstLine: {
         justifyContent: "center",
-        alignItems:"center",
-        listStyleType:"none",
+        alignItems: "center",
+        listStyleType: "none",
     },
     dialogRoles: {
-        width : "100%",
+        width: "100%",
         textAlign: "center",
         paddingBottom: theme.spacing(2),
     },
     gridPadding: {
         marginBottom: theme.spacing(1),
     },
-    paddingNone:{
+    paddingNone: {
         paddingLeft: 0,
-        paddingBottom:0,
+        paddingBottom: 0,
     },
     newRole: {
-        [theme.breakpoints.down('xs')]: {
+        [theme.breakpoints.down("xs")]: {
             maxWidth: 375,
         },
     },

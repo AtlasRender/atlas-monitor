@@ -6,4 +6,4 @@
  * All rights reserved.
  */
 
-export {default} from "./OrganizationsFieldsRow"
+export {default} from "./OrganizationsFieldsRow";

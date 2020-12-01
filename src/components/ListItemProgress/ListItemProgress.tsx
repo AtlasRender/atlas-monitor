@@ -6,11 +6,11 @@
  * All rights reserved.
  */
 
-import React, {Ref} from 'react';
-import {useTheme, withStyles} from '@material-ui/core/styles';
+import React, {Ref} from "react";
+import {useTheme, withStyles} from "@material-ui/core/styles";
 import styles from "./styles";
 import {ListItem, ListItemProps} from "@material-ui/core";
-import lightBlue from '@material-ui/core/colors/lightBlue';
+import lightBlue from "@material-ui/core/colors/lightBlue";
 
 /**
  * ListItemProgressProps - interface for List component

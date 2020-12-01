@@ -6,8 +6,8 @@
  * All rights reserved.
  */
 
-import React, {useState} from 'react';
-import NumberFormat from 'react-number-format';
+import React, {useState} from "react";
+import NumberFormat from "react-number-format";
 import Stylable from "../../interfaces/Stylable";
 import {Box, TextField, withStyles} from "@material-ui/core";
 import styles from "./styles";

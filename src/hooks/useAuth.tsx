@@ -47,7 +47,7 @@ export interface AuthContext {
 
 const Context: React.Context<AuthContext> = React.createContext<AuthContext>({
     getUser(): User | null {
-        return null
+        return null;
     },
     isLogged: false,
     login(user: User): void {
@@ -90,7 +90,7 @@ export function AuthProvider(props: AuthProviderProps) {
     React.useEffect(() => {
         window.addEventListener("storage", changeStorage);
         return () => window.removeEventListener("storage", changeStorage);
-    })
+    });
 
     function changeStorage(event: StorageEvent) {
         if (!event.newValue && logged) {
@@ -154,7 +154,7 @@ AuthProvider.displayName = displayName;
 
 AuthProvider.propTypes = {
     children: PropTypes.node,
-}
+};
 
 /**
  * useAuth - React hook, designed to work with user authentication.

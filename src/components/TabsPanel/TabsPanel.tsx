@@ -7,8 +7,8 @@
  */
 
 import React, {Ref} from "react";
-import {Box,} from "@material-ui/core"
-import {withStyles} from '@material-ui/core/styles';
+import {Box,} from "@material-ui/core";
+import {withStyles} from "@material-ui/core/styles";
 import styles from "./styles";
 import Stylable from "../../interfaces/Stylable";
 import Containerable from "../../interfaces/Containerable";

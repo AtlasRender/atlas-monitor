@@ -6,17 +6,22 @@
  * All rights reserved.
  */
 
-import React, {Ref, useContext, useEffect, useState} from "react";
+import React, {Ref, useEffect, useState} from "react";
 import {
-    Avatar, Box, Button,
+    Avatar,
+    Box,
+    Button,
     Dialog,
-    DialogTitle, Divider, Grid,
-    IconButton, InputBase,
-    ListItem, ListItemAvatar,
+    Divider,
+    Grid,
+    IconButton,
+    InputBase,
+    ListItem,
+    ListItemAvatar,
     ListItemSecondaryAction,
     ListItemText,
-    Menu,
-    MenuItem, Popover, Typography,
+    Popover,
+    Typography,
     withStyles,
 } from "@material-ui/core";
 import styles from "./styles";
@@ -37,6 +42,7 @@ interface DialogUserProps extends Stylable {
 
     onClose(): void;
 
+    // TODO: what means empty array in function definition?
     onRemove([]): void;
 
     onAddRole(roleId: number, user: number | undefined): void;
@@ -173,12 +179,12 @@ const DialogUser = React.forwardRef((props: DialogUserProps, ref: Ref<any>) => {
                         open={Boolean(isAddRoleToUserButtonActive)}
                         onClose={handleCloseAddRoleToUserButtonActive}
                         anchorOrigin={{
-                            vertical: 'bottom',
-                            horizontal: 'right',
+                            vertical: "bottom",
+                            horizontal: "right",
                         }}
                         transformOrigin={{
-                            vertical: 'top',
-                            horizontal: 'right',
+                            vertical: "top",
+                            horizontal: "right",
                         }}
                         classes={{
                             paper: classes.menuPaper,
@@ -201,7 +207,7 @@ const DialogUser = React.forwardRef((props: DialogUserProps, ref: Ref<any>) => {
                                     root: classes.inputRoot,
                                     input: classes.inputInput,
                                 }}
-                                inputProps={{'aria-label': 'search'}}
+                                inputProps={{"aria-label": "search"}}
                             />
                             <IconButton>
                                 <CloseIcon/>
@@ -229,7 +235,7 @@ const DialogUser = React.forwardRef((props: DialogUserProps, ref: Ref<any>) => {
                                     No roles found
                                 </Typography>
                             </Box>
-                            }
+                        }
                     </Popover>
                 </ListItem>
                 <Divider/>

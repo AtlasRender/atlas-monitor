@@ -17,6 +17,9 @@ interface PluginContextProps {
 
 export const PluginContext = React.createContext<PluginContextProps>({
     pluginFields: [],
-    setPluginFields: () => {},
-    idGenerator: (): number => { return 1},
+    setPluginFields: () => {
+    },
+    idGenerator: (): number => {
+        return 1;
+    },
 });

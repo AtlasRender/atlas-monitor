@@ -10,7 +10,7 @@ import {createStyles, Theme} from "@material-ui/core";
 import grey from "@material-ui/core/colors/grey";
 
 const styles = (theme: Theme) => createStyles({
-    folder:{
+    folder: {
         border: `1px solid ${grey[700]}`,
         padding: theme.spacing(1, 1, 1, 1),
         minHeight: 50,

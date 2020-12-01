@@ -71,7 +71,7 @@ export default class User extends BaseEntity {
      */
     constructor(user: any) {
         super("User");
-        const validationMap: UserValidationMap = {}
+        const validationMap: UserValidationMap = {};
 
         this.id = NumberValidator(user.id).value || 0;
         validationMap.id = NumberValidator(user.id).error;

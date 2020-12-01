@@ -23,21 +23,24 @@ import {DropTargetMonitor, useDrag, useDrop, XYCoord} from "react-dnd";
 import BasicPluginField from "../../../../entities/BasicPluginField";
 import {PluginContext} from "../../CreatePluginPageView";
 
-interface DragableListItemProps extends Stylable{
+interface DragableListItemProps extends Stylable {
     field: BasicPluginField,
+
     onDelete(item: BasicPluginField): void,
+
     moveCard: (dragIndex: number, hoverIndex: number, targetId: number, toId: number) => void
     index: number,
+
     getIndex(index: number): void,
 }
 
-interface DragItem{
+interface DragItem {
     index: number,
     id: string,
     type: string,
 }
 
-const DragableListItem : React.FC<DragableListItemProps> = ({ field, onDelete, moveCard, index, getIndex}) => {
+const DragableListItem: React.FC<DragableListItemProps> = ({field, onDelete, moveCard, index, getIndex}) => {
 
     const context = useContext(PluginContext);
 
@@ -61,8 +64,8 @@ const DragableListItem : React.FC<DragableListItemProps> = ({ field, onDelete, m
 
             const hoveredRect = refer.current.getBoundingClientRect();
             const hoverMiddleY = (hoveredRect.bottom - hoveredRect.top) / 2;
-            const clientOffset = monitor.getClientOffset()
-            const hoveredClientY = (clientOffset as XYCoord).y - hoveredRect.top
+            const clientOffset = monitor.getClientOffset();
+            const hoveredClientY = (clientOffset as XYCoord).y - hoveredRect.top;
 
             if (dragIndex < hoverIndex && hoveredClientY < hoverMiddleY) {
                 return;
@@ -79,11 +82,11 @@ const DragableListItem : React.FC<DragableListItemProps> = ({ field, onDelete, m
             item.index = hoverIndex;
         },
 
-    })
+    });
 
     const [{isDragging}, drag] = useDrag({
         item: {type: "InputField", id, index},
-        collect: (monitor:any) => ({
+        collect: (monitor: any) => ({
             isDragging: monitor.isDragging(),
         }),
     });
@@ -92,31 +95,31 @@ const DragableListItem : React.FC<DragableListItemProps> = ({ field, onDelete, m
 
     const opacity = isDragging ? 0 : 1;
 
-    return(
-            <ListItem
-                ref={refer}
-                style={{opacity, paddingLeft: 0}}
-                button
-                onClick={() => getIndex(index)}
-            >
-                <ListItemAvatar>
-                    <Avatar/>
-                </ListItemAvatar>
-                <ListItemText
-                    primary={field.label}
-                    // secondary={field.label}
-                />
-                <ListItemSecondaryAction style={{opacity}}>
-                    <IconButton
-                        edge="end"
-                        aria-label="delete"
-                        onClick={() => onDelete(field)}
-                    >
-                        <DeleteIcon/>
-                    </IconButton>
-                </ListItemSecondaryAction>
+    return (
+        <ListItem
+            ref={refer}
+            style={{opacity, paddingLeft: 0}}
+            button
+            onClick={() => getIndex(index)}
+        >
+            <ListItemAvatar>
+                <Avatar/>
+            </ListItemAvatar>
+            <ListItemText
+                primary={field.label}
+                // secondary={field.label}
+            />
+            <ListItemSecondaryAction style={{opacity}}>
+                <IconButton
+                    edge="end"
+                    aria-label="delete"
+                    onClick={() => onDelete(field)}
+                >
+                    <DeleteIcon/>
+                </IconButton>
+            </ListItemSecondaryAction>
 
-            </ListItem>
+        </ListItem>
     );
 };
 

@@ -12,11 +12,11 @@ const drawerWidth = 240;
 
 const styles = (theme: Theme) => createStyles({
     root: {
-        display: 'flex',
+        display: "flex",
     },
     appBar: {
         zIndex: theme.zIndex.drawer + 1,
-        transition: theme.transitions.create(['width', 'margin'], {
+        transition: theme.transitions.create(["width", "margin"], {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen,
         }),
@@ -24,7 +24,7 @@ const styles = (theme: Theme) => createStyles({
     appBarShift: {
         marginLeft: drawerWidth,
         width: `calc(100% - ${drawerWidth}px)`,
-        transition: theme.transitions.create(['width', 'margin'], {
+        transition: theme.transitions.create(["width", "margin"], {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.enteringScreen,
         }),
@@ -33,43 +33,43 @@ const styles = (theme: Theme) => createStyles({
         marginRight: 36,
     },
     hide: {
-        display: 'none',
+        display: "none",
     },
     drawer: {
         width: drawerWidth,
         flexShrink: 0,
-        whiteSpace: 'nowrap',
+        whiteSpace: "nowrap",
     },
     drawerOpen: {
         width: drawerWidth,
-        transition: theme.transitions.create('width', {
+        transition: theme.transitions.create("width", {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.enteringScreen,
         }),
     },
     drawerClose: {
-        transition: theme.transitions.create('width', {
+        transition: theme.transitions.create("width", {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen,
         }),
-        overflowX: 'hidden',
+        overflowX: "hidden",
         width: theme.spacing(7) + 1,
-        [theme.breakpoints.up('sm')]: {
+        [theme.breakpoints.up("sm")]: {
             width: theme.spacing(9) + 1,
         },
     },
     toolbar: {
-        display: 'flex',
-        alignItems: 'center',
+        display: "flex",
+        alignItems: "center",
         padding: theme.spacing(0, 1),
         // necessary for content to be below app bar
         // ...theme.mixins.toolbar,
-        justifyContent: 'flex-end',
+        justifyContent: "flex-end",
     },
     content: {
         flexGrow: 1,
         padding: theme.spacing(2),
-        [theme.breakpoints.down('sm')]: {
+        [theme.breakpoints.down("sm")]: {
             padding: theme.spacing(0),
         }
     },
@@ -77,7 +77,7 @@ const styles = (theme: Theme) => createStyles({
         width: 250,
     },
     fullList: {
-        width: 'auto',
+        width: "auto",
     },
     popperTop: {
         marginTop: 8,

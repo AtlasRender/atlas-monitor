@@ -6,11 +6,10 @@
  * All rights reserved.
  */
 
-import React, {useState} from "react";
-import {Box, Divider, Switch, Typography, withStyles} from "@material-ui/core";
+import React from "react";
+import {Box, Switch, Typography, withStyles} from "@material-ui/core";
 import Stylable from "../../interfaces/Stylable";
 import styles from "./styles";
-import {PluginSetting} from "@atlasrender/render-plugin";
 
 
 interface BooleanPluginFieldProps extends Stylable {

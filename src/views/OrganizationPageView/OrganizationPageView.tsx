@@ -46,7 +46,6 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import DialogAddRoles from "./LocalComponents/DialogAddRoles";
 import Loading from "../../components/Loading";
-import FilesLoader from "../../components/FilesLoader";
 
 /**
  * OrganizationPageViewPropsStyled - interface for OrganizationPageView function
@@ -119,7 +118,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
             handleGetRoles()
         ]).then(() => {
             setLoaded(true);
-        })
+        });
     }, []);
 
     //basic
@@ -158,7 +157,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
             .catch(err => {
                 //TODO handle errors
                 enqueueErrorSnackbar("Cant get role by id");
-            })
+            });
     }
 
     function handleAddRoleToUser(roleId: number, userToAddRoleId: number) {
@@ -173,7 +172,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
             .catch(err => {
                 //TODO handle errors
                 enqueueErrorSnackbar("Cant get role by id");
-            })
+            });
     }
 
     function handleRemoveRoleFromUser(roleId: number, userToRemoveRoleId: number) {
@@ -188,7 +187,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
             .catch(err => {
                 //TODO handle errors
                 enqueueErrorSnackbar("Cant get role by id");
-            })
+            });
     }
 
     function handleAddRole(roleToAdd: any, errors: ValidationErrors) {
@@ -205,7 +204,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                 .catch(err => {
                     //TODO handle errors
                     enqueueErrorSnackbar("Cant add role");
-                })
+                });
         } else {
             enqueueErrorSnackbar("Cant add role");
         }
@@ -222,7 +221,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
             .catch(err => {
                 //TODO handle errors
                 enqueueErrorSnackbar("Cant add role");
-            })
+            });
     }
 
     function handleModifyRole(roleId: number, roleToModify: any) {
@@ -237,7 +236,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
             .catch(err => {
                 //TODO handle errors
                 enqueueErrorSnackbar("Cant edit role");
-            })
+            });
     }
 
     function handleIsAddRoleButtonActive() {
@@ -254,7 +253,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
 
     function handleIsDialogModifyRoleButtonActive(roleId: number) {
         handleGetRoleById(roleId).then(() => {
-            setIsDialogModifyRoleButtonActive(true)
+            setIsDialogModifyRoleButtonActive(true);
         });
     }
 
@@ -272,7 +271,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
 
     async function handleGetOrganization() {
         try {
-            const response = await coreRequest().get(`organizations/${id}`)
+            const response = await coreRequest().get(`organizations/${id}`);
             setOrganizationData(response.body);
         } catch (err) {
             //TODO handle errors
@@ -303,7 +302,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
             .catch(err => {
                 //TODO handle errors
                 enqueueErrorSnackbar("No such user");
-            })
+            });
     }
 
     function handleRemoveUser(usersToDeleteIds: number[]) {
@@ -318,7 +317,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
             .catch(err => {
                 //TODO handle errors
                 enqueueErrorSnackbar(err.message);
-            })
+            });
     }
 
     function handleNewUsersClick(newUserId: number) {
@@ -327,7 +326,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
             newUsersArray = newUsersArray.filter(userId => userId !== newUserId);
             setNewUsers(newUsersArray);
         } else {
-            setNewUsers([...newUsers, newUserId])
+            setNewUsers([...newUsers, newUserId]);
         }
     }
 
@@ -354,7 +353,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
         "Kiev slave",
         "Harkov slave",
         "Lvov slave",
-    ]
+    ];
 
 
     const theme = useTheme();
@@ -391,7 +390,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                     </Grid>
                 </Grid>
             </Box>
-        )
+        );
     } else {
         mainInfo = (
             <Grid container spacing={2} className={classes.firstLine}>
@@ -406,7 +405,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                                    children="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dicta dolorem, dolorum nam quidem sint sunt!"/>
                 </Grid>
             </Grid>
-        )
+        );
     }
 
     let {path} = useRouteMatch();
@@ -435,7 +434,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                                                 <IconButton><SettingsIcon/></IconButton>
                                             </ListItemSecondaryAction>
                                         </ListItem>
-                                    )
+                                    );
                                 })}
                             </Grid>
                         </Grid>
@@ -504,7 +503,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                                                     </IconButton>
                                                 </ListItemSecondaryAction>
                                             </ListItem>
-                                        )
+                                        );
                                     })}
                                 </List>
                             </Grid>
@@ -552,7 +551,9 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                             {organizationUsers.map((user: UserData, key: number) => {
                                 return (
                                     <Grid item xs={12} md={10} key={key}>
-                                        <ListItem button onClick={()=>{changeRoute({page:"user", id: user.id})}}>
+                                        <ListItem button onClick={() => {
+                                            changeRoute({page: "user", id: user.id});
+                                        }}>
                                             <ListItemAvatar>
                                                 <Avatar
                                                     src="https://cdn.sportclub.ru/assets/2019-09-20/n97c311rvb.jpg"
@@ -572,7 +573,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                                             </ListItemSecondaryAction>
                                         </ListItem>
                                     </Grid>
-                                )
+                                );
                             })}
                         </Grid>
 
@@ -586,7 +587,8 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                             onRemoveRole={handleRemoveRoleFromUser}
                         />
 
-                        <TopicWithButton children="Plugins" onClick={()=>changeRoute({page:"plugin/create", id: id})}/>
+                        <TopicWithButton children="Plugins"
+                                         onClick={() => changeRoute({page: "plugin/create", id: id})}/>
                         <PluginComponent plugin="GachiWork" description="best remixes of all time"/>
                     </Box>
                 </Route>
@@ -597,6 +599,6 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
             </Box>
 
     );
-})
+});
 
 export default withStyles(styles)(OrganizationPageView);

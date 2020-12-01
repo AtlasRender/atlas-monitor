@@ -10,7 +10,7 @@ import {createStyles, Theme} from "@material-ui/core";
 
 const styles = (theme: Theme) => createStyles({
     root: {
-        width: '100%',
+        width: "100%",
     },
     container: {
         maxHeight: "74vh",
@@ -19,10 +19,10 @@ const styles = (theme: Theme) => createStyles({
         margin: theme.spacing(2),
         fontWeight: 500,
     },
-    box:{
+    box: {
         display: "flex",
         justifyContent: "center",
-        alignItems:"center"
+        alignItems: "center"
     },
     loading: {
         display: "flex",
