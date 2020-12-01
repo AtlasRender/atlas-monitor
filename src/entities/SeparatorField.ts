@@ -10,7 +10,7 @@ import BasicPluginField from "./BasicPluginField";
 
 
 /**
- * SeparatorField - interface for Divider Plugin Field
+ * SeparatorPluginField - interface for Divider Plugin Field
  * @interface
  * @author Andrii Demchyshyn
  */

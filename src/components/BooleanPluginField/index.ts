@@ -6,4 +6,4 @@
  * All rights reserved.
  */
 
-export {default} from "./BooleanField";
+export {default} from "./BooleanPluginField";

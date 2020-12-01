@@ -2,7 +2,7 @@
  * Copyright (c) 2020. This code created and belongs to Atlas render manager project.
  * Owner and project architect: Danil Andreev | danssg08@gmail.com |  https://github.com/DanilAndreev
  * Project: atlas-monitor
- * File last modified: 01.12.2020, 03:36
+ * File last modified: 01.12.2020, 03:48
  * All rights reserved.
  */
 
@@ -11,11 +11,11 @@ import {Box, Divider, Typography, withStyles} from "@material-ui/core";
 import Stylable from "../../interfaces/Stylable";
 import styles from "./styles";
 
-interface SeparatorFieldProps extends Stylable {
+interface SeparatorPluginFieldProps extends Stylable {
     label?: string;
 }
 
-const SeparatorField = React.forwardRef((props: SeparatorFieldProps, ref) => {
+const SeparatorPluginField = React.forwardRef((props: SeparatorPluginFieldProps, ref) => {
     const {
         classes,
         className,
@@ -27,7 +27,7 @@ const SeparatorField = React.forwardRef((props: SeparatorFieldProps, ref) => {
     return (
         <Box className={classes.container}>
             {label &&
-            <Typography>
+            <Typography className={classes.text}>
                 {label}
             </Typography>
             }
@@ -36,4 +36,4 @@ const SeparatorField = React.forwardRef((props: SeparatorFieldProps, ref) => {
     );
 });
 
-export default withStyles(styles)(SeparatorField);
+export default withStyles(styles)(SeparatorPluginField);

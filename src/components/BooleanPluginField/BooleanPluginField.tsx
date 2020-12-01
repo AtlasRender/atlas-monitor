@@ -2,7 +2,7 @@
  * Copyright (c) 2020. This code created and belongs to Atlas render manager project.
  * Owner and project architect: Danil Andreev | danssg08@gmail.com |  https://github.com/DanilAndreev
  * Project: atlas-monitor
- * File last modified: 01.12.2020, 03:36
+ * File last modified: 01.12.2020, 03:46
  * All rights reserved.
  */
 
@@ -13,16 +13,14 @@ import styles from "./styles";
 import {PluginSetting} from "@atlasrender/render-plugin";
 
 
-interface BooleanFieldProps extends Stylable {
+interface BooleanPluginFieldProps extends Stylable {
     value: boolean;
     label?: string;
 
     onChange(): void;
-
-    // onChange(event: React.ChangeEvent<HTMLInputElement>): void;
 }
 
-const BooleanField = React.forwardRef((props: BooleanFieldProps, ref) => {
+const BooleanPluginField = React.forwardRef((props: BooleanPluginFieldProps, ref) => {
     const {
         classes,
         className,
@@ -57,4 +55,4 @@ const BooleanField = React.forwardRef((props: BooleanFieldProps, ref) => {
     );
 });
 
-export default withStyles(styles)(BooleanField);
+export default withStyles(styles)(BooleanPluginField);

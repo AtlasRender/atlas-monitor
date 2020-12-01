@@ -489,9 +489,9 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
 
                 </Grid>
 
-                <Container maxWidth={"md"}>
-                    <IntegerPluginField field={field}/>
-                </Container>
+                {/*<Container maxWidth={"md"}>*/}
+                {/*    <IntegerPluginField field={field}/>*/}
+                {/*</Container>*/}
             </Box>
             :
             <Box className={classes.loading}>

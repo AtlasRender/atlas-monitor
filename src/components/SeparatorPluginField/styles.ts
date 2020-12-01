@@ -17,6 +17,10 @@ const styles = (theme: Theme) => createStyles({
     separator: {
         background: grey[500],
         width: "100%",
+    },
+    text: {
+        textAlign: "center",
+        fontSize: 14,
     }
 });
 

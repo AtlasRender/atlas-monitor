@@ -6,16 +6,4 @@
  * All rights reserved.
  */
 
-import {createStyles, Theme} from "@material-ui/core";
-
-const styles = (theme: Theme) => createStyles({
-    container: {
-        display: "flex",
-        padding: theme.spacing(1),
-    },
-    text: {
-        flexGrow: 1,
-    }
-});
-
-export default styles;
+export {default} from "./SeparatorPluginField";
