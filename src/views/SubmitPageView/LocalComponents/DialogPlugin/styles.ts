@@ -65,6 +65,10 @@ const styles = (theme: Theme) => createStyles({
         justifyContent: "center",
         alignItems: "center",
     },
+    pluginContainer: {
+        height: 220,
+        overflow: "auto"
+    }
 });
 
 export default styles;

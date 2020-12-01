@@ -149,7 +149,7 @@ const DialogPlugin = React.forwardRef((props: DialogPluginProps, ref: Ref<any>) 
                                         <CloseIcon/>
                                     </IconButton>
                                 </ListItem>
-                                <Grid container style={{height: 220, overflow: "auto"}}>
+                                <Grid container className={classes.pluginContainer}>
                                     {filterPlugins.length !== 0 ? filterPlugins.map(plugin => {
                                         return (
                                             <Grid item xs={12} key={plugin.id}>

@@ -15,6 +15,5 @@ export default interface PluginFull {
     description: string | null;
     note: string | null;
     readme: string | null;
-    //TODO normal type
     rules: PluginSettingsSpec;
 }

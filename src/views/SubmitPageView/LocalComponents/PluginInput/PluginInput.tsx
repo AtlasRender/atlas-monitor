@@ -7,7 +7,7 @@
  */
 
 import React, {Ref, useEffect, useState} from "react";
-import {Box, Typography, withStyles} from "@material-ui/core";
+import {Box, Grid, TextField, Typography, withStyles} from "@material-ui/core";
 import styles from "./styles";
 import Stylable from "../../../../interfaces/Stylable";
 import useCoreRequest from "../../../../hooks/useCoreRequest";
@@ -46,8 +46,6 @@ const PluginInput = React.forwardRef((props: PluginInputProps, ref: Ref<any>) =>
     const [plugin, setPlugin] = useState<PluginFull | null>(null);
     const [loaded, setLoaded] = useState<boolean>(false);
 
-    console.log(plugin);
-
 
     useEffect(() => {
         Promise.all([
@@ -61,7 +59,8 @@ const PluginInput = React.forwardRef((props: PluginInputProps, ref: Ref<any>) =>
     async function handleGetPlugin() {
         try {
             const response = await coreRequest().get(`/plugins/${pluginId}`);
-            const temp = {...response.body, rules: new PluginSettingsSpec(response.body.rules)};
+            //TODO validation for rules
+            const temp = {...response.body, rules: response.body.rules};
             setPlugin(temp);
         } catch (err) {
             enqueueErrorSnackbar("Cant get plugin");
@@ -74,8 +73,20 @@ const PluginInput = React.forwardRef((props: PluginInputProps, ref: Ref<any>) =>
         (loaded && plugin) ?
             <Box>
                 <Typography variant="h6" className={classes.header}>
-                    {plugin.name} settings
+                    {plugin.name}
                 </Typography>
+                <Grid container spacing={2}>
+                    {plugin.rules.map(field => {
+                        return (
+                            <Grid item xs={12}>
+                                <TextField
+                                    fullWidth
+                                    label={field.label}
+                                />
+                            </Grid>
+                        );
+                    })}
+                </Grid>
             </Box>
             :
             <Box/>
