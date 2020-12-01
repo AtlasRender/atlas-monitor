@@ -18,6 +18,7 @@ import SeparatorPluginField from "../../../../components/SeparatorPluginField";
 import BooleanPluginField from "../../../../components/BooleanPluginField";
 import StringPluginField from "../../../../components/RenderJobCustomFields/StringPluginField";
 import IntegerPluginField from "../../../../components/RenderJobCustomFields/IntegerPluginField";
+import {number} from "prop-types";
 
 
 /**
@@ -27,6 +28,7 @@ import IntegerPluginField from "../../../../components/RenderJobCustomFields/Int
  */
 interface PluginInputProps extends Stylable {
     pluginId: number;
+    setPluginSetting(field: PluginSetting, value: number | string | null):void,
 }
 
 /**
@@ -39,6 +41,7 @@ const PluginInput = React.forwardRef((props: PluginInputProps, ref: Ref<any>) =>
         classes,
         style,
         className,
+        setPluginSetting,
         pluginId,
     } = props;
 
@@ -80,13 +83,13 @@ const PluginInput = React.forwardRef((props: PluginInputProps, ref: Ref<any>) =>
         setState(!state);
     }
 
-    const [str, setStr] = useState<string | null>("hello");
+    // const [str, setStr] = useState<string | null>("hello");
 
-    function handleChangeStr(value: string | null) {
-        setStr(value);
-    }
+    // function handleChangeStr(value: string | null) {
+    //     setStr(value);
+    // }
 
-    console.log(str);
+    // console.log(str);
 
     let pluginCopy: PluginSetting[] = [];
 
@@ -106,13 +109,13 @@ const PluginInput = React.forwardRef((props: PluginInputProps, ref: Ref<any>) =>
                             case "integer" :
                                 return (
                                     <Grid item xs={12}>
-                                        <IntegerPluginField field={field as IntegerField}/>
+                                        <IntegerPluginField field={field as IntegerField} setPluginSetting={setPluginSetting}/>
                                     </Grid>
                                 );
                             case "string" :
                                 return (
                                     <Grid item xs={12}>
-                                        <StringPluginField field={field as StringField} value={str} onChange={handleChange}/>
+                                        <StringPluginField field={field as StringField} setPluginSetting={setPluginSetting}/>
                                     </Grid>
                                 );
                             case "float" :

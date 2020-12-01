@@ -23,13 +23,13 @@ import Stylable from "../../../interfaces/Stylable";
 import styles from "./styles";
 import validate from "validate.js";
 import {number} from "prop-types";
-import {IntegerField} from "@atlasrender/render-plugin";
+import {IntegerField, PluginSetting} from "@atlasrender/render-plugin";
 
 interface IntegerPluginFieldProps extends Stylable {
     field: IntegerField;
     value?: number,
 
-    onChange?(value: number | null): void;
+    setPluginSetting(field: PluginSetting, value: number | string | null):void,
 }
 
 const IntegerPluginField = React.forwardRef((props: IntegerPluginFieldProps, ref: Ref<HTMLElement>) => {
@@ -38,7 +38,7 @@ const IntegerPluginField = React.forwardRef((props: IntegerPluginFieldProps, ref
         className,
         style,
         field,
-        onChange,
+        setPluginSetting,
         value: inputValue,
     } = props;
 
@@ -51,7 +51,7 @@ const IntegerPluginField = React.forwardRef((props: IntegerPluginFieldProps, ref
 
     React.useEffect(() => {
         setValue(String(finalValue));
-        onChange && onChange(finalValue);
+        setPluginSetting(field, finalValue);
     }, [finalValue]);
 
 
@@ -75,13 +75,13 @@ const IntegerPluginField = React.forwardRef((props: IntegerPluginFieldProps, ref
     // }
 
     return (
-        <Grid container>
+        <Grid container spacing={1}>
             <Grid item xs={3}>
                 <Button
                     fullWidth
                     onClick={() => setSlider(prev => !prev)}
                 >
-                    Samples
+                    {field.name}
                 </Button>
             </Grid>
             <Grid item xs={slider ? 2 : 9}>
@@ -115,7 +115,6 @@ const IntegerPluginField = React.forwardRef((props: IntegerPluginFieldProps, ref
                     aria-labelledby="discrete-slider"
                     valueLabelDisplay="off"
                     step={1}
-                    marks
                     min={field.min}
                     max={field.max}
                 />

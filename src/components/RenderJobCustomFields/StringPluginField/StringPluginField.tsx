@@ -23,13 +23,13 @@ import Stylable from "../../../interfaces/Stylable";
 import styles from "./styles";
 import validate from "validate.js";
 import {number} from "prop-types";
-import {StringField} from "@atlasrender/render-plugin";
+import {PluginSetting, StringField} from "@atlasrender/render-plugin";
 
 interface StringPluginFieldProps extends Stylable {
     field: StringField;
-    value?: string | null,
+    // value?: string | null,
 
-    onChange?(value: string | null): void;
+    setPluginSetting(field: PluginSetting, value: number | string | null):void,
 }
 
 const StringPluginField = React.forwardRef((props: StringPluginFieldProps, ref: Ref<HTMLElement>) => {
@@ -38,27 +38,32 @@ const StringPluginField = React.forwardRef((props: StringPluginFieldProps, ref: 
         className,
         style,
         field,
-        onChange,
-        value,
+        setPluginSetting,
+        // value,
     } = props;
 
-    const [string, setString] = useState<string>(value ? value : "");
+    const [value, setValue] = useState<string>("");
 
     function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
-        setString(event.target.value);
+        setValue(event.target.value);
     }
 
     return (
-        <Box className={classes.container}>
-            <TextField
-                fullWidth
-                value={string}
-                onChange={handleChange}
-                onBlur={() => {
-                    onChange && onChange(string);
-                }}
-            />
-        </Box>
+        <Grid container spacing={1}>
+            <Grid item xs={3}>
+                <Button fullWidth>{field.name}</Button>
+            </Grid>
+            <Grid item xs={9}>
+                <TextField
+                    fullWidth
+                    value={value}
+                    onChange={handleChange}
+                    onBlur={() => {
+                         setPluginSetting(field, value);
+                    }}
+                />
+            </Grid>
+        </Grid>
     );
 })
 

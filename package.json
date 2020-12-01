@@ -39,7 +39,7 @@
   },
   "proxy": "http://api.atlasrender.com:3002",
   "dependencies": {
-    "@atlasrender/render-plugin": "^0.1.1",
+    "@atlasrender/render-plugin": "^0.1.2",
     "@date-io/date-fns": "2.x",
     "@devexpress/dx-react-chart": "^2.7.2",
     "@devexpress/dx-react-chart-material-ui": "^2.7.2",

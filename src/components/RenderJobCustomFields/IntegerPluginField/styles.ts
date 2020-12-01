@@ -11,7 +11,9 @@ import {createStyles, Theme} from "@material-ui/core";
 const styles = (theme: Theme) =>createStyles({
     field: {
         border: "1px solid black",
-    }
+        borderRadius: 2,
+        paddingLeft: theme.spacing(1),
+    },
 });
 
 export default styles;

@@ -9,10 +9,7 @@
 import {createStyles, Theme} from "@material-ui/core";
 
 const styles = (theme: Theme) =>createStyles({
-    container: {
-        width: "100%",
-        padding: theme.spacing(1),
-    }
+
 });
 
 export default styles;
