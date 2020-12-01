@@ -44,6 +44,7 @@ import User from "../../interfaces/User";
 import IntegerPluginField from "../../components/RenderJobCustomFields/IntegerPluginField";
 import {IntegerField, PluginSetting, PluginSettingsSpec} from "@atlasrender/render-plugin";
 import validate from "validate.js";
+import {useChangeRoute} from "routing-manager";
 
 /**
  * SubmitPagePropsStyled - interface for SubmitPageView function
@@ -89,6 +90,7 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
     const enqueueSuccessSnackbar = useEnqueueSuccessSnackbar();
     const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
     const {getUser} = useAuth();
+    const {changeRoute} = useChangeRoute();
     const coreRequest = useCoreRequest();
 
     const user = getUser();
@@ -107,7 +109,7 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
         user: user ? user.username : "",
         description: "",
         organization: userOrgs[0]?.id,
-        frameRange: "1-10 11-100",
+        frameRange: "1-10",
         attempts_per_task_limit: 1,
         plugin: undefined,
         pluginSettings: {},
@@ -236,6 +238,7 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
             .send(job)
             .then(() => {
                 enqueueSuccessSnackbar("successfully submitted");
+                changeRoute({page:"jobs"});
             })
             .catch(() => {
                 enqueueErrorSnackbar("Something went wrong");
