@@ -9,23 +9,8 @@
 import {createStyles, Theme} from "@material-ui/core";
 
 const styles = (theme: Theme) =>createStyles({
-    box:{
-        display:"flex",
-        flexDirection:"row",
-        alignItems:"flex-end",
-    },
-    valueField:{
-        display: "flex",
-        flexGrow:2,
-        marginLeft: theme.spacing(1),
-        marginRight: theme.spacing(1),
-    },
-    button:{
-        flexGrow:1,
-    },
-    slider:{
-        display:"flex",
-        flexGrow:1,
+    field: {
+        border: "1px solid black",
     }
 });
 

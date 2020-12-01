@@ -10,7 +10,7 @@ import React, {Ref, useEffect, useState} from "react";
 import {
     Box,
     Button,
-    Chip,
+    Chip, Container,
     Grid,
     IconButton,
     InputLabel,
@@ -36,7 +36,8 @@ import useEnqueueErrorSnackbar from "../../utils/enqueueErrorSnackbar";
 import Loading from "../../components/Loading";
 import Organization from "../../interfaces/Organization";
 import User from "../../interfaces/User";
-import IntegerPluginField from "../../components/IntegerPluginField";
+import IntegerPluginField from "../../components/RenderJobCustomFields/IntegerPluginField";
+import {IntegerField} from "@atlasrender/render-plugin";
 
 /**
  * SubmitPagePropsStyled - interface for SubmitPageView function
@@ -328,6 +329,8 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
         )
     }
 
+    const field: IntegerField = new IntegerField({type: "integer", name: "samples", label: "Samples", min: 100, max: 120, default: 115});
+
     return (
         loaded ?
             <Box className={className} style={style}>
@@ -375,7 +378,10 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
                     {plugin}
                     {submitButton}
                 </Grid>
-                <IntegerPluginField/>
+
+                <Container maxWidth={"md"}>
+                    <IntegerPluginField field={field}/>
+                </Container>
             </Box>
             :
             <Box className={classes.loading}>
