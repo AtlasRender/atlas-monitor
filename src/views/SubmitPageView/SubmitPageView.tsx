@@ -39,6 +39,7 @@ import Plugin from "../../interfaces/Plugin";
 import PluginInput from "./LocalComponents/PluginInput";
 import PluginPreview from "../../interfaces/PluginPreview";
 import DialogPlugin from "./LocalComponents/DialogPlugin";
+import IntegerPluginField from "../../components/IntegerPluginField";
 
 /**
  * SubmitPagePropsStyled - interface for SubmitPageView function
@@ -482,6 +483,7 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
 
 
                 </Grid>
+                <IntegerPluginField/>
             </Box>
             :
             <Box className={classes.loading}>
