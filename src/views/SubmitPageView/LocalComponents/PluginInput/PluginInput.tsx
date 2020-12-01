@@ -14,6 +14,10 @@ import useCoreRequest from "../../../../hooks/useCoreRequest";
 import useEnqueueErrorSnackbar from "../../../../utils/enqueueErrorSnackbar";
 import PluginFull from "../../../../interfaces/PluginFull";
 import {PluginSettingsSpec} from "@atlasrender/render-plugin";
+import IntegerPluginField from "../../../../components/IntegerPluginField";
+import IntegerField from "../../../../entities/IntegerField";
+import SeparatorField from "../../../../components/SeparatorField";
+import BooleanField from "../../../../components/BooleanField";
 
 
 /**
@@ -58,8 +62,11 @@ const PluginInput = React.forwardRef((props: PluginInputProps, ref: Ref<any>) =>
 
     async function handleGetPlugin() {
         try {
+            // debugger;
             const response = await coreRequest().get(`/plugins/${pluginId}`);
             //TODO validation for rules
+            console.log(response.body.rules);
+            // const temp = {...response.body, rules: new PluginSettingsSpec(response.body.rules)};
             const temp = {...response.body, rules: response.body.rules};
             setPlugin(temp);
         } catch (err) {
@@ -68,6 +75,20 @@ const PluginInput = React.forwardRef((props: PluginInputProps, ref: Ref<any>) =>
 
     }
 
+    const [state, setState] = useState(false);
+    function handleChange() {
+        setState(!state);
+    }
+    console.log(state);
+
+    // const obj = new PluginSettingsSpec([{
+    //     label: "Value 1",
+    //     name: "value1",
+    //     nullable: false,
+    //     type: "integer",
+    // }])
+    //
+    // console.log(obj);
 
     return (
         (loaded && plugin) ?
@@ -86,6 +107,8 @@ const PluginInput = React.forwardRef((props: PluginInputProps, ref: Ref<any>) =>
                             </Grid>
                         );
                     })}
+                    <SeparatorField label="label"/>
+                    <BooleanField value={state} onChange={handleChange} label="Description"/>
                 </Grid>
             </Box>
             :
