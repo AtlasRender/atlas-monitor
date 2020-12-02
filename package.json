@@ -1,8 +1,8 @@
 {
-  "name": "pathfinder-monitor",
+  "name": "atlas-monitor",
   "version": "0.1.0",
   "private": false,
-  "description": "Pathfinder Monitor - a part of Pathfinder system, designed to submit jobs, view render reports and control jobs.",
+  "description": "Atlas Monitor - a part of Pathfinder system, designed to submit jobs, view render reports and control jobs.",
   "keywords": [
     "rendering",
     "manager-system",
