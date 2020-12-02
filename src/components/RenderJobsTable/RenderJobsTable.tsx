@@ -31,6 +31,8 @@ import ShortJobs from "../../entities/ShortJobs";
 import useEnqueueErrorSnackbar from "../../utils/enqueueErrorSnackbar";
 import Loading from "../Loading";
 import {blue, green, orange} from "@material-ui/core/colors";
+import CoreEventDispatcher from "../../core/CoreEventDispatcher";
+import {WS_RENDER_JOB_UPDATE} from "../../globals";
 
 /**
  * RenderJobsTableProps - interface for RenderJobsTable component
@@ -123,11 +125,36 @@ const RenderJobsTable = React.forwardRef((props: RenderJobsTableProps, ref: Ref<
 
 
     useEffect(() => {
+
+        const listener = (message: any) => {
+            console.log("Get event for refreshing job:", message);
+            coreRequest()
+                .get("jobs")
+                .query({id: message.id})
+                .then(res => {
+                    console.log("Get job from core: ", res.body);
+                    setJobs(prev => {
+                        const jobIndex = prev.findIndex(job => job.id === message.id);
+                        if (jobIndex > 0) {
+                            console.log(`Found job index: ${jobIndex}`);
+                            prev[jobIndex] = new ShortJobs(res.body);
+                        }
+                        return prev;
+                    });
+                });
+        };
+        CoreEventDispatcher.getInstance().addListener(WS_RENDER_JOB_UPDATE, listener);
+
         Promise.all([
             handleGetJobs(),
         ]).then(() => {
             setLoaded(true);
         });
+
+        return () => {
+            CoreEventDispatcher.getInstance().removeListener(WS_RENDER_JOB_UPDATE, listener);
+        }
+
     }, []);
 
 
