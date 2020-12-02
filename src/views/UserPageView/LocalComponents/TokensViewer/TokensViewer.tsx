@@ -141,6 +141,7 @@ const TokensViewer = React.forwardRef((props: TokensViewerProps, ref: Ref<any>) 
 
     const handleClick = () => {
         setIsOpen(!isOpen);
+        setIsButtonActive(false);
     };
 
     function handleClose() {
