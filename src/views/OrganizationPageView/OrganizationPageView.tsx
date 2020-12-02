@@ -439,25 +439,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                             </Grid>
                         </Grid>
 
-                        <Grid container className={classes.firstLine}>
-                            <Grid item xs={12} md={10}>
-                                <List component="nav" aria-label="secondary mailbox folders">
-                                    <ListItem className={classes.paddingNone}>
-                                        <ListItemText primary="Roles" primaryTypographyProps={{variant: "h6"}}/>
-                                        <ListItemSecondaryAction>
-                                            <IconButton
-                                                edge="end"
-                                                aria-label="delete"
-                                                onClick={handleIsAddRoleButtonActive}
-                                            >
-                                                <AddIcon/>
-                                            </IconButton>
-                                        </ListItemSecondaryAction>
-                                    </ListItem>
-                                    <Divider/>
-                                </List>
-                            </Grid>
-                        </Grid>
+                        <TopicWithButton onClick={handleIsAddRoleButtonActive} children="Roles"/>
 
                         <DialogAddRoles
                             open={isAddRoleButtonActive}
@@ -518,25 +500,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                             onModifyRole={handleModifyRole}
                         />
 
-                        <Grid container className={classes.firstLine}>
-                            <Grid item xs={12} md={10}>
-                                <List component="nav" aria-label="secondary mailbox folders">
-                                    <ListItem className={classes.paddingNone}>
-                                        <ListItemText primary="Members" primaryTypographyProps={{variant: "h6"}}/>
-                                        <ListItemSecondaryAction>
-                                            <IconButton
-                                                edge="end"
-                                                aria-label="delete"
-                                                onClick={handleIsButtonActive}
-                                            >
-                                                <AddIcon/>
-                                            </IconButton>
-                                        </ListItemSecondaryAction>
-                                    </ListItem>
-                                    <Divider/>
-                                </List>
-                            </Grid>
-                        </Grid>
+                        <TopicWithButton onClick={handleIsButtonActive} children="Members"/>
 
                         <DialogAddUsers
                             open={isButtonActive}

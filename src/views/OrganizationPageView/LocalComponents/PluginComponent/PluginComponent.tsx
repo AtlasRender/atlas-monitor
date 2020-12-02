@@ -7,7 +7,17 @@
  */
 
 import React, {Ref} from "react";
-import {Grid, IconButton, ListItem, MenuItem, Select, useMediaQuery, useTheme, withStyles,} from "@material-ui/core";
+import {
+    Grid,
+    IconButton, List,
+    ListItem, ListItemIcon, ListItemSecondaryAction,
+    ListItemText,
+    MenuItem,
+    Select, Typography,
+    useMediaQuery,
+    useTheme,
+    withStyles,
+} from "@material-ui/core";
 import styles from "./styles";
 import DataTextField from "../../../../components/DataTextField";
 import clsx from "clsx";
@@ -38,69 +48,21 @@ const PluginComponent = React.forwardRef((props: PluginComponentProps, ref: Ref<
         description,
     } = props;
 
-    const theme = useTheme();
-    const matches = useMediaQuery(theme.breakpoints.up("md"));
-    let item;
-    if (matches) {
-        item = (
-            <Grid container spacing={0} className={classes.container}>
-                <Grid item xs={10} className={classes.containerItem}>
-                    <Grid item xs={2} style={{padding: 0}}>
-                        <DataTextField label="Plugin name" children={plugin} className={classes.dataTextFieldFix}/>
-                    </Grid>
-                    <Grid item xs={2} className={clsx(classes.container, classes.selectAlignment)}>
-                        <Select
-                            value="v.1.0.1"
-                            className={classes.container}
-                        >
-                            <MenuItem value={"v.1.0.1"}>v.1.0.1</MenuItem>
-                            <MenuItem value={"v.1.0.2"}>v.1.0.2</MenuItem>
-                            <MenuItem value={"v.1.0.3"}>v.1.0.3</MenuItem>
-                        </Select>
-                    </Grid>
-                    <Grid item xs={1}/>
-                    <Grid item xs={4} className={classes.dataTextFieldFix}>
-                        <DataTextField label="Description" children={description} className={classes.dataTextFieldFix}/>
-                    </Grid>
-                    <Grid item xs={1} className={classes.selectAlignment}>
-                        <IconButton>
-                            <CloseIcon/>
-                        </IconButton>
-                    </Grid>
-                </Grid>
-            </Grid>
-        );
-    } else {
-        item = (
-            <Grid container spacing={0} className={classes.container}>
-                <Grid item xs={10} className={classes.containerItem}>
-                    <Grid item xs={6} style={{padding: 0}}>
-                        <DataTextField label={description} children={plugin} className={classes.dataTextFieldFix}/>
-                    </Grid>
-                    <Grid item xs={2} className={clsx(classes.container, classes.selectAlignment)}>
-                        <Select
-                            value="v.1.0.1"
-                            className={classes.container}
-                        >
-                            <MenuItem value={"v.1.0.1"}>v.1.0.1</MenuItem>
-                            <MenuItem value={"v.1.0.2"}>v.1.0.2</MenuItem>
-                            <MenuItem value={"v.1.0.3"}>v.1.0.3</MenuItem>
-                        </Select>
-                    </Grid>
-                    <Grid item xs={1}>
-                        <IconButton>
-                            <CloseIcon/>
-                        </IconButton>
-                    </Grid>
-                </Grid>
-            </Grid>
-        );
-    }
-
     return (
-        <ListItem style={style} className={className}>
-            {item}
-        </ListItem>
+        <Grid container spacing={0} className={classes.container}>
+            <Grid item xs={10}>
+                <List className={classes.listRoot}>
+                    <ListItem style={style} className={className}>
+                        <ListItemText primary={plugin} secondary={description}/>
+                        <ListItemSecondaryAction>
+                            <IconButton>
+                                <CloseIcon/>
+                            </IconButton>
+                        </ListItemSecondaryAction>
+                    </ListItem>
+                </List>
+            </Grid>
+        </Grid>
     );
 });
 

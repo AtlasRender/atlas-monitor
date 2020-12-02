@@ -7,11 +7,21 @@
  */
 
 import React, {Ref} from "react";
-import {Divider, Grid, IconButton, Typography, withStyles} from "@material-ui/core";
+import {
+    Divider,
+    Grid,
+    IconButton,
+    ListItem,
+    ListItemSecondaryAction,
+    ListItemText,
+    Typography,
+    withStyles
+} from "@material-ui/core";
 import styles from "./styles";
 import AddIcon from "@material-ui/icons/Add";
 import clsx from "clsx";
 import Stylable from "../../../../interfaces/Stylable";
+import List from "@material-ui/core/List";
 
 /**
  * TopicWithButtonPropsStyled - interface for TopicWithButton function
@@ -38,19 +48,23 @@ const TopicWithButton = React.forwardRef((props: TopicWithButtonProps, ref: Ref<
         onClick,
     } = props;
     return (
-        <Grid container className={clsx(classes.container, className)} style={style}>
-            <Grid item xs={10}>
-                <Grid container className={classes.childAlign}>
-                    <Grid item xs={11}>
-                        <Typography variant="h6">{children}</Typography>
-                    </Grid>
-                    <Grid item xs={1} className={classes.box}>
-                        <IconButton onClick={onClick}><AddIcon/></IconButton>
-                    </Grid>
-                </Grid>
-            </Grid>
-            <Grid item xs={10}>
-                <Divider/>
+        <Grid container className={classes.firstLine}>
+            <Grid item xs={12} md={10}>
+                <List component="nav" aria-label="secondary mailbox folders">
+                    <ListItem className={classes.paddingNone}>
+                        <ListItemText primary={children} primaryTypographyProps={{variant: "h6"}}/>
+                        <ListItemSecondaryAction>
+                            <IconButton
+                                edge="end"
+                                aria-label="delete"
+                                onClick={onClick}
+                            >
+                                <AddIcon/>
+                            </IconButton>
+                        </ListItemSecondaryAction>
+                    </ListItem>
+                    <Divider/>
+                </List>
             </Grid>
         </Grid>
     );
