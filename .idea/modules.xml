@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/pathfinder-monitor.iml" filepath="$PROJECT_DIR$/.idea/pathfinder-monitor.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/atlas-monitor.iml" filepath="$PROJECT_DIR$/.idea/atlas-monitor.iml" />
     </modules>
   </component>
 </project>
