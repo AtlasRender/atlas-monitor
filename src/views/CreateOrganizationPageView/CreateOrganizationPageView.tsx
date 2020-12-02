@@ -236,10 +236,10 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
     return (
         <Grid container spacing={2} style={style} className={clsx(classes.container, classes.sidePaddings, className)}>
             <Grid container justify="center" direction="row" alignItems="center">
-                <IconButton><Avatar variant="circle" src="/broken-image.jpg" className={classes.avatar}/></IconButton>
+                <IconButton><Avatar variant="circular" src="/broken-image.jpg" className={classes.avatar}/></IconButton>
             </Grid>
             {info}
-            <Grid item xs={12} spacing={2}>
+            <Grid item xs={12}>
                 <List>
                     <ListItem className={clsx(classes.sidePaddingsNone, classes.listHeader)}>
                         <ListItemText primary="Roles" primaryTypographyProps={{variant: "h6"}}/>
