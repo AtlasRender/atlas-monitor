@@ -252,7 +252,6 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
     const handleCloseDialog = () => {
         setOpenDialog(false);
     };
-
     const matches = useMediaQuery("(min-width:800px)");
     let submitInfo;
     let renderSettings;

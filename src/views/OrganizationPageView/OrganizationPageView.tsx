@@ -9,8 +9,8 @@
 import React, {Ref, useEffect, useState} from "react";
 import {
     Avatar,
-    Box,
-    Chip,
+    Box, Button,
+    Chip, Dialog, DialogTitle,
     Divider,
     Grid,
     IconButton,
@@ -18,7 +18,7 @@ import {
     ListItemAvatar,
     ListItemIcon,
     ListItemSecondaryAction,
-    ListItemText,
+    ListItemText, TextField, Typography,
     useMediaQuery,
     useTheme,
     withStyles,
@@ -46,6 +46,9 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import DialogAddRoles from "./LocalComponents/DialogAddRoles";
 import Loading from "../../components/Loading";
+import Plugin from "../../interfaces/Plugin";
+import PluginFull from "../../interfaces/PluginFull";
+import {PluginSettingsSpec} from "@atlasrender/render-plugin";
 
 /**
  * OrganizationPageViewPropsStyled - interface for OrganizationPageView function
@@ -103,11 +106,14 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
     const [organizationData, setOrganizationData] = useState<Organization | null>(null);
     const [allUsers, setAllUsers] = useState<UserData[] | null>(null);
     const [newUsers, setNewUsers] = useState<number[]>([]);
-    const [organizationUsers, serOrganizationUsers] = useState<UserData[]>([]);
+    const [organizationUsers, setOrganizationUsers] = useState<UserData[]>([]);
     const [currentUser, setCurrentUser] = useState<UserData | null>(null);
 
 
-    // console.log(currentUser);
+    //Plugins
+    const [plugins, setPlugins] = useState<Plugin[]>();
+    const [dialogPluginButton, setDialogPluginButton] = useState<boolean>(false);
+    const [currentPlugin, setCurrentPlugin] = useState<PluginFull>();
 
 
     useEffect(() => {
@@ -115,16 +121,17 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
             handleGetOrganization(),
             handleGetAllUsers(),
             handleGetOrganizationUsers(),
-            handleGetRoles()
+            handleGetRoles(),
+            handleGetPlugins(),
         ]).then(() => {
             setLoaded(true);
         });
     }, []);
 
     //basic
-    function handleSetLoaded() {
-        setLoaded(true);
-    }
+    // function handleSetLoaded() {
+    //     setLoaded(true);
+    // }
 
 
     //roles
@@ -145,6 +152,15 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
             setRoleToChange(response.body);
         } catch (err) {
             enqueueErrorSnackbar("Cant get role by id");
+        }
+    }
+
+    async function handleGetPlugins() {
+        try {
+            const response = await coreRequest().get("plugins").query({organization: id});
+            setPlugins(response.body);
+        } catch (err) {
+            enqueueErrorSnackbar("Cant get plugins");
         }
     }
 
@@ -262,7 +278,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
     async function handleGetOrganizationUsers() {
         try {
             const response = await coreRequest().get(`organizations/${id}/users`);
-            serOrganizationUsers(response.body);
+            setOrganizationUsers(response.body);
         } catch (err) {
             //TODO handle errors
             enqueueErrorSnackbar("Cant get roles");
@@ -346,6 +362,15 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
         setIsUserSettingsButtonActive(true);
         console.log(user);
         setCurrentUser(user);
+    }
+
+    function handleSetCurrentPlugin(id: number) {
+        coreRequest()
+            .get(`/plugins/${id}`)
+            .then(response => {
+                setCurrentPlugin({...response.body, rules: new PluginSettingsSpec(response.body.rules)});
+            })
+            .catch(error=>{enqueueErrorSnackbar(error.message);})
     }
 
 
@@ -551,9 +576,56 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                             onRemoveRole={handleRemoveRoleFromUser}
                         />
 
-                        <TopicWithButton children="Plugins"
-                                         onClick={() => changeRoute({page: "plugin/create", id: id})}/>
-                        <PluginComponent plugin="GachiWork" description="best remixes of all time"/>
+                        <TopicWithButton
+                            children="Plugins"
+                            onClick={() => changeRoute({page: "plugin/create", id: id})}
+                        />
+                        {plugins?.map((plugin) => {
+                            return (
+                                <PluginComponent
+                                    plugin={plugin}
+                                    invokeDialog={() => {
+                                        setDialogPluginButton(!dialogPluginButton);
+                                    }}
+                                    setCurrentPlugin={handleSetCurrentPlugin}
+                                />
+                            );
+                        })}
+                        {console.log(currentPlugin)}
+                        <Dialog
+                            open={dialogPluginButton}
+                            onClose={() => setDialogPluginButton(false)}
+                            maxWidth={false}
+                        >
+                            <DialogTitle className={classes.pluginDialogTitle}>
+                                {currentPlugin?.name}
+                            </DialogTitle>
+                            <Divider/>
+                            <Box className={classes.pluginDialog}>
+                                <Box className={classes.pluginDialogBox}>
+                                    <Typography variant="h6">Version: {currentPlugin?.version}</Typography>
+                                    <Typography variant="h6">Note: {currentPlugin?.note}</Typography>
+                                    <Typography variant="h6">Readme: {currentPlugin?.readme}</Typography>
+                                    <Typography style={{paddingTop:16}}>{currentPlugin?.description}</Typography>
+                                </Box>
+                                <Box className={classes.pluginDialogRules}>
+                                    {currentPlugin?.rules.map((item)=>{
+                                        return(
+                                            <Grid container style={{display:"flex", justifyContent:"space-between", alignItems:"flex-end"}}>
+                                                <TextField
+                                                    InputProps={{readOnly: true}}
+                                                    value={item.name}
+                                                    style={{marginBottom:theme.spacing(1)}}
+                                                />
+                                                <Typography className={classes.pluginType}>{item.getType()}</Typography>
+                                            </Grid>
+                                        );
+                                    })}
+                                </Box>
+                            </Box>
+                            <Button fullWidth onClick={() => setDialogPluginButton(!dialogPluginButton)}>Close</Button>
+                        </Dialog>
+
                     </Box>
                 </Route>
             </Switch>
