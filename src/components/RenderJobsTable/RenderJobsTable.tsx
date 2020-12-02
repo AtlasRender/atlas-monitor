@@ -127,19 +127,16 @@ const RenderJobsTable = React.forwardRef((props: RenderJobsTableProps, ref: Ref<
     useEffect(() => {
 
         const listener = (message: any) => {
-            console.log("Get event for refreshing job:", message);
             coreRequest()
                 .get("jobs")
                 .query({id: message.id})
                 .then(res => {
-                    console.log("Get job from core: ", res.body);
                     setJobs(prev => {
                         const jobIndex = prev.findIndex(job => job.id === message.id);
-                        if (jobIndex > 0) {
-                            console.log(`Found job index: ${jobIndex}`);
+                        if (jobIndex >= 0) {
                             prev[jobIndex] = new ShortJobs(res.body);
                         }
-                        return prev;
+                        return [...prev];
                     });
                 });
         };
@@ -157,12 +154,10 @@ const RenderJobsTable = React.forwardRef((props: RenderJobsTableProps, ref: Ref<
 
     }, []);
 
-
     async function handleGetJobs() {
         try {
             const response = await coreRequest().get("jobs");
             if (Array.isArray(response.body)) {
-                console.log(response.body);
                 try {
                     setJobs(response.body.map(item => new ShortJobs(item)));
                 } catch (err) {
