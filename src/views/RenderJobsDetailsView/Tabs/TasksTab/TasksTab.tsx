@@ -28,6 +28,8 @@ import Task from "../../../../entities/Task";
 import useCoreRequest from "../../../../hooks/useCoreRequest";
 import useEnqueueErrorSnackbar from "../../../../utils/enqueueErrorSnackbar";
 import {format} from "date-fns";
+import {useChangeRoute} from "routing-manager";
+import DialogTaskLogs from "../../LocalComponents/DialogTaskLogs";
 
 /**
  * TasksTabProps - interface for TasksTab component
@@ -99,11 +101,14 @@ const TasksTab = React.forwardRef((props: TasksTabProps, ref: Ref<any>) => {
 
     const coreRequest = useCoreRequest();
     const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
+    const {getRouteParams} = useChangeRoute();
+    const {panel} = getRouteParams();
 
 
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const [tasks, setTasks] = useState<Task[]>([]);
+    const [openDialog, setOpenDialog] = useState(false);
 
 
     useEffect(() => {
@@ -113,7 +118,7 @@ const TasksTab = React.forwardRef((props: TasksTabProps, ref: Ref<any>) => {
 
     const handleGetTasks = () => {
         coreRequest()
-            .get("jobs/72/tasks")
+            .get(`jobs/${panel}/tasks`)
             .then(response => {
                 if (Array.isArray(response.body)) {
                     try {
@@ -121,7 +126,6 @@ const TasksTab = React.forwardRef((props: TasksTabProps, ref: Ref<any>) => {
                     } catch (err) {
                         enqueueErrorSnackbar("Invalid data types");
                     }
-                    // console.log(entity);
                 }
             })
             .catch(err => {
@@ -136,6 +140,14 @@ const TasksTab = React.forwardRef((props: TasksTabProps, ref: Ref<any>) => {
     const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
         setRowsPerPage(+event.target.value);
         setPage(0);
+    };
+
+    const handleOpenDialog = () => {
+        setOpenDialog(true);
+    }
+
+    const handleCloseDialog = () => {
+        setOpenDialog(false);
     };
 
     return (
@@ -187,7 +199,7 @@ const TasksTab = React.forwardRef((props: TasksTabProps, ref: Ref<any>) => {
                                             {isWidthUp("md", props.width) ? (<Progress progress={10}/>) : ("10%")}
                                         </TableCell>
                                         <TableCell align="left">
-                                            <IconButton className={classes.iconVisible}>
+                                            <IconButton className={classes.iconVisible} onClick={handleOpenDialog}>
                                                 <VisibilityIcon/>
                                             </IconButton>
                                         </TableCell>
@@ -207,6 +219,14 @@ const TasksTab = React.forwardRef((props: TasksTabProps, ref: Ref<any>) => {
                     onChangeRowsPerPage={handleChangeRowsPerPage}
                 />
             </Paper>
+
+
+            <DialogTaskLogs
+                open={openDialog}
+                onClose={handleCloseDialog}
+            />
+
+
         </Box>
     );
 });
