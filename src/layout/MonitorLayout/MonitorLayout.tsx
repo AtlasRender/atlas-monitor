@@ -51,6 +51,7 @@ import {DndProvider} from "react-dnd";
 import CoreEventDispatcher from "../../core/CoreEventDispatcher";
 import User from "../../entities/User";
 import {WS_RENDER_JOB_UPDATE} from "../../globals";
+import MenuElement from "../../components/MenuElement";
 
 /**
  * MonitorLayoutProps - interface for MonitorLayout component
@@ -157,36 +158,10 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<HTML
             onKeyDown={toggleDrawer(anchor, false)}
         >
             <List>
-                <ListItem button onClick={() => changeRoute({page: "jobs", panel: null})}>
-                    <ListItemIcon>
-                        <InboxIcon/>
-                    </ListItemIcon>
-                    <ListItemText primary="Render ShortJobs"/>
-                </ListItem>
-            </List>
-            <List>
-                <ListItem button onClick={() => changeRoute({page: "user", panel: null})}>
-                    <ListItemIcon>
-                        <InboxIcon/>
-                    </ListItemIcon>
-                    <ListItemText primary="User Page"/>
-                </ListItem>
-            </List>
-            <List>
-                <ListItem button onClick={() => changeRoute({page: "organization/1", panel: null})}>
-                    <ListItemIcon>
-                        <InboxIcon/>
-                    </ListItemIcon>
-                    <ListItemText primary="Organization Page"/>
-                </ListItem>
-            </List>
-            <List>
-                <ListItem button onClick={() => changeRoute({page: "submit", panel: null})}>
-                    <ListItemIcon>
-                        <InboxIcon/>
-                    </ListItemIcon>
-                    <ListItemText primary="Submit Page"/>
-                </ListItem>
+                <MenuElement page="jobs" label="Render ShortJobs"/>
+                <MenuElement page="user" label="User Page"/>
+                <MenuElement page="organization/1" label="Organization Page"/>
+                <MenuElement page="submit" label="Submit Page"/>
             </List>
         </Box>
     );
@@ -274,36 +249,10 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<HTML
                     </Box>
                     <Divider/>
                     <List>
-                        <ListItem button onClick={() => changeRoute({page: "jobs"})}>
-                            <ListItemIcon>
-                                <InboxIcon/>
-                            </ListItemIcon>
-                            <ListItemText primary="Render ShortJobs"/>
-                        </ListItem>
-                    </List>
-                    <List>
-                        <ListItem button onClick={() => changeRoute({page: "user", panel: null})}>
-                            <ListItemIcon>
-                                <InboxIcon/>
-                            </ListItemIcon>
-                            <ListItemText primary="User Page"/>
-                        </ListItem>
-                    </List>
-                    <List>
-                        <ListItem button onClick={() => changeRoute({page: "organization/1", id: null})}>
-                            <ListItemIcon>
-                                <InboxIcon/>
-                            </ListItemIcon>
-                            <ListItemText primary="Organization Page"/>
-                        </ListItem>
-                    </List>
-                    <List>
-                        <ListItem button onClick={() => changeRoute({page: "submit", panel: null})}>
-                            <ListItemIcon>
-                                <InboxIcon/>
-                            </ListItemIcon>
-                            <ListItemText primary="Submit Page"/>
-                        </ListItem>
+                        <MenuElement page="jobs" label="Render ShortJobs"/>
+                        <MenuElement page="user" label="User Page"/>
+                        <MenuElement page="organization/1" label="Organization Page"/>
+                        <MenuElement page="submit" label="Submit Page"/>
                     </List>
                 </Drawer>
             </React.Fragment>

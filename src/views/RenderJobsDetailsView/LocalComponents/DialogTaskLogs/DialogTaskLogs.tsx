@@ -104,34 +104,34 @@ const DialogTaskLogs = React.forwardRef((props: DialogTaskLogsProps, ref: Ref<an
 
     let Visible = function (target: any, container: any) {
 
-        console.log(target.offsetTop - (container.scrollTop + container.offsetHeight));
+            console.log(target.offsetTop - (container.scrollTop + container.offsetHeight));
 
-        console.log(refList);
-
-
-        console.log(window.pageYOffset, target.getBoundingClientRect().bottom);
-
-        let targetPosition = {
-                top: window.pageYOffset + target.getBoundingClientRect().top,
-                bottom: window.pageYOffset + target.getBoundingClientRect().bottom
-            },
-            windowPosition = {
-                top: window.pageYOffset,
-                bottom: window.pageYOffset + document.documentElement.clientHeight
-            };
-
-        // console.log(targetPosition.top - 63, windowPosition.bottom);
+            console.log(refList);
 
 
-        //
-        // console.log(target.offsetTop, (container.scrollTop + container.offsetHeight))
+            console.log(window.pageYOffset, target.getBoundingClientRect().bottom);
+
+            let targetPosition = {
+                    top: window.pageYOffset + target.getBoundingClientRect().top,
+                    bottom: window.pageYOffset + target.getBoundingClientRect().bottom
+                },
+                windowPosition = {
+                    top: window.pageYOffset,
+                    bottom: window.pageYOffset + document.documentElement.clientHeight
+                };
+
+            // console.log(targetPosition.top - 63, windowPosition.bottom);
 
 
-        if(target.offsetTop - (container.scrollTop + container.offsetHeight) < 0) {
-            return true;
-        }
+            //
+            // console.log(target.offsetTop, (container.scrollTop + container.offsetHeight))
 
-        return targetPosition.top - 63 < windowPosition.bottom;
+
+            if(target.offsetTop - (container.scrollTop + container.offsetHeight) < 0) {
+                return true;
+            }
+
+            return targetPosition.top - 63 < windowPosition.bottom;
     };
 
 
