@@ -2,7 +2,7 @@
  * Copyright (c) 2020. This code created and belongs to Atlas render manager project.
  * Owner and project architect: Danil Andreev | danssg08@gmail.com |  https://github.com/DanilAndreev
  * Project: atlas-monitor
- * File last modified: 02.12.2020, 20:47
+ * File last modified: 03.12.2020, 23:28
  * All rights reserved.
  */
 
@@ -10,9 +10,6 @@ import {createStyles, Theme} from "@material-ui/core";
 import {grey} from "@material-ui/core/colors";
 
 const styles = (theme: Theme) => createStyles({
-    root: {
-        backgroundColor: theme.palette.baseDarkColors.main,
-    },
     dialogContainer: {
         counterReset: "line 0",
         height: 700,
@@ -51,12 +48,6 @@ const styles = (theme: Theme) => createStyles({
         fontFamily: "Monospace",
         fontSize: 16,
     },
-    loading: {
-        display: "flex",
-        height: "60vh",
-        justifyContent: "center",
-        alignItems: "center",
-    },
-});
+})
 
 export default styles;

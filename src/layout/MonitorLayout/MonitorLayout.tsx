@@ -136,7 +136,7 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<HTML
         if (
             event &&
             event.type === "keydown" &&
-            ((event as React.KeyboardEvent).key === "Tab" ||
+            ((event as React.KeyboardEvent).key === "DialogTaskTabs" ||
                 (event as React.KeyboardEvent).key === "Shift")
         ) {
             return;

@@ -13,6 +13,7 @@ import StringValidator from "../core/validators/StringValidator";
 import DateValidator from "../core/validators/DateValidator";
 import ValidationError from "../core/ValidationError";
 import User from "../interfaces/User";
+import Organization from "../interfaces/Organization";
 
 export interface ShortJobsValidationMap {
     id?: boolean;
@@ -69,8 +70,9 @@ export default class ShortJobs extends BaseEntity {
     /**
      * frameRange - frames to render
      */
-    public frameRange: string;
+    public frameRange: any[];
 
+    public organization: Organization
     public doneTasks: number;
     public failedTasks: number;
     public pendingTasks: number;
@@ -103,8 +105,7 @@ export default class ShortJobs extends BaseEntity {
 
         this.failed = !!job.failed;
 
-        this.frameRange = StringValidator(job.frameRange).value || "";
-        validationMap.frameRange = StringValidator(job.frameRange).error;
+        this.frameRange = [...job.frameRange];
 
         this.doneTasks = NumberValidator(job.doneTasks).value || 0;
         validationMap.doneTasks = NumberValidator(job.doneTasks).error;
@@ -117,6 +118,8 @@ export default class ShortJobs extends BaseEntity {
 
         this.processingTasks = NumberValidator(job.processingTasks).value || 0;
         validationMap.processingTasks = NumberValidator(job.processingTasks).error;
+
+        this.organization = job.organization;
 
         this.pluginSettings = job.pluginSettings;
 

@@ -109,6 +109,7 @@ const TasksTab = React.forwardRef((props: TasksTabProps, ref: Ref<any>) => {
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const [tasks, setTasks] = useState<Task[]>([]);
     const [openDialog, setOpenDialog] = useState(false);
+    const [currentTaskId, setCurrentTaskId] = useState(0);
 
 
     useEffect(() => {
@@ -142,7 +143,8 @@ const TasksTab = React.forwardRef((props: TasksTabProps, ref: Ref<any>) => {
         setPage(0);
     };
 
-    const handleOpenDialog = () => {
+    const handleOpenDialog = (id: number) => {
+        setCurrentTaskId(id);
         setOpenDialog(true);
     }
 
@@ -199,7 +201,7 @@ const TasksTab = React.forwardRef((props: TasksTabProps, ref: Ref<any>) => {
                                             {isWidthUp("md", props.width) ? (<Progress progress={10}/>) : ("10%")}
                                         </TableCell>
                                         <TableCell align="left">
-                                            <IconButton className={classes.iconVisible} onClick={handleOpenDialog}>
+                                            <IconButton className={classes.iconVisible} onClick={() => handleOpenDialog(task.id)}>
                                                 <VisibilityIcon/>
                                             </IconButton>
                                         </TableCell>
@@ -224,6 +226,7 @@ const TasksTab = React.forwardRef((props: TasksTabProps, ref: Ref<any>) => {
             <DialogTaskLogs
                 open={openDialog}
                 onClose={handleCloseDialog}
+                taskId={currentTaskId}
             />
 
 

@@ -7,7 +7,7 @@
  */
 
 import React, {Ref, useEffect, useState} from "react";
-import {Box, Divider, Grid, IconButton, Typography, useMediaQuery, withStyles} from "@material-ui/core";
+import {Box, Chip, Divider, Grid, IconButton, Typography, useMediaQuery, withStyles} from "@material-ui/core";
 import styles from "./styles";
 import clsx from "clsx";
 import Progress from "../../components/Progress";
@@ -28,6 +28,7 @@ import useCoreRequest from "../../hooks/useCoreRequest";
 import useEnqueueErrorSnackbar from "../../utils/enqueueErrorSnackbar";
 import RenderJob from "../../entities/RenderJob";
 import Loading from "../../components/Loading";
+import {format} from "date-fns";
 
 /**
  * RenderJobsDetailsViewProps - interface for RenderJobsDetailsView component
@@ -74,16 +75,17 @@ const RenderJobsDetailsView = React.forwardRef((props: RenderJobsDetailsViewProp
     }, []);
 
 
-
     async function handleGetJob() {
         try {
             const response = await coreRequest().get(`jobs/${panel}`);
+            console.log(response.body);
             let entity: RenderJob = response.body;
             try {
                 entity = new ShortJobs(response.body);
             } catch (err) {
                 enqueueErrorSnackbar("Invalid data types");
             }
+
             setRenderJob(entity);
         } catch (err) {
             enqueueErrorSnackbar("Cant get job");
@@ -149,7 +151,9 @@ const RenderJobsDetailsView = React.forwardRef((props: RenderJobsDetailsViewProp
                                     <DataTextField label="Submitter" children="Danil Andreev"/>
                                 </Grid>
                                 <Grid item xs={12} sm={6} md={4}>
-                                    <DataTextField label="Organisation" children="Blizzard Entertainment"/>
+                                    <DataTextField label="Organisation">
+                                        {renderJob?.organization.name}
+                                    </DataTextField>
                                 </Grid>
                                 <Grid item xs={6} sm={3} md={2}>
                                     <DataTextField label="Priority" children="1"/>
@@ -160,20 +164,28 @@ const RenderJobsDetailsView = React.forwardRef((props: RenderJobsDetailsViewProp
                                 </Grid>
                                 <Grid item xs={6} md={4}>
                                     <DataTextField label="Submission date">
-                                        {/*{renderJob && format(renderJob?.createdAt, "dd.MM.yyyy hh:mm")}*/}
+                                        {renderJob && format(renderJob.createdAt, "dd.MM.yyyy hh:mm")}
                                     </DataTextField>
                                 </Grid>
                                 <Grid item xs={6} md={4}>
-                                    <DataTextField label="Finish date" children="29.09.2020 12.59.20"/>
-                                </Grid>
-                                <Grid item xs={6} md={4}>
-                                    <DataTextField label="Frames">
-                                        {renderJob?.frameRange}
+                                    <DataTextField label="Finish date">
+                                        {renderJob && format(renderJob.updatedAt, "dd.MM.yyyy hh:mm")}
                                     </DataTextField>
+
                                 </Grid>
-                                <Grid item xs={6} md={2}>
-                                    <DataTextField label="Competing tasks" children="2"/>
+                                {renderJob &&
+                                <Grid item xs={6} md={4}>
+                                    {renderJob?.frameRange.map((frame: any, index: number) => {
+                                        return (
+                                            <Chip
+                                                key={index}
+                                                label={`Frames: ${frame.start} - ${frame.end}`}
+                                                style={{minWidth: 125}}
+                                            />
+                                        );
+                                    })}
                                 </Grid>
+                                }
 
                                 <Grid item xs={12}>
                                     <DataTextField

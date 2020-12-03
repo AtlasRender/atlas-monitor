@@ -159,6 +159,7 @@ const RenderJobsTable = React.forwardRef((props: RenderJobsTableProps, ref: Ref<
             const response = await coreRequest().get("jobs");
             if (Array.isArray(response.body)) {
                 try {
+                    console.log(response.body);
                     setJobs(response.body.map(item => new ShortJobs(item)));
                 } catch (err) {
                     enqueueErrorSnackbar("Invalid data types");
@@ -231,7 +232,7 @@ const RenderJobsTable = React.forwardRef((props: RenderJobsTableProps, ref: Ref<
                                     <TableCell className={classes.cell} align="left">Id</TableCell>
                                     <TableCell className={classes.cell} align="left">Name</TableCell>
                                     <TableCell className={classes.cell} align="left">Submitter</TableCell>
-                                    <TableCell className={classes.cell} align="left">Org(frameRange)</TableCell>
+                                    <TableCell className={classes.cell} align="left">Organization</TableCell>
                                     <TableCell className={classes.cell} align="left">Date</TableCell>
                                     <TableCell align="left" className={classes.progress}>Progress</TableCell>
                                 </TableRow>
@@ -251,7 +252,7 @@ const RenderJobsTable = React.forwardRef((props: RenderJobsTableProps, ref: Ref<
                                             <TableCell component="th" scope="row">{job.id}</TableCell>
                                             <TableCell align="left">{job.name}</TableCell>
                                             <TableCell align="left">{job.submitter.username}</TableCell>
-                                            <TableCell align="left">{job.frameRange}</TableCell>
+                                            <TableCell align="left">{job.organization.name}</TableCell>
                                             <TableCell
                                                 align="left">{format(job.createdAt, "dd.MM.yyyy hh:mm")}</TableCell>
                                             <TableCell align="left">
