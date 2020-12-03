@@ -54,8 +54,7 @@ const RenderJobsDetailsView = React.forwardRef((props: RenderJobsDetailsViewProp
     const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
     const {getRouteParams} = useChangeRoute();
     const {jobDetails} = getRouteParams();
-
-    // console.log(jobDetails);
+    const {panel} = getRouteParams();
 
 
     const [value, setValue] = React.useState(0);
@@ -75,9 +74,10 @@ const RenderJobsDetailsView = React.forwardRef((props: RenderJobsDetailsViewProp
     }, []);
 
 
+
     async function handleGetJob() {
         try {
-            const response = await coreRequest().get(`jobs/72`);
+            const response = await coreRequest().get(`jobs/${panel}`);
             let entity: RenderJob = response.body;
             try {
                 entity = new ShortJobs(response.body);
@@ -92,7 +92,7 @@ const RenderJobsDetailsView = React.forwardRef((props: RenderJobsDetailsViewProp
 
     async function handleGetTasks() {
         try {
-            const response = await coreRequest().get(`jobs/72/tasks`);
+            const response = await coreRequest().get(`jobs/${panel}/tasks`);
             setTasks(response.body);
         } catch (err) {
             enqueueErrorSnackbar("Cant get task");
