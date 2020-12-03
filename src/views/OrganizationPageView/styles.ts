@@ -77,26 +77,6 @@ const styles = (theme: Theme) => createStyles({
     roleItem: {
         paddingLeft: theme.spacing(2),
     },
-    pluginDialogTitle: {
-        width: "100%",
-        textAlign: "center",
-    },
-    pluginDialogBox: {
-        padding: theme.spacing(1),
-        height: 600,
-        width: 500,
-    },
-    pluginDialog:{
-        display:"flex",
-    },
-    pluginDialogRules:{
-        padding: theme.spacing(1),
-        height: 600,
-        width: 500,
-        borderLeft:`1px solid ${grey[700]}`
-    },
-    pluginType:{
-        color: orange[500],
-    }
+
 });
 export default styles;
