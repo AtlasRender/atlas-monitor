@@ -32,7 +32,7 @@ import useEnqueueErrorSnackbar from "../../utils/enqueueErrorSnackbar";
 import Loading from "../Loading";
 import {blue, green, orange} from "@material-ui/core/colors";
 import CoreEventDispatcher from "../../core/CoreEventDispatcher";
-import {WS_RENDER_JOB_UPDATE} from "../../globals";
+import {WS_RENDER_JOB_CREATE, WS_RENDER_JOB_DELETE, WS_RENDER_JOB_UPDATE} from "../../globals";
 
 /**
  * RenderJobsTableProps - interface for RenderJobsTable component
@@ -126,7 +126,37 @@ const RenderJobsTable = React.forwardRef((props: RenderJobsTableProps, ref: Ref<
 
     useEffect(() => {
 
-        const listener = (message: any) => {
+        console.log("adding event listener");
+
+        const createListener = (message: any) => {
+            coreRequest()
+                .get("jobs")
+                .query({id: message.id})
+                .then(response => {
+                    if (Array.isArray(response.body)) {
+                        setJobs(response.body.map(item => new ShortJobs(item)));
+                    }
+                });
+        };
+
+        const deleteListener = (message: any) => {
+            console.log("delete event listener");
+            coreRequest()
+                .get("jobs")
+                .query({id: message.id})
+                .then(res => {
+                    setJobs(prev => {
+                        const jobIndex = prev.findIndex(job => job.id === message.id);
+                        if (jobIndex >= 0) {
+                            const updatedJobs = prev.splice(jobIndex, 1);
+                            return [...updatedJobs];
+                        }
+                        return prev;
+                    });
+                });
+        };
+
+        const updateListener = (message: any) => {
             coreRequest()
                 .get("jobs")
                 .query({id: message.id})
@@ -140,7 +170,10 @@ const RenderJobsTable = React.forwardRef((props: RenderJobsTableProps, ref: Ref<
                     });
                 });
         };
-        CoreEventDispatcher.getInstance().addListener(WS_RENDER_JOB_UPDATE, listener);
+
+        CoreEventDispatcher.getInstance().addListener(WS_RENDER_JOB_UPDATE, updateListener);
+        CoreEventDispatcher.getInstance().addListener(WS_RENDER_JOB_CREATE, createListener);
+        CoreEventDispatcher.getInstance().addListener(WS_RENDER_JOB_DELETE, deleteListener);
 
         Promise.all([
             handleGetJobs(),
@@ -149,7 +182,9 @@ const RenderJobsTable = React.forwardRef((props: RenderJobsTableProps, ref: Ref<
         });
 
         return () => {
-            CoreEventDispatcher.getInstance().removeListener(WS_RENDER_JOB_UPDATE, listener);
+            CoreEventDispatcher.getInstance().removeListener(WS_RENDER_JOB_UPDATE, updateListener);
+            CoreEventDispatcher.getInstance().removeListener(WS_RENDER_JOB_CREATE, createListener);
+            CoreEventDispatcher.getInstance().removeListener(WS_RENDER_JOB_DELETE, deleteListener);
         }
 
     }, []);

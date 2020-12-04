@@ -99,19 +99,26 @@ const DialogTaskLogs = React.forwardRef((props: DialogTaskLogsProps, ref: Ref<an
 
 
     useEffect(() => {
+        //TODO change 0 to smth
         if (taskId !== 0) {
-            const listener = (message: any) => {
 
+            console.log("adding event listener");
+
+            const listener = (message: any) => {
+                console.log("listener");
                 coreRequest()
                     .get(`attempts/${attemptsId[attemptIndex]}/log/${message.id}`)
                     .then(response => {
-                        setLogs(prev => ([...prev, response.body]));
+                        // setLogs(prev => ([...prev, response.body]));
+                        console.log(response.body);
+                        setLogs(response.body);
                     })
                     .catch(err => {
                         enqueueErrorSnackbar("Cant get log");
                     });
 
             };
+
             CoreEventDispatcher.getInstance().addListener(WS_RENDER_JOB_ATTEMPT_LOG_CREATE, listener);
 
             Promise.all([
