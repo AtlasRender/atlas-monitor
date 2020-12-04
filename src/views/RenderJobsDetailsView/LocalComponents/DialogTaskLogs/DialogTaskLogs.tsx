@@ -91,6 +91,7 @@ const DialogTaskLogs = React.forwardRef((props: DialogTaskLogsProps, ref: Ref<an
     const [attemptsId, setAttemptsId] = useState([]);
     const [logs, setLogs] = useState<Log[]>([]);
     const [value, setValue] = React.useState(0);
+    const [attemptIndex, setAttemptIndex] = useState(0);
 
 
     const refDiv = React.useRef<HTMLDivElement | null>(null);
@@ -102,7 +103,7 @@ const DialogTaskLogs = React.forwardRef((props: DialogTaskLogsProps, ref: Ref<an
             const listener = (message: any) => {
 
                 coreRequest()
-                    .get(`attempts/${attemptsId[0]}/log/${message.id}`)
+                    .get(`attempts/${attemptsId[attemptIndex]}/log/${message.id}`)
                     .then(response => {
                         setLogs(prev => ([...prev, response.body]));
                     })
