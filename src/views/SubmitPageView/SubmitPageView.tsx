@@ -179,7 +179,7 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
 
     const handleGetPlugin = (pluginId: number) => {
         coreRequest()
-            .get(`/plugins/${pluginId}/preview`)
+            .get(`plugins/${pluginId}/preview`)
             .then(response => {
                 console.log(response.body);
                 setChosenPlugin(response.body);
