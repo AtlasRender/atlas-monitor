@@ -65,7 +65,7 @@ const PluginInput = React.forwardRef((props: PluginInputProps, ref: Ref<any>) =>
 
     async function handleGetPlugin() {
         try {
-            const response = await coreRequest().get(`/plugins/${pluginId}`);
+            const response = await coreRequest().get(`plugins/${pluginId}`);
             //TODO validation for rules
             console.log(response.body.rules);
             const temp = {...response.body, rules: new PluginSettingsSpec(response.body.rules)};
