@@ -121,6 +121,8 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
         settings: pluginFields,
     });
 
+    console.log(plugin);
+
     function getFileId(id: number) {
         setPlugin((prev) => ({...prev, file: id}));
         console.log("file id", id);
@@ -153,8 +155,10 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
             }
             return;
         }
+        console.log("Before send:", plugin);
         coreRequest()
-            .post("/plugins")
+            .post("plugins")
+            .query({organization: plugin.organization})
             .send(plugin)
             .then(response => {
                 console.log("done");
