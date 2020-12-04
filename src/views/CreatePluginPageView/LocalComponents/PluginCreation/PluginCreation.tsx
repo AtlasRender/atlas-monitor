@@ -103,6 +103,7 @@ const PluginCreation = React.forwardRef((props: PluginCreationProps, ref: Ref<an
                         key={folder.id}
                         field={folder}
                         index={index}
+                        fieldIndex={fieldIndex}
                         moveCard={move}
                         getIndex={getFieldIndex}
                         onDelete={context.handleDeletePluginField}
@@ -123,6 +124,7 @@ const PluginCreation = React.forwardRef((props: PluginCreationProps, ref: Ref<an
                                 <Grid item xs={12} className={classes.gridPadding}>
                                     <List>
                                         <DragableSubject type="integer"/>
+                                        <DragableSubject type="string"/>
                                         <DragableSubject type="folder"/>
                                         <DragableSubject type="divider"/>
                                     </List>

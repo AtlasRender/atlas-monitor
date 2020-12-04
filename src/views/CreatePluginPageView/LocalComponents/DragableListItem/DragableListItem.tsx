@@ -22,6 +22,7 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import {DropTargetMonitor, useDrag, useDrop, XYCoord} from "react-dnd";
 import BasicPluginField from "../../../../entities/BasicPluginField";
 import {PluginContext} from "../../CreatePluginPageView";
+import {grey} from "@material-ui/core/colors";
 
 interface DragableListItemProps extends Stylable {
     field: BasicPluginField,
@@ -30,6 +31,7 @@ interface DragableListItemProps extends Stylable {
 
     moveCard: (dragIndex: number, hoverIndex: number, targetId: number, toId: number) => void
     index: number,
+    fieldIndex: number;
 
     getIndex(index: number): void,
 }
@@ -40,7 +42,7 @@ interface DragItem {
     type: string,
 }
 
-const DragableListItem: React.FC<DragableListItemProps> = ({field, onDelete, moveCard, index, getIndex}) => {
+const DragableListItem: React.FC<DragableListItemProps> = ({field, onDelete, moveCard, index, getIndex, fieldIndex}) => {
 
     const context = useContext(PluginContext);
 
@@ -94,11 +96,12 @@ const DragableListItem: React.FC<DragableListItemProps> = ({field, onDelete, mov
     drag(drop(refer));
 
     const opacity = isDragging ? 0 : 1;
+    const backgroundColor = fieldIndex === index ? "#3D3D3D" : grey[800];
 
     return (
         <ListItem
             ref={refer}
-            style={{opacity, paddingLeft: 0}}
+            style={{opacity, paddingLeft: 0, backgroundColor}}
             button
             onClick={() => getIndex(index)}
         >
