@@ -91,7 +91,7 @@ const DialogPlugin = React.forwardRef((props: DialogPluginProps, ref: Ref<any>) 
 
     const handleGetPlugin = (pluginId: number) => {
         coreRequest()
-            .get(`/plugins/${pluginId}/preview`)
+            .get(`plugins/${pluginId}/preview`)
             .then(response => {
                 setChosenPlugin(response.body);
             })
