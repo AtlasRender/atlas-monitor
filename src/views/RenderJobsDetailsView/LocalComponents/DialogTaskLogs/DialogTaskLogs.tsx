@@ -88,7 +88,7 @@ const DialogTaskLogs = React.forwardRef((props: DialogTaskLogsProps, ref: Ref<an
 
 
     const [loaded, setLoaded] = useState(false);
-    const [attemptsId, setAttemptsId] = useState(0);
+    const [attemptsId, setAttemptsId] = useState([]);
     const [logs, setLogs] = useState<Log[]>([]);
     const [value, setValue] = React.useState(0);
 
@@ -102,7 +102,7 @@ const DialogTaskLogs = React.forwardRef((props: DialogTaskLogsProps, ref: Ref<an
             const listener = (message: any) => {
 
                 coreRequest()
-                    .get(`attempts/${attemptsId}/log/${message.id}`)
+                    .get(`attempts/${attemptsId[0]}/log/${message.id}`)
                     .then(response => {
                         setLogs(prev => ([...prev, response.body]));
                     })
@@ -137,12 +137,13 @@ const DialogTaskLogs = React.forwardRef((props: DialogTaskLogsProps, ref: Ref<an
         }
     }, [logs]);
 
+    console.log(attemptsId);
 
     async function handleGetLogs() {
         try {
             const attempts: any = await coreRequest().get(`tasks/${taskId}/attempts`);
             const firstAttemptId: any = attempts.body[0].id;
-            setAttemptsId(attempts.body);
+            setAttemptsId(attempts.body.map((attempt: any) => attempt.id));
             const logs = await coreRequest().get(`attempts/${firstAttemptId}/log`);
             setLogs(logs.body);
         } catch (err) {

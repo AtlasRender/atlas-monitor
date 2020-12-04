@@ -16,6 +16,7 @@ import {PluginContext} from "../../../CreatePluginPageView";
 import GroupField from "../../../../../entities/GroupField";
 import IntegerField from "../../../../../entities/IntegerField";
 import SeparatorField from "../../../../../entities/SeparatorField";
+import StringField from "../../../../../entities/StringField";
 
 interface FolderProps extends Stylable {
     id: number,
@@ -26,7 +27,7 @@ const Folder: React.FC<FolderProps> = ({classes, className, children, id, style}
     const context = useContext(PluginContext);
 
     const [{isOver, isOverCurrent}, drop] = useDrop({
-        accept: ["integer", "folder", "divider"],
+        accept: ["integer", "folder", "divider", "string"],
         drop(item, monitor) {
             const didDrop = monitor.didDrop();
             if (didDrop) {
@@ -58,6 +59,16 @@ const Folder: React.FC<FolderProps> = ({classes, className, children, id, style}
                     type: "divider",
                     name: "Divider",
                     label: "Divider",
+                    id: context.idGenerator(),
+                }), id);
+            } else if (item.type === "string") {
+                context.handleAddPluginField(new StringField({
+                    type: "string",
+                    name: "String",
+                    label: "String",
+                    min: 0,
+                    max: 16,
+                    default: "",
                     id: context.idGenerator(),
                 }), id);
             }

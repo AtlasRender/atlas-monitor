@@ -16,6 +16,7 @@ import {PluginContext} from "../../CreatePluginPageView";
 import styles from "./styles";
 import GroupField from "../../../../entities/GroupField";
 import SeparatorField from "../../../../entities/SeparatorField";
+import StringField from "../../../../entities/StringField";
 
 interface ValidationErrors {
     "noInputError": boolean;
@@ -91,6 +92,16 @@ const PluginFieldSettings = React.forwardRef((props: PluginFieldSettingsProps, r
                 label: name === "label" ? event.target.value : pluginField.label,
                 id: pluginField.id,
             }), index);
+        } else if (pluginField instanceof StringField) {
+            context.handleEditPluginField(new StringField({
+                type: pluginField.type,
+                name: name === "name" ? event.target.value : pluginField.name,
+                label: name === "label" ? event.target.value : pluginField.label,
+                min: name === "min" ? +event.target.value : pluginField.min,
+                max: name === "max" ? +event.target.value : pluginField.max,
+                default: name === "default" ? event.target.value : pluginField.default,
+                id: pluginField.id,
+            }), index);
         }
     };
 
@@ -119,7 +130,7 @@ const PluginFieldSettings = React.forwardRef((props: PluginFieldSettingsProps, r
                 }));
             }
         }
-        if (pluginField instanceof IntegerField) {
+        if (pluginField instanceof (IntegerField || StringField)) {
             if (event.target.name === "min") {
                 if (!pluginField.min || pluginField.min < 0) {
                     setErrors(prev => ({
@@ -142,20 +153,25 @@ const PluginFieldSettings = React.forwardRef((props: PluginFieldSettingsProps, r
                 }
             } else if (event.target.name === "default") {
                 // TODO: lookup logic and set up parenthesis (skobo4ki)
-                if (!pluginField.default || pluginField.min && pluginField.default < pluginField.min || pluginField.max && pluginField.default > pluginField.max) {
-                    setErrors(prev => ({
-                        ...prev, "defaultError": true
-                    }));
+                if(pluginField instanceof StringField) {
+
                 } else {
-                    setErrors(prev => ({
-                        ...prev, "defaultError": false
-                    }));
+                    if (!pluginField.default || pluginField.min && pluginField.default < pluginField.min || pluginField.max && pluginField.default > pluginField.max) {
+                        setErrors(prev => ({
+                            ...prev, "defaultError": true
+                        }));
+                    } else {
+                        setErrors(prev => ({
+                            ...prev, "defaultError": false
+                        }));
+                    }
+                    if (!pluginField.default) {
+                        setErrors(prev => ({
+                            ...prev, "defaultError": false
+                        }));
+                    }
                 }
-                if (!pluginField.default) {
-                    setErrors(prev => ({
-                        ...prev, "defaultError": false
-                    }));
-                }
+
             }
             if (event.target.name === "min" || event.target.name === "max") {
                 if (pluginField.min && pluginField.max) {
@@ -216,7 +232,7 @@ const PluginFieldSettings = React.forwardRef((props: PluginFieldSettingsProps, r
                                 }}
                             />
                         </Grid>
-                        {pluginField instanceof IntegerField &&
+                        {(pluginField instanceof IntegerField || pluginField instanceof StringField) &&
                         <React.Fragment>
                             <Grid item xs={12} className={classes.gridPadding}>
                                 <TextField
