@@ -52,11 +52,11 @@ interface SubmitPagePropsStyled extends Stylable {
 }
 
 interface FrameRange {
-    frameStart: number,
-    frameEnd: number,
+    start: number,
+    end: number,
     step: number,
-    startFrom: number,
-    renumStep: number,
+    renumberStart: number,
+    renumberStep: number,
 }
 
 interface Job {
@@ -64,8 +64,7 @@ interface Job {
     user: string,
     description: string,
     organization: number,
-    //frameRange: FrameRange,
-    frameRange: string,
+    frameRange: FrameRange[],
     attempts_per_task_limit: number,
     plugin: number | undefined,
     pluginSettings: object,
@@ -93,19 +92,20 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
     const [userOrgs, setUserOrgs] = useState<Organization[]>([]);
     const [loaded, setLoaded] = useState<boolean>(false);
     const [org, setOrg] = useState<string>();
-    const [frameRange, setFrameRange] = useState<FrameRange>({
-        frameStart: 0,
-        frameEnd: 0,
+    const [frame, setFrame] = useState<FrameRange>({
+        start: 0,
+        end: 0,
         step: 0,
-        startFrom: 0,
-        renumStep: 0,
+        renumberStart: 0,
+        renumberStep: 0,
     });
+    const [frameRange, setFrameRange] = useState<FrameRange[]>([]);
     const [job, setJob] = useState<Job>({
         name: "",
         user: user ? user.username : "",
         description: "",
         organization: userOrgs[0]?.id,
-        frameRange: "1-10",
+        frameRange: [],
         attempts_per_task_limit: 1,
         plugin: undefined,
         pluginSettings: {},
@@ -115,6 +115,7 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
     const [chosenPlugin, setChosenPlugin] = useState<PluginPreview | null>(null);
     const [openDialog, setOpenDialog] = useState(false);
 
+    console.log(job);
 
     useEffect(() => {
         Promise.all([
@@ -127,8 +128,8 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
 
     useEffect(() => {
         //uncomment when frame range as object will be ready
-        //setJob((prev) => ({...prev, ["frameRange"]: frameRange}));
-        console.log(job.frameRange);
+        setJob((prev) => ({...prev, ["frameRange"]: frameRange}));
+        // console.log(job.frameRange);
     }, [frameRange]);
 
 
@@ -196,13 +197,13 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
 
     function handleJobParametersChange(event: React.ChangeEvent<HTMLInputElement>) {
         event.persist();
-        console.log("frame change", validate.isInteger(+event.target.value));
+        // console.log("frame change", validate.isInteger(+event.target.value));
         if (validate.isInteger(+event.target.value)) {
             if (event.target.name === "attempts_per_task_limit") {
                 setJob((prev) => ({...prev, [event.target.name]: +event.target.value}));
                 return;
             } else if (event) {
-                setFrameRange((prev) => ({...prev, [event.target.name]: event.target.value}));
+                setFrame((prev) => ({...prev, [event.target.name]: +event.target.value}));
             }
         }
     }
@@ -241,8 +242,10 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
             });
     }
 
-    const handleDelete = () => {
-        console.info("You clicked the delete icon.");
+    const handleDelete = (index: number) => {
+        const copyFrameRange = [...frameRange];
+        copyFrameRange.splice(index, 1);
+        setFrameRange(copyFrameRange);
     };
 
     const handleOpenDialog = () => {
@@ -253,6 +256,11 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
         setOpenDialog(false);
     };
 
+    const handleAddFrame = (frame: FrameRange) => {
+        setFrameRange(prev => ([...prev, frame]));
+    }
+
+
     const matches = useMediaQuery("(min-width:800px)");
     let submitInfo;
     let renderSettings;
@@ -260,7 +268,7 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
     let submitButton;
     if (matches) {
         submitInfo = (
-            <React.Fragment>
+            <Grid container spacing={2}>
                 <Grid item xs={4}>
                     <TextField
                         fullWidth
@@ -270,17 +278,23 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
                         onChange={handleInput}
                     />
                 </Grid>
-                <Grid item xs={3}>
+                <Grid item xs={2}>
                     <TextField
                         fullWidth
-                        InputLabelProps={{shrink: true}}
-                        label="Description"
-                        name="description"
-                        value={job.description}
-                        onChange={handleInput}
+                        label="Attempts"
+                        name="attempts_per_task_limit"
+                        value={job.attempts_per_task_limit}
+                        onChange={handleJobParametersChange}
                     />
                 </Grid>
-                <Grid item xs={3}>
+                <Grid item xs={2}>
+                    <TextField
+                        fullWidth
+                        label="Priority"
+                        name="priority"
+                    />
+                </Grid>
+                <Grid item xs={4}>
                     <InputLabel id="Organization">Organization</InputLabel>
                     <Select
                         value={org}
@@ -301,7 +315,17 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
                         })}
                     </Select>
                 </Grid>
-            </React.Fragment>
+                <Grid item xs={12}>
+                    <TextField
+                        fullWidth
+                        InputLabelProps={{shrink: true}}
+                        label="Description"
+                        name="description"
+                        value={job.description}
+                        onChange={handleInput}
+                    />
+                </Grid>
+            </Grid>
         );
         renderSettings = (
             <Grid item xs={10}>
@@ -310,8 +334,8 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
                         <TextField
                             fullWidth
                             label="Frame start"
-                            name="frameStart"
-                            value={frameRange.frameStart}
+                            name="start"
+                            value={frame.start}
                             onChange={handleJobParametersChange}
                         />
                     </Grid>
@@ -319,8 +343,8 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
                         <TextField
                             fullWidth
                             label="Frame end"
-                            name="frameEnd"
-                            value={frameRange.frameEnd}
+                            name="end"
+                            value={frame.end}
                             onChange={handleJobParametersChange}
                         />
                     </Grid>
@@ -329,45 +353,33 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
                             fullWidth
                             label="Step"
                             name="step"
-                            value={frameRange.step}
+                            value={frame.step}
                             onChange={handleJobParametersChange}
                         />
                     </Grid>
                     <Grid item>
                         <TextField
                             fullWidth
-                            label="Start from"
-                            name="startFrom"
-                            value={frameRange.startFrom}
+                            label="Renumber Start"
+                            name="renumberStart"
+                            value={frame.renumberStart}
                             onChange={handleJobParametersChange}
                         />
                     </Grid>
                     <Grid item>
                         <TextField
                             fullWidth
-                            label="Renum step"
-                            name="renumStep"
-                            value={frameRange.renumStep}
+                            label="Renumber step"
+                            name="renumberStep"
+                            value={frame.renumberStep}
                             onChange={handleJobParametersChange}/>
                     </Grid>
-                    <Grid item>
-                        <TextField
-                            fullWidth
-                            label="Attempts"
-                            name="attempts_per_task_limit"
-                            value={job.attempts_per_task_limit}
-                            onChange={handleJobParametersChange}
-                        />
-                    </Grid>
-                    <Grid item style={{paddingRight: 0, flexGrow: 1}}>
-                        <TextField
-                            fullWidth
-                            label="Priority"
-                            name="priority"
-                        />
-                    </Grid>
                     <Box>
-                        <IconButton><AddIcon/></IconButton>
+                        <IconButton
+                            onClick={() => handleAddFrame(frame)}
+                        >
+                            <AddIcon/>
+                        </IconButton>
                     </Box>
                 </Grid>
             </Grid>
@@ -534,7 +546,9 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
                     <Grid item xs={10}>
                         <Typography variant="h6">Submit info</Typography>
                     </Grid>
-                    {submitInfo}
+                    <Grid item xs={10}>
+                        {submitInfo}
+                    </Grid>
                     <Grid item xs={10} className={classes.flexItem}>
                         <List disablePadding className={classes.fullWidth}>
                             <ListItem disableGutters>
@@ -547,25 +561,21 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
                             </ListItem>
                         </List>
                     </Grid>
+
                     {renderSettings}
 
                     <Grid item xs={10} className={classes.flexItem}>
                         <Box>
-                            <Chip
-                                label="1000-1001 2 save as 10 Priority:1"
-                                onDelete={handleDelete}
-                                className={classes.chipStyle}
-                            />
-                            <Chip
-                                label="1002-1279 1 save as 1 Priority:3"
-                                onDelete={handleDelete}
-                                className={classes.chipStyle}
-                            />
-                            <Chip
-                                label="1279-1400 5 save as 1 Priority:2"
-                                onDelete={handleDelete}
-                                className={classes.chipStyle}
-                            />
+                            {frameRange.map((frame, index) => {
+                                return (
+                                    <Chip
+                                        key={index}
+                                        label={`${frame.start}-${frame.end} ${frame.step} from ${frame.renumberStart} with ${frame.renumberStep}`}
+                                        onDelete={() => handleDelete(index)}
+                                        className={classes.chipStyle}
+                                    />
+                                );
+                            })}
                         </Box>
                     </Grid>
                     <Grid item xs={10}>
