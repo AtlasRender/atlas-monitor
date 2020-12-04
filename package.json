@@ -44,7 +44,7 @@
     "@devexpress/dx-react-chart": "^2.7.2",
     "@devexpress/dx-react-chart-material-ui": "^2.7.2",
     "@devexpress/dx-react-core": "^2.7.2",
-    "@material-ui/core": "^4.11.0",
+    "@material-ui/core": "^4.11.2",
     "@material-ui/icons": "^4.11.2",
     "@material-ui/pickers": "^3.2.10",
     "@reduxjs/toolkit": "^1.5.0",
