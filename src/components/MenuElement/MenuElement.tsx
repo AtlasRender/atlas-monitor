@@ -24,6 +24,7 @@ import {useChangeRoute} from "routing-manager";
 interface MenuElementProps extends Stylable {
     page: string;
     label: string;
+    icon: React.ElementType;
 }
 
 /**
@@ -36,7 +37,8 @@ const MenuElement = React.forwardRef((props: MenuElementProps, ref: Ref<any>) =>
         classes,
         className,
         page,
-        label
+        label,
+        icon: Icon
     } = props;
 
     const {changeRoute} = useChangeRoute();
@@ -47,7 +49,7 @@ const MenuElement = React.forwardRef((props: MenuElementProps, ref: Ref<any>) =>
             button onClick={() => changeRoute({page: page, panel: null})}
         >
             <ListItemIcon className={classes.listIcon}>
-                <InboxIcon/>
+                <Icon/>
             </ListItemIcon>
             <ListItemText className={classes.listText} primary={label}/>
         </ListItem>

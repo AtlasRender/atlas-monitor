@@ -52,6 +52,11 @@ import CoreEventDispatcher from "../../core/CoreEventDispatcher";
 import User from "../../entities/User";
 import {WS_RENDER_JOB_UPDATE} from "../../globals";
 import MenuElement from "../../components/MenuElement";
+import PersonIcon from '@material-ui/icons/Person';
+import AddIcon from '@material-ui/icons/Add';
+import WorkIcon from '@material-ui/icons/Work';
+import CheckIcon from '@material-ui/icons/Check';
+import GroupIcon from '@material-ui/icons/Group';
 
 /**
  * MonitorLayoutProps - interface for MonitorLayout component
@@ -158,11 +163,11 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<HTML
             onKeyDown={toggleDrawer(anchor, false)}
         >
             <List>
-                <MenuElement page="jobs" label="Render ShortJobs"/>
-                <MenuElement page="user" label="User Page"/>
-                <MenuElement page="organization/1" label="Organization Page"/>
-                <MenuElement page="submit" label="Submit Page"/>
-                <MenuElement page="createorganization" label="Create Organization"/>
+                <MenuElement icon={WorkIcon} page="jobs" label="Render ShortJobs"/>
+                <MenuElement icon={PersonIcon} page="user" label="User Page"/>
+                <MenuElement icon={GroupIcon} page="organization/1" label="Organization Page"/>
+                <MenuElement icon={CheckIcon} page="submit" label="Submit Page"/>
+                <MenuElement icon={AddIcon} page="createorganization" label="Create Organization"/>
             </List>
         </Box>
     );
@@ -250,11 +255,11 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<HTML
                     </Box>
                     <Divider/>
                     <List>
-                        <MenuElement page="jobs" label="Render ShortJobs"/>
-                        <MenuElement page="user" label="User Page"/>
-                        <MenuElement page="organization/1" label="Organization Page"/>
-                        <MenuElement page="submit" label="Submit Page"/>
-                        <MenuElement page="createorganization" label="Create Organization"/>
+                        <MenuElement icon={WorkIcon} page="jobs" label="Render ShortJobs"/>
+                        <MenuElement icon={PersonIcon} page="user" label="User Page"/>
+                        <MenuElement icon={GroupIcon} page="organization/1" label="Organization Page"/>
+                        <MenuElement icon={CheckIcon} page="submit" label="Submit Page"/>
+                        <MenuElement icon={AddIcon} page="createorganization" label="Create Organization"/>
                     </List>
                 </Drawer>
             </React.Fragment>
