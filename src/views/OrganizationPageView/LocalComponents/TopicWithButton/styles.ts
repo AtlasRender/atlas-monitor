@@ -9,21 +9,19 @@
 import {createStyles, Theme} from "@material-ui/core";
 
 const styles = (theme: Theme) => createStyles({
-    container: {
+    firstLine: {
         justifyContent: "center",
         alignItems: "center",
-        marginTop: theme.spacing(2),
-        marginBottom: theme.spacing(2),
-
+        listStyleType: "none",
+        [theme.breakpoints.down("sm")]: {
+            paddingLeft: theme.spacing(2),
+            paddingRight: theme.spacing(2),
+        },
     },
-    box: {
-        display: "flex",
-        justifyContent: "flex-end",
-        alignItems: "center"
+    paddingNone: {
+        paddingLeft: 0,
+        paddingBottom: 0,
     },
-    childAlign: {
-        alignItems: "center",
-    }
 });
 
 export default styles;
