@@ -64,8 +64,6 @@ const DialogUser = React.forwardRef((props: DialogUserProps, ref: Ref<any>) => {
         onRemoveRole,
     } = props;
 
-    console.log(user);
-
     const confirm = useConfirm();
     const [isAddRoleToUserButtonActive, setIsAddRoleToUserButtonActive] = useState<null | HTMLElement>(null);
     const [isRemoveRoleFromUserButtonActive, setIsRemoveRoleFromUserButtonActive] = useState<null | HTMLElement>(null);
@@ -95,11 +93,6 @@ const DialogUser = React.forwardRef((props: DialogUserProps, ref: Ref<any>) => {
     function handleCloseRemoveRoleFromUserButtonActive() {
         setIsRemoveRoleFromUserButtonActive(null);
     }
-
-
-    console.log(user?.roles.length);
-
-
 
     return (
         <Dialog

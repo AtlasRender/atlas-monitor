@@ -134,9 +134,6 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
     //     setLoaded(true);
     // }
 
-    console.log(organizationUsers);
-    console.log(currentUser);
-
     //roles
     async function handleGetRoles() {
         try {
@@ -202,7 +199,6 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
     }
 
     function handleRemoveRoleFromUser(roleId: number, userToRemoveRoleId: number) {
-        console.log(roleId, userToRemoveRoleId);
         setIsRemoveRoleFromUserButtonActive(null);
         coreRequest()
             .delete(`organizations/${id}/roles/${roleId}/users`)
@@ -376,7 +372,6 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
 
     function handleIsUserSettingsButtonActive(user: UserData) {
         setIsUserSettingsButtonActive(true);
-        console.log(user);
         setCurrentUser(user);
     }
 
@@ -609,7 +604,6 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                                 />
                             );
                         })}
-                        {console.log(currentPlugin)}
                         {currentPlugin &&
                         <DialogPluginInfo
                             currentPlugin={currentPlugin}
