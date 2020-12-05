@@ -15,23 +15,8 @@ const styles = (theme: Theme) => createStyles({
         justifyContent: "center",
         margin: 0,
     },
-    containerItem: {
-        justifyContent: "space-between",
-        display: "flex",
-        // backgroundColor: grey[200],
-        borderRadius: "5px",
-        padding: theme.spacing(0),
-        // paddingTop:theme.spacing(0.5),
-        // paddingBottom: theme.spacing(0.5)
-    },
-    dataTextFieldFix: {
-        padding: 0,
-        //paddingLeft:theme.spacing(1),
-        backgroundColor: "inherit",
-    },
-    selectAlignment: {
-        display: "flex",
-        justifyContent: "flex-end",
+    listRoot:{
+        padding: theme.spacing(0, 0, 0, 0),
     }
 
 });

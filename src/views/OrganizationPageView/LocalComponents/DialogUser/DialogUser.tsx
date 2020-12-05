@@ -64,7 +64,6 @@ const DialogUser = React.forwardRef((props: DialogUserProps, ref: Ref<any>) => {
         onRemoveRole,
     } = props;
 
-
     const confirm = useConfirm();
     const [isAddRoleToUserButtonActive, setIsAddRoleToUserButtonActive] = useState<null | HTMLElement>(null);
     const [isRemoveRoleFromUserButtonActive, setIsRemoveRoleFromUserButtonActive] = useState<null | HTMLElement>(null);
@@ -105,7 +104,7 @@ const DialogUser = React.forwardRef((props: DialogUserProps, ref: Ref<any>) => {
 
             <Box
                 className={classes.userContainer}
-                style={{background: `linear-gradient(45deg, #${user?.roles[0].color}, #fff 100%)`}}
+                style={user?.roles.length ? {background: `linear-gradient(45deg, #${user?.roles[0].color}, #fff 100%)`} : {background: `transparent`}}
             >
                 <Grid container>
                     <Grid item xs={12}>
@@ -129,37 +128,6 @@ const DialogUser = React.forwardRef((props: DialogUserProps, ref: Ref<any>) => {
 
 
             <List>
-                {/*<ListItem>*/}
-                {/*    <ListItemText>*/}
-                {/*        Add role*/}
-                {/*    </ListItemText>*/}
-                {/*    <ListItemSecondaryAction*/}
-                {/*        onClick={handleOpenAddRoleToUserButtonActive}*/}
-                {/*    >*/}
-                {/*        <IconButton>*/}
-                {/*            <AddIcon/>*/}
-                {/*        </IconButton>*/}
-                {/*    </ListItemSecondaryAction>*/}
-                {/*    <Menu*/}
-                {/*        id="simple-menu"*/}
-                {/*        anchorEl={isAddRoleToUserButtonActive}*/}
-                {/*        keepMounted*/}
-                {/*        open={Boolean(isAddRoleToUserButtonActive)}*/}
-                {/*        onClose={handleCloseAddRoleToUserButtonActive}*/}
-                {/*    >*/}
-                {/*        {roles.map(role => {*/}
-                {/*            return (*/}
-                {/*                <MenuItem*/}
-                {/*                    key={role.id}*/}
-                {/*                    onClick={() => onAddRole(role.id, user?.id)}*/}
-                {/*                >*/}
-                {/*                    {role.name}*/}
-                {/*                </MenuItem>*/}
-                {/*            );*/}
-                {/*        })}*/}
-                {/*    </Menu>*/}
-                {/*</ListItem>*/}
-
                 <ListItem className={classes.listItemHeader}>
                     <ListItemText primaryTypographyProps={{variant: "h6"}}>
                         Roles
@@ -223,7 +191,7 @@ const DialogUser = React.forwardRef((props: DialogUserProps, ref: Ref<any>) => {
                                     >
                                         <ListItemText
                                             className={classes.menuListItemText}
-                                            style={{borderLeft: `4px solid #${role.color}`}}
+                                            style={role.color ? {borderLeft: `4px solid #${role.color}`} : {borderLeft: 0}}
                                             primary={role.name}
                                             secondary={role.description}
                                         />
@@ -245,7 +213,7 @@ const DialogUser = React.forwardRef((props: DialogUserProps, ref: Ref<any>) => {
                         <ListItem>
                             <ListItemAvatar style={{minWidth: 16}}>
                                 <Box className={classes.colorBar}
-                                     style={{backgroundColor: `#${role.color}`}}/>
+                                     style={role.color ? {backgroundColor: `#${role.color}`} : {backgroundColor: `transparent`}}/>
                             </ListItemAvatar>
                             <ListItemText
                                 primary={role.name}
@@ -263,37 +231,6 @@ const DialogUser = React.forwardRef((props: DialogUserProps, ref: Ref<any>) => {
                 })}
 
                 <Divider/>
-
-                {/*<ListItem>*/}
-                {/*    <ListItemText>*/}
-                {/*        Remove role*/}
-                {/*    </ListItemText>*/}
-                {/*    <ListItemSecondaryAction*/}
-                {/*        onClick={handleOpenRemoveRoleFromUserButtonActive}*/}
-                {/*    >*/}
-                {/*        <IconButton>*/}
-                {/*            <DeleteIcon/>*/}
-                {/*        </IconButton>*/}
-                {/*    </ListItemSecondaryAction>*/}
-                {/*    <Menu*/}
-                {/*        id="simple-menu-1"*/}
-                {/*        anchorEl={isRemoveRoleFromUserButtonActive}*/}
-                {/*        keepMounted*/}
-                {/*        open={Boolean(isRemoveRoleFromUserButtonActive)}*/}
-                {/*        onClose={handleCloseRemoveRoleFromUserButtonActive}*/}
-                {/*    >*/}
-                {/*        {user?.roles.map(role => {*/}
-                {/*            return (*/}
-                {/*                <MenuItem*/}
-                {/*                    key={role.id}*/}
-                {/*                    onClick={() => onRemoveRole(role.id, user?.id)}*/}
-                {/*                >*/}
-                {/*                    {role.name}*/}
-                {/*                </MenuItem>*/}
-                {/*            );*/}
-                {/*        })}*/}
-                {/*    </Menu>*/}
-                {/*</ListItem>*/}
 
                 <ListItem className={classes.dangerZoneHeader}>
                     <ListItemText primaryTypographyProps={{variant: "h6"}}>
@@ -314,18 +251,6 @@ const DialogUser = React.forwardRef((props: DialogUserProps, ref: Ref<any>) => {
                     </Button>
                 </Box>
 
-                {/*<ListItem className={classes.dangerZone}>*/}
-                {/*    <ListItemText>*/}
-                {/*        Remove User from Organization*/}
-                {/*     </ListItemText>*/}
-                {/*    <ListItemSecondaryAction*/}
-                {/*        onClick={() => confirm(async () => onRemove([user?.id]), {title: `are you sure you want to remove user: ${user?.username} ?`})}*/}
-                {/*    >*/}
-                {/*        <IconButton>*/}
-                {/*            <DeleteIcon/>*/}
-                {/*        </IconButton>*/}
-                {/*    </ListItemSecondaryAction>*/}
-                {/*</ListItem>*/}
             </List>
         </Dialog>
     );

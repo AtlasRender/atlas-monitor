@@ -9,8 +9,8 @@
 import React, {Ref, useEffect, useState} from "react";
 import {
     Avatar,
-    Box,
-    Chip,
+    Box, Button,
+    Chip, Dialog, DialogTitle,
     Divider,
     Grid,
     IconButton,
@@ -18,7 +18,7 @@ import {
     ListItemAvatar,
     ListItemIcon,
     ListItemSecondaryAction,
-    ListItemText,
+    ListItemText, TextField, Typography,
     useMediaQuery,
     useTheme,
     withStyles,
@@ -46,6 +46,10 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import DialogAddRoles from "./LocalComponents/DialogAddRoles";
 import Loading from "../../components/Loading";
+import Plugin from "../../interfaces/Plugin";
+import PluginFull from "../../interfaces/PluginFull";
+import {PluginSettingsSpec} from "@atlasrender/render-plugin";
+import DialogPluginInfo from "./LocalComponents/DialogPluginInfo";
 
 /**
  * OrganizationPageViewPropsStyled - interface for OrganizationPageView function
@@ -103,11 +107,14 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
     const [organizationData, setOrganizationData] = useState<Organization | null>(null);
     const [allUsers, setAllUsers] = useState<UserData[] | null>(null);
     const [newUsers, setNewUsers] = useState<number[]>([]);
-    const [organizationUsers, serOrganizationUsers] = useState<UserData[]>([]);
+    const [organizationUsers, setOrganizationUsers] = useState<UserData[]>([]);
     const [currentUser, setCurrentUser] = useState<UserData | null>(null);
 
 
-    // console.log(currentUser);
+    //Plugins
+    const [plugins, setPlugins] = useState<Plugin[]>();
+    const [dialogPluginButton, setDialogPluginButton] = useState<boolean>(false);
+    const [currentPlugin, setCurrentPlugin] = useState<PluginFull>();
 
 
     useEffect(() => {
@@ -115,17 +122,17 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
             handleGetOrganization(),
             handleGetAllUsers(),
             handleGetOrganizationUsers(),
-            handleGetRoles()
+            handleGetRoles(),
+            handleGetPlugins(),
         ]).then(() => {
             setLoaded(true);
         });
     }, []);
 
     //basic
-    function handleSetLoaded() {
-        setLoaded(true);
-    }
-
+    // function handleSetLoaded() {
+    //     setLoaded(true);
+    // }
 
     //roles
     async function handleGetRoles() {
@@ -148,6 +155,15 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
         }
     }
 
+    async function handleGetPlugins() {
+        try {
+            const response = await coreRequest().get("plugins").query({organization: id});
+            setPlugins(response.body);
+        } catch (err) {
+            enqueueErrorSnackbar("Cant get plugins");
+        }
+    }
+
     function handleGetRoleUsers(roleId: number) {
         coreRequest()
             .get(`organizations/${id}/roles/${roleId}/users`)
@@ -166,7 +182,14 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
             .post(`organizations/${id}/roles/${roleId}/users`)
             .send({userId: userToAddRoleId})
             .then((response) => {
-                handleGetOrganizationUsers().then();
+                handleGetOrganizationUsers()
+                    .then(response => {
+                        const item = response.filter((user: any) => user.id === userToAddRoleId);
+                        setCurrentUser(item[0]);
+                    })
+                    .catch(err => {
+                        enqueueErrorSnackbar("Cant set current user");
+                    });
                 handleGetRoles().then();
             })
             .catch(err => {
@@ -181,7 +204,11 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
             .delete(`organizations/${id}/roles/${roleId}/users`)
             .send({userId: userToRemoveRoleId})
             .then((response) => {
-                handleGetOrganizationUsers().then();
+                handleGetOrganizationUsers()
+                    .then(response => {
+                        const item = response.filter((user: any) => user.id === userToRemoveRoleId);
+                        setCurrentUser(item[0]);
+                    });
                 handleGetRoles().then();
             })
             .catch(err => {
@@ -262,7 +289,8 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
     async function handleGetOrganizationUsers() {
         try {
             const response = await coreRequest().get(`organizations/${id}/users`);
-            serOrganizationUsers(response.body);
+            setOrganizationUsers(response.body);
+            return response.body;
         } catch (err) {
             //TODO handle errors
             enqueueErrorSnackbar("Cant get roles");
@@ -344,8 +372,18 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
 
     function handleIsUserSettingsButtonActive(user: UserData) {
         setIsUserSettingsButtonActive(true);
-        console.log(user);
         setCurrentUser(user);
+    }
+
+    function handleSetCurrentPlugin(id: number) {
+        coreRequest()
+            .get(`/plugins/${id}`)
+            .then(response => {
+                setCurrentPlugin({...response.body, rules: new PluginSettingsSpec(response.body.rules)});
+            })
+            .catch(error => {
+                enqueueErrorSnackbar(error.message);
+            });
     }
 
 
@@ -439,25 +477,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                             </Grid>
                         </Grid>
 
-                        <Grid container className={classes.firstLine}>
-                            <Grid item xs={12} md={10}>
-                                <List component="nav" aria-label="secondary mailbox folders">
-                                    <ListItem className={classes.paddingNone}>
-                                        <ListItemText primary="Roles" primaryTypographyProps={{variant: "h6"}}/>
-                                        <ListItemSecondaryAction>
-                                            <IconButton
-                                                edge="end"
-                                                aria-label="delete"
-                                                onClick={handleIsAddRoleButtonActive}
-                                            >
-                                                <AddIcon/>
-                                            </IconButton>
-                                        </ListItemSecondaryAction>
-                                    </ListItem>
-                                    <Divider/>
-                                </List>
-                            </Grid>
-                        </Grid>
+                        <TopicWithButton onClick={handleIsAddRoleButtonActive} children="Roles"/>
 
                         <DialogAddRoles
                             open={isAddRoleButtonActive}
@@ -518,25 +538,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                             onModifyRole={handleModifyRole}
                         />
 
-                        <Grid container className={classes.firstLine}>
-                            <Grid item xs={12} md={10}>
-                                <List component="nav" aria-label="secondary mailbox folders">
-                                    <ListItem className={classes.paddingNone}>
-                                        <ListItemText primary="Members" primaryTypographyProps={{variant: "h6"}}/>
-                                        <ListItemSecondaryAction>
-                                            <IconButton
-                                                edge="end"
-                                                aria-label="delete"
-                                                onClick={handleIsButtonActive}
-                                            >
-                                                <AddIcon/>
-                                            </IconButton>
-                                        </ListItemSecondaryAction>
-                                    </ListItem>
-                                    <Divider/>
-                                </List>
-                            </Grid>
-                        </Grid>
+                        <TopicWithButton onClick={handleIsButtonActive} children="Members"/>
 
                         <DialogAddUsers
                             open={isButtonActive}
@@ -587,9 +589,28 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                             onRemoveRole={handleRemoveRoleFromUser}
                         />
 
-                        <TopicWithButton children="Plugins"
-                                         onClick={() => changeRoute({page: "plugin/create", id: id})}/>
-                        <PluginComponent plugin="GachiWork" description="best remixes of all time"/>
+                        <TopicWithButton
+                            children="Plugins"
+                            onClick={() => changeRoute({page: "plugin/create", id: id})}
+                        />
+                        {plugins?.map((plugin) => {
+                            return (
+                                <PluginComponent
+                                    plugin={plugin}
+                                    invokeDialog={() => {
+                                        setDialogPluginButton(!dialogPluginButton);
+                                    }}
+                                    setCurrentPlugin={handleSetCurrentPlugin}
+                                />
+                            );
+                        })}
+                        {currentPlugin &&
+                        <DialogPluginInfo
+                            currentPlugin={currentPlugin}
+                            onClose={() => setDialogPluginButton(false)}
+                            open={dialogPluginButton}
+                        />
+                        }
                     </Box>
                 </Route>
             </Switch>
