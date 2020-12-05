@@ -193,6 +193,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
     }
 
     function handleRemoveRoleFromUser(roleId: number, userToRemoveRoleId: number) {
+        console.log(roleId, userToRemoveRoleId);
         setIsRemoveRoleFromUserButtonActive(null);
         coreRequest()
             .delete(`organizations/${id}/roles/${roleId}/users`)

@@ -95,6 +95,11 @@ const DialogUser = React.forwardRef((props: DialogUserProps, ref: Ref<any>) => {
         setIsRemoveRoleFromUserButtonActive(null);
     }
 
+
+    console.log(user?.roles.length);
+
+
+
     return (
         <Dialog
             open={open}
@@ -105,7 +110,7 @@ const DialogUser = React.forwardRef((props: DialogUserProps, ref: Ref<any>) => {
 
             <Box
                 className={classes.userContainer}
-                style={{background: `linear-gradient(45deg, #${user?.roles[0].color}, #fff 100%)`}}
+                style={user?.roles.length ? {background: `linear-gradient(45deg, #${user?.roles[0].color}, #fff 100%)`} : {background: `transparent`}}
             >
                 <Grid container>
                     <Grid item xs={12}>
@@ -223,7 +228,7 @@ const DialogUser = React.forwardRef((props: DialogUserProps, ref: Ref<any>) => {
                                     >
                                         <ListItemText
                                             className={classes.menuListItemText}
-                                            style={{borderLeft: `4px solid #${role.color}`}}
+                                            style={role.color ? {borderLeft: `4px solid #${role.color}`} : {borderLeft: 0}}
                                             primary={role.name}
                                             secondary={role.description}
                                         />
@@ -245,7 +250,7 @@ const DialogUser = React.forwardRef((props: DialogUserProps, ref: Ref<any>) => {
                         <ListItem>
                             <ListItemAvatar style={{minWidth: 16}}>
                                 <Box className={classes.colorBar}
-                                     style={{backgroundColor: `#${role.color}`}}/>
+                                     style={role.color ? {backgroundColor: `#${role.color}`} : {backgroundColor: `transparent`}}/>
                             </ListItemAvatar>
                             <ListItemText
                                 primary={role.name}

@@ -162,6 +162,7 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<HTML
                 <MenuElement page="user" label="User Page"/>
                 <MenuElement page="organization/1" label="Organization Page"/>
                 <MenuElement page="submit" label="Submit Page"/>
+                <MenuElement page="createorganization" label="Create Organization"/>
             </List>
         </Box>
     );
@@ -253,6 +254,7 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<HTML
                         <MenuElement page="user" label="User Page"/>
                         <MenuElement page="organization/1" label="Organization Page"/>
                         <MenuElement page="submit" label="Submit Page"/>
+                        <MenuElement page="createorganization" label="Create Organization"/>
                     </List>
                 </Drawer>
             </React.Fragment>
