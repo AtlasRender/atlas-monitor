@@ -134,6 +134,8 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
     //     setLoaded(true);
     // }
 
+    console.log(organizationUsers);
+    console.log(currentUser);
 
     //roles
     async function handleGetRoles() {
@@ -183,7 +185,14 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
             .post(`organizations/${id}/roles/${roleId}/users`)
             .send({userId: userToAddRoleId})
             .then((response) => {
-                handleGetOrganizationUsers().then();
+                handleGetOrganizationUsers()
+                    .then(response => {
+                        const item = response.filter((user: any) => user.id === userToAddRoleId);
+                        setCurrentUser(item[0]);
+                    })
+                    .catch(err => {
+                        enqueueErrorSnackbar("Cant set current user");
+                    });
                 handleGetRoles().then();
             })
             .catch(err => {
@@ -199,7 +208,11 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
             .delete(`organizations/${id}/roles/${roleId}/users`)
             .send({userId: userToRemoveRoleId})
             .then((response) => {
-                handleGetOrganizationUsers().then();
+                handleGetOrganizationUsers()
+                    .then(response => {
+                        const item = response.filter((user: any) => user.id === userToRemoveRoleId);
+                        setCurrentUser(item[0]);
+                    });
                 handleGetRoles().then();
             })
             .catch(err => {
@@ -281,6 +294,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
         try {
             const response = await coreRequest().get(`organizations/${id}/users`);
             setOrganizationUsers(response.body);
+            return response.body;
         } catch (err) {
             //TODO handle errors
             enqueueErrorSnackbar("Cant get roles");
@@ -597,11 +611,11 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                         })}
                         {console.log(currentPlugin)}
                         {currentPlugin &&
-                            <DialogPluginInfo
-                                currentPlugin={currentPlugin}
-                                onClose={() => setDialogPluginButton(false)}
-                                open={dialogPluginButton}
-                            />
+                        <DialogPluginInfo
+                            currentPlugin={currentPlugin}
+                            onClose={() => setDialogPluginButton(false)}
+                            open={dialogPluginButton}
+                        />
                         }
                     </Box>
                 </Route>
