@@ -51,6 +51,7 @@ import PluginFull from "../../interfaces/PluginFull";
 import {PluginSettingsSpec} from "@atlasrender/render-plugin";
 import DialogPluginInfo from "./LocalComponents/DialogPluginInfo";
 import useAuth from "../../hooks/useAuth";
+import DialogSlave from "./LocalComponents/DialogSlave";
 
 /**
  * OrganizationPageViewPropsStyled - interface for OrganizationPageView function
@@ -99,6 +100,10 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
     const [roles, setRoles] = useState<Role[]>([]);
     const [roleToChange, setRoleToChange] = useState<Role>();
     const [roleUsers, setRoleUsers] = useState<UserData[] | null>(null);
+
+
+    //slaves
+    const [openDialogSlave, setOpenDialogSlave] = useState(false);
 
 
     //organizations and users
@@ -366,6 +371,14 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
         });
     }
 
+    function handleOpenDialogSlave() {
+        setOpenDialogSlave(true);
+    }
+
+    function handleCloseDialogSlave() {
+        setOpenDialogSlave(false);
+    }
+
 
     //organizations and users
     async function handleGetOrganizationUsers() {
@@ -598,14 +611,25 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                                                 secondary="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur, rerum?"
                                             />
 
-                                            <ListItemSecondaryAction>
-                                                <IconButton><SettingsIcon/></IconButton>
+                                            <ListItemSecondaryAction
+                                                onClick={handleOpenDialogSlave}
+                                            >
+                                                <IconButton>
+                                                    <SettingsIcon/>
+                                                </IconButton>
                                             </ListItemSecondaryAction>
                                         </ListItem>
                                     );
                                 })}
                             </Grid>
                         </Grid>
+
+
+                        <DialogSlave
+                            open={openDialogSlave}
+                            onClose={handleCloseDialogSlave}
+                        />
+
 
                         <TopicWithButton onClick={handleIsAddRoleButtonActive} children="Roles"/>
 
