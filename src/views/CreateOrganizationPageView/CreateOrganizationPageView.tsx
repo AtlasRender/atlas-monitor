@@ -55,11 +55,13 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
         classes,
     } = props;
 
+    const {logout} = useAuth();
     const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
     const {getRouteParams} = useChangeRoute();
     const coreRequest = useCoreRequest();
     const {getUser} = useAuth();
     const confirm = useConfirm();
+
 
     const [addRoleButton, setAddRoleButton] = useState<boolean>(false);
     const [modify, setModify] = useState<boolean>(false);
@@ -144,7 +146,15 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
             })
             .catch(err => {
                 //TODO handle errors
-                enqueueErrorSnackbar("Cant get users");
+                switch(err.status) {
+                    case 400:
+                        enqueueErrorSnackbar("Error: see details in console");
+                        console.error(err);
+                        break;
+                    case 401:
+                        logout();
+                        break;
+                }
             });
     }
 
@@ -158,7 +168,15 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
             })
             .catch(err => {
                 //TODO handle errors
-                enqueueErrorSnackbar("Who are you?");
+                switch(err.status) {
+                    case 400:
+                        enqueueErrorSnackbar("Error: see details in console");
+                        console.error(err);
+                        break;
+                    case 401:
+                        logout();
+                        break;
+                }
             });
     }
 
@@ -169,7 +187,15 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
             .then()
             .catch(err => {
                 //TODO handle errors
-                enqueueErrorSnackbar("couldn't create org");
+                switch(err.status) {
+                    case 400:
+                        enqueueErrorSnackbar("Error: see details in console");
+                        console.error(err);
+                        break;
+                    case 401:
+                        logout();
+                        break;
+                }
             });
     }
 

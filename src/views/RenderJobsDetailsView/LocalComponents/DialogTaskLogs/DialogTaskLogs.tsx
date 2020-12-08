@@ -90,7 +90,7 @@ const DialogTaskLogs = React.forwardRef((props: DialogTaskLogsProps, ref: Ref<an
     const [loaded, setLoaded] = useState(false);
     const [attemptsId, setAttemptsId] = useState([]);
     const [logs, setLogs] = useState<Log[]>([]);
-    const [value, setValue] = React.useState(0);
+    const [value, setValue] = useState(0);
     const [attemptIndex, setAttemptIndex] = useState(0);
 
 

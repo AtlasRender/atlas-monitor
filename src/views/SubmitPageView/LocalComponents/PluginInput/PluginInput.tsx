@@ -18,6 +18,7 @@ import SeparatorPluginField from "../../../../components/SeparatorPluginField";
 import BooleanPluginField from "../../../../components/BooleanPluginField";
 import StringPluginField from "../../../../components/RenderJobCustomFields/StringPluginField";
 import IntegerPluginField from "../../../../components/RenderJobCustomFields/IntegerPluginField";
+import useAuth from "../../../../hooks/useAuth";
 
 
 /**
@@ -46,6 +47,7 @@ const PluginInput = React.forwardRef((props: PluginInputProps, ref: Ref<any>) =>
     } = props;
 
 
+    const {logout} = useAuth();
     const coreRequest = useCoreRequest();
     const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
 
@@ -72,7 +74,15 @@ const PluginInput = React.forwardRef((props: PluginInputProps, ref: Ref<any>) =>
             // const temp = {...response.body, rules: response.body.rules};
             setPlugin(temp);
         } catch (err) {
-            enqueueErrorSnackbar("Cant get plugin");
+            switch(err.status) {
+                case 400:
+                    enqueueErrorSnackbar("Error: see details in console");
+                    console.error(err);
+                    break;
+                case 401:
+                    logout();
+                    break;
+            }
         }
 
     }

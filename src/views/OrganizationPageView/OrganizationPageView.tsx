@@ -50,6 +50,8 @@ import Plugin from "../../interfaces/Plugin";
 import PluginFull from "../../interfaces/PluginFull";
 import {PluginSettingsSpec} from "@atlasrender/render-plugin";
 import DialogPluginInfo from "./LocalComponents/DialogPluginInfo";
+import useAuth from "../../hooks/useAuth";
+import DialogSlave from "./LocalComponents/DialogSlave";
 
 /**
  * OrganizationPageViewPropsStyled - interface for OrganizationPageView function
@@ -80,6 +82,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
 
 
     //basic
+    const {logout} = useAuth();
     const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
     const coreRequest = useCoreRequest();
     const {getRouteParams, changeRoute} = useChangeRoute();
@@ -97,6 +100,10 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
     const [roles, setRoles] = useState<Role[]>([]);
     const [roleToChange, setRoleToChange] = useState<Role>();
     const [roleUsers, setRoleUsers] = useState<UserData[] | null>(null);
+
+
+    //slaves
+    const [openDialogSlave, setOpenDialogSlave] = useState(false);
 
 
     //organizations and users
@@ -141,7 +148,15 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
             setRoles(response.body);
         } catch (err) {
             //TODO handle errors
-            enqueueErrorSnackbar("Cant get roles");
+            switch(err.status) {
+                case 400:
+                    enqueueErrorSnackbar("Error: see details in console");
+                    console.error(err);
+                    break;
+                case 401:
+                    logout();
+                    break;
+            }
         }
     }
 
@@ -151,7 +166,15 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                 .get(`organizations/${id}/roles/${roleId}`);
             setRoleToChange(response.body);
         } catch (err) {
-            enqueueErrorSnackbar("Cant get role by id");
+            switch(err.status) {
+                case 400:
+                    enqueueErrorSnackbar("Error: see details in console");
+                    console.error(err);
+                    break;
+                case 401:
+                    logout();
+                    break;
+            }
         }
     }
 
@@ -160,7 +183,15 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
             const response = await coreRequest().get("plugins").query({organization: id});
             setPlugins(response.body);
         } catch (err) {
-            enqueueErrorSnackbar("Cant get plugins");
+            switch(err.status) {
+                case 400:
+                    enqueueErrorSnackbar("Error: see details in console");
+                    console.error(err);
+                    break;
+                case 401:
+                    logout();
+                    break;
+            }
         }
     }
 
@@ -172,7 +203,15 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
             })
             .catch(err => {
                 //TODO handle errors
-                enqueueErrorSnackbar("Cant get role by id");
+                switch(err.status) {
+                    case 400:
+                        enqueueErrorSnackbar("Error: see details in console");
+                        console.error(err);
+                        break;
+                    case 401:
+                        logout();
+                        break;
+                }
             });
     }
 
@@ -188,13 +227,29 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                         setCurrentUser(item[0]);
                     })
                     .catch(err => {
-                        enqueueErrorSnackbar("Cant set current user");
+                        switch(err.status) {
+                            case 400:
+                                enqueueErrorSnackbar("Error: see details in console");
+                                console.error(err);
+                                break;
+                            case 401:
+                                logout();
+                                break;
+                        }
                     });
                 handleGetRoles().then();
             })
             .catch(err => {
                 //TODO handle errors
-                enqueueErrorSnackbar("Cant get role by id");
+                switch(err.status) {
+                    case 400:
+                        enqueueErrorSnackbar("Error: see details in console");
+                        console.error(err);
+                        break;
+                    case 401:
+                        logout();
+                        break;
+                }
             });
     }
 
@@ -213,7 +268,15 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
             })
             .catch(err => {
                 //TODO handle errors
-                enqueueErrorSnackbar("Cant get role by id");
+                switch(err.status) {
+                    case 400:
+                        enqueueErrorSnackbar("Error: see details in console");
+                        console.error(err);
+                        break;
+                    case 401:
+                        logout();
+                        break;
+                }
             });
     }
 
@@ -230,10 +293,18 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                 })
                 .catch(err => {
                     //TODO handle errors
-                    enqueueErrorSnackbar("Cant add role");
+                    switch(err.status) {
+                        case 400:
+                            enqueueErrorSnackbar("Error: see details in console");
+                            console.error(err);
+                            break;
+                        case 401:
+                            logout();
+                            break;
+                    }
                 });
         } else {
-            enqueueErrorSnackbar("Cant add role");
+            enqueueErrorSnackbar("Invalid data types");
         }
 
     }
@@ -247,7 +318,15 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
             })
             .catch(err => {
                 //TODO handle errors
-                enqueueErrorSnackbar("Cant add role");
+                switch(err.status) {
+                    case 400:
+                        enqueueErrorSnackbar("Error: see details in console");
+                        console.error(err);
+                        break;
+                    case 401:
+                        logout();
+                        break;
+                }
             });
     }
 
@@ -262,7 +341,15 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
             })
             .catch(err => {
                 //TODO handle errors
-                enqueueErrorSnackbar("Cant edit role");
+                switch(err.status) {
+                    case 400:
+                        enqueueErrorSnackbar("Error: see details in console");
+                        console.error(err);
+                        break;
+                    case 401:
+                        logout();
+                        break;
+                }
             });
     }
 
@@ -284,6 +371,14 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
         });
     }
 
+    function handleOpenDialogSlave() {
+        setOpenDialogSlave(true);
+    }
+
+    function handleCloseDialogSlave() {
+        setOpenDialogSlave(false);
+    }
+
 
     //organizations and users
     async function handleGetOrganizationUsers() {
@@ -293,7 +388,15 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
             return response.body;
         } catch (err) {
             //TODO handle errors
-            enqueueErrorSnackbar("Cant get roles");
+            switch(err.status) {
+                case 400:
+                    enqueueErrorSnackbar("Error: see details in console");
+                    console.error(err);
+                    break;
+                case 401:
+                    logout();
+                    break;
+            }
         }
     }
 
@@ -303,7 +406,15 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
             setOrganizationData(response.body);
         } catch (err) {
             //TODO handle errors
-            enqueueErrorSnackbar("No such user");
+            switch(err.status) {
+                case 400:
+                    enqueueErrorSnackbar("Error: see details in console");
+                    console.error(err);
+                    break;
+                case 401:
+                    logout();
+                    break;
+            }
         }
     }
 
@@ -313,7 +424,15 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
             setAllUsers(response.body);
         } catch (err) {
             //TODO handle errors
-            enqueueErrorSnackbar("Cant get users");
+            switch(err.status) {
+                case 400:
+                    enqueueErrorSnackbar("Error: see details in console");
+                    console.error(err);
+                    break;
+                case 401:
+                    logout();
+                    break;
+            }
         }
     }
 
@@ -329,7 +448,15 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
             })
             .catch(err => {
                 //TODO handle errors
-                enqueueErrorSnackbar("No such user");
+                switch(err.status) {
+                    case 400:
+                        enqueueErrorSnackbar("Error: see details in console");
+                        console.error(err);
+                        break;
+                    case 401:
+                        logout();
+                        break;
+                }
             });
     }
 
@@ -344,7 +471,15 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
             })
             .catch(err => {
                 //TODO handle errors
-                enqueueErrorSnackbar(err.message);
+                switch(err.status) {
+                    case 400:
+                        enqueueErrorSnackbar("Error: see details in console");
+                        console.error(err);
+                        break;
+                    case 401:
+                        logout();
+                        break;
+                }
             });
     }
 
@@ -381,8 +516,16 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
             .then(response => {
                 setCurrentPlugin({...response.body, rules: new PluginSettingsSpec(response.body.rules)});
             })
-            .catch(error => {
-                enqueueErrorSnackbar(error.message);
+            .catch(err => {
+                switch(err.status) {
+                    case 400:
+                        enqueueErrorSnackbar("Error: see details in console");
+                        console.error(err);
+                        break;
+                    case 401:
+                        logout();
+                        break;
+                }
             });
     }
 
@@ -468,14 +611,25 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                                                 secondary="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur, rerum?"
                                             />
 
-                                            <ListItemSecondaryAction>
-                                                <IconButton><SettingsIcon/></IconButton>
+                                            <ListItemSecondaryAction
+                                                onClick={handleOpenDialogSlave}
+                                            >
+                                                <IconButton>
+                                                    <SettingsIcon/>
+                                                </IconButton>
                                             </ListItemSecondaryAction>
                                         </ListItem>
                                     );
                                 })}
                             </Grid>
                         </Grid>
+
+
+                        <DialogSlave
+                            open={openDialogSlave}
+                            onClose={handleCloseDialogSlave}
+                        />
+
 
                         <TopicWithButton onClick={handleIsAddRoleButtonActive} children="Roles"/>
 

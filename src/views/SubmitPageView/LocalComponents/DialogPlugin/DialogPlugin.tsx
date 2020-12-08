@@ -51,6 +51,7 @@ const DialogPlugin = React.forwardRef((props: DialogPluginProps, ref: Ref<any>) 
     } = props;
 
 
+    const {logout} = useAuth();
     const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
     const {getUser} = useAuth();
     const coreRequest = useCoreRequest();
@@ -85,7 +86,15 @@ const DialogPlugin = React.forwardRef((props: DialogPluginProps, ref: Ref<any>) 
             setPlugins(response.body);
             setFilterPlugins(response.body);
         } catch (err) {
-            enqueueErrorSnackbar("Cant get plugins");
+            switch(err.status) {
+                case 400:
+                    enqueueErrorSnackbar("Error: see details in console");
+                    console.error(err);
+                    break;
+                case 401:
+                    logout();
+                    break;
+            }
         }
     };
 
@@ -96,7 +105,15 @@ const DialogPlugin = React.forwardRef((props: DialogPluginProps, ref: Ref<any>) 
                 setChosenPlugin(response.body);
             })
             .catch(err => {
-                enqueueErrorSnackbar("Cant get plugin");
+                switch(err.status) {
+                    case 400:
+                        enqueueErrorSnackbar("Error: see details in console");
+                        console.error(err);
+                        break;
+                    case 401:
+                        logout();
+                        break;
+                }
             });
     };
 

@@ -29,6 +29,9 @@ import useEnqueueErrorSnackbar from "../../utils/enqueueErrorSnackbar";
 import RenderJob from "../../entities/RenderJob";
 import Loading from "../../components/Loading";
 import {format} from "date-fns";
+import CoreEventDispatcher from "../../core/CoreEventDispatcher";
+import {WS_RENDER_JOB_UPDATE} from "../../globals";
+import useAuth from "../../hooks/useAuth";
 
 /**
  * RenderJobsDetailsViewProps - interface for RenderJobsDetailsView component
@@ -50,11 +53,11 @@ const RenderJobsDetailsView = React.forwardRef((props: RenderJobsDetailsViewProp
     } = props;
 
 
+    const {logout} = useAuth();
     const coreRequest = useCoreRequest();
     const theme = useTheme();
     const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
     const {getRouteParams} = useChangeRoute();
-    const {jobDetails} = getRouteParams();
     const {panel} = getRouteParams();
 
 
@@ -64,16 +67,37 @@ const RenderJobsDetailsView = React.forwardRef((props: RenderJobsDetailsViewProp
     const [renderJob, setRenderJob] = useState<RenderJob>();
     const [loaded, setLoaded] = useState(false);
 
+    console.log("renderJob:", renderJob);
 
     useEffect(() => {
+
+        CoreEventDispatcher.getInstance().addListener(WS_RENDER_JOB_UPDATE, updateListener);
+
         Promise.all([
             handleGetJob(),
             handleGetTasks(),
         ]).then(() => {
             setLoaded(true);
         });
+
+        return () => {
+            CoreEventDispatcher.getInstance().removeListener(WS_RENDER_JOB_UPDATE, updateListener);
+        }
+
     }, []);
 
+
+    function updateListener(message: any) {
+        console.log("Update Job Listener");
+        coreRequest()
+            .get("jobs")
+            .query({id: message.id})
+            .then(res => {
+                if(+panel === message.id) {
+                    setRenderJob(new ShortJobs(res.body));
+                }
+            });
+    }
 
     async function handleGetJob() {
         try {
@@ -88,7 +112,15 @@ const RenderJobsDetailsView = React.forwardRef((props: RenderJobsDetailsViewProp
 
             setRenderJob(entity);
         } catch (err) {
-            enqueueErrorSnackbar("Cant get job");
+            switch(err.status) {
+                case 400:
+                    enqueueErrorSnackbar("Error: see details in console");
+                    console.error(err);
+                    break;
+                case 401:
+                    logout();
+                    break;
+            }
         }
     }
 
@@ -97,8 +129,15 @@ const RenderJobsDetailsView = React.forwardRef((props: RenderJobsDetailsViewProp
             const response = await coreRequest().get(`jobs/${panel}/tasks`);
             setTasks(response.body);
         } catch (err) {
-            enqueueErrorSnackbar("Cant get task");
-            ;
+            switch(err.status) {
+                case 400:
+                    enqueueErrorSnackbar("Error: see details in console");
+                    console.error(err);
+                    break;
+                case 401:
+                    logout();
+                    break;
+            }
         }
     }
 
@@ -131,12 +170,16 @@ const RenderJobsDetailsView = React.forwardRef((props: RenderJobsDetailsViewProp
                     <Box>
                         <Box className={classes.normalContent}>
                             <Typography variant="subtitle2" className={clsx(classes.pathText, className)}>
-                                Renders Jobs / Pathfinder Logo
+                                Renders Jobs / {renderJob?.name}
                             </Typography>
                             <Typography variant="h4" className={clsx(classes.mainText, className)}>
-                                Pathfinder Logo
+                                {renderJob?.name}
                             </Typography>
-                            <Progress progress={10} className={clsx(classes.progressMargin, className)}/>
+
+                            <Progress progress={
+                                renderJob ? (((renderJob?.doneTasks) / (renderJob?.doneTasks + renderJob?.pendingTasks + renderJob?.failedTasks + renderJob?.processingTasks)) * 100) : 10
+                            } className={clsx(classes.progressMargin, className)}/>
+
                             <Typography variant="h6">
                                 General
                             </Typography>

@@ -60,7 +60,7 @@ const UserPageView = React.forwardRef((props: UserPageViewProps, ref: Ref<any>) 
         style,
     } = props;
 
-    const {getUser} = useAuth();
+    const {getUser, logout} = useAuth();
     const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
     const coreRequest = useCoreRequest();
     const [userData, setUserData] = useState<UserData | null>(null);
@@ -86,7 +86,15 @@ const UserPageView = React.forwardRef((props: UserPageViewProps, ref: Ref<any>) 
             const response = await coreRequest().get(`tokens`);
             setTokens(response.body);
         } catch (err) {
-            enqueueErrorSnackbar("No such token");
+            switch(err.status) {
+                case 400:
+                    enqueueErrorSnackbar("Error: see details in console");
+                    console.error(err);
+                    break;
+                case 401:
+                    logout();
+                    break;
+            }
         }
     }
 
@@ -101,7 +109,15 @@ const UserPageView = React.forwardRef((props: UserPageViewProps, ref: Ref<any>) 
             setUserData(response.body);
         } catch (err) {
             //TODO handle errors
-            enqueueErrorSnackbar("No such user");
+            switch(err.status) {
+                case 400:
+                    enqueueErrorSnackbar("Error: see details in console");
+                    console.error(err);
+                    break;
+                case 401:
+                    logout();
+                    break;
+            }
         }
     }
 

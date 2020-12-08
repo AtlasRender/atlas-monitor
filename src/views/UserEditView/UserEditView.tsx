@@ -40,11 +40,10 @@ const UserEditView = React.forwardRef((props: UserEditViewProps, ref: Ref<any>) 
     } = props;
 
 
-    const {getUser} = useAuth();
+    const {getUser, logout} = useAuth();
     const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
     const coreRequest = useCoreRequest();
     const {changeRoute} = useChangeRoute();
-    const {logout} = useAuth();
     const confirm = useConfirm();
     let {path} = useRouteMatch();
 
@@ -86,7 +85,15 @@ const UserEditView = React.forwardRef((props: UserEditViewProps, ref: Ref<any>) 
             setUser(response.body);
         } catch (err) {
             //TODO handle errors
-            enqueueErrorSnackbar("No such user");
+            switch(err.status) {
+                case 400:
+                    enqueueErrorSnackbar("Error: see details in console");
+                    console.error(err);
+                    break;
+                case 401:
+                    logout();
+                    break;
+            }
         }
     }
 
@@ -100,7 +107,15 @@ const UserEditView = React.forwardRef((props: UserEditViewProps, ref: Ref<any>) 
             })
             .catch(err => {
                 //TODO handle errors
-                enqueueErrorSnackbar("Can`t edit user");
+                switch(err.status) {
+                    case 400:
+                        enqueueErrorSnackbar("Error: see details in console");
+                        console.error(err);
+                        break;
+                    case 401:
+                        logout();
+                        break;
+                }
             });
     }
 
@@ -114,7 +129,15 @@ const UserEditView = React.forwardRef((props: UserEditViewProps, ref: Ref<any>) 
             })
             .catch(err => {
                 //TODO handle errors
-                enqueueErrorSnackbar("Can`t delete user");
+                switch(err.status) {
+                    case 400:
+                        enqueueErrorSnackbar("Error: see details in console");
+                        console.error(err);
+                        break;
+                    case 401:
+                        logout();
+                        break;
+                }
             });
     }
 
