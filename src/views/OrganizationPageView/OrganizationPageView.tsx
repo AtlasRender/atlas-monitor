@@ -512,7 +512,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
 
     function handleSetCurrentPlugin(id: number) {
         coreRequest()
-            .get(`/plugins/${id}`)
+            .get(`plugins/${id}`)
             .then(response => {
                 setCurrentPlugin({...response.body, rules: new PluginSettingsSpec(response.body.rules)});
             })
