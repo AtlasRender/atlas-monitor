@@ -19,6 +19,7 @@ import RenderJobsDetailsView from "../RenderJobsDetailsView";
 import useCoreRequest from "../../hooks/useCoreRequest";
 import {Jobs} from "../../interfaces/Jobs";
 import useEnqueueErrorSnackbar from "../../utils/enqueueErrorSnackbar";
+import useAuth from "../../hooks/useAuth";
 
 /**
  * RenderJobsViewProps - interface for RenderJobsView component
@@ -41,6 +42,7 @@ const RenderJobsView = React.forwardRef((props: RenderJobsViewProps, ref: Ref<an
     } = props;
 
 
+    const {logout} = useAuth();
     const coreRequest = useCoreRequest();
     const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
 
@@ -63,7 +65,15 @@ const RenderJobsView = React.forwardRef((props: RenderJobsViewProps, ref: Ref<an
             const response = await coreRequest().get("jobs");
             setJobs(response.body);
         } catch (err) {
-            enqueueErrorSnackbar("Can`t get render jobs");
+            switch(err.status) {
+                case 400:
+                    enqueueErrorSnackbar("Error: see details in console");
+                    console.error(err);
+                    break;
+                case 401:
+                    logout();
+                    break;
+            }
         }
     }
 

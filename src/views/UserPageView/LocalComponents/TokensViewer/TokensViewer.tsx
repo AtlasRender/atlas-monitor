@@ -38,6 +38,7 @@ import UserToken from "../../../../entities/UserToken";
 import CloseIcon from "@material-ui/icons/Close";
 import CheckIcon from "@material-ui/icons/Check";
 import useEnqueueSuccessSnackbar from "../../../../utils/EnqueSuccessSnackbar";
+import useAuth from "../../../../hooks/useAuth";
 
 /**
  * TokensViewerPropsStyled - interface for TokensViewer function
@@ -69,7 +70,11 @@ const TokensViewer = React.forwardRef((props: TokensViewerProps, ref: Ref<any>) 
         token,
     } = props;
 
+
+    const {logout} = useAuth();
     const coreRequest = useCoreRequest();
+
+
     const [isOpen, setIsOpen] = React.useState(false);
     const [tokens, setTokens] = React.useState<Token[]>();
     const [isButtonActive, setIsButtonActive] = React.useState(false);
@@ -97,7 +102,15 @@ const TokensViewer = React.forwardRef((props: TokensViewerProps, ref: Ref<any>) 
             })
             .catch(err => {
                 //TODO handle errors
-                enqueueErrorSnackbar("Cant get tokens");
+                switch(err.status) {
+                    case 400:
+                        enqueueErrorSnackbar("Error: see details in console");
+                        console.error(err);
+                        break;
+                    case 401:
+                        logout();
+                        break;
+                }
             });
     }
 
@@ -119,7 +132,15 @@ const TokensViewer = React.forwardRef((props: TokensViewerProps, ref: Ref<any>) 
                 })
                 .catch(err => {
                     //TODO handle errors
-                    enqueueErrorSnackbar(err.message);
+                    switch(err.status) {
+                        case 400:
+                            enqueueErrorSnackbar("Error: see details in console");
+                            console.error(err);
+                            break;
+                        case 401:
+                            logout();
+                            break;
+                    }
                 });
         } else {
             enqueueErrorSnackbar("Can`t create a token");
@@ -135,7 +156,15 @@ const TokensViewer = React.forwardRef((props: TokensViewerProps, ref: Ref<any>) 
             })
             .catch(err => {
                 //TODO handle errors
-                enqueueErrorSnackbar(err.message);
+                switch(err.status) {
+                    case 400:
+                        enqueueErrorSnackbar("Error: see details in console");
+                        console.error(err);
+                        break;
+                    case 401:
+                        logout();
+                        break;
+                }
             });
     }
 

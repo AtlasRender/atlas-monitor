@@ -33,6 +33,7 @@ import useCoreRequest from "../../hooks/useCoreRequest";
 import IntegerField from "../../entities/IntegerField";
 import {useChangeRoute} from "routing-manager";
 import {PluginSetting, PluginSettingsSpec, ValidationError} from "@atlasrender/render-plugin";
+import useAuth from "../../hooks/useAuth";
 
 
 interface PluginContextProps {
@@ -92,13 +93,13 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
         style,
     } = props;
 
+    const {logout} = useAuth();
     const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
     const coreRequest = useCoreRequest();
     const idGenerator = React.useRef(IdGenerator());
     const getNextId = (): number => idGenerator.current.next().value;
     const {getRouteParams} = useChangeRoute();
     const {id} = getRouteParams();
-    console.log(id);
 
     const [pluginFields, setPluginFields] = useState<BasicPluginField[]>([
         new IntegerField({
@@ -120,8 +121,6 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
         organization: +id,
         settings: pluginFields,
     });
-
-    console.log(plugin);
 
     function getFileId(id: number) {
         setPlugin((prev) => ({...prev, file: id}));
@@ -146,12 +145,20 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
             const validated = new PluginSettingsSpec(pluginFields);
             console.log("kuku validate", validated);
             setPlugin((prev) => ({...prev, fields: validated}));
-        } catch (error) {
-            if (error instanceof ValidationError) {
-                enqueueErrorSnackbar(error.message);
-                console.log(error);
+        } catch (err) {
+            if (err instanceof ValidationError) {
+                enqueueErrorSnackbar(err.message);
+                console.log(err);
             } else {
-                enqueueErrorSnackbar("Unrecognized error");
+                switch(err.status) {
+                    case 400:
+                        enqueueErrorSnackbar("Error: see details in console");
+                        console.error(err);
+                        break;
+                    case 401:
+                        logout();
+                        break;
+                }
             }
             return;
         }
@@ -164,7 +171,15 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
                 console.log("done");
             })
             .catch(err => {
-                enqueueErrorSnackbar("Can`t create plugin");
+                switch(err.status) {
+                    case 400:
+                        enqueueErrorSnackbar("Error: see details in console");
+                        console.error(err);
+                        break;
+                    case 401:
+                        logout();
+                        break;
+                }
             });
     }
 

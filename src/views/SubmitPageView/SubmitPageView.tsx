@@ -82,6 +82,7 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
         className,
     } = props;
 
+    const {logout} = useAuth();
     const enqueueSuccessSnackbar = useEnqueueSuccessSnackbar();
     const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
     const {getUser} = useAuth();
@@ -162,7 +163,15 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
             setOrg(response.body[0].name);
             setUserOrgs(response.body);
         } catch (err) {
-            enqueueErrorSnackbar("No such user");
+            switch(err.status) {
+                case 400:
+                    enqueueErrorSnackbar("Error: see details in console");
+                    console.error(err);
+                    break;
+                case 401:
+                    logout();
+                    break;
+            }
         }
     }
 
@@ -173,7 +182,15 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
             const response = await coreRequest().get("plugins").query({organization: userOrganizations.body[0].id});
             setPlugins(response.body);
         } catch (err) {
-            enqueueErrorSnackbar("Cant get plugins");
+            switch(err.status) {
+                case 400:
+                    enqueueErrorSnackbar("Error: see details in console");
+                    console.error(err);
+                    break;
+                case 401:
+                    logout();
+                    break;
+            }
         }
     }
 
@@ -185,7 +202,15 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
                 setChosenPlugin(response.body);
             })
             .catch(err => {
-                enqueueErrorSnackbar("Cant get plugin");
+                switch(err.status) {
+                    case 400:
+                        enqueueErrorSnackbar("Error: see details in console");
+                        console.error(err);
+                        break;
+                    case 401:
+                        logout();
+                        break;
+                }
             });
     };
 
@@ -237,8 +262,16 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
                 enqueueSuccessSnackbar("successfully submitted");
                 changeRoute({page: "jobs"});
             })
-            .catch(() => {
-                enqueueErrorSnackbar("Something went wrong");
+            .catch(err => {
+                switch(err.status) {
+                    case 400:
+                        enqueueErrorSnackbar("Error: see details in console");
+                        console.error(err);
+                        break;
+                    case 401:
+                        logout();
+                        break;
+                }
             });
     }
 

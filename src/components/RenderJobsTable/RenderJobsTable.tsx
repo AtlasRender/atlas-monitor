@@ -33,6 +33,7 @@ import Loading from "../Loading";
 import {blue, green, orange} from "@material-ui/core/colors";
 import CoreEventDispatcher from "../../core/CoreEventDispatcher";
 import {WS_RENDER_JOB_CREATE, WS_RENDER_JOB_DELETE, WS_RENDER_JOB_UPDATE} from "../../globals";
+import useAuth from "../../hooks/useAuth";
 
 /**
  * RenderJobsTableProps - interface for RenderJobsTable component
@@ -112,6 +113,7 @@ const RenderJobsTable = React.forwardRef((props: RenderJobsTableProps, ref: Ref<
     } = props;
 
 
+    const {logout} = useAuth();
     const coreRequest = useCoreRequest();
     const {changeRoute} = useChangeRoute();
     const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
@@ -204,7 +206,15 @@ const RenderJobsTable = React.forwardRef((props: RenderJobsTableProps, ref: Ref<
                 }
             }
         } catch (err) {
-            enqueueErrorSnackbar("Cant get render jobs");
+            switch(err.status) {
+                case 400:
+                    enqueueErrorSnackbar("Error: see details in console");
+                    console.error(err);
+                    break;
+                case 401:
+                    logout();
+                    break;
+            }
         }
     }
 

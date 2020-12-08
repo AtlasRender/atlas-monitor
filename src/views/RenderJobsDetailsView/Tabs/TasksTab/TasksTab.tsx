@@ -30,6 +30,10 @@ import useEnqueueErrorSnackbar from "../../../../utils/enqueueErrorSnackbar";
 import {format} from "date-fns";
 import {useChangeRoute} from "routing-manager";
 import DialogTaskLogs from "../../LocalComponents/DialogTaskLogs";
+import ShortJobs from "../../../../entities/ShortJobs";
+import CoreEventDispatcher from "../../../../core/CoreEventDispatcher";
+import {WS_RENDER_TASK_UPDATE} from "../../../../globals";
+import useAuth from "../../../../hooks/useAuth";
 
 /**
  * TasksTabProps - interface for TasksTab component
@@ -99,6 +103,7 @@ const TasksTab = React.forwardRef((props: TasksTabProps, ref: Ref<any>) => {
     } = props;
 
 
+    const {logout} = useAuth();
     const coreRequest = useCoreRequest();
     const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
     const {getRouteParams} = useChangeRoute();
@@ -113,7 +118,39 @@ const TasksTab = React.forwardRef((props: TasksTabProps, ref: Ref<any>) => {
 
 
     useEffect(() => {
+
+    }, []);
+
+
+    useEffect(() => {
+
+        console.log("adding event listener");
+
+        // const updateListener = (message: any) => {
+        //     console.log("Update Job Listener");
+        //     coreRequest()
+        //         .get(`jobs/${panel}/tasks`)
+        //         .query({id: message.id})
+        //         .then(res => {
+        //             console.log(res.body);
+        //             setTasks(prev => {
+        //                 const taskIndex = prev.findIndex(task => task.id === message.id);
+        //                 if (taskIndex >= 0) {
+        //                     prev[taskIndex] = new Task(res.body);
+        //                 }
+        //                 return [...prev];
+        //             });
+        //         });
+        // };
+
+        // CoreEventDispatcher.getInstance().addListener(WS_RENDER_TASK_UPDATE, updateListener);
+
         handleGetTasks();
+
+        // return () => {
+        //     CoreEventDispatcher.getInstance().removeListener(WS_RENDER_TASK_UPDATE, updateListener);
+        // }
+
     }, []);
 
 
@@ -123,6 +160,7 @@ const TasksTab = React.forwardRef((props: TasksTabProps, ref: Ref<any>) => {
             .then(response => {
                 if (Array.isArray(response.body)) {
                     try {
+                        console.log(response.body);
                         setTasks(response.body.map(item => new Task(item)));
                     } catch (err) {
                         enqueueErrorSnackbar("Invalid data types");
@@ -130,7 +168,15 @@ const TasksTab = React.forwardRef((props: TasksTabProps, ref: Ref<any>) => {
                 }
             })
             .catch(err => {
-                enqueueErrorSnackbar("Can`t get tasks");
+                switch(err.status) {
+                    case 400:
+                        enqueueErrorSnackbar("Error: see details in console");
+                        console.error(err);
+                        break;
+                    case 401:
+                        logout();
+                        break;
+                };
             });
     };
 
