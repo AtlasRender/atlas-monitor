@@ -129,6 +129,7 @@ const RenderJobsTable = React.forwardRef((props: RenderJobsTableProps, ref: Ref<
         console.log("adding event listener");
 
         const createListener = (message: any) => {
+            console.log("Create Job Listener");
             coreRequest()
                 .get("jobs")
                 .query({id: message.id})
@@ -140,7 +141,7 @@ const RenderJobsTable = React.forwardRef((props: RenderJobsTableProps, ref: Ref<
         };
 
         const deleteListener = (message: any) => {
-            console.log("delete event listener");
+            console.log("Delete Job Listener");
             coreRequest()
                 .get("jobs")
                 .query({id: message.id})
@@ -148,7 +149,8 @@ const RenderJobsTable = React.forwardRef((props: RenderJobsTableProps, ref: Ref<
                     setJobs(prev => {
                         const jobIndex = prev.findIndex(job => job.id === message.id);
                         if (jobIndex >= 0) {
-                            const updatedJobs = prev.splice(jobIndex, 1);
+                            const updatedJobs = [...prev];
+                            updatedJobs.splice(jobIndex, 1);
                             return [...updatedJobs];
                         }
                         return prev;
@@ -157,6 +159,7 @@ const RenderJobsTable = React.forwardRef((props: RenderJobsTableProps, ref: Ref<
         };
 
         const updateListener = (message: any) => {
+            console.log("Update Job Listener");
             coreRequest()
                 .get("jobs")
                 .query({id: message.id})
