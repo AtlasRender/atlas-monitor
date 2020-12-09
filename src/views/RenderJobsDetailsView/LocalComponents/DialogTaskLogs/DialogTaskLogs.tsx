@@ -102,24 +102,9 @@ const DialogTaskLogs = React.forwardRef((props: DialogTaskLogsProps, ref: Ref<an
         //TODO change 0 to smth
         if (taskId !== 0) {
 
-            console.log("adding event listener");
+            // console.log("adding event listener");
 
-            const listener = (message: any) => {
-                console.log("listener");
-                coreRequest()
-                    .get(`attempts/${attemptsId[attemptIndex]}/log/${message.id}`)
-                    .then(response => {
-                        // setLogs(prev => ([...prev, response.body]));
-                        console.log(response.body);
-                        setLogs(response.body);
-                    })
-                    .catch(err => {
-                        enqueueErrorSnackbar("Cant get log");
-                    });
-
-            };
-
-            CoreEventDispatcher.getInstance().addListener(WS_RENDER_JOB_ATTEMPT_LOG_CREATE, listener);
+            // CoreEventDispatcher.getInstance().addListener(WS_RENDER_JOB_ATTEMPT_LOG_CREATE, listener);
 
             Promise.all([
                 handleGetLogs(),
@@ -127,11 +112,44 @@ const DialogTaskLogs = React.forwardRef((props: DialogTaskLogsProps, ref: Ref<an
                 setLoaded(true);
             });
 
-            return () => {
-                CoreEventDispatcher.getInstance().removeListener(WS_RENDER_JOB_ATTEMPT_LOG_CREATE, listener);
-            };
+            // return () => {
+            //     CoreEventDispatcher.getInstance().removeListener(WS_RENDER_JOB_ATTEMPT_LOG_CREATE, listener);
+            // };
         }
+
+
+
     }, [taskId]);
+
+
+
+    // console.log(attemptsId[attemptIndex]);
+
+
+    // console.log(attemptIndex);
+
+    function listener(message: any) {
+        console.log("Create log listener");
+        coreRequest()
+            .get(`attempts/${attemptsId[attemptIndex]}/log/${message.id}`)
+            .then(response => {
+                // setLogs(prev => ([...prev, response.body]));
+                console.log(response.body);
+                setLogs(prev => {
+                    const logIndex = prev.findIndex(log => log.id === message.id);
+                    if(logIndex >= 0) {
+                        prev[logIndex] = response.body;
+                    }
+                    return[...prev];
+                })
+                // setLogs(response.body);
+            })
+            .catch(err => {
+                enqueueErrorSnackbar("Cant get log");
+            });
+
+    };
+
 
     useEffect(() => {
         window.addEventListener("scroll", handleChangeScroll);
@@ -145,7 +163,7 @@ const DialogTaskLogs = React.forwardRef((props: DialogTaskLogsProps, ref: Ref<an
         }
     }, [logs]);
 
-    console.log(attemptsId);
+    // console.log(attemptsId);
 
     async function handleGetLogs() {
         try {
@@ -178,7 +196,7 @@ const DialogTaskLogs = React.forwardRef((props: DialogTaskLogsProps, ref: Ref<an
 
     if(taskId !== 0) {
         handleGetLogs2().then(response => {
-            console.log("kuku", response);
+            // console.log("kuku", response);
         })
     }
 
@@ -284,7 +302,7 @@ const DialogTaskLogs = React.forwardRef((props: DialogTaskLogsProps, ref: Ref<an
                                     }
                                     return logStrings.map((string: string, key: number) => {
                                         return (
-                                            <React.Fragment>
+                                            <React.Fragment key={key}>
                                                 <ListItem className={classes.row}>
                                                     <Typography className={classes.rowText} style={{color: color}}>
                                                         {string}

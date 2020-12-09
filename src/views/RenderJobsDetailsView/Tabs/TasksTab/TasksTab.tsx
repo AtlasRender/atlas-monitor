@@ -119,37 +119,35 @@ const TasksTab = React.forwardRef((props: TasksTabProps, ref: Ref<any>) => {
 
     useEffect(() => {
 
-    }, []);
-
-
-    useEffect(() => {
-
         console.log("adding event listener");
 
-        // const updateListener = (message: any) => {
-        //     console.log("Update Job Listener");
-        //     coreRequest()
-        //         .get(`jobs/${panel}/tasks`)
-        //         .query({id: message.id})
-        //         .then(res => {
-        //             console.log(res.body);
-        //             setTasks(prev => {
-        //                 const taskIndex = prev.findIndex(task => task.id === message.id);
-        //                 if (taskIndex >= 0) {
-        //                     prev[taskIndex] = new Task(res.body);
-        //                 }
-        //                 return [...prev];
-        //             });
-        //         });
-        // };
+        const updateListener = (message: any) => {
+            console.log("Update Job Listener");
+            coreRequest()
+                .get(`tasks/${message.id}`)
+                .then(res => {
+                    console.log("Task:", res.body);
+                    console.log("MessageID:", message.id);
+                    setTasks(prev => {
+                        const taskIndex = prev.findIndex(task => task.id === message.id);
+                        if (taskIndex >= 0) {
+                            prev[taskIndex] = new Task(res.body);
+                        }
+                        return [...prev];
+                    });
+                })
+                .catch(err => {
+                    enqueueErrorSnackbar("Cant update tasks");
+                });
+        };
 
-        // CoreEventDispatcher.getInstance().addListener(WS_RENDER_TASK_UPDATE, updateListener);
+        CoreEventDispatcher.getInstance().addListener(WS_RENDER_TASK_UPDATE, updateListener);
 
         handleGetTasks();
 
-        // return () => {
-        //     CoreEventDispatcher.getInstance().removeListener(WS_RENDER_TASK_UPDATE, updateListener);
-        // }
+        return () => {
+            CoreEventDispatcher.getInstance().removeListener(WS_RENDER_TASK_UPDATE, updateListener);
+        }
 
     }, []);
 
@@ -244,7 +242,7 @@ const TasksTab = React.forwardRef((props: TasksTabProps, ref: Ref<any>) => {
                                         <TableCell align="left">Slave</TableCell>
                                         <TableCell align="left">{format(task.createdAt, "dd.MM.yyyy hh:mm")}</TableCell>
                                         <TableCell align="left">
-                                            {isWidthUp("md", props.width) ? (<Progress progress={10}/>) : ("10%")}
+                                            {isWidthUp("md", props.width) ? (<Progress progress={task.progress}/>) : ("10%")}
                                         </TableCell>
                                         <TableCell align="left">
                                             <IconButton className={classes.iconVisible} onClick={() => handleOpenDialog(task.id)}>
