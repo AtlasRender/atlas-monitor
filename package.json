@@ -78,7 +78,7 @@
     "@types/enzyme": "^3.10.8",
     "@types/enzyme-adapter-react-16": "^1.0.6",
     "@types/events": "^3.0.0",
-    "@types/jest": "^26.0.16",
+    "@types/jest": "^26.0.18",
     "@types/lodash": "^4.14.165",
     "@types/node": "^14.14.9",
     "@types/prop-types": "^15.7.3",
