@@ -122,7 +122,7 @@ const TasksTab = React.forwardRef((props: TasksTabProps, ref: Ref<any>) => {
         console.log("adding event listener");
 
         const updateListener = (message: any) => {
-            console.log("Update Job Listener");
+            console.log("Update TASK Listener");
             coreRequest()
                 .get(`tasks/${message.id}`)
                 .then(res => {

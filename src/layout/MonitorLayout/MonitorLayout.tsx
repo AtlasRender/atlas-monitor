@@ -50,7 +50,7 @@ import {HTML5Backend} from "react-dnd-html5-backend";
 import {DndProvider} from "react-dnd";
 import CoreEventDispatcher from "../../core/CoreEventDispatcher";
 import User from "../../entities/User";
-import {WS_RENDER_JOB_UPDATE} from "../../globals";
+import {WS_RENDER_JOB_UPDATE, WS_RENDER_TASK_UPDATE} from "../../globals";
 import MenuElement from "../../components/MenuElement";
 import PersonIcon from '@material-ui/icons/Person';
 import AddIcon from '@material-ui/icons/Add';
@@ -100,7 +100,14 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<HTML
         const listener = (message: any) => {
             console.log("recieved11 ", message);
         };
+
+        const updateListener = (message: any) => {
+            console.log("UPDATE TASK EVENT:", message);
+        }
+
         CoreEventDispatcher.getInstance().addListener(WS_RENDER_JOB_UPDATE, listener);
+
+        CoreEventDispatcher.getInstance().addListener(WS_RENDER_TASK_UPDATE, updateListener);
 
         if (location.pathname === "/") {
             changeRoute({page: "user", id: null});

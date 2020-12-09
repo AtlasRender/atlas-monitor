@@ -92,6 +92,7 @@ const DialogTaskLogs = React.forwardRef((props: DialogTaskLogsProps, ref: Ref<an
     const [logs, setLogs] = useState<Log[]>([]);
     const [value, setValue] = useState(0);
     const [attemptIndex, setAttemptIndex] = useState(0);
+    const [logIsLoaded, setLogIsLoaded] = useState(false);
 
 
     const refDiv = React.useRef<HTMLDivElement | null>(null);
@@ -99,22 +100,25 @@ const DialogTaskLogs = React.forwardRef((props: DialogTaskLogsProps, ref: Ref<an
 
 
     useEffect(() => {
+
+        CoreEventDispatcher.getInstance().addListener(WS_RENDER_JOB_ATTEMPT_LOG_CREATE, listener);
+
+        return () => {
+            CoreEventDispatcher.getInstance().removeListener(WS_RENDER_JOB_ATTEMPT_LOG_CREATE, listener);
+        };
+
+    }, [logIsLoaded]);
+
+    useEffect(() => {
         //TODO change 0 to smth
         if (taskId !== 0) {
-
             // console.log("adding event listener");
-
-            // CoreEventDispatcher.getInstance().addListener(WS_RENDER_JOB_ATTEMPT_LOG_CREATE, listener);
-
             Promise.all([
                 handleGetLogs(),
             ]).then(() => {
                 setLoaded(true);
+                setLogIsLoaded(true);
             });
-
-            // return () => {
-            //     CoreEventDispatcher.getInstance().removeListener(WS_RENDER_JOB_ATTEMPT_LOG_CREATE, listener);
-            // };
         }
 
 
@@ -122,33 +126,28 @@ const DialogTaskLogs = React.forwardRef((props: DialogTaskLogsProps, ref: Ref<an
     }, [taskId]);
 
 
-
-    // console.log(attemptsId[attemptIndex]);
+    console.log(attemptsId[attemptIndex]);
 
 
     // console.log(attemptIndex);
 
+
     function listener(message: any) {
         console.log("Create log listener");
+        debugger;
         coreRequest()
             .get(`attempts/${attemptsId[attemptIndex]}/log/${message.id}`)
             .then(response => {
                 // setLogs(prev => ([...prev, response.body]));
                 console.log(response.body);
-                setLogs(prev => {
-                    const logIndex = prev.findIndex(log => log.id === message.id);
-                    if(logIndex >= 0) {
-                        prev[logIndex] = response.body;
-                    }
-                    return[...prev];
-                })
+                setLogs(prev => ([...prev, response.body]));
                 // setLogs(response.body);
             })
             .catch(err => {
                 enqueueErrorSnackbar("Cant get log");
             });
 
-    };
+    }
 
 
     useEffect(() => {
@@ -216,6 +215,7 @@ const DialogTaskLogs = React.forwardRef((props: DialogTaskLogsProps, ref: Ref<an
     const handleCloseDialog = () => {
         setLogs([]);
         setLoaded(false);
+        setLogIsLoaded(false);
         onClose();
     };
 
