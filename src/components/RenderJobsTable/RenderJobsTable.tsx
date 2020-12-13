@@ -136,9 +136,13 @@ const RenderJobsTable = React.forwardRef((props: RenderJobsTableProps, ref: Ref<
                 .get("jobs")
                 .query({id: message.id})
                 .then(response => {
-                    if (Array.isArray(response.body)) {
-                        setJobs(response.body.map(item => new ShortJobs(item)));
-                    }
+                    console.log(response.body);
+                    setJobs(prev => ([new ShortJobs(response.body), ...prev]));
+                    // console.log(new ShortJobs(response.body));
+                })
+                .catch(err => {
+                    console.error(err);
+                    enqueueErrorSnackbar("Cant add new Job");
                 });
         };
 

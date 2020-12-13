@@ -6,8 +6,18 @@
  * All rights reserved.
  */
 
-import React, {Ref, useEffect, useState} from "react";
-import {Button, Dialog, DialogTitle, List, ListItem, ListItemText, Paper, withStyles,} from "@material-ui/core";
+import React, {Ref, useEffect, useRef, useState} from "react";
+import {
+    Button,
+    ButtonGroup,
+    Dialog,
+    DialogTitle, IconButton,
+    List,
+    ListItem,
+    ListItemText,
+    Paper,
+    withStyles,
+} from "@material-ui/core";
 import styles from "./styles";
 import Stylable from "../../../../interfaces/Stylable";
 import DialogTaskTabs from "../DialogTabs/DialogTaskTabs";
@@ -25,6 +35,10 @@ import CoreEventDispatcher from "../../../../core/CoreEventDispatcher";
 import {WS_RENDER_JOB_ATTEMPT_LOG_CREATE, WS_RENDER_JOB_UPDATE} from "../../../../globals";
 import Loading from "../../../../components/Loading/Loading";
 import LogField from "../../../../components/LogField";
+import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
+import SyncIcon from "@material-ui/icons/Sync";
+import BlockIcon from "@material-ui/icons/Block";
+import {grey} from "@material-ui/core/colors";
 
 interface DialogTaskLogsProps extends Stylable {
     open: boolean;
@@ -92,46 +106,64 @@ const DialogTaskLogs = React.forwardRef((props: DialogTaskLogsProps, ref: Ref<an
     const [logs, setLogs] = useState<Log[]>([]);
     const [value, setValue] = useState(0);
     const [attemptIndex, setAttemptIndex] = useState(0);
+    const [logIsLoaded, setLogIsLoaded] = useState(false);
+    const [autoUpload, setAutoUpload] = useState(true);
+    const [autoDownScroll, setAutoDownScroll] = useState(true);
 
 
     const refDiv = React.useRef<HTMLDivElement | null>(null);
     const refList = React.useRef<HTMLUListElement | null>(null);
+    const refUpload = useRef(autoUpload);
 
 
     useEffect(() => {
-        //TODO change 0 to smth
-        if (taskId !== 0) {
 
-            console.log("adding event listener");
-
-            const listener = (message: any) => {
-                console.log("listener");
-                coreRequest()
-                    .get(`attempts/${attemptsId[attemptIndex]}/log/${message.id}`)
-                    .then(response => {
-                        // setLogs(prev => ([...prev, response.body]));
-                        console.log(response.body);
-                        setLogs(response.body);
-                    })
-                    .catch(err => {
-                        enqueueErrorSnackbar("Cant get log");
-                    });
-
-            };
+        if (logIsLoaded && autoUpload) {
 
             CoreEventDispatcher.getInstance().addListener(WS_RENDER_JOB_ATTEMPT_LOG_CREATE, listener);
 
+        }
+
+        return () => {
+            CoreEventDispatcher.getInstance().removeListener(WS_RENDER_JOB_ATTEMPT_LOG_CREATE, listener);
+        };
+
+    }, [logIsLoaded]);
+
+    useEffect(() => {
+        //TODO change 0 to smth
+        if (taskId !== 0 && open) {
+            // console.log("adding event listener");
             Promise.all([
                 handleGetLogs(),
             ]).then(() => {
                 setLoaded(true);
+                setLogIsLoaded(true);
             });
-
-            return () => {
-                CoreEventDispatcher.getInstance().removeListener(WS_RENDER_JOB_ATTEMPT_LOG_CREATE, listener);
-            };
         }
-    }, [taskId]);
+    }, [open]);
+
+    // console.log(attemptsId[attemptIndex]);
+    // console.log(attemptIndex);
+
+    function listener(message: any) {
+        if (refUpload.current) {
+            console.log("Create log listener");
+            coreRequest()
+                .get(`attempts/${attemptsId[attemptIndex]}/log/${message.id}`)
+                .then(response => {
+                    console.log("Event:", message);
+                    if (response.body.message !== "undefined" && attemptsId[attemptIndex] === message.attemptId) {
+                        console.log(response.body);
+                        setLogs(prev => ([...prev, response.body]));
+                    }
+                })
+                .catch(err => {
+                    enqueueErrorSnackbar("Cant get log");
+                });
+        }
+    }
+
 
     useEffect(() => {
         window.addEventListener("scroll", handleChangeScroll);
@@ -140,12 +172,12 @@ const DialogTaskLogs = React.forwardRef((props: DialogTaskLogsProps, ref: Ref<an
 
     //TODO make normal scrolling when you in the bottom of the screen
     useEffect(() => {
-        if (refDiv.current && Visible(refDiv.current, refList.current)) {
+        if ((refDiv.current && autoDownScroll) && Visible(refDiv.current, refList.current)) {
             refDiv.current.scrollIntoView({behavior: "smooth"});
         }
     }, [logs]);
 
-    console.log(attemptsId);
+    // console.log(attemptsId);
 
     async function handleGetLogs() {
         try {
@@ -176,10 +208,10 @@ const DialogTaskLogs = React.forwardRef((props: DialogTaskLogsProps, ref: Ref<an
         return [{message: "hahahihi", type: "info"}];
     }
 
-    if(taskId !== 0) {
+    if (taskId !== 0) {
         handleGetLogs2().then(response => {
-            console.log("kuku", response);
-        })
+            // console.log("kuku", response);
+        });
     }
 
 
@@ -195,9 +227,32 @@ const DialogTaskLogs = React.forwardRef((props: DialogTaskLogsProps, ref: Ref<an
 
     }
 
+    const handleChangeAutoUpload = () => {
+        setAutoUpload(!autoUpload);
+        refUpload.current = !autoUpload;
+        if (autoUpload) {
+            CoreEventDispatcher.getInstance().removeListener(WS_RENDER_JOB_ATTEMPT_LOG_CREATE, listener);
+        } else {
+            handleGetLogs().then(() => {
+                CoreEventDispatcher.getInstance().addListener(WS_RENDER_JOB_ATTEMPT_LOG_CREATE, listener);
+            });
+        }
+    };
+
+    const handleChangeAutoDownScroll = () => {
+        setAutoDownScroll(!autoDownScroll);
+    };
+
+    const handleScrollToTheBottom = () => {
+        if (refDiv.current) {
+            refDiv.current.scrollIntoView({behavior: "smooth"});
+        }
+    };
+
     const handleCloseDialog = () => {
         setLogs([]);
         setLoaded(false);
+        setLogIsLoaded(false);
         onClose();
     };
 
@@ -267,35 +322,70 @@ const DialogTaskLogs = React.forwardRef((props: DialogTaskLogsProps, ref: Ref<an
                     </TabPanel>
                     <TabPanel value={value} index={1} dir={theme.direction}>
                         {loaded ?
-                            <List className={classes.dialogContainer} ref={refList}>
-                                {logs.map((log, key) => {
-                                    const logStrings = log.message.split("\n");
-                                    let color = "white";
-                                    switch (log.type) {
-                                        case "info":
-                                            color = "white";
-                                            break;
-                                        case "warning":
-                                            color = "yellow";
-                                            break;
-                                        case "error":
-                                            color = "red";
-                                            break;
-                                    }
-                                    return logStrings.map((string: string, key: number) => {
-                                        return (
-                                            <React.Fragment>
-                                                <ListItem className={classes.row}>
-                                                    <Typography className={classes.rowText} style={{color: color}}>
-                                                        {string}
-                                                    </Typography>
-                                                </ListItem>
-                                            </React.Fragment>
-                                        );
-                                    });
-                                })}
-                                <div style={{height: 1}} id="target" ref={refDiv}/>
-                            </List>
+                            <React.Fragment>
+
+                                <Box className={classes.buttonGroupContainer}>
+                                    <ButtonGroup aria-label="outlined primary button group">
+                                        <Button
+                                            className={classes.button1}
+                                            style={{background: grey[700]}}
+                                            onClick={handleScrollToTheBottom}
+                                        >
+                                            <ArrowDownwardIcon/>
+                                        </Button>
+                                        <Button
+                                            className={classes.button2}
+                                            style={!autoDownScroll
+                                                ? {background: grey[800], color: grey[900]}
+                                                : {background: grey[700]}
+                                            }
+                                            onClick={handleChangeAutoDownScroll}
+                                        >
+                                            <BlockIcon/>
+                                        </Button>
+                                        <Button
+                                            className={classes.button3}
+                                            style={!autoUpload
+                                                ? {background: grey[800], color: grey[900]}
+                                                : {background: grey[700]}
+                                            }
+                                            onClick={handleChangeAutoUpload}
+                                        >
+                                            <SyncIcon/>
+                                        </Button>
+                                    </ButtonGroup>
+                                </Box>
+
+                                <List className={classes.dialogContainer} ref={refList}>
+                                    {logs.map((log, key) => {
+                                        const logStrings = log.message.split("\n");
+                                        let color = "white";
+                                        switch (log.type) {
+                                            case "info":
+                                                color = "white";
+                                                break;
+                                            case "warning":
+                                                color = "yellow";
+                                                break;
+                                            case "error":
+                                                color = "red";
+                                                break;
+                                        }
+                                        return logStrings.map((string: string, key: number) => {
+                                            return (
+                                                <React.Fragment key={key}>
+                                                    <ListItem className={classes.row}>
+                                                        <Typography className={classes.rowText} style={{color: color}}>
+                                                            {string}
+                                                        </Typography>
+                                                    </ListItem>
+                                                </React.Fragment>
+                                            );
+                                        });
+                                    })}
+                                    <div style={{height: 1}} id="target" ref={refDiv}/>
+                                </List>
+                            </React.Fragment>
                             :
                             <Box className={classes.loading}>
                                 <Loading/>
@@ -304,10 +394,6 @@ const DialogTaskLogs = React.forwardRef((props: DialogTaskLogsProps, ref: Ref<an
                     </TabPanel>
                 </SwipeableViews>
             </Box>
-
-            <Button fullWidth onClick={() => sendData()}>
-                Click
-            </Button>
 
         </Dialog>
     );
