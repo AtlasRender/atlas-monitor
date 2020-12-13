@@ -44,6 +44,8 @@ const PluginFieldSettings = React.forwardRef((props: PluginFieldSettingsProps, r
 
     const context = useContext(PluginContext);
 
+
+    const [typeIS, setTypeIS] = useState(false);
     const [errors, setErrors] = useState<ValidationErrors>({
         "noInputError": true,
         "nameError": false,
@@ -53,6 +55,15 @@ const PluginFieldSettings = React.forwardRef((props: PluginFieldSettingsProps, r
         "defaultError": false,
     });
 
+    useEffect(() => {
+        if(pluginField instanceof IntegerField || pluginField instanceof StringField) {
+            setTypeIS(true);
+        }
+    })
+
+    useEffect(() => {
+        setTypeIS(false);
+    }, [index])
 
     useEffect(() => {
         setErrors({
@@ -68,38 +79,47 @@ const PluginFieldSettings = React.forwardRef((props: PluginFieldSettingsProps, r
 
     const handleInputField = (name: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
         event.persist();
+
+        let targetValue;
+
+        if(event.target.value === null || event.target.value === undefined || event.target.value === "") {
+            targetValue = null;
+        } else {
+            targetValue = event.target.value;
+        }
+
         if (pluginField instanceof IntegerField) {
             context.handleEditPluginField(new IntegerField({
                 type: pluginField.type,
-                name: name === "name" ? event.target.value : pluginField.name,
-                label: name === "label" ? event.target.value : pluginField.label,
-                min: name === "min" ? +event.target.value : pluginField.min,
-                max: name === "max" ? +event.target.value : pluginField.max,
-                default: name === "default" ? +event.target.value : pluginField.default,
+                name: name === "name" ? targetValue : pluginField.name,
+                label: name === "label" ? targetValue : pluginField.label,
+                min: name === "min" ? (targetValue ? +targetValue : targetValue) : pluginField.min,
+                max: name === "max" ? (targetValue ? +targetValue : targetValue) : pluginField.max,
+                default: name === "default" ? (targetValue ? +targetValue : targetValue) : pluginField.default,
                 id: pluginField.id,
             }), index);
         } else if (pluginField instanceof GroupField) {
             context.handleEditPluginField(new GroupField({
                 type: pluginField.type,
-                name: name === "name" ? event.target.value : pluginField.name,
-                label: name === "label" ? event.target.value : pluginField.label,
+                name: name === "name" ? targetValue : pluginField.name,
+                label: name === "label" ? targetValue : pluginField.label,
                 id: pluginField.id,
             }), index);
         } else if (pluginField instanceof SeparatorField) {
             context.handleEditPluginField(new SeparatorField({
                 type: pluginField.type,
-                name: name === "name" ? event.target.value : pluginField.name,
-                label: name === "label" ? event.target.value : pluginField.label,
+                name: name === "name" ? targetValue : pluginField.name,
+                label: name === "label" ? targetValue : pluginField.label,
                 id: pluginField.id,
             }), index);
         } else if (pluginField instanceof StringField) {
             context.handleEditPluginField(new StringField({
                 type: pluginField.type,
-                name: name === "name" ? event.target.value : pluginField.name,
-                label: name === "label" ? event.target.value : pluginField.label,
-                min: name === "min" ? +event.target.value : pluginField.min,
-                max: name === "max" ? +event.target.value : pluginField.max,
-                default: name === "default" ? event.target.value : pluginField.default,
+                name: name === "name" ? targetValue : pluginField.name,
+                label: name === "label" ? targetValue : pluginField.label,
+                min: name === "min" ? (targetValue ? +targetValue : targetValue) : pluginField.min,
+                max: name === "max" ? (targetValue ? +targetValue : targetValue) : pluginField.max,
+                default: name === "default" ? targetValue : pluginField.default,
                 id: pluginField.id,
             }), index);
         }
@@ -130,7 +150,7 @@ const PluginFieldSettings = React.forwardRef((props: PluginFieldSettingsProps, r
                 }));
             }
         }
-        if (pluginField instanceof (IntegerField || StringField)) {
+        if (pluginField instanceof IntegerField || pluginField instanceof StringField) {
             if (event.target.name === "min") {
                 if (!pluginField.min || pluginField.min < 0) {
                     setErrors(prev => ({
@@ -153,9 +173,23 @@ const PluginFieldSettings = React.forwardRef((props: PluginFieldSettingsProps, r
                 }
             } else if (event.target.name === "default") {
                 // TODO: lookup logic and set up parenthesis (skobo4ki)
-                if(pluginField instanceof StringField) {
-
-                } else {
+                if (pluginField instanceof StringField) {
+                    if (!pluginField.default || pluginField.min && pluginField.default.length < pluginField.min || pluginField.max && pluginField.default.length > pluginField.max) {
+                        setErrors(prev => ({
+                            ...prev, "defaultError": true
+                        }));
+                    } else {
+                        setErrors(prev => ({
+                            ...prev, "defaultError": false
+                        }));
+                    }
+                    if (!pluginField.default) {
+                        setErrors(prev => ({
+                            ...prev, "defaultError": false
+                        }));
+                    }
+                } else if(pluginField instanceof IntegerField)
+                {
                     if (!pluginField.default || pluginField.min && pluginField.default < pluginField.min || pluginField.max && pluginField.default > pluginField.max) {
                         setErrors(prev => ({
                             ...prev, "defaultError": true
@@ -232,7 +266,7 @@ const PluginFieldSettings = React.forwardRef((props: PluginFieldSettingsProps, r
                                 }}
                             />
                         </Grid>
-                        {(pluginField instanceof IntegerField || pluginField instanceof StringField) &&
+                        {(typeIS && (pluginField instanceof IntegerField || pluginField instanceof StringField)) &&
                         <React.Fragment>
                             <Grid item xs={12} className={classes.gridPadding}>
                                 <TextField
@@ -242,7 +276,7 @@ const PluginFieldSettings = React.forwardRef((props: PluginFieldSettingsProps, r
                                     fullWidth
                                     name="min"
                                     label="Min value"
-                                    value={pluginField.min || null}
+                                    value={pluginField.min}
                                     onChange={handleInputField("min")}
                                     onBlur={handleValidation}
                                     InputLabelProps={{
@@ -258,7 +292,7 @@ const PluginFieldSettings = React.forwardRef((props: PluginFieldSettingsProps, r
                                     fullWidth
                                     name="max"
                                     label="Max value"
-                                    value={pluginField.max || null}
+                                    value={pluginField.max}
                                     onChange={handleInputField("max")}
                                     onBlur={handleValidation}
                                     InputLabelProps={{
@@ -269,12 +303,12 @@ const PluginFieldSettings = React.forwardRef((props: PluginFieldSettingsProps, r
                             <Grid item xs={12} className={classes.gridPadding}>
                                 <TextField
                                     error={errors.defaultError}
-                                    type="number"
+                                    type={pluginField instanceof IntegerField ? "number" : "string"}
                                     variant="standard"
                                     fullWidth
                                     name="default"
                                     label="Default Value"
-                                    value={pluginField.default || null}
+                                    value={pluginField.default}
                                     onChange={handleInputField("default")}
                                     onBlur={handleValidation}
                                     InputLabelProps={{
