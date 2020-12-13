@@ -49,9 +49,9 @@ const Folder: React.FC<FolderProps> = ({classes, className, children, id, style}
                     type: "integer",
                     name: "Integer",
                     label: "Integer Field",
-                    min: 0,
-                    max: 16,
-                    default: 10,
+                    min: null,
+                    max: null,
+                    default: null,
                     id: context.idGenerator(),
                 }), id);
             } else if (item.type === "divider") {
@@ -65,9 +65,9 @@ const Folder: React.FC<FolderProps> = ({classes, className, children, id, style}
                 context.handleAddPluginField(new StringField({
                     type: "string",
                     name: "String",
-                    label: "String",
-                    min: 0,
-                    max: 16,
+                    label: "String Field",
+                    min: null,
+                    max: null,
                     default: "",
                     id: context.idGenerator(),
                 }), id);
