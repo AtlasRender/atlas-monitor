@@ -18,6 +18,7 @@ export interface TaskValidationMap {
     status?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
+    progress?: boolean;
 }
 
 
@@ -47,6 +48,10 @@ export default class Task extends BaseEntity {
      * updatedAt - date of last update
      */
     public updatedAt: Date;
+    /**
+     * progress - task processing progress
+     */
+    public progress: number;
 
     constructor(task: any) {
         super("ShortJobs");
@@ -66,6 +71,9 @@ export default class Task extends BaseEntity {
 
         this.updatedAt = DateValidator(task.updatedAt).value || new Date();
         validationMap.updatedAt = DateValidator(task.updatedAt).error;
+
+        this.progress = NumberValidator(task.progress).value || 0;
+        validationMap.progress = NumberValidator(task.progress).error;
 
         for (const key in validationMap) {
             if ((validationMap as any)[key] === true) {

@@ -15,7 +15,7 @@ const styles = (theme: Theme) => createStyles({
     },
     dialogContainer: {
         counterReset: "line 0",
-        height: 700,
+        height: 650,
         [theme.breakpoints.down("sm")]: {
             height: 500,
         },
@@ -27,7 +27,7 @@ const styles = (theme: Theme) => createStyles({
         boxShadow: "inset 0 0 10px rgba(0,0,0,0.5)",
         margin: theme.spacing(0, 2, 2, 2),
         padding: 0,
-        borderRadius: theme.spacing(0.5),
+        borderRadius: theme.spacing(0.5, 0,  0.5, 0.5),
     },
     dialogTitle: {
         textAlign: "center",
@@ -57,6 +57,26 @@ const styles = (theme: Theme) => createStyles({
         justifyContent: "center",
         alignItems: "center",
     },
+    buttonGroupContainer: {
+        width: "100%",
+        display: "flex",
+        justifyContent: "flex-end",
+        padding: theme.spacing(0, 2),
+    },
+    button1: {
+        border: `1px solid ${grey[900]}`,
+        borderBottom: 0,
+        borderRadius: "4px 4px 4px 0px",
+    },
+    button2: {
+        border: `1px solid ${grey[900]}`,
+        borderBottom: 0,
+    },
+    button3: {
+        border: `1px solid ${grey[900]}`,
+        borderBottom: 0,
+        borderRadius: "4px 4px 0px 4px",
+    }
 });
 
 export default styles;

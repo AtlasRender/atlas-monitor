@@ -67,7 +67,7 @@ const RenderJobsDetailsView = React.forwardRef((props: RenderJobsDetailsViewProp
     const [renderJob, setRenderJob] = useState<RenderJob>();
     const [loaded, setLoaded] = useState(false);
 
-    console.log("renderJob:", renderJob);
+    // console.log("renderJob:", renderJob);
 
     useEffect(() => {
 
