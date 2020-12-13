@@ -31,7 +31,7 @@ export default class StringField extends BasicPluginField {
     constructor(field: any) {
         super({id: field.id, type: field.type, name: field.name, label: field.label});
 
-        this.default = field.default;
+        this.default = "" + field.default;
         this.min = field.min;
         this.max = field.max;
     }
