@@ -101,16 +101,7 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
     const {getRouteParams} = useChangeRoute();
     const {id} = getRouteParams();
 
-    const [pluginFields, setPluginFields] = useState<BasicPluginField[]>([
-        new IntegerField({
-            type: "integer",
-            name: "",
-            label: "Integer Field",
-            min: 1,
-            max: 255,
-            id: getNextId(),
-        })
-    ]);
+    const [pluginFields, setPluginFields] = useState<BasicPluginField[]>([]);
 
     const [plugin, setPlugin] = useState<Plugin>({
         name: "",
