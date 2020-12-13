@@ -92,8 +92,6 @@ const PluginCreation = React.forwardRef((props: PluginCreationProps, ref: Ref<an
         setFieldIndex(index);
     }
 
-    console.log(context.pluginFields);
-
     function showPluginFields(array: BasicPluginField[]) {
         return (
             array.map((folder, index) => {

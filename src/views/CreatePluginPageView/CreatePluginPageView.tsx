@@ -131,11 +131,9 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
     }
 
     function handleCreatePlugin() {
-        console.log("hi");
-        console.log(JSON.stringify(pluginFields));
         try {
             const validated = new PluginSettingsSpec(pluginFields);
-            console.log("kuku validate", validated);
+            // console.log("kuku validate", validated);
             setPlugin((prev) => ({...prev, fields: validated}));
         } catch (err) {
             if (err instanceof ValidationError) {
