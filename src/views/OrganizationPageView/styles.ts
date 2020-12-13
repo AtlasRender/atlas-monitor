@@ -77,6 +77,12 @@ const styles = (theme: Theme) => createStyles({
     roleItem: {
         paddingLeft: theme.spacing(2),
     },
-
+    pluginOptionBox:{
+        width:400,
+        height:300,
+    },
+    pluginOptionButton:{
+        height:50,
+    }
 });
 export default styles;

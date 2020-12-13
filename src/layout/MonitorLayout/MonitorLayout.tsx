@@ -344,7 +344,7 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<HTML
                         </ChangeRouteProvider>
                     </Route>
                     <Route path="/plugin">
-                        <ChangeRouteProvider routeMask="(/:create(/:id))">
+                        <ChangeRouteProvider routeMask="(/:id)">
                             <DndProvider backend={HTML5Backend}>
                                 <CreatePluginPageView/>
                             </DndProvider>

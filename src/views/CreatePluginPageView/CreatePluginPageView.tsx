@@ -15,7 +15,7 @@ import {
     ListItem,
     ListItemSecondaryAction,
     ListItemText,
-    TextField,
+    TextField, Typography,
     withStyles
 } from "@material-ui/core";
 import styles from "./styles";
@@ -34,6 +34,7 @@ import IntegerField from "../../entities/IntegerField";
 import {useChangeRoute} from "routing-manager";
 import {PluginSetting, PluginSettingsSpec, ValidationError} from "@atlasrender/render-plugin";
 import useAuth from "../../hooks/useAuth";
+import useEnqueueSuccessSnackbar from "../../utils/EnqueSuccessSnackbar";
 
 
 interface PluginContextProps {
@@ -95,11 +96,14 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
 
     const {logout} = useAuth();
     const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
+    const enqueueSuccessSnackbar = useEnqueueSuccessSnackbar();
     const coreRequest = useCoreRequest();
     const idGenerator = React.useRef(IdGenerator());
     const getNextId = (): number => idGenerator.current.next().value;
-    const {getRouteParams} = useChangeRoute();
+    const {getRouteParams, getQueryParams} = useChangeRoute();
     const {id} = getRouteParams();
+    const {variant} = getQueryParams();
+    console.log(id);
 
     const [pluginFields, setPluginFields] = useState<BasicPluginField[]>([
         new IntegerField({
@@ -150,7 +154,7 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
                 enqueueErrorSnackbar(err.message);
                 console.log(err);
             } else {
-                switch(err.status) {
+                switch (err.status) {
                     case 400:
                         enqueueErrorSnackbar("Error: see details in console");
                         console.error(err);
@@ -171,7 +175,7 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
                 console.log("done");
             })
             .catch(err => {
-                switch(err.status) {
+                switch (err.status) {
                     case 400:
                         enqueueErrorSnackbar("Error: see details in console");
                         console.error(err);
@@ -181,6 +185,27 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
                         break;
                 }
             });
+    }
+
+    function handleCreatePluginZip(){
+        coreRequest()
+            .post("plugins")
+            .query({organization: plugin.organization})
+            .send({file: plugin.file})
+            .then(()=>{
+                enqueueSuccessSnackbar("Successfully added plugin");
+            })
+            .catch(err=>{
+                switch (err.status) {
+                    case 400:
+                        enqueueErrorSnackbar("Error: see details in console");
+                        console.error(err);
+                        break;
+                    case 401:
+                        logout();
+                        break;
+                }
+            })
     }
 
 
@@ -291,6 +316,26 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
 
     function handleSetIsDialogPluginButtonActive() {
         setIsDialogPluginButtonActive(true);
+    }
+
+    console.log(plugin.file);
+    if (variant === "zip") {
+        return (
+            <React.Fragment>
+                <Grid container className={classes.firstLine}>
+                    <Grid item xs={12}>
+                        <Typography variant="h5" style={{marginBottom:8}}>Upload zip archive with plugin</Typography>
+                        <Typography variant="overline" color="textSecondary">You can get plugins on official "Atlas render" web-page</Typography>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <FilesLoader multiple getFileId={getFileId} style={{height: 400}}/>
+                    </Grid>
+                    <Button fullWidth onClick={handleCreatePluginZip} className={classes.savePluginZip}>
+                        Save
+                    </Button>
+                </Grid>
+            </React.Fragment>
+        );
     }
 
     return (

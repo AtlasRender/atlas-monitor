@@ -22,6 +22,9 @@ const styles = (theme: Theme) => createStyles({
         paddingLeft: 0,
         paddingBottom: 0,
     },
+    savePluginZip:{
+        marginTop:theme.spacing(2),
+    }
 });
 
 export default styles;
