@@ -45,6 +45,7 @@ const PluginFieldSettings = React.forwardRef((props: PluginFieldSettingsProps, r
     const context = useContext(PluginContext);
 
 
+    const [typeIS, setTypeIS] = useState(false);
     const [errors, setErrors] = useState<ValidationErrors>({
         "noInputError": true,
         "nameError": false,
@@ -54,6 +55,15 @@ const PluginFieldSettings = React.forwardRef((props: PluginFieldSettingsProps, r
         "defaultError": false,
     });
 
+    useEffect(() => {
+        if(pluginField instanceof IntegerField || pluginField instanceof StringField) {
+            setTypeIS(true);
+        }
+    })
+
+    useEffect(() => {
+        setTypeIS(false);
+    }, [index])
 
     useEffect(() => {
         setErrors({
@@ -72,7 +82,7 @@ const PluginFieldSettings = React.forwardRef((props: PluginFieldSettingsProps, r
 
         let targetValue;
 
-        if(!event.target.value) {
+        if(event.target.value === null || event.target.value === undefined || event.target.value === "") {
             targetValue = null;
         } else {
             targetValue = event.target.value;
@@ -256,7 +266,7 @@ const PluginFieldSettings = React.forwardRef((props: PluginFieldSettingsProps, r
                                 }}
                             />
                         </Grid>
-                        {(pluginField instanceof IntegerField || pluginField instanceof StringField) &&
+                        {(typeIS && (pluginField instanceof IntegerField || pluginField instanceof StringField)) &&
                         <React.Fragment>
                             <Grid item xs={12} className={classes.gridPadding}>
                                 <TextField
@@ -266,7 +276,7 @@ const PluginFieldSettings = React.forwardRef((props: PluginFieldSettingsProps, r
                                     fullWidth
                                     name="min"
                                     label="Min value"
-                                    value={pluginField.min || null}
+                                    value={pluginField.min}
                                     onChange={handleInputField("min")}
                                     onBlur={handleValidation}
                                     InputLabelProps={{
@@ -282,7 +292,7 @@ const PluginFieldSettings = React.forwardRef((props: PluginFieldSettingsProps, r
                                     fullWidth
                                     name="max"
                                     label="Max value"
-                                    value={pluginField.max || null}
+                                    value={pluginField.max}
                                     onChange={handleInputField("max")}
                                     onBlur={handleValidation}
                                     InputLabelProps={{
@@ -298,7 +308,7 @@ const PluginFieldSettings = React.forwardRef((props: PluginFieldSettingsProps, r
                                     fullWidth
                                     name="default"
                                     label="Default Value"
-                                    value={pluginField.default || null}
+                                    value={pluginField.default}
                                     onChange={handleInputField("default")}
                                     onBlur={handleValidation}
                                     InputLabelProps={{

@@ -132,6 +132,7 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
 
     function handleCreatePlugin() {
         console.log("hi");
+        console.log(JSON.stringify(pluginFields));
         try {
             const validated = new PluginSettingsSpec(pluginFields);
             console.log("kuku validate", validated);
@@ -139,9 +140,9 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
         } catch (err) {
             if (err instanceof ValidationError) {
                 enqueueErrorSnackbar(err.message);
-                console.log(err);
+                console.log(err.getValidation());
             } else {
-                switch(err.status) {
+                switch (err.status) {
                     case 400:
                         enqueueErrorSnackbar("Error: see details in console");
                         console.error(err);
@@ -162,7 +163,7 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
                 console.log("done");
             })
             .catch(err => {
-                switch(err.status) {
+                switch (err.status) {
                     case 400:
                         enqueueErrorSnackbar("Error: see details in console");
                         console.error(err);
