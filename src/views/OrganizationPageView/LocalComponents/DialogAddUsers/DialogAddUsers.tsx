@@ -91,15 +91,15 @@ const DialogAddUsers = React.forwardRef((props: DialogAddUsersProps, ref: Ref<an
                             <Avatar/>
                         </ListItemAvatar>
                         <ListItemText primary={user.username} secondary="department"/>
-
-                        <ListItemSecondaryAction>
-
                             <Checkbox
                                 checked={newUsers.includes(user.id)}
                                 color="primary"
+                                disableFocusRipple
+                                disableTouchRipple
+                                disableRipple
+                                style={{ backgroundColor: 'transparent'}}
                                 inputProps={{"aria-label": "secondary checkbox"}}
                             />
-                        </ListItemSecondaryAction>
                     </ListItem>
                 ))}
                 <ListItem>
