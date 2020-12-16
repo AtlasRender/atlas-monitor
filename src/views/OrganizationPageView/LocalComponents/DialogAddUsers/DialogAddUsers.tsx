@@ -6,19 +6,19 @@
  * All rights reserved.
  */
 
-import React, {Ref} from "react";
+import React, {Ref, useEffect, useState} from "react";
 import {
     Avatar,
     Button,
     Checkbox,
     Dialog,
-    DialogTitle,
-    IconButton,
+    DialogTitle, FilledInput, FormControl,
+    IconButton, Input, InputAdornment,
     InputBase,
     ListItem,
     ListItemAvatar,
     ListItemSecondaryAction,
-    ListItemText,
+    ListItemText, TextField,
     withStyles,
 } from "@material-ui/core";
 import styles from "./styles";
@@ -27,11 +27,13 @@ import Stylable from "../../../../interfaces/Stylable";
 import UserData from "../../../../interfaces/UserData";
 import SearchIcon from "@material-ui/icons/Search";
 import CloseIcon from "@material-ui/icons/Close";
+import SearchBar from "../../../../components/SearchBar";
 
 interface DialogAddUsersProps extends Stylable {
     open: boolean;
     allUsers: UserData[] | null;
     newUsers: number[];
+    organizationUsers: UserData[];
 
     onClose(): void;
 
@@ -51,7 +53,23 @@ const DialogAddUsers = React.forwardRef((props: DialogAddUsersProps, ref: Ref<an
         onClose,
         onNewUserClick,
         onAdduser,
+        organizationUsers,
     } = props;
+
+
+    const [addedUsers, setAddedUsers] = useState<UserData[] | null>(allUsers);
+
+    console.log(addedUsers);
+
+    useEffect(() => {
+        if(allUsers) {
+            let users: UserData[] | null | undefined = [...allUsers];
+            for(let i = 0; i < organizationUsers.length; i++) {
+                users = users?.filter(user => user.id !== organizationUsers[i].id);
+            }
+            setAddedUsers(users);
+        }
+    }, [open]);
 
 
     return (
@@ -64,24 +82,25 @@ const DialogAddUsers = React.forwardRef((props: DialogAddUsersProps, ref: Ref<an
             </DialogTitle>
             <List className={classes.dialog}>
                 <ListItem>
-                    <div className={classes.search}>
-                        <div className={classes.searchIcon}>
-                            <SearchIcon/>
-                        </div>
-                        <InputBase
-                            placeholder="Search…"
-                            classes={{
-                                root: classes.inputRoot,
-                                input: classes.inputInput,
-                            }}
-                            inputProps={{"aria-label": "search"}}
-                        />
-                    </div>
-                    <IconButton>
-                        <CloseIcon/>
-                    </IconButton>
+                    <SearchBar/>
+                    {/*<div className={classes.search}>*/}
+                    {/*    <div className={classes.searchIcon}>*/}
+                    {/*        <SearchIcon/>*/}
+                    {/*    </div>*/}
+                    {/*    <InputBase*/}
+                    {/*        placeholder="SearchBar…"*/}
+                    {/*        classes={{*/}
+                    {/*            root: classes.inputRoot,*/}
+                    {/*            input: classes.inputInput,*/}
+                    {/*        }}*/}
+                    {/*        inputProps={{"aria-label": "search"}}*/}
+                    {/*    />*/}
+                    {/*</div>*/}
+                    {/*<IconButton>*/}
+                    {/*    <CloseIcon/>*/}
+                    {/*</IconButton>*/}
                 </ListItem>
-                {allUsers?.map((user) => (
+                {addedUsers?.map((user) => (
                     <ListItem
                         button
                         key={user.id}
@@ -91,15 +110,15 @@ const DialogAddUsers = React.forwardRef((props: DialogAddUsersProps, ref: Ref<an
                             <Avatar/>
                         </ListItemAvatar>
                         <ListItemText primary={user.username} secondary="department"/>
-                            <Checkbox
-                                checked={newUsers.includes(user.id)}
-                                color="primary"
-                                disableFocusRipple
-                                disableTouchRipple
-                                disableRipple
-                                style={{ backgroundColor: 'transparent'}}
-                                inputProps={{"aria-label": "secondary checkbox"}}
-                            />
+                        <Checkbox
+                            checked={newUsers.includes(user.id)}
+                            color="primary"
+                            disableFocusRipple
+                            disableTouchRipple
+                            disableRipple
+                            style={{backgroundColor: "transparent"}}
+                            inputProps={{"aria-label": "secondary checkbox"}}
+                        />
                     </ListItem>
                 ))}
                 <ListItem>

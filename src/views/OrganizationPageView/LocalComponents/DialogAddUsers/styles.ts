@@ -7,6 +7,7 @@
  */
 
 import {createStyles, fade, Theme} from "@material-ui/core";
+import {grey} from "@material-ui/core/colors";
 
 const styles = (theme: Theme) => createStyles({
     dialog: {
@@ -49,6 +50,17 @@ const styles = (theme: Theme) => createStyles({
     paddingNoneBottom: {
         paddingBottom: 0,
     },
+    searchInput: {
+        background: grey[700],
+        borderRadius: 4,
+        padding: theme.spacing(0.5, 1)
+    },
+    iconSearch: {
+        "&:hover": {
+            color: "#454545",
+            cursor: "pointer",
+        },
+    }
 });
 
 export default styles;

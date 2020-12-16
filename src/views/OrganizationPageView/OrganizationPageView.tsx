@@ -445,6 +445,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
             .then(response => {
                 handleGetOrganization().then();
                 handleGetOrganizationUsers().then();
+                setNewUsers([]);
             })
             .catch(err => {
                 //TODO handle errors
@@ -527,6 +528,11 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                         break;
                 }
             });
+    }
+
+    const handleCloseAddUsersDialog = () => {
+        setIsButtonActive(false);
+        setNewUsers([]);
     }
 
 
@@ -696,9 +702,10 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
 
                         <DialogAddUsers
                             open={isButtonActive}
-                            onClose={() => setIsButtonActive(false)}
+                            onClose={handleCloseAddUsersDialog}
                             allUsers={allUsers}
                             newUsers={newUsers}
+                            organizationUsers={organizationUsers}
                             onNewUserClick={handleNewUsersClick}
                             onAdduser={handleAddUser}
                         />
