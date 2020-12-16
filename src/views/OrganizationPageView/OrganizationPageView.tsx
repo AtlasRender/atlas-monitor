@@ -460,8 +460,6 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
     }
 
     function handleAddUser(usersToAddId: number[]) {
-        setIsButtonActive(false);
-        setIsUserActive(true);
         coreRequest()
             .post(`organizations/${id}/users`)
             .send({userIds: usersToAddId})
@@ -469,6 +467,9 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                 handleGetOrganization().then();
                 handleGetOrganizationUsers().then();
                 handleGetAvailableUsers().then();
+                setNewUsers([]);
+                setIsButtonActive(false);
+                setIsUserActive(true);
             })
             .catch(err => {
                 //TODO handle errors
