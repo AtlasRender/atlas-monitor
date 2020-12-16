@@ -32,6 +32,7 @@ import {format} from "date-fns";
 import CoreEventDispatcher from "../../core/CoreEventDispatcher";
 import {WS_RENDER_JOB_UPDATE} from "../../globals";
 import useAuth from "../../hooks/useAuth";
+import ErrorHandler from "../../utils/ErrorHandler";
 
 /**
  * RenderJobsDetailsViewProps - interface for RenderJobsDetailsView component
@@ -112,15 +113,12 @@ const RenderJobsDetailsView = React.forwardRef((props: RenderJobsDetailsViewProp
 
             setRenderJob(entity);
         } catch (err) {
-            switch(err.status) {
-                case 400:
-                    enqueueErrorSnackbar("Error: see details in console");
-                    console.error(err);
-                    break;
-                case 401:
-                    logout();
-                    break;
-            }
+            const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
+            errorHandler
+                .on(401, () => {logout()})
+                .on(403, "You don't have permissions to this data")
+                .on(404, "Render job not found")
+                .handle(err);
         }
     }
 
@@ -129,15 +127,12 @@ const RenderJobsDetailsView = React.forwardRef((props: RenderJobsDetailsViewProp
             const response = await coreRequest().get(`jobs/${panel}/tasks`);
             setTasks(response.body);
         } catch (err) {
-            switch(err.status) {
-                case 400:
-                    enqueueErrorSnackbar("Error: see details in console");
-                    console.error(err);
-                    break;
-                case 401:
-                    logout();
-                    break;
-            }
+            const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
+            errorHandler
+                .on(401, () => {logout()})
+                .on(403, "You don't have permissions to this data")
+                .on(404, "Render job not found")
+                .handle(err);
         }
     }
 

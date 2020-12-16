@@ -42,6 +42,7 @@ import useConfirm from "../../hooks/useConfirm";
 import UserData from "../../interfaces/UserData";
 import useCoreRequest from "../../hooks/useCoreRequest";
 import useAuth from "../../hooks/useAuth";
+import ErrorHandler from "../../utils/ErrorHandler";
 
 
 interface CreateOrganizationPageProps extends Stylable {
@@ -54,6 +55,7 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
         className,
         classes,
     } = props;
+
 
     const {logout} = useAuth();
     const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
@@ -88,8 +90,6 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
         setAddRoleButton(!addRoleButton);
         setRoles((prev) => ([...prev, role]));
     }
-
-    console.log(roles);
 
     function modifyRole(id: number, role: Role) {
         setAddRoleButton(!addRoleButton);
@@ -145,16 +145,10 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
                 setUsers(response.body);
             })
             .catch(err => {
-                //TODO handle errors
-                switch(err.status) {
-                    case 400:
-                        enqueueErrorSnackbar("Error: see details in console");
-                        console.error(err);
-                        break;
-                    case 401:
-                        logout();
-                        break;
-                }
+                const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
+                errorHandler
+                    .on(401, () => {logout()})
+                    .handle(err);
             });
     }
 
@@ -167,16 +161,10 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
                 setOwner(response.body);
             })
             .catch(err => {
-                //TODO handle errors
-                switch(err.status) {
-                    case 400:
-                        enqueueErrorSnackbar("Error: see details in console");
-                        console.error(err);
-                        break;
-                    case 401:
-                        logout();
-                        break;
-                }
+                const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
+                errorHandler
+                    .on(401, () => {logout()})
+                    .handle(err);
             });
     }
 
@@ -186,16 +174,12 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
             .send({name: name, description: description, users: members})
             .then()
             .catch(err => {
-                //TODO handle errors
-                switch(err.status) {
-                    case 400:
-                        enqueueErrorSnackbar("Error: see details in console");
-                        console.error(err);
-                        break;
-                    case 401:
-                        logout();
-                        break;
-                }
+                const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
+                errorHandler
+                    .on(400, "Invalid input")
+                    .on(401, () => {logout()})
+                    .on(409, "Organization with this name already exists")
+                    .handle(err);
             });
     }
 

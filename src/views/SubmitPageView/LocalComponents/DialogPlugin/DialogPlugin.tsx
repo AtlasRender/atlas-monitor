@@ -30,6 +30,7 @@ import useCoreRequest from "../../../../hooks/useCoreRequest";
 import Plugin from "../../../../interfaces/Plugin";
 import Loading from "../../../../components/Loading/Loading";
 import PluginPreview from "../../../../interfaces/PluginPreview";
+import ErrorHandler from "../../../../utils/ErrorHandler";
 
 interface DialogPluginProps extends Stylable {
     open: boolean;
@@ -86,17 +87,13 @@ const DialogPlugin = React.forwardRef((props: DialogPluginProps, ref: Ref<any>) 
             setPlugins(response.body);
             setFilterPlugins(response.body);
         } catch (err) {
-            switch(err.status) {
-                case 400:
-                    enqueueErrorSnackbar("Error: see details in console");
-                    console.error(err);
-                    break;
-                case 401:
-                    logout();
-                    break;
-            }
+            const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
+            errorHandler
+                .on(401, () => {logout()})
+                .on(404, "No organization found")
+                .handle(err);
         }
-    };
+    }
 
     const handleGetPlugin = (pluginId: number) => {
         coreRequest()
@@ -105,15 +102,11 @@ const DialogPlugin = React.forwardRef((props: DialogPluginProps, ref: Ref<any>) 
                 setChosenPlugin(response.body);
             })
             .catch(err => {
-                switch(err.status) {
-                    case 400:
-                        enqueueErrorSnackbar("Error: see details in console");
-                        console.error(err);
-                        break;
-                    case 401:
-                        logout();
-                        break;
-                }
+                const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
+                errorHandler
+                    .on(401, () => {logout()})
+                    .on(404, "Plugin not found")
+                    .handle(err);
             });
     };
 

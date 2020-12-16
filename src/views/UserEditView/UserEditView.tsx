@@ -18,6 +18,7 @@ import {useChangeRoute} from "routing-manager";
 import {Route, Switch, useRouteMatch} from "react-router-dom";
 import useConfirm from "../../hooks/useConfirm";
 import Loading from "../../components/Loading/Loading";
+import ErrorHandler from "../../utils/ErrorHandler";
 
 /**
  * UserEditViewProps - interface for UserEditView
@@ -84,16 +85,11 @@ const UserEditView = React.forwardRef((props: UserEditViewProps, ref: Ref<any>) 
             const response = await coreRequest().get(`users/${userId}`);
             setUser(response.body);
         } catch (err) {
-            //TODO handle errors
-            switch(err.status) {
-                case 400:
-                    enqueueErrorSnackbar("Error: see details in console");
-                    console.error(err);
-                    break;
-                case 401:
-                    logout();
-                    break;
-            }
+            const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
+            errorHandler
+                .on(401, () => {logout()})
+                .on(404, "User not found")
+                .handle(err);
         }
     }
 
@@ -106,16 +102,14 @@ const UserEditView = React.forwardRef((props: UserEditViewProps, ref: Ref<any>) 
                 changeRoute({page: `user`});
             })
             .catch(err => {
-                //TODO handle errors
-                switch(err.status) {
-                    case 400:
-                        enqueueErrorSnackbar("Error: see details in console");
-                        console.error(err);
-                        break;
-                    case 401:
-                        logout();
-                        break;
-                }
+                const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
+                errorHandler
+                    .on(400, "Cant not edit user")
+                    .on(401, () => {logout()})
+                    .on(403, "Forbidden")
+                    .on(404, "User not found")
+                    .on(409, "Conflict user data")
+                    .handle(err);
             });
     }
 
@@ -128,16 +122,13 @@ const UserEditView = React.forwardRef((props: UserEditViewProps, ref: Ref<any>) 
                 logout();
             })
             .catch(err => {
-                //TODO handle errors
-                switch(err.status) {
-                    case 400:
-                        enqueueErrorSnackbar("Error: see details in console");
-                        console.error(err);
-                        break;
-                    case 401:
-                        logout();
-                        break;
-                }
+                const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
+                errorHandler
+                    .on(400, "Cant not delete user")
+                    .on(401, () => {logout()})
+                    .on(403, "Forbidden")
+                    .on(404, "User not found")
+                    .handle(err);
             });
     }
 
