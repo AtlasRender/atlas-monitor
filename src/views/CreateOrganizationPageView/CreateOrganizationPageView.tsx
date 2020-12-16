@@ -80,7 +80,7 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
     const [members, setMembers] = useState<UserData[]>([]);
     const [addMemberButton, setAddMemberButton] = useState<boolean>(false);
 
-    console.log("users: ", members, "roles: ", roles);
+    console.log("role to modify", roleToModify);
 
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up("md"));
@@ -294,7 +294,7 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
 
                 <DialogAddRoles
                     open={addRoleButton}
-                    onClose={() => setAddRoleButton(!addRoleButton)}
+                    onClose={() => {setAddRoleButton(!addRoleButton); setRoleToModify(undefined)}}
                     onAddRole={addRole}
                     role={roleToModify}
                     modify={modify}
@@ -326,7 +326,6 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
                                 </ListItemAvatar>
                                 <ListItemText primary={person.username}/>
                                 <ListItemSecondaryAction>
-                                    {/*chips here*/}
                                     <IconButton
                                         onClick={() => setMembers(prev => [...prev.filter(mem => person.id !== mem.id)])}
                                     >

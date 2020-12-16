@@ -10,11 +10,11 @@ import Stylable from "../../../../interfaces/Stylable";
 import React, {Ref} from "react";
 import styles from "./styles";
 import {Grid, ListItem, ListItemSecondaryAction, ListItemText, Switch, withStyles} from "@material-ui/core";
+import DemoRole from "../../../../interfaces/DemoRole";
 
 interface RoleTogglesProps extends Stylable {
     handleSwitch(event: React.ChangeEvent<HTMLInputElement>):void;
-    addRole: any;
-
+    addRole: DemoRole;
 }
 
 const RoleToggles = React.forwardRef((props: RoleTogglesProps, ref: Ref<any>) => {

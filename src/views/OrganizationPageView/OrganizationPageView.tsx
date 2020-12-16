@@ -52,6 +52,7 @@ import {PluginSettingsSpec} from "@atlasrender/render-plugin";
 import DialogPluginInfo from "./LocalComponents/DialogPluginInfo";
 import useAuth from "../../hooks/useAuth";
 import DialogSlave from "./LocalComponents/DialogSlave";
+import DemoRole from "../../interfaces/DemoRole";
 
 /**
  * OrganizationPageViewPropsStyled - interface for OrganizationPageView function
@@ -330,7 +331,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
             });
     }
 
-    function handleModifyRole(roleId: number, roleToModify: any) {
+    function handleModifyRole(roleId: number, roleToModify: DemoRole) {
         setIsDialogModifyRoleButtonActive(false);
         roleToModify.permissionLevel = +roleToModify.permissionLevel;
         coreRequest()

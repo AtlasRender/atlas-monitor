@@ -61,7 +61,6 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
 
 
     const theme = useTheme();
-    const [activeIds, setCurrentId] = useState<number[]>([]);
     const [addRole, setAddRole] = useState({
         name: role?.name || "",
         description: role?.description || "",
@@ -78,7 +77,7 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
     });
 
     const [errors, setErrors] = useState<ValidationErrors>({
-        noInputError: true,
+        noInputError: false,
         nameError: false,
         descriptionError: false,
         permissionLevelError: false,
@@ -100,14 +99,6 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
             canEditAudit: role?.canEditAudit || false,
         });
     }, [role]);
-
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (activeIds.includes(+event.target.id)) {
-            setCurrentId(prev => prev.filter(id => id !== +event.target.id));
-        } else {
-            setCurrentId(prev => ([...prev, +event.target.id]));
-        }
-    };
 
     const handleSwitch = (event: React.ChangeEvent<HTMLInputElement>) => {
         setAddRole((prev) => (
@@ -190,7 +181,7 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
             canEditAudit: false,
         });
         setErrors({
-            "noInputError": true,
+            "noInputError": false,
             "nameError": false,
             "descriptionError": false,
             "permissionLevelError": false,
@@ -220,7 +211,7 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
                             fullWidth
                             name="name"
                             label="Name"
-                            defaultValue={addRole?.name}
+                            value={addRole?.name}
                             onChange={handleInputRole("name")}
                             onBlur={handleValidation}
                         />
@@ -235,7 +226,7 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
                             rowsMax={5}
                             name="description"
                             label="Description"
-                            defaultValue={addRole?.description}
+                            value={addRole?.description}
                             onChange={handleInputRole("description")}
                             onBlur={handleValidation}
                         />
@@ -249,7 +240,7 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
                             fullWidth
                             name="permissionLevel"
                             label="Permission Level"
-                            defaultValue={addRole?.permissionLevel}
+                            value={addRole?.permissionLevel}
                             onChange={handleInputRole("permissionLevel")}
                             onBlur={handleValidation}
                         />
