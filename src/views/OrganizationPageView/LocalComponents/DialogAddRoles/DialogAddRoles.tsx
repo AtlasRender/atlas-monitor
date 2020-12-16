@@ -25,6 +25,7 @@ import styles from "./styles";
 import TextField from "@material-ui/core/TextField";
 import ColorPicker from "../../../../components/ColorPicker";
 import Role from "../../../../interfaces/Role";
+import RoleToggles from "../RoleToggles";
 
 interface DialogAddRolesProps extends Stylable {
     open: boolean;
@@ -58,15 +59,6 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
         onModifyRole,
     } = props;
 
-    const roleOpportunities = [
-        {
-            flag: false,
-        },
-        {
-            flag: false,
-        }
-    ];
-
 
     const theme = useTheme();
     const [activeIds, setCurrentId] = useState<number[]>([]);
@@ -75,13 +67,21 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
         description: role?.description || "",
         color: role?.color || "FFF",
         permissionLevel: role?.permissionLevel || -1,
+        canManageUsers: role?.canManageUsers || false,
+        canCreateJobs: role?.canCreateJobs || false,
+        canEditJobs: role?.canEditJobs || false,
+        canDeleteJobs: role?.canDeleteJobs || false,
+        canManageRoles: role?.canManageRoles || false,
+        canManagePlugins: role?.canManagePlugins || false,
+        canManageTeams: role?.canManageTeams || false,
+        canEditAudit: role?.canEditAudit || false,
     });
 
     const [errors, setErrors] = useState<ValidationErrors>({
-        "noInputError": true,
-        "nameError": false,
-        "descriptionError": false,
-        "permissionLevelError": false,
+        noInputError: true,
+        nameError: false,
+        descriptionError: false,
+        permissionLevelError: false,
     });
 
     useEffect(() => {
@@ -90,6 +90,14 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
             description: role?.description || "",
             color: role?.color || "FFF",
             permissionLevel: role?.permissionLevel || -1,
+            canManageUsers: role?.canManageUsers || false,
+            canCreateJobs: role?.canCreateJobs || false,
+            canEditJobs: role?.canEditJobs || false,
+            canDeleteJobs: role?.canDeleteJobs || false,
+            canManageRoles: role?.canManageRoles || false,
+            canManagePlugins: role?.canManagePlugins || false,
+            canManageTeams: role?.canManageTeams || false,
+            canEditAudit: role?.canEditAudit || false,
         });
     }, [role]);
 
@@ -101,8 +109,18 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
         }
     };
 
+    const handleSwitch = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setAddRole((prev) => (
+            {...prev, [event.target.name]: event.target.checked}
+        ));
+    };
+
     const handleInputRole = (name: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
         event.persist();
+        if (name === "permissionLevel") {
+            setAddRole(prev => (prev && {...prev, [name]: +event.target.value}));
+            return;
+        }
         setAddRole(prev => (prev && {...prev, [name]: event.target.value}));
     };
 
@@ -152,21 +170,24 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
     function handleClick() {
         if (!errors.noInputError && !errors.nameError && !errors.descriptionError && !errors.permissionLevelError) {
             modify ? onModifyRole && onModifyRole(role?.id, addRole) : onAddRole(addRole, errors);
-            setAddRole({
-                name: "", description: "", color: "fff", permissionLevel: -1,
-            });
-            setErrors({
-                "noInputError": true,
-                "nameError": false,
-                "descriptionError": false,
-                "permissionLevelError": false,
-            });
+            handleOnClose();
         }
     }
 
     function handleOnClose() {
         setAddRole({
-            name: "", description: "", color: "fff", permissionLevel: -1,
+            name: "",
+            description: "",
+            color: "fff",
+            permissionLevel: -1,
+            canManageUsers: false,
+            canCreateJobs: false,
+            canEditJobs: false,
+            canDeleteJobs: false,
+            canManageRoles: false,
+            canManagePlugins: false,
+            canManageTeams: false,
+            canEditAudit: false,
         });
         setErrors({
             "noInputError": true,
@@ -208,7 +229,6 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
                         <TextField
                             error={errors.descriptionError}
                             variant="standard"
-                            required
                             fullWidth
                             multiline
                             rows={2}
@@ -241,24 +261,7 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
                         />
                     </Grid>
                     <Grid container className={classes.firstLine}>
-                        <Grid item xs={12}>
-                            {[0, 1, 2, 3].map((role, key) => {
-                                return (
-                                    <ListItem className={classes.paddingNone} key={key}>
-                                        <ListItemText primary="User manager" secondary="Can manage users"/>
-                                        <ListItemSecondaryAction>
-                                            <Switch
-                                                id={`${role}`}
-                                                checked={activeIds.includes(role)}
-                                                onChange={handleChange}
-                                                name="checkedA"
-                                                inputProps={{"aria-label": "secondary checkbox"}}
-                                            />
-                                        </ListItemSecondaryAction>
-                                    </ListItem>
-                                );
-                            })}
-                        </Grid>
+                        <RoleToggles addRole={addRole} handleSwitch={handleSwitch}/>
                     </Grid>
                     <Button
                         fullWidth

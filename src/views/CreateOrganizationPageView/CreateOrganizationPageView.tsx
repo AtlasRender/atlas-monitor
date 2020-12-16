@@ -80,6 +80,8 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
     const [members, setMembers] = useState<UserData[]>([]);
     const [addMemberButton, setAddMemberButton] = useState<boolean>(false);
 
+    console.log("users: ", members, "roles: ", roles);
+
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up("md"));
     let info;
@@ -89,7 +91,6 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
         setRoles((prev) => ([...prev, role]));
     }
 
-    console.log(roles);
 
     function modifyRole(id: number, role: Role) {
         setAddRoleButton(!addRoleButton);
@@ -104,12 +105,10 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
 
     const handleInputName = (event: React.ChangeEvent<HTMLInputElement>) => {
         setName(event.target.value);
-        console.log(name);
     };
 
     const handleInputDescription = (event: React.ChangeEvent<HTMLInputElement>) => {
         setDescription(event.target.value);
-        console.log(description);
     };
 
     function errorHandler() {
@@ -146,7 +145,7 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
             })
             .catch(err => {
                 //TODO handle errors
-                switch(err.status) {
+                switch (err.status) {
                     case 400:
                         enqueueErrorSnackbar("Error: see details in console");
                         console.error(err);
@@ -168,7 +167,7 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
             })
             .catch(err => {
                 //TODO handle errors
-                switch(err.status) {
+                switch (err.status) {
                     case 400:
                         enqueueErrorSnackbar("Error: see details in console");
                         console.error(err);
@@ -181,13 +180,15 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
     }
 
     function createOrg() {
+        const userIds = members.map((member) => member.id);
+        console.log(users);
         coreRequest()
             .post("organizations")
-            .send({name: name, description: description, users: members})
+            .send({name: name, description: description, userIds: userIds, roles: roles})
             .then()
             .catch(err => {
                 //TODO handle errors
-                switch(err.status) {
+                switch (err.status) {
                     case 400:
                         enqueueErrorSnackbar("Error: see details in console");
                         console.error(err);
@@ -204,60 +205,33 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
         handleGetOwner();
     }, []);
 
-    if (matches) {
-        info = (
-            <React.Fragment>
-                <Grid item xs={6}>
-                    <TextField
-                        margin="normal"
-                        required
-                        fullWidth
-                        label="Organization name"
-                        onChange={handleInputName}
-                        error={errors.nameError}
-                        helperText={errors.nameMessage}
-                        onBlur={errorHandler}
-                    />
-                </Grid>
-                <Grid item xs={6}>
-                    <TextField
-                        margin="normal"
-                        fullWidth
-                        label="Description"
-                        onChange={handleInputDescription}
-                        error={errors.descriptionError}
-                        helperText={errors.descriptionMessage}
-                        onBlur={errorHandler}
-                    />
-                </Grid>
-            </React.Fragment>
-        );
-    } else {
-        info = (
-            <React.Fragment>
-                <Grid item xs={12}>
-                    <TextField
-                        margin="normal"
-                        required fullWidth
-                        label="Organization name"
-                        error={errors.nameError}
-                        helperText={errors.nameMessage}
-                        onBlur={errorHandler}
-                    />
-                </Grid>
-                <Grid item xs={12}>
-                    <TextField
-                        margin="normal"
-                        fullWidth
-                        label="Description"
-                        error={errors.descriptionError}
-                        helperText={errors.descriptionMessage}
-                        onBlur={errorHandler}
-                    />
-                </Grid>
-            </React.Fragment>
-        );
-    }
+    info = (
+        <React.Fragment>
+            <Grid item xs={12} md={6}>
+                <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    label="Organization name"
+                    onChange={handleInputName}
+                    error={errors.nameError}
+                    helperText={errors.nameMessage}
+                    onBlur={errorHandler}
+                />
+            </Grid>
+            <Grid item xs={12} md={6}>
+                <TextField
+                    margin="normal"
+                    fullWidth
+                    label="Description"
+                    onChange={handleInputDescription}
+                    error={errors.descriptionError}
+                    helperText={errors.descriptionMessage}
+                    onBlur={errorHandler}
+                />
+            </Grid>
+        </React.Fragment>
+    );
 
     return (
         <Grid container spacing={2} style={style} className={clsx(classes.container, classes.sidePaddings, className)}>
@@ -279,7 +253,6 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
                         </IconButton>
                     </ListItem>
                     <Divider/>
-                    {console.log(roles)}
                     {roles.map((item) => {
                         return (
                             <ListItem key={item.id}>
