@@ -38,6 +38,7 @@ import {Route, Switch, useRouteMatch} from "react-router-dom";
 import List from "@material-ui/core/List";
 import SettingsIcon from "@material-ui/icons/Settings";
 import Loading from "../../components/Loading";
+import ErrorHandler from "../../utils/ErrorHandler";
 
 /**
  * UserPageViewPropsStyled - interface for UserPageView
@@ -86,15 +87,10 @@ const UserPageView = React.forwardRef((props: UserPageViewProps, ref: Ref<any>) 
             const response = await coreRequest().get(`tokens`);
             setTokens(response.body);
         } catch (err) {
-            switch(err.status) {
-                case 400:
-                    enqueueErrorSnackbar("Error: see details in console");
-                    console.error(err);
-                    break;
-                case 401:
-                    logout();
-                    break;
-            }
+            const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
+            errorHandler
+                .on(401, () => {logout()})
+                .handle(err);
         }
     }
 
@@ -108,16 +104,11 @@ const UserPageView = React.forwardRef((props: UserPageViewProps, ref: Ref<any>) 
             const response = await coreRequest().get(`users/${userId}`);
             setUserData(response.body);
         } catch (err) {
-            //TODO handle errors
-            switch(err.status) {
-                case 400:
-                    enqueueErrorSnackbar("Error: see details in console");
-                    console.error(err);
-                    break;
-                case 401:
-                    logout();
-                    break;
-            }
+            const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
+            errorHandler
+                .on(401, () => {logout()})
+                .on(404, "User not found")
+                .handle(err);
         }
     }
 

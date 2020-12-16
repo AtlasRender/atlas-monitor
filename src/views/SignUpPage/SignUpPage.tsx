@@ -27,6 +27,7 @@ import useCoreRequest from "../../hooks/useCoreRequest";
 import {useChangeRoute} from "routing-manager";
 import useEnqueueErrorSnackbar from "../../utils/enqueueErrorSnackbar";
 import User from "../../entities/User";
+import ErrorHandler from "../../utils/ErrorHandler";
 
 interface SignUpPageProps extends Stylable {
 
@@ -90,8 +91,9 @@ const SignUpPage = React.forwardRef((props: SignUpPageProps, ref: Ref<any>) => {
                 changeRoute({page: `user/${user.id}`});
             })
             .catch(err => {
-                switch (err.status) {
-                    case 400:
+                const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
+                errorHandler
+                    .on(400, () => {
                         err.response.body.response.errors.forEach((item: any) => {
                             console.log(item);
                             const keyError = item.dataPath.substr(1) + "Error";
@@ -127,13 +129,10 @@ const SignUpPage = React.forwardRef((props: SignUpPageProps, ref: Ref<any>) => {
                                     break;
                             }
                         });
-                        break;
-                    case 401:
-                        enqueueErrorSnackbar(err.response.body.response.errors.message);
-                        break;
-                    default:
-                        enqueueErrorSnackbar("Unrecognized Error");
-                }
+                    })
+                    .on(401, `${err.response.body.response.errors.message}`)
+                    .on(409, "user with this username already exists")
+                    .handle(err);
 
             });
     }

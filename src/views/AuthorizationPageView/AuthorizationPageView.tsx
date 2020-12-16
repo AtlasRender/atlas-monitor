@@ -26,6 +26,8 @@ import useCoreRequest from "../../hooks/useCoreRequest";
 import useAuth from "../../hooks/useAuth";
 import {useChangeRoute} from "routing-manager";
 import {useSnackbar} from "notistack";
+import ErrorHandler from "../../utils/ErrorHandler";
+import useEnqueueErrorSnackbar from "../../utils/enqueueErrorSnackbar";
 
 interface AuthorizationPageViewProps extends Stylable {
 
@@ -52,6 +54,7 @@ const AuthorizationPageView = React.forwardRef((props: AuthorizationPageViewProp
 
     const {changeRoute} = useChangeRoute();
     const {enqueueSnackbar} = useSnackbar();
+    const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
     const {login} = useAuth();
     const coreRequest = useCoreRequest();
     const [errors, setErrors] = useState<validationError>(
@@ -98,8 +101,9 @@ const AuthorizationPageView = React.forwardRef((props: AuthorizationPageViewProp
                 changeRoute({page: `user/${user.id}`});
             })
             .catch(err => {
-                switch (err.status) {
-                    case 400:
+                const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
+                errorHandler
+                    .on(400, () => {
                         err.response.body.response.errors.forEach((item: any) => {
                             console.log(item);
                             const keyError = item.dataPath.substr(1) + "Error";
@@ -135,16 +139,14 @@ const AuthorizationPageView = React.forwardRef((props: AuthorizationPageViewProp
                                     break;
                             }
                         });
-                        break;
-                    case 404:
-                        setErrors((prev) => ({...prev, usernameError: true, usernameMessage: "There is no such user"}));
-                        break;
-                    case 401:
+                    })
+                    .on(401, () => {
                         setErrors((prev) => ({...prev, passwordError: true, passwordMessage: "Incorrect passsword"}));
-                        break;
-                    default:
-                        enqueueSnackbar("Unrecognized Error");
-                }
+                    })
+                    .on(404, () => {
+                        setErrors((prev) => ({...prev, usernameError: true, usernameMessage: "There is no such user"}));
+                    })
+                    .handle(err);
             });
     }
 

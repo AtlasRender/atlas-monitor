@@ -103,8 +103,6 @@ const DialogSlave = React.forwardRef((props: DialogSlaveProps, ref: Ref<any>) =>
     const [value, setValue] = useState(0);
     const [editable, setEditable] = useState(false);
 
-    console.log(slaveEnvArray);
-
     useEffect(() => {
         let array = Object.entries(slaveEnv);
         let array2: any[] = [];
