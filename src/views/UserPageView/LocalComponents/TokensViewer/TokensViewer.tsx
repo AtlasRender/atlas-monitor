@@ -39,6 +39,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import CheckIcon from "@material-ui/icons/Check";
 import useEnqueueSuccessSnackbar from "../../../../utils/EnqueSuccessSnackbar";
 import useAuth from "../../../../hooks/useAuth";
+import ErrorHandler from "../../../../utils/ErrorHandler";
 
 /**
  * TokensViewerPropsStyled - interface for TokensViewer function
@@ -101,16 +102,10 @@ const TokensViewer = React.forwardRef((props: TokensViewerProps, ref: Ref<any>) 
                 setTokens(response.body);
             })
             .catch(err => {
-                //TODO handle errors
-                switch(err.status) {
-                    case 400:
-                        enqueueErrorSnackbar("Error: see details in console");
-                        console.error(err);
-                        break;
-                    case 401:
-                        logout();
-                        break;
-                }
+                const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
+                errorHandler
+                    .on(401, () => {logout()})
+                    .handle(err);
             });
     }
 
@@ -131,16 +126,11 @@ const TokensViewer = React.forwardRef((props: TokensViewerProps, ref: Ref<any>) 
                     handleGetTokens();
                 })
                 .catch(err => {
-                    //TODO handle errors
-                    switch(err.status) {
-                        case 400:
-                            enqueueErrorSnackbar("Error: see details in console");
-                            console.error(err);
-                            break;
-                        case 401:
-                            logout();
-                            break;
-                    }
+                    const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
+                    errorHandler
+                        .on(400, "Can not add token")
+                        .on(401, () => {logout()})
+                        .handle(err);
                 });
         } else {
             enqueueErrorSnackbar("Can`t create a token");
@@ -155,16 +145,12 @@ const TokensViewer = React.forwardRef((props: TokensViewerProps, ref: Ref<any>) 
                 handleGetTokens();
             })
             .catch(err => {
-                //TODO handle errors
-                switch(err.status) {
-                    case 400:
-                        enqueueErrorSnackbar("Error: see details in console");
-                        console.error(err);
-                        break;
-                    case 401:
-                        logout();
-                        break;
-                }
+                const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
+                errorHandler
+                    .on(400, "Can not add token")
+                    .on(401, () => {logout()})
+                    .on(404, "You have no permissions to delete this token")
+                    .handle(err);
             });
     }
 

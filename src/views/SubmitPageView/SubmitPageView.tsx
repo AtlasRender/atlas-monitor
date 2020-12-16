@@ -41,6 +41,7 @@ import DialogPlugin from "./LocalComponents/DialogPlugin";
 import {IntegerField, PluginSetting} from "@atlasrender/render-plugin";
 import validate from "validate.js";
 import {useChangeRoute} from "routing-manager";
+import ErrorHandler from "../../utils/ErrorHandler";
 
 /**
  * SubmitPagePropsStyled - interface for SubmitPageView function
@@ -163,15 +164,11 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
             setOrg(response.body[0].name);
             setUserOrgs(response.body);
         } catch (err) {
-            switch(err.status) {
-                case 400:
-                    enqueueErrorSnackbar("Error: see details in console");
-                    console.error(err);
-                    break;
-                case 401:
-                    logout();
-                    break;
-            }
+            const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
+            errorHandler
+                .on(401, () => {logout()})
+                .on(404, "User not found")
+                .handle(err);
         }
     }
 
@@ -182,15 +179,11 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
             const response = await coreRequest().get("plugins").query({organization: userOrganizations.body[0].id});
             setPlugins(response.body);
         } catch (err) {
-            switch(err.status) {
-                case 400:
-                    enqueueErrorSnackbar("Error: see details in console");
-                    console.error(err);
-                    break;
-                case 401:
-                    logout();
-                    break;
-            }
+            const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
+            errorHandler
+                .on(401, () => {logout()})
+                .on(404, "Organization not found")
+                .handle(err);
         }
     }
 
@@ -202,15 +195,11 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
                 setChosenPlugin(response.body);
             })
             .catch(err => {
-                switch(err.status) {
-                    case 400:
-                        enqueueErrorSnackbar("Error: see details in console");
-                        console.error(err);
-                        break;
-                    case 401:
-                        logout();
-                        break;
-                }
+                const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
+                errorHandler
+                    .on(401, () => {logout()})
+                    .on(404, "Plugin not found")
+                    .handle(err);
             });
     };
 
@@ -263,15 +252,14 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
                 changeRoute({page: "jobs"});
             })
             .catch(err => {
-                switch(err.status) {
-                    case 400:
-                        enqueueErrorSnackbar("Error: see details in console");
-                        console.error(err);
-                        break;
-                    case 401:
-                        logout();
-                        break;
-                }
+                const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
+                errorHandler
+                    .on(400, "Can not create job")
+                    .on(401, () => {logout()})
+                    .on(404, "Plugin with selected not found")
+                    .on(409, "Unavailable to queue job")
+                    .on(503, "Internal server error. Please, visit this resource later")
+                    .handle(err);
             });
     }
 

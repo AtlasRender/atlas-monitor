@@ -19,6 +19,7 @@ import BooleanPluginField from "../../../../components/BooleanPluginField";
 import StringPluginField from "../../../../components/RenderJobCustomFields/StringPluginField";
 import IntegerPluginField from "../../../../components/RenderJobCustomFields/IntegerPluginField";
 import useAuth from "../../../../hooks/useAuth";
+import ErrorHandler from "../../../../utils/ErrorHandler";
 
 
 /**
@@ -74,15 +75,11 @@ const PluginInput = React.forwardRef((props: PluginInputProps, ref: Ref<any>) =>
             // const temp = {...response.body, rules: response.body.rules};
             setPlugin(temp);
         } catch (err) {
-            switch(err.status) {
-                case 400:
-                    enqueueErrorSnackbar("Error: see details in console");
-                    console.error(err);
-                    break;
-                case 401:
-                    logout();
-                    break;
-            }
+            const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
+            errorHandler
+                .on(401, () => {logout()})
+                .on(404, "Plugin not found")
+                .handle(err);
         }
 
     }

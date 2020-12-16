@@ -39,6 +39,8 @@ import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
 import SyncIcon from "@material-ui/icons/Sync";
 import BlockIcon from "@material-ui/icons/Block";
 import {grey} from "@material-ui/core/colors";
+import ErrorHandler from "../../../../utils/ErrorHandler";
+import useAuth from "../../../../hooks/useAuth";
 
 interface DialogTaskLogsProps extends Stylable {
     open: boolean;
@@ -96,6 +98,7 @@ const DialogTaskLogs = React.forwardRef((props: DialogTaskLogsProps, ref: Ref<an
     } = props;
 
 
+    const {logout} = useAuth();
     const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
     const coreRequest = useCoreRequest();
     const theme = useTheme();
@@ -187,7 +190,12 @@ const DialogTaskLogs = React.forwardRef((props: DialogTaskLogsProps, ref: Ref<an
             const logs = await coreRequest().get(`attempts/${firstAttemptId}/log`);
             setLogs(logs.body);
         } catch (err) {
-            enqueueErrorSnackbar("Cant get attempts");
+            const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
+            errorHandler
+                .on(401, () => {logout()})
+                .on(403, "You have no access to view this data")
+                .on(404, "Task not found")
+                .handle(err);
         }
     }
 

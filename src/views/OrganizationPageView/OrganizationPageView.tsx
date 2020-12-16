@@ -52,6 +52,7 @@ import {PluginSettingsSpec} from "@atlasrender/render-plugin";
 import DialogPluginInfo from "./LocalComponents/DialogPluginInfo";
 import useAuth from "../../hooks/useAuth";
 import DialogSlave from "./LocalComponents/DialogSlave";
+import ErrorHandler from "../../utils/ErrorHandler";
 
 /**
  * OrganizationPageViewPropsStyled - interface for OrganizationPageView function
@@ -152,16 +153,11 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
             const response = await coreRequest().get(`organizations/${id}/roles`);
             setRoles(response.body);
         } catch (err) {
-            //TODO handle errors
-            switch(err.status) {
-                case 400:
-                    enqueueErrorSnackbar("Error: see details in console");
-                    console.error(err);
-                    break;
-                case 401:
-                    logout();
-                    break;
-            }
+            const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
+            errorHandler
+                .on(401, () => {logout()})
+                .on(404, "Organization not found")
+                .handle(err);
         }
     }
 
@@ -171,15 +167,11 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                 .get(`organizations/${id}/roles/${roleId}`);
             setRoleToChange(response.body);
         } catch (err) {
-            switch(err.status) {
-                case 400:
-                    enqueueErrorSnackbar("Error: see details in console");
-                    console.error(err);
-                    break;
-                case 401:
-                    logout();
-                    break;
-            }
+            const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
+            errorHandler
+                .on(401, () => {logout()})
+                .on(404, "Role not found")
+                .handle(err);
         }
     }
 
@@ -188,15 +180,11 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
             const response = await coreRequest().get("plugins").query({organization: id});
             setPlugins(response.body);
         } catch (err) {
-            switch(err.status) {
-                case 400:
-                    enqueueErrorSnackbar("Error: see details in console");
-                    console.error(err);
-                    break;
-                case 401:
-                    logout();
-                    break;
-            }
+            const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
+            errorHandler
+                .on(401, () => {logout()})
+                .on(404, "Organization not found")
+                .handle(err);
         }
     }
 
@@ -207,16 +195,11 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                 setRoleUsers(response.body);
             })
             .catch(err => {
-                //TODO handle errors
-                switch(err.status) {
-                    case 400:
-                        enqueueErrorSnackbar("Error: see details in console");
-                        console.error(err);
-                        break;
-                    case 401:
-                        logout();
-                        break;
-                }
+                const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
+                errorHandler
+                    .on(401, () => {logout()})
+                    .on(404, "Role not found")
+                    .handle(err);
             });
     }
 
@@ -232,29 +215,21 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                         setCurrentUser(item[0]);
                     })
                     .catch(err => {
-                        switch(err.status) {
-                            case 400:
-                                enqueueErrorSnackbar("Error: see details in console");
-                                console.error(err);
-                                break;
-                            case 401:
-                                logout();
-                                break;
-                        }
+                        const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
+                        errorHandler
+                            .on(401, () => {logout()})
+                            .handle(err);
                     });
                 handleGetRoles().then();
             })
             .catch(err => {
-                //TODO handle errors
-                switch(err.status) {
-                    case 400:
-                        enqueueErrorSnackbar("Error: see details in console");
-                        console.error(err);
-                        break;
-                    case 401:
-                        logout();
-                        break;
-                }
+                const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
+                errorHandler
+                    .on(400, "Can not add role to user")
+                    .on(401, () => {logout()})
+                    .on(403, "User already owns this role")
+                    .on(404, "Role or User not found")
+                    .handle(err);
             });
     }
 
@@ -272,16 +247,13 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                 handleGetRoles().then();
             })
             .catch(err => {
-                //TODO handle errors
-                switch(err.status) {
-                    case 400:
-                        enqueueErrorSnackbar("Error: see details in console");
-                        console.error(err);
-                        break;
-                    case 401:
-                        logout();
-                        break;
-                }
+                const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
+                errorHandler
+                    .on(400, "Can not delete role from user")
+                    .on(401, () => {logout()})
+                    .on(403, "User does not own this role")
+                    .on(404, "Role not found")
+                    .handle(err);
             });
     }
 
@@ -297,16 +269,12 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                     handleGetRoles().then();
                 })
                 .catch(err => {
-                    //TODO handle errors
-                    switch(err.status) {
-                        case 400:
-                            enqueueErrorSnackbar("Error: see details in console");
-                            console.error(err);
-                            break;
-                        case 401:
-                            logout();
-                            break;
-                    }
+                    const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
+                    errorHandler
+                        .on(400, "Can not add new role")
+                        .on(401, () => {logout()})
+                        .on(409, "Role with this name already exist")
+                        .handle(err);
                 });
         } else {
             enqueueErrorSnackbar("Invalid data types");
@@ -322,16 +290,12 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                 handleGetRoles().then();
             })
             .catch(err => {
-                //TODO handle errors
-                switch(err.status) {
-                    case 400:
-                        enqueueErrorSnackbar("Error: see details in console");
-                        console.error(err);
-                        break;
-                    case 401:
-                        logout();
-                        break;
-                }
+                const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
+                errorHandler
+                    .on(400, "Can not delete role")
+                    .on(401, () => {logout()})
+                    .on(404, "Role not found")
+                    .handle(err);
             });
     }
 
@@ -345,16 +309,13 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                 handleGetRoles().then();
             })
             .catch(err => {
-                //TODO handle errors
-                switch(err.status) {
-                    case 400:
-                        enqueueErrorSnackbar("Error: see details in console");
-                        console.error(err);
-                        break;
-                    case 401:
-                        logout();
-                        break;
-                }
+                const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
+                errorHandler
+                    .on(400, "Can not edit role")
+                    .on(401, () => {logout()})
+                    .on(404, "Role not found")
+                    .on(409, "Role with this name already exist")
+                    .handle(err);
             });
     }
 
@@ -392,16 +353,11 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
             setOrganizationUsers(response.body);
             return response.body;
         } catch (err) {
-            //TODO handle errors
-            switch(err.status) {
-                case 400:
-                    enqueueErrorSnackbar("Error: see details in console");
-                    console.error(err);
-                    break;
-                case 401:
-                    logout();
-                    break;
-            }
+            const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
+            errorHandler
+                .on(401, () => {logout()})
+                .on(404, "Organization not found")
+                .handle(err);
         }
     }
 
@@ -410,16 +366,11 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
             const response = await coreRequest().get(`organizations/${id}`);
             setOrganizationData(response.body);
         } catch (err) {
-            //TODO handle errors
-            switch(err.status) {
-                case 400:
-                    enqueueErrorSnackbar("Error: see details in console");
-                    console.error(err);
-                    break;
-                case 401:
-                    logout();
-                    break;
-            }
+            const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
+            errorHandler
+                .on(401, () => {logout()})
+                .on(404, "Organization not found")
+                .handle(err);
         }
     }
 
@@ -428,16 +379,10 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
             const response = await coreRequest().get("users");
             setAllUsers(response.body);
         } catch (err) {
-            //TODO handle errors
-            switch(err.status) {
-                case 400:
-                    enqueueErrorSnackbar("Error: see details in console");
-                    console.error(err);
-                    break;
-                case 401:
-                    logout();
-                    break;
-            }
+            const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
+            errorHandler
+                .on(401, () => {logout()})
+                .handle(err);
         }
     }
 
@@ -446,16 +391,11 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
             const response = await coreRequest().get(`organizations/${id}/availableUsers`);
             setAvailableUsers(response.body)
         } catch (err) {
-            //TODO handle errors
-            switch(err.status) {
-                case 400:
-                    enqueueErrorSnackbar("Error: see details in console");
-                    console.error(err);
-                    break;
-                case 401:
-                    logout();
-                    break;
-            }
+            const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
+            errorHandler
+                .on(401, () => {logout()})
+                .on(404, "Organization not found")
+                .handle(err);
         }
     }
 
@@ -472,16 +412,11 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                 setIsUserActive(true);
             })
             .catch(err => {
-                //TODO handle errors
-                switch(err.status) {
-                    case 400:
-                        enqueueErrorSnackbar("Error: see details in console");
-                        console.error(err);
-                        break;
-                    case 401:
-                        logout();
-                        break;
-                }
+                const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
+                errorHandler
+                    .on(400, "Can not add user")
+                    .on(401, () => {logout()})
+                    .handle(err);
             });
     }
 
@@ -496,16 +431,13 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                 handleGetAvailableUsers().then();
             })
             .catch(err => {
-                //TODO handle errors
-                switch(err.status) {
-                    case 400:
-                        enqueueErrorSnackbar("Error: see details in console");
-                        console.error(err);
-                        break;
-                    case 401:
-                        logout();
-                        break;
-                }
+                const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
+                errorHandler
+                    .on(400, "Can not delete user")
+                    .on(401, () => {logout()})
+                    .on(404, "User not exist")
+                    .on(409, "Some users are not in organization")
+                    .handle(err);
             });
     }
 
@@ -543,15 +475,11 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                 setCurrentPlugin({...response.body, rules: new PluginSettingsSpec(response.body.rules)});
             })
             .catch(err => {
-                switch(err.status) {
-                    case 400:
-                        enqueueErrorSnackbar("Error: see details in console");
-                        console.error(err);
-                        break;
-                    case 401:
-                        logout();
-                        break;
-                }
+                const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
+                errorHandler
+                    .on(401, () => {logout()})
+                    .on(404, "Plugin not found")
+                    .handle(err);
             });
     }
 

@@ -34,6 +34,7 @@ import IntegerField from "../../entities/IntegerField";
 import {useChangeRoute} from "routing-manager";
 import {PluginSetting, PluginSettingsSpec, ValidationError} from "@atlasrender/render-plugin";
 import useAuth from "../../hooks/useAuth";
+import ErrorHandler from "../../utils/ErrorHandler";
 
 
 interface PluginContextProps {
@@ -138,17 +139,15 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
         } catch (err) {
             if (err instanceof ValidationError) {
                 enqueueErrorSnackbar(err.message);
-                console.log(err.getValidation());
+                console.log(err);
             } else {
-                switch (err.status) {
-                    case 400:
-                        enqueueErrorSnackbar("Error: see details in console");
-                        console.error(err);
-                        break;
-                    case 401:
-                        logout();
-                        break;
-                }
+                const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
+                errorHandler
+                    .on(400, "Plugin settings validation error")
+                    .on(401, () => {logout()})
+                    .on(404, "Temp file not found")
+                    .on(409, "Plugin with this version already exists")
+                    .handle(err);
             }
             return;
         }
@@ -161,15 +160,13 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
                 console.log("done");
             })
             .catch(err => {
-                switch (err.status) {
-                    case 400:
-                        enqueueErrorSnackbar("Error: see details in console");
-                        console.error(err);
-                        break;
-                    case 401:
-                        logout();
-                        break;
-                }
+                const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
+                errorHandler
+                    .on(400, "Plugin settings validation error")
+                    .on(401, () => {logout()})
+                    .on(404, "Organization not found")
+                    .on(409, "Plugin with this version already exists")
+                    .handle(err);
             });
     }
 
