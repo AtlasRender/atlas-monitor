@@ -114,6 +114,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
     const [organizationData, setOrganizationData] = useState<Organization | null>(null);
     const [allUsers, setAllUsers] = useState<UserData[] | null>(null);
     const [newUsers, setNewUsers] = useState<number[]>([]);
+    const [availableUsers, setAvailableUsers] = useState<UserData[]>([]);
     const [organizationUsers, setOrganizationUsers] = useState<UserData[]>([]);
     const [currentUser, setCurrentUser] = useState<UserData | null>(null);
 
@@ -124,6 +125,9 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
     const [currentPlugin, setCurrentPlugin] = useState<PluginFull>();
 
 
+    console.log(availableUsers);
+
+
     useEffect(() => {
         Promise.all([
             handleGetOrganization(),
@@ -131,6 +135,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
             handleGetOrganizationUsers(),
             handleGetRoles(),
             handleGetPlugins(),
+            handleGetAvailableUsers(),
         ]).then(() => {
             setLoaded(true);
         });
@@ -436,6 +441,24 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
         }
     }
 
+    async function handleGetAvailableUsers() {
+        try {
+            const response = await coreRequest().get(`organizations/${id}/availableUsers`);
+            setAvailableUsers(response.body)
+        } catch (err) {
+            //TODO handle errors
+            switch(err.status) {
+                case 400:
+                    enqueueErrorSnackbar("Error: see details in console");
+                    console.error(err);
+                    break;
+                case 401:
+                    logout();
+                    break;
+            }
+        }
+    }
+
     function handleAddUser(usersToAddId: number[]) {
         setIsButtonActive(false);
         setIsUserActive(true);
@@ -445,7 +468,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
             .then(response => {
                 handleGetOrganization().then();
                 handleGetOrganizationUsers().then();
-                setNewUsers([]);
+                handleGetAvailableUsers().then();
             })
             .catch(err => {
                 //TODO handle errors
@@ -469,6 +492,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
             .then(response => {
                 handleGetOrganization().then();
                 handleGetOrganizationUsers().then();
+                handleGetAvailableUsers().then();
             })
             .catch(err => {
                 //TODO handle errors
@@ -705,7 +729,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                             onClose={handleCloseAddUsersDialog}
                             allUsers={allUsers}
                             newUsers={newUsers}
-                            organizationUsers={organizationUsers}
+                            availableUsers={availableUsers}
                             onNewUserClick={handleNewUsersClick}
                             onAdduser={handleAddUser}
                         />

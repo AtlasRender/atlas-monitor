@@ -33,7 +33,7 @@ interface DialogAddUsersProps extends Stylable {
     open: boolean;
     allUsers: UserData[] | null;
     newUsers: number[];
-    organizationUsers: UserData[];
+    availableUsers: UserData[];
 
     onClose(): void;
 
@@ -53,23 +53,8 @@ const DialogAddUsers = React.forwardRef((props: DialogAddUsersProps, ref: Ref<an
         onClose,
         onNewUserClick,
         onAdduser,
-        organizationUsers,
+        availableUsers,
     } = props;
-
-
-    const [addedUsers, setAddedUsers] = useState<UserData[] | null>(allUsers);
-
-    console.log(addedUsers);
-
-    useEffect(() => {
-        if(allUsers) {
-            let users: UserData[] | null | undefined = [...allUsers];
-            for(let i = 0; i < organizationUsers.length; i++) {
-                users = users?.filter(user => user.id !== organizationUsers[i].id);
-            }
-            setAddedUsers(users);
-        }
-    }, [open]);
 
 
     return (
@@ -100,7 +85,7 @@ const DialogAddUsers = React.forwardRef((props: DialogAddUsersProps, ref: Ref<an
                     {/*    <CloseIcon/>*/}
                     {/*</IconButton>*/}
                 </ListItem>
-                {addedUsers?.map((user) => (
+                {availableUsers.map((user) => (
                     <ListItem
                         button
                         key={user.id}
