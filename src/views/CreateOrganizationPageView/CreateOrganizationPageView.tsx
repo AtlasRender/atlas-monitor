@@ -91,6 +91,7 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
         setRoles((prev) => ([...prev, role]));
     }
 
+
     function modifyRole(id: number, role: Role) {
         setAddRoleButton(!addRoleButton);
         setRoles((prev) => ([...prev.filter(elem => elem.id !== id)]));
@@ -104,12 +105,10 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
 
     const handleInputName = (event: React.ChangeEvent<HTMLInputElement>) => {
         setName(event.target.value);
-        console.log(name);
     };
 
     const handleInputDescription = (event: React.ChangeEvent<HTMLInputElement>) => {
         setDescription(event.target.value);
-        console.log(description);
     };
 
     function errorHandler() {
@@ -169,6 +168,8 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
     }
 
     function createOrg() {
+        const userIds = members.map((member) => member.id);
+        console.log(users);
         coreRequest()
             .post("organizations")
             .send({name: name, description: description, users: members})
@@ -188,60 +189,33 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
         handleGetOwner();
     }, []);
 
-    if (matches) {
-        info = (
-            <React.Fragment>
-                <Grid item xs={6}>
-                    <TextField
-                        margin="normal"
-                        required
-                        fullWidth
-                        label="Organization name"
-                        onChange={handleInputName}
-                        error={errors.nameError}
-                        helperText={errors.nameMessage}
-                        onBlur={errorHandler}
-                    />
-                </Grid>
-                <Grid item xs={6}>
-                    <TextField
-                        margin="normal"
-                        fullWidth
-                        label="Description"
-                        onChange={handleInputDescription}
-                        error={errors.descriptionError}
-                        helperText={errors.descriptionMessage}
-                        onBlur={errorHandler}
-                    />
-                </Grid>
-            </React.Fragment>
-        );
-    } else {
-        info = (
-            <React.Fragment>
-                <Grid item xs={12}>
-                    <TextField
-                        margin="normal"
-                        required fullWidth
-                        label="Organization name"
-                        error={errors.nameError}
-                        helperText={errors.nameMessage}
-                        onBlur={errorHandler}
-                    />
-                </Grid>
-                <Grid item xs={12}>
-                    <TextField
-                        margin="normal"
-                        fullWidth
-                        label="Description"
-                        error={errors.descriptionError}
-                        helperText={errors.descriptionMessage}
-                        onBlur={errorHandler}
-                    />
-                </Grid>
-            </React.Fragment>
-        );
-    }
+    info = (
+        <React.Fragment>
+            <Grid item xs={12} md={6}>
+                <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    label="Organization name"
+                    onChange={handleInputName}
+                    error={errors.nameError}
+                    helperText={errors.nameMessage}
+                    onBlur={errorHandler}
+                />
+            </Grid>
+            <Grid item xs={12} md={6}>
+                <TextField
+                    margin="normal"
+                    fullWidth
+                    label="Description"
+                    onChange={handleInputDescription}
+                    error={errors.descriptionError}
+                    helperText={errors.descriptionMessage}
+                    onBlur={errorHandler}
+                />
+            </Grid>
+        </React.Fragment>
+    );
 
     return (
         <Grid container spacing={2} style={style} className={clsx(classes.container, classes.sidePaddings, className)}>
@@ -263,7 +237,6 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
                         </IconButton>
                     </ListItem>
                     <Divider/>
-                    {console.log(roles)}
                     {roles.map((item) => {
                         return (
                             <ListItem key={item.id}>
@@ -305,7 +278,7 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
 
                 <DialogAddRoles
                     open={addRoleButton}
-                    onClose={() => setAddRoleButton(!addRoleButton)}
+                    onClose={() => {setAddRoleButton(!addRoleButton); setRoleToModify(undefined)}}
                     onAddRole={addRole}
                     role={roleToModify}
                     modify={modify}
@@ -337,7 +310,6 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
                                 </ListItemAvatar>
                                 <ListItemText primary={person.username}/>
                                 <ListItemSecondaryAction>
-                                    {/*chips here*/}
                                     <IconButton
                                         onClick={() => setMembers(prev => [...prev.filter(mem => person.id !== mem.id)])}
                                     >

@@ -52,6 +52,7 @@ import {PluginSettingsSpec} from "@atlasrender/render-plugin";
 import DialogPluginInfo from "./LocalComponents/DialogPluginInfo";
 import useAuth from "../../hooks/useAuth";
 import DialogSlave from "./LocalComponents/DialogSlave";
+import DemoRole from "../../interfaces/DemoRole";
 import ErrorHandler from "../../utils/ErrorHandler";
 
 /**
@@ -124,9 +125,6 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
     const [plugins, setPlugins] = useState<Plugin[]>();
     const [dialogPluginButton, setDialogPluginButton] = useState<boolean>(false);
     const [currentPlugin, setCurrentPlugin] = useState<PluginFull>();
-
-
-    console.log(availableUsers);
 
 
     useEffect(() => {
@@ -299,7 +297,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
             });
     }
 
-    function handleModifyRole(roleId: number, roleToModify: any) {
+    function handleModifyRole(roleId: number, roleToModify: DemoRole) {
         setIsDialogModifyRoleButtonActive(false);
         roleToModify.permissionLevel = +roleToModify.permissionLevel;
         coreRequest()
