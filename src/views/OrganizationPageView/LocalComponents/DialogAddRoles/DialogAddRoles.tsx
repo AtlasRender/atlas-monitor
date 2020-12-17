@@ -116,7 +116,11 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
     };
 
     function handleGetColor(inputColor: string) {
-        setAddRole((prev) => (prev && {...prev, color: inputColor}));
+        if(inputColor) {
+            setAddRole((prev) => (prev && {...prev, color: inputColor}));
+        } else {
+            setAddRole((prev) => (prev && {...prev, color: "000"}));
+        }
     }
 
     const handleValidation = (event: React.FocusEvent<HTMLInputElement>) => {
@@ -198,7 +202,7 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
         >
             <DialogTitle
                 className={classes.dialogRoles}
-                style={{background: `#${addRole?.color}`, color: theme.palette.getContrastText(`#${addRole?.color}`)}}
+                style={{background: `#${addRole.color}`, color: theme.palette.getContrastText(`#${addRole.color}`)}}
             >
                 {modify ? "Modify role" : "Add new role"}
             </DialogTitle>
@@ -224,7 +228,6 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
                             variant="standard"
                             fullWidth
                             multiline
-                            rows={2}
                             rowsMax={5}
                             name="description"
                             label="Description"
@@ -250,7 +253,7 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
                     <Grid item xs={12} className={classes.gridPadding}>
                         <ColorPicker
                             onChange={handleGetColor}
-                            color={addRole?.color}
+                            color={addRole.color}
                         />
                     </Grid>
                     <Grid container className={classes.firstLine}>
