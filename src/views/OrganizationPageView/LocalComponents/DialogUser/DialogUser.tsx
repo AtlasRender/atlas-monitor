@@ -34,6 +34,7 @@ import UserData from "../../../../interfaces/UserData";
 import Role from "../../../../interfaces/Role";
 import SearchIcon from "@material-ui/icons/Search";
 import CloseIcon from "@material-ui/icons/Close";
+import SearchBar from "../../../../components/SearchBar/SearchBar";
 
 interface DialogUserProps extends Stylable {
     user: UserData | null;
@@ -172,23 +173,26 @@ const DialogUser = React.forwardRef((props: DialogUserProps, ref: Ref<any>) => {
                             </ListItemText>
                         </ListItem>
                         <Divider/>
-                        <Box className={classes.search}>
-                            <Box className={classes.searchIcon}>
-                                <SearchIcon/>
-                            </Box>
-                            <InputBase
-                                onChange={handleSearch}
-                                placeholder="Search…"
-                                classes={{
-                                    root: classes.inputRoot,
-                                    input: classes.inputInput,
-                                }}
-                                inputProps={{"aria-label": "search"}}
-                            />
-                            <IconButton>
-                                <CloseIcon/>
-                            </IconButton>
-                        </Box>
+                        <ListItem>
+                            <SearchBar onChange={handleSearch}/>
+                        </ListItem>
+                        {/*<Box className={classes.search}>*/}
+                        {/*    <Box className={classes.searchIcon}>*/}
+                        {/*        <SearchIcon/>*/}
+                        {/*    </Box>*/}
+                        {/*    <InputBase*/}
+                        {/*        onChange={handleSearch}*/}
+                        {/*        placeholder="Search…"*/}
+                        {/*        classes={{*/}
+                        {/*            root: classes.inputRoot,*/}
+                        {/*            input: classes.inputInput,*/}
+                        {/*        }}*/}
+                        {/*        inputProps={{"aria-label": "search"}}*/}
+                        {/*    />*/}
+                        {/*    <IconButton>*/}
+                        {/*        <CloseIcon/>*/}
+                        {/*    </IconButton>*/}
+                        {/*</Box>*/}
                         {filterRoles.length !== 0 ? filterRoles.map(role => {
 
                                 return (

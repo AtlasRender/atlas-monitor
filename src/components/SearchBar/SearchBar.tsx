@@ -6,7 +6,7 @@
  * All rights reserved.
  */
 
-import React from "react";
+import React, {ChangeEvent} from "react";
 import {FormControl, InputAdornment, InputBase, withStyles} from "@material-ui/core";
 import Stylable from "../../interfaces/Stylable";
 import styles from "./styles";
@@ -14,7 +14,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import SearchIcon from "@material-ui/icons/Search";
 
 interface SearchBarProps extends Stylable {
-
+    onChange?(event: ChangeEvent<HTMLInputElement>): void;
 }
 
 const SearchBar = React.forwardRef((props: SearchBarProps, ref) => {
@@ -22,6 +22,7 @@ const SearchBar = React.forwardRef((props: SearchBarProps, ref) => {
         classes,
         className,
         style,
+        onChange,
     } = props;
 
 
@@ -29,6 +30,7 @@ const SearchBar = React.forwardRef((props: SearchBarProps, ref) => {
         <FormControl style={{width: "100%"}}>
             <InputBase
                 className={classes.searchInput}
+                onChange={onChange}
                 placeholder="Search…"
                 endAdornment={
                     <InputAdornment position="end">
