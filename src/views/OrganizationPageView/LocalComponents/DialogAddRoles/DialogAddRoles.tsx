@@ -26,6 +26,7 @@ import TextField from "@material-ui/core/TextField";
 import ColorPicker from "../../../../components/ColorPicker";
 import Role from "../../../../interfaces/Role";
 import RoleToggles from "../RoleToggles";
+import useEnqueueErrorSnackbar from "../../../../utils/enqueueErrorSnackbar";
 
 interface DialogAddRolesProps extends Stylable {
     open: boolean;
@@ -60,6 +61,7 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
     } = props;
 
 
+    const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
     const theme = useTheme();
     const [addRole, setAddRole] = useState({
         name: role?.name || "",
@@ -116,7 +118,11 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
     };
 
     function handleGetColor(inputColor: string) {
-        setAddRole((prev) => (prev && {...prev, color: inputColor}));
+        if(inputColor) {
+            setAddRole((prev) => (prev && {...prev, color: inputColor}));
+        } else {
+            setAddRole((prev) => (prev && {...prev, color: "000"}));
+        }
     }
 
     const handleValidation = (event: React.FocusEvent<HTMLInputElement>) => {
@@ -124,10 +130,12 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
             ...prev, "noInputError": false
         }));
         if (event.target.name === "name") {
-            if (!addRole.name.match(/^[a-zA-Z]+$/) || !addRole.name || addRole.name.length < 3 || addRole.name.length > 50) {
+            //TODO every language exept special symbols
+            if (addRole.name.match(/[^A-Za-z0-9_ ]/) || !addRole.name || addRole.name.length < 3 || addRole.name.length > 50) {
                 setErrors(prev => ({
                     ...prev, "nameError": true
                 }));
+
             } else {
                 setErrors(prev => ({
                     ...prev, "nameError": false
@@ -162,6 +170,8 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
         if (!errors.noInputError && !errors.nameError && !errors.descriptionError && !errors.permissionLevelError) {
             modify ? onModifyRole && onModifyRole(role?.id, addRole) : onAddRole(addRole, errors);
             handleOnClose();
+        } else {
+            enqueueErrorSnackbar("Invalid input");
         }
     }
 
@@ -196,7 +206,7 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
         >
             <DialogTitle
                 className={classes.dialogRoles}
-                style={{background: `#${addRole?.color}`, color: theme.palette.getContrastText(`#${addRole?.color}`)}}
+                style={{background: `#${addRole.color}`, color: theme.palette.getContrastText(`#${addRole.color}`)}}
             >
                 {modify ? "Modify role" : "Add new role"}
             </DialogTitle>
@@ -222,7 +232,6 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
                             variant="standard"
                             fullWidth
                             multiline
-                            rows={2}
                             rowsMax={5}
                             name="description"
                             label="Description"
@@ -248,7 +257,7 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
                     <Grid item xs={12} className={classes.gridPadding}>
                         <ColorPicker
                             onChange={handleGetColor}
-                            color={addRole?.color}
+                            color={addRole.color}
                         />
                     </Grid>
                     <Grid container className={classes.firstLine}>

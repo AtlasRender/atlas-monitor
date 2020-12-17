@@ -44,6 +44,7 @@ import useCoreRequest from "../../hooks/useCoreRequest";
 import useAuth from "../../hooks/useAuth";
 import ErrorHandler from "../../utils/ErrorHandler";
 import useEnqueueSuccessSnackbar from "../../utils/EnqueSuccessSnackbar";
+import DialogAddUsers from "../OrganizationPageView/LocalComponents/DialogAddUsers";
 
 
 interface CreateOrganizationPageProps extends Stylable {
@@ -83,6 +84,60 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
     const [users, setUsers] = useState<UserData[]>([]);
     const [members, setMembers] = useState<UserData[]>([]);
     const [addMemberButton, setAddMemberButton] = useState<boolean>(false);
+
+
+    //For dialog-----------------------------------------------------------------------------------------
+    const [newUsers, setNewUsers] = useState<number[]>([]);
+    const [availableUsers, setAvailableUsers] = useState<UserData[]>([]);
+
+
+    function handleNewUsersClick(newUserId: number) {
+        let newUsersArray = newUsers;
+        if (newUsers.includes(newUserId)) {
+            newUsersArray = newUsersArray.filter(userId => userId !== newUserId);
+            setNewUsers(newUsersArray);
+        } else {
+            setNewUsers([...newUsers, newUserId]);
+        }
+    }
+
+    function handleAddUser(usersToAddId: number[]) {
+        for(let i = 0; i < usersToAddId.length; i++) {
+            const newMember = users.filter(user => user.id === usersToAddId[i]);
+            if(newMember[0].id !== owner?.id) {
+                setMembers(prev => ([...prev, newMember[0]]));
+            }
+        }
+        setAddMemberButton(!addMemberButton);
+        setNewUsers([]);
+    }
+
+    function handleGetAvailableUsers() {
+        let availableMembers: UserData[] = users;
+        availableMembers = availableMembers.filter(user => user.id !== owner?.id);
+        for(let i = 0; i < members.length; i++) {
+            availableMembers = availableMembers.filter(user => (user.id !== members[i].id && user.id !== owner?.id));
+        }
+        setAvailableUsers(availableMembers);
+    }
+
+    const handleCloseDialogAddUser = () => {
+        setAddMemberButton(!addMemberButton);
+        setNewUsers([]);
+    }
+
+    useEffect(() => {
+        if(owner) {
+            handleGetAvailableUsers();
+        }
+    }, [owner]);
+
+    useEffect(() => {
+        handleGetAvailableUsers();
+    }, [members]);
+
+    //----------------------------------------------------------------------------------------------------
+
 
     const theme = useTheme();
     let info;
@@ -325,43 +380,53 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
                     })}
                 </List>
 
-                <Dialog
+                <DialogAddUsers
                     open={addMemberButton}
-                    onClose={() => setAddMemberButton(!addMemberButton)}
-                >
-                    <DialogTitle className={classes.container}>
-                        <Typography variant="h6" align="center">
-                            Add members
-                        </Typography>
-                    </DialogTitle>
-                    <Divider/>
-                    <List className={classes.minWidthList}>
-                        {users.map((user) => {
-                            if (user.id === owner?.id) {
-                                return;
-                            }
-                            return (
-                                <ListItem key={user.id}>
-                                    <ListItemAvatar><Avatar/></ListItemAvatar>
-                                    <ListItemText primary={user.username}/>
-                                    <ListItemSecondaryAction>
-                                        <IconButton
-                                            onClick={() => setMembers(prev => [...prev, user])}
-                                        >
-                                            <AddIcon/>
-                                        </IconButton>
-                                    </ListItemSecondaryAction>
-                                </ListItem>
-                            );
-                        })}
-                    </List>
-                    <Button
-                        fullWidth
-                        onClick={() => setAddMemberButton(!addMemberButton)}
-                    >
-                        Close
-                    </Button>
-                </Dialog>
+                    onClose={handleCloseDialogAddUser}
+                    newUsers={newUsers}
+                    availableUsers={availableUsers}
+                    orgCreation={true}
+                    onNewUserClick={handleNewUsersClick}
+                    onAdduser={handleAddUser}
+                />
+
+                {/*<Dialog*/}
+                {/*    open={addMemberButton}*/}
+                {/*    onClose={() => setAddMemberButton(!addMemberButton)}*/}
+                {/*>*/}
+                {/*    <DialogTitle className={classes.container}>*/}
+                {/*        <Typography variant="h6" align="center">*/}
+                {/*            Add members*/}
+                {/*        </Typography>*/}
+                {/*    </DialogTitle>*/}
+                {/*    <Divider/>*/}
+                {/*    <List className={classes.minWidthList}>*/}
+                {/*        {users.map((user) => {*/}
+                {/*            if (user.id === owner?.id) {*/}
+                {/*                return;*/}
+                {/*            }*/}
+                {/*            return (*/}
+                {/*                <ListItem key={user.id}>*/}
+                {/*                    <ListItemAvatar><Avatar/></ListItemAvatar>*/}
+                {/*                    <ListItemText primary={user.username}/>*/}
+                {/*                    <ListItemSecondaryAction>*/}
+                {/*                        <IconButton*/}
+                {/*                            onClick={() => setMembers(prev => [...prev, user])}*/}
+                {/*                        >*/}
+                {/*                            <AddIcon/>*/}
+                {/*                        </IconButton>*/}
+                {/*                    </ListItemSecondaryAction>*/}
+                {/*                </ListItem>*/}
+                {/*            );*/}
+                {/*        })}*/}
+                {/*    </List>*/}
+                {/*    <Button*/}
+                {/*        fullWidth*/}
+                {/*        onClick={() => setAddMemberButton(!addMemberButton)}*/}
+                {/*    >*/}
+                {/*        Close*/}
+                {/*    </Button>*/}
+                {/*</Dialog>*/}
             </Grid>
             <Grid item xs={12} style={{display: "flex", justifyContent: "flex-end"}}>
                 <Grid item xs={3}>

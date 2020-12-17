@@ -88,6 +88,9 @@ const styles = (theme: Theme) => createStyles({
     header: {
         background: theme.palette.header.dark,
         color: theme.palette.common.white,
+    },
+    rightSideMenu: {
+        marginTop: 50,
     }
 });
 

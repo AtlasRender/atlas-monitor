@@ -31,9 +31,10 @@ import SearchBar from "../../../../components/SearchBar";
 
 interface DialogAddUsersProps extends Stylable {
     open: boolean;
-    allUsers: UserData[] | null;
+    allUsers?: UserData[] | null;
     newUsers: number[];
     availableUsers: UserData[];
+    orgCreation?: boolean;
 
     onClose(): void;
 
