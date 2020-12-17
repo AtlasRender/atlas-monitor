@@ -172,7 +172,7 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
         console.log(users);
         coreRequest()
             .post("organizations")
-            .send({name: name, description: description, users: members})
+            .send({name: name, description: description, userIds: userIds, roles: roles})
             .then()
             .catch(err => {
                 const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
