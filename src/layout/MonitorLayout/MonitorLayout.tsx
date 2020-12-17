@@ -346,7 +346,7 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<HTML
                         </ChangeRouteProvider>
                     </Route>
                     <Route path="/createorganization">
-                        <ChangeRouteProvider routeMask="(/:panel)">
+                        <ChangeRouteProvider routeMask="(/:id)">
                             <CreateOrganizationPageView/>
                         </ChangeRouteProvider>
                     </Route>

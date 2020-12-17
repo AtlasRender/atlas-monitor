@@ -43,6 +43,7 @@ import UserData from "../../interfaces/UserData";
 import useCoreRequest from "../../hooks/useCoreRequest";
 import useAuth from "../../hooks/useAuth";
 import ErrorHandler from "../../utils/ErrorHandler";
+import useEnqueueSuccessSnackbar from "../../utils/EnqueSuccessSnackbar";
 
 
 interface CreateOrganizationPageProps extends Stylable {
@@ -59,7 +60,8 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
 
     const {logout} = useAuth();
     const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
-    const {getRouteParams} = useChangeRoute();
+    const enqueueSuccessSnackbar = useEnqueueSuccessSnackbar();
+    const {getRouteParams, changeRoute} = useChangeRoute();
     const coreRequest = useCoreRequest();
     const {getUser} = useAuth();
     const confirm = useConfirm();
@@ -83,7 +85,6 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
     const [addMemberButton, setAddMemberButton] = useState<boolean>(false);
 
     const theme = useTheme();
-    const matches = useMediaQuery(theme.breakpoints.up("md"));
     let info;
 
     function addRole(role: Role) {
@@ -172,8 +173,11 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
         console.log(users);
         coreRequest()
             .post("organizations")
-            .send({name: name, description: description, users: members})
-            .then()
+            .send({name: name, description: description, userIds: userIds, roles: roles})
+            .then((response)=>{
+                enqueueSuccessSnackbar("Successfully created");
+                changeRoute({page: "organization", id: response.body.organizationId});
+            })
             .catch(err => {
                 const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
                 errorHandler
