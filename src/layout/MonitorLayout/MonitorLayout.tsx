@@ -6,7 +6,7 @@
  * All rights reserved.
  */
 
-import React, {Ref, useEffect} from "react";
+import React, {Ref, useEffect, useState} from "react";
 import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -23,7 +23,7 @@ import {
     Avatar,
     Box,
     Divider,
-    IconButton,
+    IconButton, Menu, MenuItem,
     Popover,
     SwipeableDrawer,
     useMediaQuery,
@@ -57,6 +57,10 @@ import AddIcon from '@material-ui/icons/Add';
 import WorkIcon from '@material-ui/icons/Work';
 import CheckIcon from '@material-ui/icons/Check';
 import GroupIcon from '@material-ui/icons/Group';
+import useCoreRequest from "../../hooks/useCoreRequest";
+import Organization from "../../interfaces/Organization";
+import ErrorHandler from "../../utils/ErrorHandler";
+import useEnqueueErrorSnackbar from "../../utils/enqueueErrorSnackbar";
 
 /**
  * MonitorLayoutProps - interface for MonitorLayout component
@@ -80,22 +84,31 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<HTML
         className,
     } = props;
 
+    const coreRequest = useCoreRequest();
     const {changeRoute} = useChangeRoute();
+    const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
 
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
     const [state, setState] = React.useState({left: false});
     const {logout, isLogged, getUser} = useAuth();
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+    const [userId, setUserId] = useState(-1);
+    const [organizations, setOrganizations] = useState<Organization[]>([]);
 
     const openPopper = Boolean(anchorEl);
     const id = openPopper ? "simple-popper" : undefined;
     const location = useLocation();
 
+    console.log(organizations);
+
     useEffect(() => {
         const user: User | null = getUser();
-        if (user)
+        if (user){
             CoreEventDispatcher.connect(user.bearer);
+            setUserId(user.id);
+        }
+
 
         const listener = (message: any) => {
             console.log("recieved11 ", message);
@@ -125,12 +138,33 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<HTML
         }
     }, [isLogged]);
 
+    useEffect(() => {
+        if(userId >= 0) {
+            handleGetUserOrganizations();
+        }
+    }, [userId]);
+
+
+    const handleGetUserOrganizations = () => {
+        coreRequest()
+            .get(`users/${userId}/organizations`)
+            .then(response => {
+                setOrganizations(response.body)
+            })
+            .catch(err => {
+                const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
+                errorHandler
+                    .on(401, () => {logout()})
+                    .on(404, "User not found")
+                    .handle(err);
+            })
+    }
 
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(anchorEl ? null : event.currentTarget);
     };
 
-    const handleClosePopover = () => {
+    const handleClose = () => {
         setAnchorEl(null);
     };
 
@@ -172,7 +206,6 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<HTML
             <List>
                 <MenuElement icon={WorkIcon} page="jobs" label="Render ShortJobs"/>
                 <MenuElement icon={PersonIcon} page="user" label="User Page"/>
-                <MenuElement icon={GroupIcon} page="organization/1" label="Organization Page"/>
                 <MenuElement icon={CheckIcon} page="submit" label="Submit Page"/>
                 <MenuElement icon={AddIcon} page="createorganization" label="Create Organization"/>
             </List>
@@ -216,30 +249,37 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<HTML
                         >
                             <Avatar/>
                         </IconButton>
-                        <Popover
-                            id={id}
-                            open={openPopper}
+                        <Menu
+                            id="simple-menu"
                             anchorEl={anchorEl}
-                            onClose={handleClosePopover}
-                            className={classes.popperTop}
-                            anchorOrigin={{
-                                vertical: "bottom",
-                                horizontal: "center",
-                            }}
-                            transformOrigin={{
-                                vertical: "top",
-                                horizontal: "center",
-                            }}
+                            keepMounted
+                            open={Boolean(anchorEl)}
+                            onClose={handleClose}
+                            className={classes.rightSideMenu}
                         >
-                            <Button
-                                type="submit"
-                                variant="contained"
-                                color="primary"
-                                onClick={handleLogout}
-                            >
-                                Logout
-                            </Button>
-                        </Popover>
+                            <MenuItem onClick={() => {
+                                changeRoute({page: "user", panel: null});
+                                handleClose();
+                            }}>Profile</MenuItem>
+                            <MenuItem onClick={() => {
+                                changeRoute({page: "jobs", panel: null});
+                                handleClose();
+                            }}>Render Jobs</MenuItem>
+                            <MenuItem onClick={() => {
+                                changeRoute({page: "organization/1"});
+                                handleClose();
+                            }}>Organization 1</MenuItem>
+                            <MenuItem onClick={() => {
+                                changeRoute({page: "organization/2"});
+                                handleClose();
+                            }}>Organization 2</MenuItem>
+                            <MenuItem onClick={() => {
+                                changeRoute({page: "organization/3"});
+                                handleClose();
+                            }}>Organization 3</MenuItem>
+                            <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                        </Menu>
+
                     </Toolbar>
                 </AppBar>
                 <Drawer
