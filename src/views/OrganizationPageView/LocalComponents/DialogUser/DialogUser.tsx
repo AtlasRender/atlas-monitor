@@ -35,6 +35,7 @@ import Role from "../../../../interfaces/Role";
 import SearchIcon from "@material-ui/icons/Search";
 import CloseIcon from "@material-ui/icons/Close";
 import SearchBar from "../../../../components/SearchBar/SearchBar";
+import useAuth from "../../../../hooks/useAuth";
 
 interface DialogUserProps extends Stylable {
     user: UserData | null;
@@ -67,6 +68,8 @@ const DialogUser = React.forwardRef((props: DialogUserProps, ref: Ref<any>) => {
 
 
     const confirm = useConfirm();
+    const {getUser} = useAuth();
+    const loggedUser = getUser();
 
 
     const [isAddRoleToUserButtonActive, setIsAddRoleToUserButtonActive] = useState<null | HTMLElement>(null);
@@ -259,7 +262,7 @@ const DialogUser = React.forwardRef((props: DialogUserProps, ref: Ref<any>) => {
                         onClick={() => confirm(async () => onRemove([user?.id]), {title: `are you sure you want to remove user: ${user?.username} ?`})}
 
                     >
-                        Remove User from Organization
+                        {loggedUser?.id === user?.id ? "Leave from Organization" : "Remove User from Organization"}
                     </Button>
                 </Box>
 

@@ -726,7 +726,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                                 return (
                                     <Grid item xs={12} md={10} key={key}>
                                         <ListItem button onClick={() => {
-                                            changeRoute({page: "orgUser", id: orgUser.id});
+                                            changeRoute({page: "user", id: orgUser.id});
                                         }}>
                                             <ListItemAvatar>
                                                 <Avatar
