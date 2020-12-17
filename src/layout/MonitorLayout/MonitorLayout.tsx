@@ -139,8 +139,7 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<HTML
     }, [isLogged]);
 
     useEffect(() => {
-        const user: User | null = getUser();
-        if(user && userId >= 0) {
+        if(isLogged && userId >= 0) {
             handleGetUserOrganizations();
         }
     }, [userId]);
@@ -155,6 +154,7 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<HTML
             .catch(err => {
                 const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
                 errorHandler
+                    // .on(401, () => {logout()})
                     .on(404, "User not found")
                     .handle(err);
             })
