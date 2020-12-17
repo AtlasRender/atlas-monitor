@@ -72,6 +72,7 @@ const DialogUser = React.forwardRef((props: DialogUserProps, ref: Ref<any>) => {
     const loggedUser = getUser();
 
 
+    // const [user, setUser] = useState<UserData | null>(userOrg);
     const [isAddRoleToUserButtonActive, setIsAddRoleToUserButtonActive] = useState<null | HTMLElement>(null);
     const [isRemoveRoleFromUserButtonActive, setIsRemoveRoleFromUserButtonActive] = useState<null | HTMLElement>(null);
     const [filterRoles, setFilterRoles] = useState<Role[]>(roles);
@@ -85,6 +86,10 @@ const DialogUser = React.forwardRef((props: DialogUserProps, ref: Ref<any>) => {
     useEffect(() => {
         setFilterRoles(roles);
     }, [roles]);
+
+    // useEffect(() => {
+    //     setUser(userOrg);
+    // }, [userOrg]);
 
     function handleSearch(event: React.ChangeEvent<HTMLInputElement>) {
         setSearchValue(event.target.value.toLowerCase());
