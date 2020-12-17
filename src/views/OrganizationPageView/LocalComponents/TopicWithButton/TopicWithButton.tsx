@@ -30,6 +30,7 @@ import List from "@material-ui/core/List";
  */
 interface TopicWithButtonProps extends Stylable {
     children?: string,
+    can?: boolean;
 
     onClick?(): void,
 }
@@ -46,6 +47,7 @@ const TopicWithButton = React.forwardRef((props: TopicWithButtonProps, ref: Ref<
         className,
         children,
         onClick,
+        can = true
     } = props;
     return (
         <Grid container className={classes.firstLine}>
@@ -53,6 +55,7 @@ const TopicWithButton = React.forwardRef((props: TopicWithButtonProps, ref: Ref<
                 <List component="nav" aria-label="secondary mailbox folders">
                     <ListItem className={classes.paddingNone}>
                         <ListItemText primary={children} primaryTypographyProps={{variant: "h6"}}/>
+                        {can &&
                         <ListItemSecondaryAction>
                             <IconButton
                                 edge="end"
@@ -62,6 +65,7 @@ const TopicWithButton = React.forwardRef((props: TopicWithButtonProps, ref: Ref<
                                 <AddIcon/>
                             </IconButton>
                         </ListItemSecondaryAction>
+                        }
                     </ListItem>
                     <Divider/>
                 </List>

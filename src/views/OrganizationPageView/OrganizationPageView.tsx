@@ -54,6 +54,7 @@ import useAuth from "../../hooks/useAuth";
 import DialogSlave from "./LocalComponents/DialogSlave";
 import DemoRole from "../../interfaces/DemoRole";
 import ErrorHandler from "../../utils/ErrorHandler";
+import User from "../../entities/User";
 
 /**
  * OrganizationPageViewPropsStyled - interface for OrganizationPageView function
@@ -84,14 +85,14 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
 
 
     //basic
-    const {logout} = useAuth();
+    const {logout, getUser} = useAuth();
     const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
     const coreRequest = useCoreRequest();
     const {getRouteParams, changeRoute} = useChangeRoute();
     const {id} = getRouteParams();
     const confirm = useConfirm();
     const [loaded, setLoaded] = useState(false);
-
+    const [user, setUser] = useState<UserData>();
 
     //roles
     const [isAddRoleButtonActive, setIsAddRoleButtonActive] = useState(false);
@@ -145,6 +146,17 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
     //     setLoaded(true);
     // }
 
+    const handleGetUser = (orgUsers: UserData[]) => {
+        const u = getUser();
+        let uToAdd;
+        if (u) {
+            uToAdd = orgUsers.filter(orgUser => orgUser.id === u.id);
+            if (uToAdd) {
+                setUser(uToAdd[0]);
+            }
+        }
+    };
+
     //roles
     async function handleGetRoles() {
         try {
@@ -153,7 +165,9 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
         } catch (err) {
             const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
             errorHandler
-                .on(401, () => {logout()})
+                .on(401, () => {
+                    logout();
+                })
                 .on(404, "Organization not found")
                 .handle(err);
         }
@@ -167,7 +181,9 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
         } catch (err) {
             const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
             errorHandler
-                .on(401, () => {logout()})
+                .on(401, () => {
+                    logout();
+                })
                 .on(404, "Role not found")
                 .handle(err);
         }
@@ -180,7 +196,9 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
         } catch (err) {
             const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
             errorHandler
-                .on(401, () => {logout()})
+                .on(401, () => {
+                    logout();
+                })
                 .on(404, "Organization not found")
                 .handle(err);
         }
@@ -195,7 +213,9 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
             .catch(err => {
                 const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
                 errorHandler
-                    .on(401, () => {logout()})
+                    .on(401, () => {
+                        logout();
+                    })
                     .on(404, "Role not found")
                     .handle(err);
             });
@@ -215,7 +235,9 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                     .catch(err => {
                         const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
                         errorHandler
-                            .on(401, () => {logout()})
+                            .on(401, () => {
+                                logout();
+                            })
                             .handle(err);
                     });
                 handleGetRoles().then();
@@ -224,7 +246,9 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                 const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
                 errorHandler
                     .on(400, "Can not add role to user")
-                    .on(401, () => {logout()})
+                    .on(401, () => {
+                        logout();
+                    })
                     .on(403, "User already owns this role")
                     .on(404, "Role or User not found")
                     .handle(err);
@@ -248,7 +272,9 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                 const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
                 errorHandler
                     .on(400, "Can not delete role from user")
-                    .on(401, () => {logout()})
+                    .on(401, () => {
+                        logout();
+                    })
                     .on(403, "User does not own this role")
                     .on(404, "Role not found")
                     .handle(err);
@@ -270,7 +296,9 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                     const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
                     errorHandler
                         .on(400, "Can not add new role")
-                        .on(401, () => {logout()})
+                        .on(401, () => {
+                            logout();
+                        })
                         .on(409, "Role with this name already exist")
                         .handle(err);
                 });
@@ -291,7 +319,9 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                 const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
                 errorHandler
                     .on(400, "Can not delete role")
-                    .on(401, () => {logout()})
+                    .on(401, () => {
+                        logout();
+                    })
                     .on(404, "Role not found")
                     .handle(err);
             });
@@ -310,7 +340,9 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                 const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
                 errorHandler
                     .on(400, "Can not edit role")
-                    .on(401, () => {logout()})
+                    .on(401, () => {
+                        logout();
+                    })
                     .on(404, "Role not found")
                     .on(409, "Role with this name already exist")
                     .handle(err);
@@ -350,11 +382,14 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
         try {
             const response = await coreRequest().get(`organizations/${id}/users`);
             setOrganizationUsers(response.body);
+            handleGetUser(response.body);
             return response.body;
         } catch (err) {
             const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
             errorHandler
-                .on(401, () => {logout()})
+                .on(401, () => {
+                    logout();
+                })
                 .on(404, "Organization not found")
                 .handle(err);
         }
@@ -367,7 +402,9 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
         } catch (err) {
             const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
             errorHandler
-                .on(401, () => {logout()})
+                .on(401, () => {
+                    logout();
+                })
                 .on(404, "Organization not found")
                 .handle(err);
         }
@@ -380,7 +417,9 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
         } catch (err) {
             const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
             errorHandler
-                .on(401, () => {logout()})
+                .on(401, () => {
+                    logout();
+                })
                 .handle(err);
         }
     }
@@ -388,11 +427,13 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
     async function handleGetAvailableUsers() {
         try {
             const response = await coreRequest().get(`organizations/${id}/availableUsers`);
-            setAvailableUsers(response.body)
+            setAvailableUsers(response.body);
         } catch (err) {
             const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
             errorHandler
-                .on(401, () => {logout()})
+                .on(401, () => {
+                    logout();
+                })
                 .on(404, "Organization not found")
                 .handle(err);
         }
@@ -414,7 +455,9 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                 const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
                 errorHandler
                     .on(400, "Can not add user")
-                    .on(401, () => {logout()})
+                    .on(401, () => {
+                        logout();
+                    })
                     .handle(err);
             });
     }
@@ -433,7 +476,9 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                 const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
                 errorHandler
                     .on(400, "Can not delete user")
-                    .on(401, () => {logout()})
+                    .on(401, () => {
+                        logout();
+                    })
                     .on(404, "User not exist")
                     .on(409, "Some users are not in organization")
                     .handle(err);
@@ -476,7 +521,9 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
             .catch(err => {
                 const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
                 errorHandler
-                    .on(401, () => {logout()})
+                    .on(401, () => {
+                        logout();
+                    })
                     .on(404, "Plugin not found")
                     .handle(err);
             });
@@ -485,7 +532,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
     const handleCloseAddUsersDialog = () => {
         setIsButtonActive(false);
         setNewUsers([]);
-    }
+    };
 
 
     const slaves = [
@@ -555,7 +602,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                 <Route path={path}>
                     <Box>
                         {mainInfo}
-                        <TopicWithButton children="Slaves"/>
+                        <TopicWithButton children="Slaves" can={(user !== undefined && (user.roles.length > 0 && user.roles[0].canManageRoles))}/>
                         <Grid container className={classes.firstLine}>
                             <Grid item xs={12} md={10}>
                                 {slaves.map((slave, key) => {
@@ -568,7 +615,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                                                 primary={slave}
                                                 secondary="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur, rerum?"
                                             />
-
+                                            {(user && (user.roles.length > 0 && user.roles[0].canManagePlugins)) &&
                                             <ListItemSecondaryAction
                                                 onClick={handleOpenDialogSlave}
                                             >
@@ -576,6 +623,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                                                     <SettingsIcon/>
                                                 </IconButton>
                                             </ListItemSecondaryAction>
+                                            }
                                         </ListItem>
                                     );
                                 })}
@@ -589,7 +637,12 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                         />
 
 
-                        <TopicWithButton onClick={handleIsAddRoleButtonActive} children="Roles"/>
+                        <TopicWithButton
+                            onClick={handleIsAddRoleButtonActive}
+                            can={(user !== undefined && (user.roles.length > 0 && user.roles[0].canManageRoles))}
+                            children="Roles"
+                        />
+
 
                         <DialogAddRoles
                             open={isAddRoleButtonActive}
@@ -615,6 +668,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                                                         secondary: classes.rolesDescription,
                                                     }}
                                                 />
+                                                {(user && (user.roles.length > 0 && user.roles[0].canManageRoles)) &&
                                                 <ListItemSecondaryAction>
                                                     <IconButton
                                                         edge="end"
@@ -634,6 +688,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                                                         <DeleteIcon/>
                                                     </IconButton>
                                                 </ListItemSecondaryAction>
+                                                }
                                             </ListItem>
                                         );
                                     })}
@@ -650,7 +705,11 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                             onModifyRole={handleModifyRole}
                         />
 
-                        <TopicWithButton onClick={handleIsButtonActive} children="Members"/>
+                        <TopicWithButton
+                            onClick={handleIsButtonActive}
+                            can={(user !== undefined && (user.roles.length > 0 && user.roles[0].canManageUsers))}
+                            children="Members"
+                        />
 
                         <DialogAddUsers
                             open={isButtonActive}
@@ -663,28 +722,30 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                         />
 
                         <Grid container className={classes.firstLine} spacing={0}>
-                            {organizationUsers.map((user: UserData, key: number) => {
+                            {organizationUsers.map((orgUser: UserData, key: number) => {
                                 return (
                                     <Grid item xs={12} md={10} key={key}>
                                         <ListItem button onClick={() => {
-                                            changeRoute({page: "user", id: user.id});
+                                            changeRoute({page: "user", id: orgUser.id});
                                         }}>
                                             <ListItemAvatar>
                                                 <Avatar
                                                     src="https://cdn.sportclub.ru/assets/2019-09-20/n97c311rvb.jpg"
                                                 />
                                             </ListItemAvatar>
-                                            <ListItemText primary={user.username} secondary={user.email}/>
+                                            <ListItemText primary={orgUser.username} secondary={orgUser.email}/>
                                             <ListItemSecondaryAction>
-                                                {user.roles[0] &&
+                                                {orgUser.roles[0] &&
                                                 <Chip
-                                                    label={user.roles[0]?.name}
-                                                    style={{backgroundColor: `#${user?.roles[0].color}`}}
+                                                    label={orgUser.roles[0]?.name}
+                                                    style={{backgroundColor: `#${orgUser?.roles[0].color}`}}
                                                 />
                                                 }
-                                                <IconButton onClick={() => handleIsUserSettingsButtonActive(user)}>
+                                                {(user && (user.roles.length > 0 && user.roles[0].canManageUsers)) &&
+                                                <IconButton onClick={() => handleIsUserSettingsButtonActive(orgUser)}>
                                                     <SettingsIcon/>
                                                 </IconButton>
+                                                }
                                             </ListItemSecondaryAction>
                                         </ListItem>
                                     </Grid>
@@ -704,6 +765,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
 
                         <TopicWithButton
                             children="Plugins"
+                            can={(user !== undefined && (user.roles.length > 0 && user.roles[0].canManagePlugins))}
                             onClick={() => changeRoute({page: "plugin/create", id: id})}
                         />
                         {plugins?.map((plugin) => {
@@ -714,6 +776,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                                         setDialogPluginButton(!dialogPluginButton);
                                     }}
                                     setCurrentPlugin={handleSetCurrentPlugin}
+                                    can={(user !== undefined && (user.roles.length > 0 && user.roles[0].canManagePlugins))}
                                 />
                             );
                         })}

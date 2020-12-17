@@ -154,7 +154,7 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<HTML
             .catch(err => {
                 const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
                 errorHandler
-                    // .on(401, () => {logout()})
+                    .on(401, () => {logout()})
                     .on(404, "User not found")
                     .handle(err);
             })
