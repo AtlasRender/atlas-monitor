@@ -176,7 +176,7 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
             .send({name: name, description: description, userIds: userIds, roles: roles})
             .then((response)=>{
                 enqueueSuccessSnackbar("Successfully created");
-                changeRoute({page: "user", id: getUser()?.id});
+                changeRoute({page: "organization", id: response.body.organizationId});
             })
             .catch(err => {
                 const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
