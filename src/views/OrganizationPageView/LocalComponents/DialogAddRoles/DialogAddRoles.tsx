@@ -124,10 +124,12 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
             ...prev, "noInputError": false
         }));
         if (event.target.name === "name") {
-            if (!addRole.name.match(/^[a-zA-Z]+$/) || !addRole.name || addRole.name.length < 3 || addRole.name.length > 50) {
+            //TODO every language exept special symbols
+            if (addRole.name.match(/[^A-Za-z0-9_ ]/) || !addRole.name || addRole.name.length < 3 || addRole.name.length > 50) {
                 setErrors(prev => ({
                     ...prev, "nameError": true
                 }));
+
             } else {
                 setErrors(prev => ({
                     ...prev, "nameError": false
