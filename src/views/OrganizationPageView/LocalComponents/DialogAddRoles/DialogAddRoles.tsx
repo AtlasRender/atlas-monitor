@@ -26,6 +26,7 @@ import TextField from "@material-ui/core/TextField";
 import ColorPicker from "../../../../components/ColorPicker";
 import Role from "../../../../interfaces/Role";
 import RoleToggles from "../RoleToggles";
+import useEnqueueErrorSnackbar from "../../../../utils/enqueueErrorSnackbar";
 
 interface DialogAddRolesProps extends Stylable {
     open: boolean;
@@ -60,6 +61,7 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
     } = props;
 
 
+    const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
     const theme = useTheme();
     const [addRole, setAddRole] = useState({
         name: role?.name || "",
@@ -168,6 +170,8 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
         if (!errors.noInputError && !errors.nameError && !errors.descriptionError && !errors.permissionLevelError) {
             modify ? onModifyRole && onModifyRole(role?.id, addRole) : onAddRole(addRole, errors);
             handleOnClose();
+        } else {
+            enqueueErrorSnackbar("Invalid input");
         }
     }
 
