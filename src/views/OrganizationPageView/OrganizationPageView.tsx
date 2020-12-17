@@ -318,6 +318,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
     }
 
     function handleIsAddRoleButtonActive() {
+        setRoleToChange(undefined);
         setIsAddRoleButtonActive(!isAddRoleButtonActive);
     }
 
