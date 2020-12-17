@@ -13,6 +13,10 @@ const styles = (theme: Theme)=> createStyles({
         paddingLeft: 0,
         paddingBottom: 0,
     },
+    scroll: {
+        height: 256,
+        overflow: "auto",
+    }
 });
 
 export default styles;
