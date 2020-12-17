@@ -20,7 +20,10 @@ import Plugin from "../../../../interfaces/Plugin";
  */
 interface PluginComponentProps extends Stylable {
     plugin: Plugin,
+    can?: boolean,
+
     invokeDialog(): void,
+
     setCurrentPlugin(id: number): void,
 }
 
@@ -37,19 +40,25 @@ const PluginComponent = React.forwardRef((props: PluginComponentProps, ref: Ref<
         plugin,
         invokeDialog,
         setCurrentPlugin,
+        can = true,
     } = props;
 
     return (
         <Grid container spacing={0} className={classes.container}>
             <Grid item xs={10}>
                 <List className={classes.listRoot}>
-                    <ListItem style={style} className={className} button onClick={()=>{invokeDialog(); setCurrentPlugin(plugin.id)}}>
+                    <ListItem style={style} className={className} button onClick={() => {
+                        invokeDialog();
+                        setCurrentPlugin(plugin.id);
+                    }}>
                         <ListItemText primary={plugin.name} secondary={plugin.description}/>
+                        {can &&
                         <ListItemSecondaryAction>
                             <IconButton>
                                 <CloseIcon/>
                             </IconButton>
                         </ListItemSecondaryAction>
+                        }
                     </ListItem>
                 </List>
             </Grid>
