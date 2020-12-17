@@ -264,7 +264,6 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<HTML
                     <List>
                         <MenuElement icon={WorkIcon} page="jobs" label="Render ShortJobs"/>
                         <MenuElement icon={PersonIcon} page="user" label="User Page"/>
-                        <MenuElement icon={GroupIcon} page="organization/1" label="Organization Page"/>
                         <MenuElement icon={CheckIcon} page="submit" label="Submit Page"/>
                         <MenuElement icon={AddIcon} page="createorganization" label="Create Organization"/>
                     </List>
