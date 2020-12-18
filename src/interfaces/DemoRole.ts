@@ -7,6 +7,7 @@
  */
 
 export default interface DemoRole{
+    id: number,
     name: string;
     permissionLevel: number;
     description?: string | null;

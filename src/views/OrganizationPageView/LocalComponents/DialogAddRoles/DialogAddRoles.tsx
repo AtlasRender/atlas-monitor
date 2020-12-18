@@ -6,7 +6,7 @@
  * All rights reserved.
  */
 
-import React, {Ref, useEffect, useState} from "react";
+import React, {Ref, useEffect, useRef, useState} from "react";
 import {
     Button,
     Dialog,
@@ -27,10 +27,12 @@ import ColorPicker from "../../../../components/ColorPicker";
 import Role from "../../../../interfaces/Role";
 import RoleToggles from "../RoleToggles";
 import useEnqueueErrorSnackbar from "../../../../utils/enqueueErrorSnackbar";
+import DemoRole from "../../../../interfaces/DemoRole";
+import IdGenerator from "../../../../utils/IdGenerator";
 
 interface DialogAddRolesProps extends Stylable {
     open: boolean;
-    role?: Role;
+    role?: Role | DemoRole;
     modify?: boolean;
 
     onClose(): void;
@@ -60,10 +62,17 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
         onModifyRole,
     } = props;
 
+    let counterId = 0;
+    const idGenerator = React.useRef(IdGenerator());
+    if(open) {
+        const getNextId = (): number => idGenerator.current.next().value;
+        counterId = getNextId();
+    }
 
     const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
     const theme = useTheme();
     const [addRole, setAddRole] = useState({
+        id: role?.id || counterId,
         name: role?.name || "",
         description: role?.description || "",
         color: role?.color || "FFF",
@@ -87,6 +96,7 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
 
     useEffect(() => {
         setAddRole({
+            id: role?.id || counterId,
             name: role?.name || "",
             description: role?.description || "",
             color: role?.color || "FFF",
@@ -101,6 +111,9 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
             canEditAudit: role?.canEditAudit || false,
         });
     }, [role]);
+
+    console.log("id counter", counterId);
+    console.log("role id", addRole.id);
 
     const handleSwitch = (event: React.ChangeEvent<HTMLInputElement>) => {
         setAddRole((prev) => (
@@ -177,6 +190,7 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
 
     function handleOnClose() {
         setAddRole({
+            id: counterId,
             name: "",
             description: "",
             color: "fff",

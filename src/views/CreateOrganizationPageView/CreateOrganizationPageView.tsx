@@ -45,6 +45,7 @@ import useAuth from "../../hooks/useAuth";
 import ErrorHandler from "../../utils/ErrorHandler";
 import useEnqueueSuccessSnackbar from "../../utils/EnqueSuccessSnackbar";
 import DialogAddUsers from "../OrganizationPageView/LocalComponents/DialogAddUsers";
+import DemoRole from "../../interfaces/DemoRole";
 
 
 interface CreateOrganizationPageProps extends Stylable {
@@ -79,8 +80,8 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
         descriptionMessage: "",
     });
     const [owner, setOwner] = useState<UserData>();
-    const [roles, setRoles] = useState<Role[]>([]);
-    const [roleToModify, setRoleToModify] = useState<Role>();
+    const [roles, setRoles] = useState<DemoRole[]>([]);
+    const [roleToModify, setRoleToModify] = useState<DemoRole>();
     const [users, setUsers] = useState<UserData[]>([]);
     const [members, setMembers] = useState<UserData[]>([]);
     const [addMemberButton, setAddMemberButton] = useState<boolean>(false);
@@ -142,13 +143,14 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
     const theme = useTheme();
     let info;
 
-    function addRole(role: Role) {
+    function addRole(role: DemoRole) {
         setAddRoleButton(!addRoleButton);
         setRoles((prev) => ([...prev, role]));
     }
 
 
     function modifyRole(id: number, role: Role) {
+        console.log("new role id", id);
         setAddRoleButton(!addRoleButton);
         setRoles((prev) => ([...prev.filter(elem => elem.id !== id)]));
         setRoles((prev) => ([...prev, role]));
@@ -225,10 +227,24 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
 
     function createOrg() {
         const userIds = members.map((member) => member.id);
+        const sentRoles = roles.map(elem=>({
+            name: elem.name,
+            permissionLevel: elem.permissionLevel,
+            description: elem.description,
+            color: elem.color,
+            canManageUsers: elem.canManageUsers,
+            canCreateJobs: elem.canCreateJobs,
+            canEditJobs: elem.canEditJobs,
+            canDeleteJobs: elem.canDeleteJobs,
+            canManageRoles: elem.canManageRoles,
+            canManagePlugins: elem.canManagePlugins,
+            canManageTeams: elem.canManageTeams,
+            canEditAudit: elem.canEditAudit,
+        }));
         console.log(users);
         coreRequest()
             .post("organizations")
-            .send({name: name, description: description, userIds: userIds, roles: roles})
+            .send({name: name, description: description, userIds: userIds, roles: sentRoles})
             .then((response)=>{
                 enqueueSuccessSnackbar("Successfully created");
                 changeRoute({page: "organization", id: response.body.organizationId});
@@ -337,7 +353,7 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
 
                 <DialogAddRoles
                     open={addRoleButton}
-                    onClose={() => {setAddRoleButton(!addRoleButton); setRoleToModify(undefined)}}
+                    onClose={() => {setAddRoleButton(!addRoleButton); setRoleToModify(undefined); setModify(false)}}
                     onAddRole={addRole}
                     role={roleToModify}
                     modify={modify}
