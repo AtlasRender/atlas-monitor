@@ -79,6 +79,22 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
         descriptionError: false,
         descriptionMessage: "",
     });
+
+    const defaultRole = {
+        name: "user",
+        description: "Default user role.",
+        color: "090",
+        permissionLevel: 0,
+        canManageUsers: false,
+        canManageRoles: false,
+        canCreateJobs: true,
+        canDeleteJobs: false,
+        canEditJobs: false,
+        canManagePlugins: true,
+        canManageTeams: true,
+        canEditAudit: true,
+    }
+
     const [owner, setOwner] = useState<UserData>();
     const [roles, setRoles] = useState<DemoRole[]>([]);
     const [roleToModify, setRoleToModify] = useState<DemoRole>();
@@ -103,9 +119,9 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
     }
 
     function handleAddUser(usersToAddId: number[]) {
-        for(let i = 0; i < usersToAddId.length; i++) {
+        for (let i = 0; i < usersToAddId.length; i++) {
             const newMember = users.filter(user => user.id === usersToAddId[i]);
-            if(newMember[0].id !== owner?.id) {
+            if (newMember[0].id !== owner?.id) {
                 setMembers(prev => ([...prev, newMember[0]]));
             }
         }
@@ -116,7 +132,7 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
     function handleGetAvailableUsers() {
         let availableMembers: UserData[] = users;
         availableMembers = availableMembers.filter(user => user.id !== owner?.id);
-        for(let i = 0; i < members.length; i++) {
+        for (let i = 0; i < members.length; i++) {
             availableMembers = availableMembers.filter(user => (user.id !== members[i].id && user.id !== owner?.id));
         }
         setAvailableUsers(availableMembers);
@@ -125,10 +141,10 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
     const handleCloseDialogAddUser = () => {
         setAddMemberButton(!addMemberButton);
         setNewUsers([]);
-    }
+    };
 
     useEffect(() => {
-        if(owner) {
+        if (owner) {
             handleGetAvailableUsers();
         }
     }, [owner]);
@@ -142,6 +158,14 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
 
     const theme = useTheme();
     let info;
+
+    useEffect(()=>{
+        addDefaultRole(defaultRole);
+    }, [])
+
+    const addDefaultRole = (role: any)=>{
+        addRole(role);
+    }
 
     function addRole(role: DemoRole) {
         setAddRoleButton(!addRoleButton);
@@ -204,7 +228,9 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
             .catch(err => {
                 const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
                 errorHandler
-                    .on(401, () => {logout()})
+                    .on(401, () => {
+                        logout();
+                    })
                     .handle(err);
             });
     }
@@ -220,7 +246,9 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
             .catch(err => {
                 const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
                 errorHandler
-                    .on(401, () => {logout()})
+                    .on(401, () => {
+                        logout();
+                    })
                     .handle(err);
             });
     }
@@ -253,7 +281,9 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
                 const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
                 errorHandler
                     .on(400, "Invalid input")
-                    .on(401, () => {logout()})
+                    .on(401, () => {
+                        logout();
+                    })
                     .on(409, "Organization with this name already exists")
                     .handle(err);
             });
@@ -349,11 +379,22 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
                             </ListItem>
                         );
                     })}
+                    {!roles.length &&
+                        <Box className={classes.emptyRolesList}>
+                            <Typography variant="body1" align="center">
+                                There are no roles. Please be aware that the default role will be created anyway
+                            </Typography>
+                        </Box>
+                    }
                 </List>
 
                 <DialogAddRoles
                     open={addRoleButton}
-                    onClose={() => {setAddRoleButton(!addRoleButton); setRoleToModify(undefined); setModify(false)}}
+                    onClose={() => {
+                        setAddRoleButton(!addRoleButton);
+                        setRoleToModify(undefined);
+                        setModify(false)
+                    }}
                     onAddRole={addRole}
                     role={roleToModify}
                     modify={modify}
