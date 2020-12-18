@@ -80,7 +80,8 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
         descriptionMessage: "",
     });
 
-    const defaultRole = {
+    const [defaultRole, setDefaultRole] = useState<DemoRole>({
+        id: -1,
         name: "user",
         description: "Default user role.",
         color: "090",
@@ -93,7 +94,7 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
         canManagePlugins: true,
         canManageTeams: true,
         canEditAudit: true,
-    }
+    });
 
     const [owner, setOwner] = useState<UserData>();
     const [roles, setRoles] = useState<DemoRole[]>([]);
@@ -159,16 +160,12 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
     const theme = useTheme();
     let info;
 
-    useEffect(()=>{
-        addDefaultRole(defaultRole);
-    }, [])
-
-    const addDefaultRole = (role: any)=>{
-        addRole(role);
-    }
+    useEffect(() => {
+        addRole(defaultRole);
+    }, []);
 
     function addRole(role: DemoRole) {
-        setAddRoleButton(!addRoleButton);
+        setAddRoleButton(false);
         setRoles((prev) => ([...prev, role]));
     }
 
@@ -254,26 +251,25 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
     }
 
     function createOrg() {
+        console.log('roles', roles);
         const userIds = members.map((member) => member.id);
-        const sentRoles = roles.map(elem=>({
-            name: elem.name,
-            permissionLevel: elem.permissionLevel,
-            description: elem.description,
-            color: elem.color,
-            canManageUsers: elem.canManageUsers,
-            canCreateJobs: elem.canCreateJobs,
-            canEditJobs: elem.canEditJobs,
-            canDeleteJobs: elem.canDeleteJobs,
-            canManageRoles: elem.canManageRoles,
-            canManagePlugins: elem.canManagePlugins,
-            canManageTeams: elem.canManageTeams,
-            canEditAudit: elem.canEditAudit,
-        }));
-        console.log(users);
+        const filteredRoles = roles.filter(elem => elem.id !== defaultRole.id);
+        const sentRoles = filteredRoles.map((elem) => {
+            const {id, ...obj} = elem;
+            return obj;
+        });
+        const {id, ...defaultRoleToSent} = defaultRole;
+        console.log(sentRoles);
         coreRequest()
             .post("organizations")
-            .send({name: name, description: description, userIds: userIds, roles: sentRoles})
-            .then((response)=>{
+            .send({
+                name: name,
+                description: description,
+                userIds: userIds,
+                roles: sentRoles,
+                defaultRole: defaultRoleToSent
+            })
+            .then((response) => {
                 enqueueSuccessSnackbar("Successfully created");
                 changeRoute({page: "organization", id: response.body.organizationId});
             })
@@ -380,11 +376,11 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
                         );
                     })}
                     {!roles.length &&
-                        <Box className={classes.emptyRolesList}>
-                            <Typography variant="body1" align="center">
-                                There are no roles. Please be aware that the default role will be created anyway
-                            </Typography>
-                        </Box>
+                    <Box className={classes.emptyRolesList}>
+                        <Typography variant="body1" align="center">
+                            There are no roles. Please be aware that the default role will be created anyway
+                        </Typography>
+                    </Box>
                     }
                 </List>
 
@@ -393,7 +389,7 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
                     onClose={() => {
                         setAddRoleButton(!addRoleButton);
                         setRoleToModify(undefined);
-                        setModify(false)
+                        setModify(false);
                     }}
                     onAddRole={addRole}
                     role={roleToModify}
