@@ -34,12 +34,12 @@ interface DialogAddRolesProps extends Stylable {
     open: boolean;
     role?: Role | DemoRole;
     modify?: boolean;
-
+    defaultId?: number;
     onClose(): void;
 
     onAddRole(role: any, errors: any): void;
 
-    onModifyRole?(roleId: number | undefined, roleToModify: any): void;
+    onModifyRole?(roleId: number | undefined, roleToModify: any, isDefault: boolean): void;
 }
 
 interface ValidationErrors {
@@ -60,14 +60,16 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
         onClose,
         onAddRole,
         onModifyRole,
+        defaultId,
     } = props;
 
     let counterId = 0;
     const idGenerator = React.useRef(IdGenerator());
-    if(open) {
+    if (open) {
         const getNextId = (): number => idGenerator.current.next().value;
         counterId = getNextId();
     }
+    const [defaultIdLocal, setDefaultIdLocal] = useState<number | undefined>(defaultId);
 
     const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
     const theme = useTheme();
@@ -131,7 +133,7 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
     };
 
     function handleGetColor(inputColor: string) {
-        if(inputColor) {
+        if (inputColor) {
             setAddRole((prev) => (prev && {...prev, color: inputColor}));
         } else {
             setAddRole((prev) => (prev && {...prev, color: "000"}));
@@ -181,7 +183,7 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
 
     function handleClick() {
         if (!errors.noInputError && !errors.nameError && !errors.descriptionError && !errors.permissionLevelError) {
-            modify ? onModifyRole && onModifyRole(role?.id, addRole) : onAddRole(addRole, errors);
+            modify ? onModifyRole && onModifyRole(role?.id, addRole, addRole.id === defaultIdLocal) : onAddRole(addRole, errors);
             handleOnClose();
         } else {
             enqueueErrorSnackbar("Invalid input");
@@ -268,6 +270,16 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
                             onBlur={handleValidation}
                         />
                     </Grid>
+                    {modify &&
+                        <Button
+                            fullWidth
+                            onClick={()=>{setDefaultIdLocal(addRole.id)}}
+                            className={classes.makeDefaultButton}
+                            disabled={defaultIdLocal === addRole.id}
+                        >
+                            Mark as default
+                        </Button>
+                    }
                     <Grid item xs={12} className={classes.gridPadding}>
                         <ColorPicker
                             onChange={handleGetColor}
@@ -281,7 +293,7 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
                         fullWidth
                         onClick={handleClick}
                     >
-                        {modify ? "Modify" : "Add role"}
+                        Accept
                     </Button>
                 </Grid>
             </ListItem>

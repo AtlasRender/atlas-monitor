@@ -170,9 +170,12 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
     }
 
 
-    function modifyRole(id: number, role: Role) {
+    function modifyRole(id: number, role: DemoRole, isDefault: boolean) {
         console.log("new role id", id);
         setAddRoleButton(!addRoleButton);
+        if(isDefault){
+            setDefaultRole(role);
+        }
         setRoles((prev) => ([...prev.filter(elem => elem.id !== id)]));
         setRoles((prev) => ([...prev, role]));
         setModify(false);
@@ -395,6 +398,7 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
                     role={roleToModify}
                     modify={modify}
                     onModifyRole={modifyRole}
+                    defaultId={defaultRole.id}
                 />
 
                 <List style={{marginTop: 16}}>

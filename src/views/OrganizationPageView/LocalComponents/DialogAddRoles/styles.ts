@@ -7,6 +7,7 @@
  */
 
 import {createStyles, Theme} from "@material-ui/core";
+import {green} from "@material-ui/core/colors";
 
 const styles = (theme: Theme) => createStyles({
     firstLine: {
@@ -31,6 +32,9 @@ const styles = (theme: Theme) => createStyles({
             maxWidth: 375,
         },
     },
+    makeDefaultButton:{
+        backgroundColor: green[400],
+    }
 
 });
 
