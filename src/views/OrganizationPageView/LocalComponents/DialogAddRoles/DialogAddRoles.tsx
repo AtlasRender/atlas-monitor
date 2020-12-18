@@ -276,6 +276,7 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
                             onClick={()=>{setDefaultIdLocal(addRole.id)}}
                             className={classes.makeDefaultButton}
                             disabled={defaultIdLocal === addRole.id}
+                            classes={{disabled: classes.disabledButton}}
                         >
                             Mark as default
                         </Button>
