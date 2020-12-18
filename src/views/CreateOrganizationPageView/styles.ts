@@ -47,6 +47,9 @@ const styles = (theme: Theme) => createStyles({
     button: {
         backgroundColor: grey[300],
 
+    },
+    emptyRolesList:{
+        margin: theme.spacing(2,2,2,2),
     }
 
 });
