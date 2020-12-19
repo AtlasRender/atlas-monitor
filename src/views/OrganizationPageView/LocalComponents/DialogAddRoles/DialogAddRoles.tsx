@@ -34,8 +34,11 @@ interface DialogAddRolesProps extends Stylable {
     open: boolean;
     role?: Role | DemoRole;
     modify?: boolean;
-    defaultId?: number;
+    isDefault?: boolean;
+
     onClose(): void;
+
+    onExited?(): void;
 
     onAddRole(role: any, errors: any): void;
 
@@ -60,7 +63,8 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
         onClose,
         onAddRole,
         onModifyRole,
-        defaultId,
+        isDefault,
+        onExited,
     } = props;
 
     let counterId = 0;
@@ -69,16 +73,18 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
         const getNextId = (): number => idGenerator.current.next().value;
         counterId = getNextId();
     }
-    const [defaultIdLocal, setDefaultIdLocal] = useState<number | undefined>(defaultId);
+
+    const [willBeDefault, setWillBeDefault] = useState<boolean>(isDefault || false);
+
 
     const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
     const theme = useTheme();
-    const [addRole, setAddRole] = useState({
+    const [addRole, setAddRole] = useState<DemoRole | Role>({
         id: role?.id || counterId,
         name: role?.name || "",
         description: role?.description || "",
         color: role?.color || "FFF",
-        permissionLevel: role?.permissionLevel || 0,
+        permissionLevel: role?.permissionLevel || 1,
         canManageUsers: role?.canManageUsers || false,
         canCreateJobs: role?.canCreateJobs || false,
         canEditJobs: role?.canEditJobs || false,
@@ -89,6 +95,7 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
         canEditAudit: role?.canEditAudit || false,
     });
 
+
     const [errors, setErrors] = useState<ValidationErrors>({
         noInputError: false,
         nameError: false,
@@ -97,25 +104,24 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
     });
 
     useEffect(() => {
-        setAddRole({
-            id: role?.id || counterId,
-            name: role?.name || "",
-            description: role?.description || "",
-            color: role?.color || "FFF",
-            permissionLevel: role?.permissionLevel || 0,
-            canManageUsers: role?.canManageUsers || false,
-            canCreateJobs: role?.canCreateJobs || false,
-            canEditJobs: role?.canEditJobs || false,
-            canDeleteJobs: role?.canDeleteJobs || false,
-            canManageRoles: role?.canManageRoles || false,
-            canManagePlugins: role?.canManagePlugins || false,
-            canManageTeams: role?.canManageTeams || false,
-            canEditAudit: role?.canEditAudit || false,
+        role && setAddRole({
+            id: role.id,
+            name: role.name,
+            description: role?.description,
+            color: role.color,
+            permissionLevel: role.permissionLevel,
+            canManageUsers: role.canManageUsers,
+            canCreateJobs: role.canCreateJobs,
+            canEditJobs: role.canEditJobs,
+            canDeleteJobs: role.canDeleteJobs,
+            canManageRoles: role.canManageRoles,
+            canManagePlugins: role.canManagePlugins,
+            canManageTeams: role.canManageTeams,
+            canEditAudit: role.canEditAudit,
         });
     }, [role]);
 
-    console.log("id counter", counterId);
-    console.log("role id", addRole.id);
+    // console.log("defaultRoleId", defaultIdLocal);
 
     const handleSwitch = (event: React.ChangeEvent<HTMLInputElement>) => {
         setAddRole((prev) => (
@@ -183,7 +189,7 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
 
     function handleClick() {
         if (!errors.noInputError && !errors.nameError && !errors.descriptionError && !errors.permissionLevelError) {
-            modify ? onModifyRole && onModifyRole(role?.id, addRole, addRole.id === defaultIdLocal) : onAddRole(addRole, errors);
+            modify ? onModifyRole && onModifyRole(role?.id, addRole, willBeDefault) : onAddRole(addRole, errors);
             handleOnClose();
         } else {
             enqueueErrorSnackbar("Invalid input");
@@ -191,34 +197,38 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
     }
 
     function handleOnClose() {
-        setAddRole({
-            id: counterId,
-            name: "",
-            description: "",
-            color: "fff",
-            permissionLevel: 0,
-            canManageUsers: false,
-            canCreateJobs: false,
-            canEditJobs: false,
-            canDeleteJobs: false,
-            canManageRoles: false,
-            canManagePlugins: false,
-            canManageTeams: false,
-            canEditAudit: false,
-        });
+        onClose();
         setErrors({
             "noInputError": false,
             "nameError": false,
             "descriptionError": false,
             "permissionLevelError": false,
         });
-        onClose();
+        setWillBeDefault(false);
     }
 
     return (
         <Dialog
             open={open}
             onClose={handleOnClose}
+            onExited={() => {
+                onExited && onExited();
+                setAddRole({
+                    id: counterId,
+                    name: "",
+                    description: "",
+                    color: "fff",
+                    permissionLevel: 1,
+                    canManageUsers: false,
+                    canCreateJobs: false,
+                    canEditJobs: false,
+                    canDeleteJobs: false,
+                    canManageRoles: false,
+                    canManagePlugins: false,
+                    canManageTeams: false,
+                    canEditAudit: false,
+                });
+            }}
         >
             <DialogTitle
                 className={classes.dialogRoles}
@@ -271,15 +281,17 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
                         />
                     </Grid>
                     {modify &&
-                        <Button
-                            fullWidth
-                            onClick={()=>{setDefaultIdLocal(addRole.id)}}
-                            className={classes.makeDefaultButton}
-                            disabled={defaultIdLocal === addRole.id}
-                            classes={{disabled: classes.disabledButton}}
-                        >
-                            Mark as default
-                        </Button>
+                    <Button
+                        fullWidth
+                        onClick={() => {
+                            setWillBeDefault(true);
+                        }}
+                        className={classes.makeDefaultButton}
+                        disabled={isDefault || willBeDefault}
+                        classes={{disabled: classes.disabledButton}}
+                    >
+                        Mark as default
+                    </Button>
                     }
                     <Grid item xs={12} className={classes.gridPadding}>
                         <ColorPicker

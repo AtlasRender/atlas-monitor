@@ -42,6 +42,10 @@ const styles = (theme: Theme) => createStyles({
         paddingLeft: 0,
         paddingRight: 0,
     },
+    spacingBetweenButtonFix: {
+        display: "flex",
+        flexGrow: 1,
+    },
     spacingInNewToken: {
         paddingRight: theme.spacing(2),
     },
