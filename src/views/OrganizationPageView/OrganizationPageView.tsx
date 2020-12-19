@@ -78,6 +78,8 @@ interface ValidationErrors {
     "permissionLevelError": boolean;
 }
 
+type permissionsType = "canManageRoles" | "canManageUsers" | "canManagePlugins"
+
 const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps, ref: Ref<any>) => {
     const {
         classes,
@@ -158,6 +160,15 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
             }
         }
     };
+
+    const checkUserPermissions = (canManage: permissionsType) => {
+        if((user && ((user.roles.length > 0 && user.roles[0][canManage]) || user.id === organizationData?.ownerUser.id))) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
 
     //roles
     async function handleGetRoles() {
@@ -605,8 +616,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                 <Route path={path}>
                     <Box>
                         {mainInfo}
-                        <TopicWithButton children="Slaves"
-                                         can={(user !== undefined && (user.roles.length > 0 && user.roles[0].canManageRoles))}/>
+                        <TopicWithButton children="Slaves" can={checkUserPermissions("canManagePlugins")}/>
                         <Grid container className={classes.firstLine}>
                             <Grid item xs={12} md={10}>
                                 {slaves.map((slave, key) => {
@@ -619,7 +629,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                                                 primary={slave}
                                                 secondary="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur, rerum?"
                                             />
-                                            {(user && (user.roles.length > 0 && user.roles[0].canManagePlugins)) &&
+                                            {checkUserPermissions("canManagePlugins") &&
                                             <ListItemSecondaryAction
                                                 onClick={handleOpenDialogSlave}
                                             >
@@ -643,7 +653,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
 
                         <TopicWithButton
                             onClick={handleIsAddRoleButtonActive}
-                            can={(user !== undefined && (user.roles.length > 0 && user.roles[0].canManageRoles))}
+                            can={checkUserPermissions("canManageRoles")}
                             children="Roles"
                         />
 
@@ -677,7 +687,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                                                         secondary: classes.rolesDescription,
                                                     }}
                                                 />
-                                                {(user && (user.roles.length > 0 && user.roles[0].canManageRoles)) &&
+                                                {checkUserPermissions("canManageRoles") &&
                                                 <ListItemSecondaryAction>
                                                     <IconButton
                                                         edge="end"
@@ -716,7 +726,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
 
                         <TopicWithButton
                             onClick={handleIsButtonActive}
-                            can={(user !== undefined && (user.roles.length > 0 && user.roles[0].canManageUsers))}
+                            can={checkUserPermissions("canManageUsers")}
                             children="Members"
                         />
 
@@ -750,7 +760,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                                                     style={{backgroundColor: `#${orgUser?.roles[0].color}`}}
                                                 />
                                                 }
-                                                {(user && (user.roles.length > 0 && user.roles[0].canManageUsers)) &&
+                                                {checkUserPermissions("canManageUsers") &&
                                                 <IconButton onClick={() => handleIsUserSettingsButtonActive(orgUser)}>
                                                     <SettingsIcon/>
                                                 </IconButton>
@@ -774,7 +784,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
 
                         <TopicWithButton
                             children="Plugins"
-                            can={(user !== undefined && (user.roles.length > 0 && user.roles[0].canManagePlugins))}
+                            can={checkUserPermissions("canManagePlugins")}
                             onClick={() => changeRoute({page: "plugin/create", id: id})}
                         />
                         {plugins?.map((plugin) => {
@@ -785,7 +795,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                                         setDialogPluginButton(!dialogPluginButton);
                                     }}
                                     setCurrentPlugin={handleSetCurrentPlugin}
-                                    can={(user !== undefined && (user.roles.length > 0 && user.roles[0].canManagePlugins))}
+                                    can={user && checkUserPermissions("canManagePlugins")}
                                 />
                             );
                         })}
