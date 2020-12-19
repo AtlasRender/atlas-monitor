@@ -130,6 +130,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
     const [plugins, setPlugins] = useState<Plugin[]>();
     const [dialogPluginButton, setDialogPluginButton] = useState<boolean>(false);
     const [currentPlugin, setCurrentPlugin] = useState<PluginFull>();
+    const [isDefault, setIsDefault] = useState<boolean>(false);
 
 
     useEffect(() => {
@@ -345,7 +346,6 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
         roleToModify.permissionLevel = +roleToModify.permissionLevel;
         const roleToSent: any = {...roleToModify};
         delete roleToSent.id;
-        console.log(roleId);
         coreRequest()
             .post(`organizations/${id}/roles/${roleId}`)
             .send(roleToSent)
@@ -663,11 +663,9 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
 
                         <DialogAddRoles
                             open={isAddRoleButtonActive}
-                            onClose={() => setIsAddRoleButtonActive(false)}
-                            role={roleToChange}
+                            onClose={() => {setIsAddRoleButtonActive(false); setIsDefault(false)}}
                             onAddRole={handleAddRole}
                             onModifyRole={handleModifyRole}
-                            defaultId={defaultRoleId}
                         />
 
                         <Grid container className={classes.firstLine}>
@@ -696,7 +694,12 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                                                         edge="end"
                                                         aria-label="delete"
                                                         style={{marginRight: theme.spacing(0)}}
-                                                        onClick={() => handleIsDialogModifyRoleButtonActive(role.id)}
+                                                        onClick={() => {
+                                                            if(defaultRoleId === role.id){
+                                                                setIsDefault(true);
+                                                            }
+                                                            handleIsDialogModifyRoleButtonActive(role.id);
+                                                        }}
                                                     >
                                                         <EditIcon/>
                                                     </IconButton>
@@ -720,11 +723,12 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
 
                         <DialogAddRoles
                             open={isDialogModifyRoleButtonActive}
-                            onClose={() => setIsDialogModifyRoleButtonActive(false)}
+                            onClose={() => {setIsDialogModifyRoleButtonActive(false); setIsDefault(false)}}
                             role={roleToChange}
                             modify={true}
                             onAddRole={handleAddRole}
                             onModifyRole={handleModifyRole}
+                            isDefault={isDefault}
                         />
 
                         <TopicWithButton

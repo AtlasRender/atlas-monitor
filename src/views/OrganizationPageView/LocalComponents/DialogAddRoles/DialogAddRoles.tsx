@@ -34,7 +34,7 @@ interface DialogAddRolesProps extends Stylable {
     open: boolean;
     role?: Role | DemoRole;
     modify?: boolean;
-    defaultId?: number;
+    isDefault?: boolean;
 
     onClose(): void;
 
@@ -61,7 +61,7 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
         onClose,
         onAddRole,
         onModifyRole,
-        defaultId,
+        isDefault,
     } = props;
 
     let counterId = 0;
@@ -70,6 +70,8 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
         const getNextId = (): number => idGenerator.current.next().value;
         counterId = getNextId();
     }
+
+    const [willBeDefault, setWillBeDefault] = useState<boolean>(isDefault || false);
 
 
     const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
@@ -89,8 +91,6 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
         canManageTeams: role?.canManageTeams || false,
         canEditAudit: role?.canEditAudit || false,
     });
-
-    const [madeDefault, setMadeDefault] = useState<boolean>(false);
 
 
     const [errors, setErrors] = useState<ValidationErrors>({
@@ -117,12 +117,6 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
             canEditAudit: role.canEditAudit,
         });
     }, [role]);
-
-    useEffect(() => {
-        if (defaultId === addRole.id) {
-            setMadeDefault(true);
-        }
-    }, [defaultId]);
 
     // console.log("defaultRoleId", defaultIdLocal);
 
@@ -192,7 +186,7 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
 
     function handleClick() {
         if (!errors.noInputError && !errors.nameError && !errors.descriptionError && !errors.permissionLevelError) {
-            modify ? onModifyRole && onModifyRole(role?.id, addRole, madeDefault) : onAddRole(addRole, errors);
+            modify ? onModifyRole && onModifyRole(role?.id, addRole, willBeDefault) : onAddRole(addRole, errors);
             handleOnClose();
         } else {
             enqueueErrorSnackbar("Invalid input");
@@ -200,6 +194,14 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
     }
 
     function handleOnClose() {
+        onClose();
+        setErrors({
+            "noInputError": false,
+            "nameError": false,
+            "descriptionError": false,
+            "permissionLevelError": false,
+        });
+        setWillBeDefault(false);
         setAddRole({
             id: counterId,
             name: "",
@@ -215,14 +217,6 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
             canManageTeams: false,
             canEditAudit: false,
         });
-        setErrors({
-            "noInputError": false,
-            "nameError": false,
-            "descriptionError": false,
-            "permissionLevelError": false,
-        });
-        setMadeDefault(false);
-        onClose();
     }
 
     return (
@@ -284,10 +278,10 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
                     <Button
                         fullWidth
                         onClick={() => {
-                            setMadeDefault(true);
+                            setWillBeDefault(true);
                         }}
                         className={classes.makeDefaultButton}
-                        disabled={madeDefault}
+                        disabled={isDefault || willBeDefault}
                         classes={{disabled: classes.disabledButton}}
                     >
                         Mark as default
