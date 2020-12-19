@@ -96,10 +96,10 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
     const [org, setOrg] = useState<string>();
     const [frame, setFrame] = useState<FrameRange>({
         start: 0,
-        end: 0,
-        step: 0,
+        end: 10,
+        step: 1,
         renumberStart: 0,
-        renumberStep: 0,
+        renumberStep: 1,
     });
     const [frameRange, setFrameRange] = useState<FrameRange[]>([]);
     const [job, setJob] = useState<Job>({
