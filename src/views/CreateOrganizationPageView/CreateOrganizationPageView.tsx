@@ -46,6 +46,7 @@ import ErrorHandler from "../../utils/ErrorHandler";
 import useEnqueueSuccessSnackbar from "../../utils/EnqueSuccessSnackbar";
 import DialogAddUsers from "../OrganizationPageView/LocalComponents/DialogAddUsers";
 import DemoRole from "../../interfaces/DemoRole";
+import {yellow} from "@material-ui/core/colors";
 
 
 interface CreateOrganizationPageProps extends Stylable {
@@ -351,6 +352,7 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
                                 <ListItemText
                                     primary={item.name}
                                     secondary={item.description}
+                                    style={{color: defaultRole.id === item.id ? yellow[700] : undefined}}
                                 />
                                 <ListItemSecondaryAction>
                                     <IconButton
