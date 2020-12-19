@@ -106,9 +106,9 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
     const [defaultRoleId, setDefaultRoleId] = useState<number>(defaultRole.id);
     const [isDefault, setIsDefault] = useState<boolean>(false);
 
-    useEffect(()=>{
+    useEffect(() => {
         setDefaultRoleId(defaultRole.id);
-    }, [defaultRole])
+    }, [defaultRole]);
 
 
     //For dialog-----------------------------------------------------------------------------------------
@@ -180,7 +180,7 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
     function modifyRole(id: number, role: DemoRole, isDefault: boolean) {
         console.log("new role id", id);
         setAddRoleButton(!addRoleButton);
-        if(isDefault){
+        if (isDefault) {
             setDefaultRole(role);
         }
         setRoles((prev) => ([...prev.filter(elem => elem.id !== id)]));
@@ -261,7 +261,7 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
     }
 
     function createOrg() {
-        console.log('roles', roles);
+        console.log("roles", roles);
         const userIds = members.map((member) => member.id);
         const filteredRoles = roles.filter(elem => elem.id !== defaultRole.id);
         const sentRoles = filteredRoles.map((elem) => {
@@ -366,7 +366,7 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
                                         aria-label="edit"
                                         style={{marginRight: theme.spacing(0)}}
                                         onClick={() => {
-                                            if(defaultRoleId === item.id){
+                                            if (defaultRoleId === item.id) {
                                                 setIsDefault(true);
                                             }
                                             setModify(true);
@@ -403,7 +403,7 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
                     onClose={() => {
                         setAddRoleButton(false);
                     }}
-                    onExited={()=>{
+                    onExited={() => {
                         setRoleToModify(undefined);
                         setModify(false);
                         setIsDefault(false);

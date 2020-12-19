@@ -211,7 +211,7 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
         <Dialog
             open={open}
             onClose={handleOnClose}
-            onExited={()=>{
+            onExited={() => {
                 onExited && onExited();
                 setAddRole({
                     id: counterId,

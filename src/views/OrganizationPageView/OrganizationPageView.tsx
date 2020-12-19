@@ -163,13 +163,13 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
     };
 
     const checkUserPermissions = (canManage: permissionsType) => {
-        if((user && ((user.roles.length > 0 && user.roles[0][canManage]) || user.id === organizationData?.ownerUser.id))) {
+        if ((user && ((user.roles.length > 0 && user.roles[0][canManage]) || user.id === organizationData?.ownerUser.id))) {
             return true;
         } else {
             return false;
         }
 
-    }
+    };
 
     //roles
     async function handleGetRoles() {
@@ -663,7 +663,10 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
 
                         <DialogAddRoles
                             open={isAddRoleButtonActive}
-                            onClose={() => {setIsAddRoleButtonActive(false); setIsDefault(false)}}
+                            onClose={() => {
+                                setIsAddRoleButtonActive(false);
+                                setIsDefault(false);
+                            }}
                             onAddRole={handleAddRole}
                             onModifyRole={handleModifyRole}
                         />
@@ -695,7 +698,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                                                         aria-label="delete"
                                                         style={{marginRight: theme.spacing(0)}}
                                                         onClick={() => {
-                                                            if(defaultRoleId === role.id){
+                                                            if (defaultRoleId === role.id) {
                                                                 setIsDefault(true);
                                                             }
                                                             handleIsDialogModifyRoleButtonActive(role.id);
@@ -723,7 +726,10 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
 
                         <DialogAddRoles
                             open={isDialogModifyRoleButtonActive}
-                            onClose={() => {setIsDialogModifyRoleButtonActive(false); setIsDefault(false)}}
+                            onClose={() => {
+                                setIsDialogModifyRoleButtonActive(false);
+                                setIsDefault(false);
+                            }}
                             role={roleToChange}
                             modify={true}
                             onAddRole={handleAddRole}
