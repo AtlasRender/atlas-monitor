@@ -8,6 +8,10 @@
 
 import {createStyles, Theme} from "@material-ui/core";
 
-const styles = (theme: Theme) => createStyles({});
+const styles = (theme: Theme) => createStyles({
+    input: {
+        padding: theme.spacing(0),
+    }
+});
 
 export default styles;

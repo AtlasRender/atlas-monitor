@@ -43,12 +43,15 @@ const StringPluginField = React.forwardRef((props: StringPluginFieldProps, ref: 
             </Grid>
             <Grid item xs={9}>
                 <TextField
+                    variant="outlined"
                     fullWidth
                     value={value}
                     onChange={handleChange}
                     onBlur={() => {
                         setPluginSetting(field, value);
                     }}
+                    size="small"
+                    style={{padding: 0}}
                 />
             </Grid>
         </Grid>
