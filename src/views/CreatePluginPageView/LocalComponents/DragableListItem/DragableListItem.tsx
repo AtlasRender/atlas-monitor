@@ -23,6 +23,11 @@ import {DropTargetMonitor, useDrag, useDrop, XYCoord} from "react-dnd";
 import BasicPluginField from "../../../../entities/BasicPluginField";
 import {PluginContext} from "../../CreatePluginPageView";
 import {grey} from "@material-ui/core/colors";
+import TextFieldsIcon from "@material-ui/icons/TextFields";
+import RemoveIcon from "@material-ui/icons/Remove";
+import CheckIcon from "@material-ui/icons/Check";
+import Filter1Icon from "@material-ui/icons/Filter1";
+import FolderIcon from "@material-ui/icons/Folder";
 
 interface DragableListItemProps extends Stylable {
     field: BasicPluginField,
@@ -42,7 +47,15 @@ interface DragItem {
     type: string,
 }
 
-const DragableListItem: React.FC<DragableListItemProps> = ({field, onDelete, moveCard, index, getIndex, fieldIndex}) => {
+const DragableListItem: React.FC<DragableListItemProps> = ({
+                                                               classes,
+                                                               field,
+                                                               onDelete,
+                                                               moveCard,
+                                                               index,
+                                                               getIndex,
+                                                               fieldIndex
+                                                           }) => {
 
     const context = useContext(PluginContext);
 
@@ -101,16 +114,33 @@ const DragableListItem: React.FC<DragableListItemProps> = ({field, onDelete, mov
     return (
         <ListItem
             ref={refer}
-            style={{opacity, paddingLeft: 0, backgroundColor}}
+            style={{opacity, backgroundColor}}
             button
             onClick={() => getIndex(index)}
+            className={classes.field}
         >
             <ListItemAvatar>
-                <Avatar/>
+                <Avatar>
+                    {field.type === "string" &&
+                    <TextFieldsIcon/>
+                    }
+                    {field.type === "divider" &&
+                    <RemoveIcon/>
+                    }
+                    {field.type === "boolean" &&
+                    <CheckIcon/>
+                    }
+                    {(field.type === "integer" || field.type === "float") &&
+                    <Filter1Icon/>
+                    }
+                    {field.type === "folder" &&
+                    <FolderIcon/>
+                    }
+                </Avatar>
             </ListItemAvatar>
             <ListItemText
-                primary={field.label}
-                // secondary={field.label}
+                primary={field.name}
+                secondary={field.type}
             />
             <ListItemSecondaryAction style={{opacity}}>
                 <IconButton
