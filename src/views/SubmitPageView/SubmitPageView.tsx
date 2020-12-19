@@ -42,6 +42,7 @@ import {IntegerField, PluginSetting} from "@atlasrender/render-plugin";
 import validate from "validate.js";
 import {useChangeRoute} from "routing-manager";
 import ErrorHandler from "../../utils/ErrorHandler";
+import DialogAddFrameRange from "./LocalComponents/DialogAddFrameRange";
 
 /**
  * SubmitPagePropsStyled - interface for SubmitPageView function
@@ -83,12 +84,14 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
         className,
     } = props;
 
+
     const {logout} = useAuth();
     const enqueueSuccessSnackbar = useEnqueueSuccessSnackbar();
     const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
     const {getUser} = useAuth();
     const {changeRoute} = useChangeRoute();
     const coreRequest = useCoreRequest();
+
 
     const user = getUser();
     const [userOrgs, setUserOrgs] = useState<Organization[]>([]);
@@ -116,8 +119,8 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
     const [chosenPluginName, setChosenPluginName] = useState<string>("");
     const [chosenPlugin, setChosenPlugin] = useState<PluginPreview | null>(null);
     const [openDialog, setOpenDialog] = useState(false);
+    const [openAddFrameDialog, setOpenAddFrameDialog] = useState(false);
 
-    console.log(job);
 
     useEffect(() => {
         Promise.all([
@@ -166,7 +169,9 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
         } catch (err) {
             const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
             errorHandler
-                .on(401, () => {logout()})
+                .on(401, () => {
+                    logout();
+                })
                 .on(404, "User not found")
                 .handle(err);
         }
@@ -181,7 +186,9 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
         } catch (err) {
             const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
             errorHandler
-                .on(401, () => {logout()})
+                .on(401, () => {
+                    logout();
+                })
                 .on(404, "Organization not found")
                 .handle(err);
         }
@@ -197,7 +204,9 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
             .catch(err => {
                 const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
                 errorHandler
-                    .on(401, () => {logout()})
+                    .on(401, () => {
+                        logout();
+                    })
                     .on(404, "Plugin not found")
                     .handle(err);
             });
@@ -255,7 +264,9 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
                 const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
                 errorHandler
                     .on(400, "Can not create job")
-                    .on(401, () => {logout()})
+                    .on(401, () => {
+                        logout();
+                    })
                     .on(404, "Plugin with selected not found")
                     .on(409, "Unavailable to queue job")
                     .on(503, "Internal server error. Please, visit this resource later")
@@ -277,9 +288,17 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
         setOpenDialog(false);
     };
 
+    const handleOpenAddFrameDialog = () => {
+        setOpenAddFrameDialog(true);
+    };
+
+    const handleCloseAddFrameDialog = () => {
+        setOpenAddFrameDialog(false);
+    };
+
     const handleAddFrame = (frame: FrameRange) => {
         setFrameRange(prev => ([...prev, frame]));
-    }
+    };
 
 
     const matches = useMediaQuery("(min-width:800px)");
@@ -349,61 +368,84 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
             </Grid>
         );
         renderSettings = (
-            <Grid item xs={10}>
-                <Grid container spacing={2} className={clsx(classes.container, classes.flexNoWrap)}>
-                    <Grid item>
-                        <TextField
-                            fullWidth
-                            label="Frame start"
-                            name="start"
-                            value={frame.start}
-                            onChange={handleJobParametersChange}
-                        />
-                    </Grid>
-                    <Grid item>
-                        <TextField
-                            fullWidth
-                            label="Frame end"
-                            name="end"
-                            value={frame.end}
-                            onChange={handleJobParametersChange}
-                        />
-                    </Grid>
-                    <Grid item>
-                        <TextField
-                            fullWidth
-                            label="Step"
-                            name="step"
-                            value={frame.step}
-                            onChange={handleJobParametersChange}
-                        />
-                    </Grid>
-                    <Grid item>
-                        <TextField
-                            fullWidth
-                            label="Renumber Start"
-                            name="renumberStart"
-                            value={frame.renumberStart}
-                            onChange={handleJobParametersChange}
-                        />
-                    </Grid>
-                    <Grid item>
-                        <TextField
-                            fullWidth
-                            label="Renumber step"
-                            name="renumberStep"
-                            value={frame.renumberStep}
-                            onChange={handleJobParametersChange}/>
-                    </Grid>
-                    <Box>
-                        <IconButton
-                            onClick={() => handleAddFrame(frame)}
-                        >
-                            <AddIcon/>
-                        </IconButton>
-                    </Box>
+            <React.Fragment>
+                <Grid item xs={10}>
+                    {/*<Grid container spacing={2} className={clsx(classes.container, classes.flexNoWrap)}>*/}
+                    {/*    <Grid item>*/}
+                    {/*        <TextField*/}
+                    {/*            fullWidth*/}
+                    {/*            label="Frame start"*/}
+                    {/*            name="start"*/}
+                    {/*            value={frame.start}*/}
+                    {/*            onChange={handleJobParametersChange}*/}
+                    {/*        />*/}
+                    {/*    </Grid>*/}
+                    {/*    <Grid item>*/}
+                    {/*        <TextField*/}
+                    {/*            fullWidth*/}
+                    {/*            label="Frame end"*/}
+                    {/*            name="end"*/}
+                    {/*            value={frame.end}*/}
+                    {/*            onChange={handleJobParametersChange}*/}
+                    {/*        />*/}
+                    {/*    </Grid>*/}
+                    {/*    <Grid item>*/}
+                    {/*        <TextField*/}
+                    {/*            fullWidth*/}
+                    {/*            label="Step"*/}
+                    {/*            name="step"*/}
+                    {/*            value={frame.step}*/}
+                    {/*            onChange={handleJobParametersChange}*/}
+                    {/*        />*/}
+                    {/*    </Grid>*/}
+                    {/*    <Grid item>*/}
+                    {/*        <TextField*/}
+                    {/*            fullWidth*/}
+                    {/*            label="Renumber Start"*/}
+                    {/*            name="renumberStart"*/}
+                    {/*            value={frame.renumberStart}*/}
+                    {/*            onChange={handleJobParametersChange}*/}
+                    {/*        />*/}
+                    {/*    </Grid>*/}
+                    {/*    <Grid item>*/}
+                    {/*        <TextField*/}
+                    {/*            fullWidth*/}
+                    {/*            label="Renumber step"*/}
+                    {/*            name="renumberStep"*/}
+                    {/*            value={frame.renumberStep}*/}
+                    {/*            onChange={handleJobParametersChange}/>*/}
+                    {/*    </Grid>*/}
+                    {/*    <Box>*/}
+                    {/*        <IconButton*/}
+                    {/*            onClick={() => handleAddFrame(frame)}*/}
+                    {/*        >*/}
+                    {/*            <AddIcon/>*/}
+                    {/*        </IconButton>*/}
+                    {/*    </Box>*/}
+                    {/*</Grid>*/}
+
+                    <Button
+                        onClick={handleOpenAddFrameDialog}
+                        fullWidth
+                        variant="outlined"
+                    >
+                        Add new frame range
+                    </Button>
+
+
                 </Grid>
-            </Grid>
+
+
+
+
+                <DialogAddFrameRange
+                    open={openAddFrameDialog}
+                    onClose={handleCloseAddFrameDialog}
+                    onAddFrame={handleAddFrame}
+                />
+
+
+            </React.Fragment>
         );
         plugin = (
             <React.Fragment>
