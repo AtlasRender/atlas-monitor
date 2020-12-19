@@ -38,6 +38,8 @@ interface DialogAddRolesProps extends Stylable {
 
     onClose(): void;
 
+    onExited?(): void;
+
     onAddRole(role: any, errors: any): void;
 
     onModifyRole?(roleId: number | undefined, roleToModify: any, isDefault: boolean): void;
@@ -62,6 +64,7 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
         onAddRole,
         onModifyRole,
         isDefault,
+        onExited,
     } = props;
 
     let counterId = 0;
@@ -202,27 +205,30 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
             "permissionLevelError": false,
         });
         setWillBeDefault(false);
-        setAddRole({
-            id: counterId,
-            name: "",
-            description: "",
-            color: "fff",
-            permissionLevel: 1,
-            canManageUsers: false,
-            canCreateJobs: false,
-            canEditJobs: false,
-            canDeleteJobs: false,
-            canManageRoles: false,
-            canManagePlugins: false,
-            canManageTeams: false,
-            canEditAudit: false,
-        });
     }
 
     return (
         <Dialog
             open={open}
             onClose={handleOnClose}
+            onExited={()=>{
+                onExited && onExited();
+                setAddRole({
+                    id: counterId,
+                    name: "",
+                    description: "",
+                    color: "fff",
+                    permissionLevel: 1,
+                    canManageUsers: false,
+                    canCreateJobs: false,
+                    canEditJobs: false,
+                    canDeleteJobs: false,
+                    canManageRoles: false,
+                    canManagePlugins: false,
+                    canManageTeams: false,
+                    canEditAudit: false,
+                });
+            }}
         >
             <DialogTitle
                 className={classes.dialogRoles}

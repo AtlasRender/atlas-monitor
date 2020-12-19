@@ -401,7 +401,9 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
                 <DialogAddRoles
                     open={addRoleButton}
                     onClose={() => {
-                        setAddRoleButton(!addRoleButton);
+                        setAddRoleButton(false);
+                    }}
+                    onExited={()=>{
                         setRoleToModify(undefined);
                         setModify(false);
                         setIsDefault(false);
