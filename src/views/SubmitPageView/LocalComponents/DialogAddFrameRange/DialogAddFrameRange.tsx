@@ -11,6 +11,7 @@ import {Button, Dialog, DialogTitle, List, ListItem, TextField, withStyles,} fro
 import Stylable from "../../../../interfaces/Stylable";
 import styles from "./styles";
 import validate from "validate.js";
+import useEnqueueErrorSnackbar from "../../../../utils/enqueueErrorSnackbar";
 
 interface DialogAddFrameRangeProps extends Stylable {
     open: boolean;
@@ -19,6 +20,14 @@ interface DialogAddFrameRangeProps extends Stylable {
 
     onAddFrame(frame: FrameRange): void;
 
+}
+
+interface ErrorValidation {
+    errorStart: boolean,
+    errorEnd: boolean,
+    errorStep: boolean,
+    errorRenumberStart: boolean,
+    errorRenumberStep: boolean,
 }
 
 interface FrameRange {
@@ -40,6 +49,9 @@ const DialogAddFrameRange = React.forwardRef((props: DialogAddFrameRangeProps, r
     } = props;
 
 
+    const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
+
+
     const [frame, setFrame] = useState<FrameRange>({
         start: 0,
         end: 10,
@@ -47,19 +59,104 @@ const DialogAddFrameRange = React.forwardRef((props: DialogAddFrameRangeProps, r
         renumberStart: 0,
         renumberStep: 1,
     });
+    const [errors, setErrors] = useState<ErrorValidation>({
+        errorStart: false,
+        errorEnd: false,
+        errorStep: false,
+        errorRenumberStart: false,
+        errorRenumberStep: false,
+    });
 
 
     const handleAddFrame = () => {
-        onAddFrame(frame);
-        onClose();
-    }
+        if(!errors.errorStart && !errors.errorEnd && !errors.errorStep && !errors.errorRenumberStart && !errors.errorRenumberStep) {
+            onAddFrame(frame);
+            onClose();
+        } else {
+            enqueueErrorSnackbar("Invalid Input");
+        }
+    };
 
     const handleChangeFrame = (event: React.ChangeEvent<HTMLInputElement>) => {
         event.persist();
         if (validate.isInteger(+event.target.value)) {
             setFrame((prev) => ({...prev, [event.target.name]: +event.target.value}));
         }
-    }
+    };
+
+    const handleValidation = (event: React.FocusEvent<HTMLInputElement>) => {
+        if (event.target.name === "start") {
+            if (frame.start < 0) {
+                setErrors(prev => ({
+                    ...prev, "errorStart": true
+                }));
+
+            } else {
+                setErrors(prev => ({
+                    ...prev, "errorStart": false
+                }));
+            }
+        }
+        if (event.target.name === "end") {
+            if (frame.end < 0) {
+                setErrors(prev => ({
+                    ...prev, "errorEnd": true
+                }));
+
+            } else {
+                setErrors(prev => ({
+                    ...prev, "errorEnd": false
+                }));
+            }
+        }
+        if (event.target.name === "step") {
+            if (frame.step <= 0) {
+                setErrors(prev => ({
+                    ...prev, "errorStep": true
+                }));
+
+            } else {
+                setErrors(prev => ({
+                    ...prev, "errorStep": false
+                }));
+            }
+        }
+        if (event.target.name === "renumberStart") {
+            if (frame.renumberStart < 0) {
+                setErrors(prev => ({
+                    ...prev, "errorRenumberStart": true
+                }));
+
+            } else {
+                setErrors(prev => ({
+                    ...prev, "errorRenumberStart": false
+                }));
+            }
+        }
+        if (event.target.name === "renumberStep") {
+            if (frame.renumberStep <= 0) {
+                setErrors(prev => ({
+                    ...prev, "errorRenumberStep": true
+                }));
+
+            } else {
+                setErrors(prev => ({
+                    ...prev, "errorRenumberStep": false
+                }));
+            }
+        }
+        if (event.target.name === "start" || event.target.name === "end") {
+            if (frame.start > frame.end) {
+                setErrors(prev => ({
+                    ...prev, "errorStart": true, "errorEnd": true,
+                }));
+            } else {
+                setErrors(prev => ({
+                    ...prev, "errorStart": false, "errorEnd": false,
+                }));
+            }
+        }
+    };
 
 
     return (
@@ -73,49 +170,59 @@ const DialogAddFrameRange = React.forwardRef((props: DialogAddFrameRangeProps, r
             </DialogTitle>
 
             <List className={classes.dialogContainer}>
-               <ListItem>
-                   <TextField
-                       fullWidth
-                       label="Frame start"
-                       name="start"
-                       value={frame.start}
-                       onChange={handleChangeFrame}
-                   />
-               </ListItem>
                 <ListItem>
                     <TextField
+                        error={errors.errorStart}
+                        fullWidth
+                        label="Frame start"
+                        name="start"
+                        value={frame.start}
+                        onChange={handleChangeFrame}
+                        onBlur={handleValidation}
+                    />
+                </ListItem>
+                <ListItem>
+                    <TextField
+                        error={errors.errorEnd}
                         fullWidth
                         label="Frame end"
                         name="end"
                         value={frame.end}
                         onChange={handleChangeFrame}
+                        onBlur={handleValidation}
                     />
                 </ListItem>
                 <ListItem>
                     <TextField
+                        error={errors.errorStep}
                         fullWidth
                         label="Step"
                         name="step"
                         value={frame.step}
                         onChange={handleChangeFrame}
+                        onBlur={handleValidation}
                     />
                 </ListItem>
                 <ListItem>
                     <TextField
+                        error={errors.errorRenumberStart}
                         fullWidth
                         label="Renumber Start"
                         name="renumberStart"
                         value={frame.renumberStart}
                         onChange={handleChangeFrame}
+                        onBlur={handleValidation}
                     />
                 </ListItem>
                 <ListItem>
                     <TextField
+                        error={errors.errorRenumberStep}
                         fullWidth
                         label="Renumber step"
                         name="renumberStep"
                         value={frame.renumberStep}
                         onChange={handleChangeFrame}
+                        onBlur={handleValidation}
                     />
                 </ListItem>
             </List>
