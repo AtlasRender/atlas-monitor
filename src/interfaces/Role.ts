@@ -22,4 +22,5 @@ export default interface Role {
     canManagePlugins: boolean,
     canManageTeams: boolean,
     canEditAudit: boolean,
+    default: boolean,
 }

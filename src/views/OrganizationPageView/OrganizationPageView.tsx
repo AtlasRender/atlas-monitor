@@ -55,6 +55,7 @@ import DialogSlave from "./LocalComponents/DialogSlave";
 import DemoRole from "../../interfaces/DemoRole";
 import ErrorHandler from "../../utils/ErrorHandler";
 import User from "../../entities/User";
+import {yellow} from "@material-ui/core/colors";
 
 /**
  * OrganizationPageViewPropsStyled - interface for OrganizationPageView function
@@ -122,6 +123,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
     const [availableUsers, setAvailableUsers] = useState<UserData[]>([]);
     const [organizationUsers, setOrganizationUsers] = useState<UserData[]>([]);
     const [currentUser, setCurrentUser] = useState<UserData | null>(null);
+    const [defaultRoleId, setDefaultRoleId] = useState<number>();
 
 
     //Plugins
@@ -338,7 +340,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
             });
     }
 
-    function handleModifyRole(roleId: number, roleToModify: DemoRole) {
+    function handleModifyRole(roleId: number, roleToModify: DemoRole, isDefault: boolean) {
         setIsDialogModifyRoleButtonActive(false);
         roleToModify.permissionLevel = +roleToModify.permissionLevel;
         coreRequest()
@@ -410,7 +412,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
         try {
             const response = await coreRequest().get(`organizations/${id}`);
             setOrganizationData(response.body);
-            console.log(response.body);
+            setDefaultRoleId(response.body.defaultRole.id);
         } catch (err) {
             const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
             errorHandler
@@ -662,6 +664,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                             role={roleToChange}
                             onAddRole={handleAddRole}
                             onModifyRole={handleModifyRole}
+                            defaultId={defaultRoleId}
                         />
 
                         <Grid container className={classes.firstLine}>
@@ -674,7 +677,11 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                                                     primary={role.name}
                                                     secondary={role.description}
                                                     className={classes.roleItem}
-                                                    style={{borderLeft: `4px solid #${role.color}`}}
+
+                                                    style={{
+                                                        borderLeft: `4px solid #${role.color}`,
+                                                        color: defaultRoleId === role.id ? yellow[700] : undefined,
+                                                    }}
                                                     classes={{
                                                         primary: classes.rolesPrimary,
                                                         secondary: classes.rolesDescription,

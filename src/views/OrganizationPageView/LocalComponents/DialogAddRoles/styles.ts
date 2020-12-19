@@ -7,6 +7,7 @@
  */
 
 import {createStyles, Theme} from "@material-ui/core";
+import {yellow} from "@material-ui/core/colors";
 
 const styles = (theme: Theme) => createStyles({
     firstLine: {
@@ -31,6 +32,15 @@ const styles = (theme: Theme) => createStyles({
             maxWidth: 375,
         },
     },
+    makeDefaultButton:{
+        backgroundColor: yellow[700],
+        "&:hover": {
+            backgroundColor: yellow[600]
+        }
+    },
+    disabledButton:{
+        backgroundColor:yellow[900],
+    }
 
 });
 
