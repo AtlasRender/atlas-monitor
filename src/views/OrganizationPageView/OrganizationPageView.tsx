@@ -340,12 +340,15 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
             });
     }
 
-    function handleModifyRole(roleId: number, roleToModify: DemoRole, isDefault: boolean) {
+    function handleModifyRole(roleId: number, roleToModify: Role, isDefault: boolean) {
         setIsDialogModifyRoleButtonActive(false);
         roleToModify.permissionLevel = +roleToModify.permissionLevel;
+        const roleToSent: any = {...roleToModify};
+        delete roleToSent.id;
+        console.log(roleId);
         coreRequest()
             .post(`organizations/${id}/roles/${roleId}`)
-            .send(roleToModify)
+            .send(roleToSent)
             .then((response) => {
                 handleGetRoles().then();
             })

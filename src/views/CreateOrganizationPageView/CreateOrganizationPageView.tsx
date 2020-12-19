@@ -103,6 +103,11 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
     const [users, setUsers] = useState<UserData[]>([]);
     const [members, setMembers] = useState<UserData[]>([]);
     const [addMemberButton, setAddMemberButton] = useState<boolean>(false);
+    const [defaultRoleId, setDefaultRoleId] = useState<number>(defaultRole.id);
+
+    useEffect(()=>{
+        setDefaultRoleId(defaultRole.id);
+    }, [defaultRole])
 
 
     //For dialog-----------------------------------------------------------------------------------------
@@ -400,7 +405,7 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
                     role={roleToModify}
                     modify={modify}
                     onModifyRole={modifyRole}
-                    defaultId={defaultRole.id}
+                    defaultId={defaultRoleId}
                 />
 
                 <List style={{marginTop: 16}}>
