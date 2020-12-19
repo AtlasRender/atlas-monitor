@@ -7,7 +7,7 @@
  */
 
 import React from "react";
-import {Box, Switch, Typography, withStyles} from "@material-ui/core";
+import {Box, Grid, Switch, Typography, withStyles} from "@material-ui/core";
 import Stylable from "../../interfaces/Stylable";
 import styles from "./styles";
 
@@ -31,17 +31,24 @@ const BooleanPluginField = React.forwardRef((props: BooleanPluginFieldProps, ref
 
 
     return (
-        <Box className={classes.container}>
+        <Grid container className={classes.container}>
+
             {label ?
-                <Typography className={classes.text}>
-                    {label}
-                    <Switch
-                        checked={value}
-                        onChange={onChange}
-                        name="checkedA"
-                        inputProps={{"aria-label": "secondary checkbox"}}
-                    />
-                </Typography>
+                <React.Fragment>
+                    <Grid item xs={3} style={{display: "flex", justifyContent: "center"}}>
+                        <Typography className={classes.text}>
+                            {label}
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={9}>
+                        <Switch
+                            checked={value}
+                            onChange={onChange}
+                            name="checkedA"
+                            inputProps={{"aria-label": "secondary checkbox"}}
+                        />
+                    </Grid>
+                </React.Fragment>
                 :
                 <Switch
                     checked={value}
@@ -50,8 +57,10 @@ const BooleanPluginField = React.forwardRef((props: BooleanPluginFieldProps, ref
                     inputProps={{"aria-label": "secondary checkbox"}}
                 />
             }
-        </Box>
+
+        </Grid>
     );
-});
+}
+);
 
 export default withStyles(styles)(BooleanPluginField);

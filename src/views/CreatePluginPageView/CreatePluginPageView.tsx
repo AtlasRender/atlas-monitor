@@ -104,6 +104,8 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
 
     const [pluginFields, setPluginFields] = useState<BasicPluginField[]>([]);
 
+    console.log(pluginFields);
+
     const [plugin, setPlugin] = useState<Plugin>({
         name: "",
         version: "",

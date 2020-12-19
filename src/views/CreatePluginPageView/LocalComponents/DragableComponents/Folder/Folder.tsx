@@ -17,6 +17,8 @@ import GroupField from "../../../../../entities/GroupField";
 import IntegerField from "../../../../../entities/IntegerField";
 import SeparatorField from "../../../../../entities/SeparatorField";
 import StringField from "../../../../../entities/StringField";
+import BooleanField from "../../../../../entities/BooleanField";
+import FloatField from "../../../../../entities/FloatField";
 
 interface FolderProps extends Stylable {
     id: number,
@@ -27,7 +29,7 @@ const Folder: React.FC<FolderProps> = ({classes, className, children, id, style}
     const context = useContext(PluginContext);
 
     const [{isOver, isOverCurrent}, drop] = useDrop({
-        accept: ["integer", "folder", "divider", "string"],
+        accept: ["integer", "folder", "divider", "string", "boolean", "float"],
         drop(item, monitor) {
             const didDrop = monitor.didDrop();
             if (didDrop) {
@@ -69,6 +71,24 @@ const Folder: React.FC<FolderProps> = ({classes, className, children, id, style}
                     min: null,
                     max: null,
                     default: "",
+                    id: context.idGenerator(),
+                }), id);
+            } else if(item.type === "boolean") {
+                context.handleAddPluginField(new BooleanField({
+                    type: "boolean",
+                    name: "Boolean",
+                    label: "Boolean Field",
+                    default: false,
+                    id: context.idGenerator(),
+                }), id);
+            } else if (item.type === "float") {
+                context.handleAddPluginField(new FloatField({
+                    type: "float",
+                    name: "Float",
+                    label: "Float Field",
+                    min: null,
+                    max: null,
+                    default: null,
                     id: context.idGenerator(),
                 }), id);
             }

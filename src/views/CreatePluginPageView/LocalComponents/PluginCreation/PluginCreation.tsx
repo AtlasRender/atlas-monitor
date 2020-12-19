@@ -125,6 +125,8 @@ const PluginCreation = React.forwardRef((props: PluginCreationProps, ref: Ref<an
                                         <DragableSubject type="string"/>
                                         {/*<DragableSubject type="folder"/>*/}
                                         <DragableSubject type="divider"/>
+                                        <DragableSubject type="boolean"/>
+                                        <DragableSubject type="float"/>
                                     </List>
                                 </Grid>
                             </Grid>

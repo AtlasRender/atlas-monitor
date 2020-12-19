@@ -13,13 +13,14 @@ import Stylable from "../../../../interfaces/Stylable";
 import useCoreRequest from "../../../../hooks/useCoreRequest";
 import useEnqueueErrorSnackbar from "../../../../utils/enqueueErrorSnackbar";
 import PluginFull from "../../../../interfaces/PluginFull";
-import {IntegerField, PluginSetting, PluginSettingsSpec, StringField} from "@atlasrender/render-plugin";
+import {FloatField, IntegerField, PluginSetting, PluginSettingsSpec, StringField} from "@atlasrender/render-plugin";
 import SeparatorPluginField from "../../../../components/SeparatorPluginField";
 import BooleanPluginField from "../../../../components/BooleanPluginField";
 import StringPluginField from "../../../../components/RenderJobCustomFields/StringPluginField";
 import IntegerPluginField from "../../../../components/RenderJobCustomFields/IntegerPluginField";
 import useAuth from "../../../../hooks/useAuth";
 import ErrorHandler from "../../../../utils/ErrorHandler";
+import FloatPluginField from "../../../../components/RenderJobCustomFields/FloatPluginField";
 
 
 /**
@@ -130,10 +131,8 @@ const PluginInput = React.forwardRef((props: PluginInputProps, ref: Ref<any>) =>
                             case "float" :
                                 return (
                                     <Grid item xs={12}>
-                                        <TextField
-                                            fullWidth
-                                            label={field.label}
-                                        />
+                                        <FloatPluginField field={field as FloatField}
+                                                          setPluginSetting={setPluginSetting}/>
                                     </Grid>
                                 );
                             case "group" :

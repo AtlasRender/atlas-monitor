@@ -45,7 +45,7 @@ const DragableSubject: React.FC<DragableSubjectProps> = ({classes, className, st
                     {type === "boolean" &&
                     <CheckIcon/>
                     }
-                    {type === "integer" &&
+                    {(type === "integer" || type === "float") &&
                     <Filter1Icon/>
                     }
                     {type === "folder" &&
