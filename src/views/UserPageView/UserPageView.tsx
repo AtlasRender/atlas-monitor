@@ -89,7 +89,9 @@ const UserPageView = React.forwardRef((props: UserPageViewProps, ref: Ref<any>) 
         } catch (err) {
             const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
             errorHandler
-                .on(401, () => {logout()})
+                .on(401, () => {
+                    logout();
+                })
                 .handle(err);
         }
     }
@@ -106,7 +108,9 @@ const UserPageView = React.forwardRef((props: UserPageViewProps, ref: Ref<any>) 
         } catch (err) {
             const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
             errorHandler
-                .on(401, () => {logout()})
+                .on(401, () => {
+                    logout();
+                })
                 .on(404, "User not found")
                 .handle(err);
         }
@@ -194,37 +198,42 @@ const UserPageView = React.forwardRef((props: UserPageViewProps, ref: Ref<any>) 
                             <Grid item xs={12} md={10}>
                                 <List>
                                     {userData?.organizations.map((organization) => {
-                                        return (
-                                            <ListItem
-                                                key={organization.id}
-                                                button
-                                                onClick={() => {
-                                                    changeRoute({page: "organization", id: organization.id});
-                                                }}
-                                            >
-                                                <ListItemAvatar>
-                                                    <Avatar
-                                                        src="https://cdn.sportclub.ru/assets/2019-09-20/n97c311rvb.jpg"
+                                            return (
+                                                <ListItem
+                                                    key={organization.id}
+                                                    button
+                                                    onClick={() => {
+                                                        changeRoute({page: "organization", id: organization.id});
+                                                    }}
+                                                >
+                                                    <ListItemAvatar>
+                                                        <Avatar
+                                                            src="https://cdn.sportclub.ru/assets/2019-09-20/n97c311rvb.jpg"
+                                                        />
+                                                    </ListItemAvatar>
+                                                    <ListItemText
+                                                        primary={organization.name}
+                                                        secondary={organization.description}
                                                     />
-                                                </ListItemAvatar>
-                                                <ListItemText
-                                                    primary={organization.name}
-                                                    secondary={organization.description}
-                                                />
-                                                <ListItemSecondaryAction>
-                                                    <Chip
-                                                        label={"MainRole"}
-                                                        style={{backgroundColor: `#f76`}}
-                                                    />
-                                                    <IconButton
-                                                        edge="end"
-                                                    >
-                                                        <SettingsIcon/>
-                                                    </IconButton>
-                                                </ListItemSecondaryAction>
-                                            </ListItem>
-                                        );
-                                    })}
+                                                    <ListItemSecondaryAction>
+                                                        <Chip
+                                                            label={"MainRole"}
+                                                            style={{backgroundColor: `#f76`}}
+                                                        />
+                                                        <IconButton
+                                                            edge="end"
+                                                        >
+                                                            <SettingsIcon/>
+                                                        </IconButton>
+                                                    </ListItemSecondaryAction>
+                                                </ListItem>
+                                            );
+                                        })}
+                                    {userData?.organizations.length === 0 &&
+                                        <ListItem>
+                                            <ListItemText primary="You are not a member of any organization"/>
+                                        </ListItem>
+                                    }
                                 </List>
                             </Grid>
                         </Grid>
