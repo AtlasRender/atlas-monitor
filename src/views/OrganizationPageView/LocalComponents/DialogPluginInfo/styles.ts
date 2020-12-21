@@ -14,26 +14,16 @@ const styles = (theme: Theme) => createStyles({
         width: "100%",
         textAlign: "center",
     },
-    pluginDialogBox: {
-        padding: theme.spacing(1),
-        height: 600,
-        width: 500,
+    maxDialogWidth: {
+        width:450,
+        maxWidth: 450,
     },
-    pluginDialog:{
-        display:"flex",
+    descriptionPadding: {
+        padding: theme.spacing(0, 2, 0, 2),
     },
-    pluginDialogRules:{
-        padding: theme.spacing(1),
-        height: 600,
-        width: 500,
-        borderLeft:`1px solid ${grey[700]}`
-    },
-    pluginType:{
-        color: orange[500],
-    },
-    ruleName:{
-        marginBottom: theme.spacing(1),
+    descriptionListItem:{
+        paddingBottom: theme.spacing(0),
     }
-})
+});
 
 export default styles;
