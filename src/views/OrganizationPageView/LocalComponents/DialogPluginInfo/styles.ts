@@ -15,15 +15,49 @@ const styles = (theme: Theme) => createStyles({
         textAlign: "center",
     },
     maxDialogWidth: {
-        width:450,
-        maxWidth: 450,
+        width: 900,
     },
     descriptionPadding: {
         padding: theme.spacing(0, 2, 0, 2),
     },
     descriptionListItem:{
         paddingBottom: theme.spacing(0),
+    },
+    mainBox:{
+        display:"flex",
+    },
+    boxWithInfo:{
+        width:320,
+        // borderRight: `1px solid ${grey[400]}`,
+        marginRight:20,
+        margin: theme.spacing(1, 0, 1, 0)
+    },
+    readmeBox:{
+        width: 550,
+        borderLeft: `1px solid ${grey[700]}`,
+        margin: theme.spacing(1, 0, 1, 0),
+        marginRight:10,
+    },
+    readme:{
+        height: 400,
+        overflow: "auto",
+        margin: theme.spacing(1, 1.5, 1, 2),
+        // marginLeft: 12,
+    },
+    descriptionOverflow: {
+        width: 300,
+    },
+    noReadme:{
+        display: "flex",
+        textAlign: "center",
+        justifyContent: "center",
+        alignItems:"center",
+    },
+    settingSpecList:{
+        height: 480,
+        overflow: "auto"
     }
+
 });
 
 export default styles;

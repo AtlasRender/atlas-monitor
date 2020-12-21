@@ -8,13 +8,13 @@
 
 import React, {Ref, useState} from "react";
 import {
-    AppBar,
+    AppBar, Avatar,
     Box,
     Button,
     Dialog,
     DialogTitle,
     Divider,
-    Grid, List, ListItem, ListItemSecondaryAction, ListItemText, Tab, Tabs,
+    Grid, List, ListItem, ListItemAvatar, ListItemSecondaryAction, ListItemText, Tab, Tabs,
     TextField,
     Typography,
     withStyles
@@ -25,6 +25,12 @@ import styles from "./styles";
 import PluginFull from "../../../../interfaces/PluginFull";
 import {orange} from "@material-ui/core/colors";
 import Markdown from "markdown-to-jsx";
+import TextFieldsIcon from "@material-ui/icons/TextFields";
+import RemoveIcon from "@material-ui/icons/Remove";
+import CheckIcon from "@material-ui/icons/Check";
+import Filter1Icon from "@material-ui/icons/Filter1";
+import FolderIcon from "@material-ui/icons/Folder";
+import theme from "../../../../theme";
 
 interface DialogPluginInfoProps extends Stylable {
     currentPlugin: PluginFull,
@@ -86,10 +92,6 @@ const DialogPluginInfo = React.forwardRef((props: DialogPluginInfoProps, ref: Re
         setValue(newValue);
     };
 
-    const handleChangeIndex = (index: number) => {
-        setValue(index);
-    };
-
     return (
         <Dialog
             open={open}
@@ -100,66 +102,123 @@ const DialogPluginInfo = React.forwardRef((props: DialogPluginInfoProps, ref: Re
                 {currentPlugin.name}
             </DialogTitle>
             <Divider/>
-            <AppBar position="static" className={classes.maxDialogWidth}>
-                <Tabs value={value} onChange={handleChange} aria-label="simple tabs example" variant="fullWidth">
-                    <Tab label="Info" {...a11yProps(0)}/>
-                    <Tab label="Settings Spec" {...a11yProps(1)}/>
-                </Tabs>
-            </AppBar>
-            <TabPanel value={value} index={0}>
-                <List>
-                    <ListItem>
-                        <ListItemText primary="Version"/>
-                        <ListItemSecondaryAction>
-                            <Typography variant="body2"
-                                        style={{color: orange[500]}}>{currentPlugin.version}</Typography>
-                        </ListItemSecondaryAction>
-                    </ListItem>
-                    {currentPlugin.description &&
-                    <React.Fragment>
-                        <ListItem className={classes.descriptionListItem}>
-                            <ListItemText
-                                primary="Description"
-                            />
-                        </ListItem>
-                        <Box className={clsx(classes.maxDialogWidth, classes.descriptionPadding)}>
-                            <Typography align="justify" variant="body2" color="textSecondary">
-                                {currentPlugin.description}
-                            </Typography>
-                        </Box>
-                    </React.Fragment>
-                    }
-                    {currentPlugin.note &&
-                    <React.Fragment>
-                        <ListItem className={classes.descriptionListItem}>
-                            <ListItemText
-                                primary="Note"
-                            />
-                        </ListItem>
-                        <Box className={clsx(classes.maxDialogWidth, classes.descriptionPadding)}>
-                            <Typography align="justify" variant="body2" color="textSecondary">
-                                {currentPlugin.note}
-                            </Typography>
-                        </Box>
-                    </React.Fragment>
-                    }
-                    {currentPlugin.readme &&
-                    <React.Fragment>
-                        <ListItem className={classes.descriptionListItem}>
-                            <ListItemText
-                                primary="README"
-                            />
-                        </ListItem>
-                        <Box className={clsx(classes.maxDialogWidth, classes.descriptionPadding)}>
-                            {readMe?.map((str)=>
-                                <Markdown>
-                                    {str}
-                                </Markdown>
-                            )}
 
-                        </Box>
-                    </React.Fragment>
-                    }
+            <Tabs
+                value={value}
+                onChange={handleChange}
+                indicatorColor="primary"
+                className={classes.tabsColor}
+                variant="fullWidth">
+                <Tab label="Info" {...a11yProps(0)}/>
+                <Tab label="Settings Spec" {...a11yProps(1)}/>
+            </Tabs>
+
+            <TabPanel value={value} index={0}>
+                <Box className={classes.mainBox}>
+
+                    <Box className={classes.boxWithInfo}>
+                        <List style={{paddingTop: 0}}>
+                            <ListItem className={classes.descriptionListItem} style={{paddingTop: 0}}>
+                                <ListItemText
+                                    primary="Version"
+                                    secondary={currentPlugin.version}
+                                    secondaryTypographyProps={{variant: "body2"}}
+                                />
+                            </ListItem>
+                            {currentPlugin.description &&
+                            <React.Fragment>
+                                <ListItem className={classes.descriptionListItem}>
+                                    <ListItemText
+                                        primary="Description"
+                                    />
+                                </ListItem>
+                                <Box className={clsx(classes.maxDialogWidth, classes.descriptionPadding)}>
+                                    <Typography
+                                        align="justify"
+                                        variant="body2"
+                                        color="textSecondary"
+                                        className={classes.descriptionOverflow}
+                                    >
+                                        {currentPlugin.description}
+                                    </Typography>
+                                </Box>
+                            </React.Fragment>
+                            }
+                            {currentPlugin.note &&
+                            <React.Fragment>
+                                <ListItem className={classes.descriptionListItem}>
+                                    <ListItemText
+                                        primary="Note"
+                                    />
+                                </ListItem>
+                                <Box className={clsx(classes.maxDialogWidth, classes.descriptionPadding)}>
+                                    <Typography
+                                        align="justify"
+                                        variant="body2"
+                                        color="textSecondary"
+                                        className={classes.descriptionOverflow}
+                                    >
+                                        {currentPlugin.note}
+                                    </Typography>
+                                </Box>
+                            </React.Fragment>
+                            }
+                        </List>
+                    </Box>
+
+                    <Box className={classes.readmeBox}>
+                        <Typography
+                            variant="h5"
+                            align={"center"}
+                            style={{padding: theme.spacing(1, 0, 1, 0)}}
+                        >
+                            README
+                        </Typography>
+                        <Divider/>
+                        {currentPlugin.readme ?
+                            <Box className={classes.readme}>
+                                {readMe?.map((str) =>
+                                    <Markdown>
+                                        {str}
+                                    </Markdown>
+                                )}
+                            </Box>
+                            :
+                            <Box className={clsx(classes.readme, classes.noReadme)}>
+                                No ReadMe were provided
+                            </Box>
+                        }
+                    </Box>
+
+                </Box>
+            </TabPanel>
+
+            <TabPanel value={value} index={1}>
+                <List className={clsx(classes.maxDialogWidth, classes.settingSpecList)}>
+                    {currentPlugin.rules.map((item) =>
+                        <ListItem>
+                            <ListItemAvatar>
+                                <Avatar>
+                                    {item.getType() === "string" &&
+                                    <TextFieldsIcon/>
+                                    }
+                                    {item.getType() === "separator" &&
+                                    <RemoveIcon/>
+                                    }
+                                    {item.getType() === "boolean" &&
+                                    <CheckIcon/>
+                                    }
+                                    {(item.getType() === "integer" || item.getType() === "float") &&
+                                    <Filter1Icon/>
+                                    }
+                                    {item.getType() === "folder" &&
+                                    <FolderIcon/>
+                                    }
+                                </Avatar>
+                            </ListItemAvatar>
+                            <ListItemText primary={item.name} secondary={item.getType()}/>
+                        </ListItem>
+                    )}
                 </List>
             </TabPanel>
             <Button fullWidth onClick={onClose}>Close</Button>
