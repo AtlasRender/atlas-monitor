@@ -27,7 +27,7 @@ const styles = (theme: Theme) => createStyles({
     rootFolder: {
         border: `1px solid ${grey[700]}`,
         minHeight: 300,
-        padding: theme.spacing(2, 1, 2, 2),
+        padding: theme.spacing(1),
     },
 
 });

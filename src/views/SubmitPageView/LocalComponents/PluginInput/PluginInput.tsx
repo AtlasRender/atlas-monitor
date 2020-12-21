@@ -7,19 +7,27 @@
  */
 
 import React, {Ref, useEffect, useState} from "react";
-import {Box, Grid, TextField, Typography, withStyles} from "@material-ui/core";
+import {Box, Divider, Grid, TextField, Typography, withStyles} from "@material-ui/core";
 import styles from "./styles";
 import Stylable from "../../../../interfaces/Stylable";
 import useCoreRequest from "../../../../hooks/useCoreRequest";
 import useEnqueueErrorSnackbar from "../../../../utils/enqueueErrorSnackbar";
 import PluginFull from "../../../../interfaces/PluginFull";
-import {IntegerField, PluginSetting, PluginSettingsSpec, StringField} from "@atlasrender/render-plugin";
+import {
+    BooleanField,
+    FloatField,
+    IntegerField,
+    PluginSetting,
+    PluginSettingsSpec,
+    StringField
+} from "@atlasrender/render-plugin";
 import SeparatorPluginField from "../../../../components/SeparatorPluginField";
 import BooleanPluginField from "../../../../components/BooleanPluginField";
 import StringPluginField from "../../../../components/RenderJobCustomFields/StringPluginField";
 import IntegerPluginField from "../../../../components/RenderJobCustomFields/IntegerPluginField";
 import useAuth from "../../../../hooks/useAuth";
 import ErrorHandler from "../../../../utils/ErrorHandler";
+import FloatPluginField from "../../../../components/RenderJobCustomFields/FloatPluginField";
 
 
 /**
@@ -77,17 +85,13 @@ const PluginInput = React.forwardRef((props: PluginInputProps, ref: Ref<any>) =>
         } catch (err) {
             const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
             errorHandler
-                .on(401, () => {logout()})
+                .on(401, () => {
+                    logout();
+                })
                 .on(404, "Plugin not found")
                 .handle(err);
         }
 
-    }
-
-    const [state, setState] = useState(false);
-
-    function handleChange() {
-        setState(!state);
     }
 
     // const [str, setStr] = useState<string | null>("hello");
@@ -110,6 +114,12 @@ const PluginInput = React.forwardRef((props: PluginInputProps, ref: Ref<any>) =>
                 <Typography variant="h6" className={classes.header}>
                     {plugin.name}
                 </Typography>
+                <Box>
+                    <Typography variant="h6" className={classes.headerSettings}>
+                        Plugin Settings
+                    </Typography>
+                    <Divider style={{marginBottom: 16}}/>
+                </Box>
                 <Grid container spacing={2}>
                     {pluginCopy.map((field: PluginSetting) => {
                         switch (field.getType()) {
@@ -118,6 +128,7 @@ const PluginInput = React.forwardRef((props: PluginInputProps, ref: Ref<any>) =>
                                     <Grid item xs={12}>
                                         <IntegerPluginField field={field as IntegerField}
                                                             setPluginSetting={setPluginSetting}/>
+
                                     </Grid>
                                 );
                             case "string" :
@@ -130,10 +141,8 @@ const PluginInput = React.forwardRef((props: PluginInputProps, ref: Ref<any>) =>
                             case "float" :
                                 return (
                                     <Grid item xs={12}>
-                                        <TextField
-                                            fullWidth
-                                            label={field.label}
-                                        />
+                                        <FloatPluginField field={field as FloatField}
+                                                          setPluginSetting={setPluginSetting}/>
                                     </Grid>
                                 );
                             case "group" :
@@ -148,13 +157,14 @@ const PluginInput = React.forwardRef((props: PluginInputProps, ref: Ref<any>) =>
                             case "separator" :
                                 return (
                                     <Grid item xs={12}>
-                                        <SeparatorPluginField label="label"/>
+                                        <SeparatorPluginField label={field.label}/>
                                     </Grid>
                                 );
                             case "boolean" :
                                 return (
                                     <Grid item xs={12}>
-                                        <BooleanPluginField value={state} onChange={handleChange} label="Description"/>
+                                        <BooleanPluginField field={field as BooleanField}
+                                                            setPluginSetting={setPluginSetting}/>
                                     </Grid>
                                 );
                         }

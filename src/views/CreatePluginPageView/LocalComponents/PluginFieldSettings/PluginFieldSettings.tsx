@@ -8,7 +8,7 @@
 
 import Stylable from "../../../../interfaces/Stylable";
 import React, {Ref, useContext, useEffect, useState} from "react";
-import {Grid, List, ListItem, Typography, withStyles} from "@material-ui/core";
+import {Grid, List, ListItem, Switch, Typography, withStyles} from "@material-ui/core";
 import TextField from "@material-ui/core/TextField";
 import BasicPluginField from "../../../../entities/BasicPluginField";
 import IntegerField from "../../../../entities/IntegerField";
@@ -17,6 +17,8 @@ import styles from "./styles";
 import GroupField from "../../../../entities/GroupField";
 import SeparatorField from "../../../../entities/SeparatorField";
 import StringField from "../../../../entities/StringField";
+import FloatField from "../../../../entities/FloatField";
+import BooleanField from "../../../../entities/BooleanField";
 
 interface ValidationErrors {
     "noInputError": boolean;
@@ -56,14 +58,14 @@ const PluginFieldSettings = React.forwardRef((props: PluginFieldSettingsProps, r
     });
 
     useEffect(() => {
-        if(pluginField instanceof IntegerField || pluginField instanceof StringField) {
+        if (pluginField instanceof IntegerField || pluginField instanceof StringField || pluginField instanceof FloatField) {
             setTypeIS(true);
         }
-    })
+    });
 
     useEffect(() => {
         setTypeIS(false);
-    }, [index])
+    }, [index]);
 
     useEffect(() => {
         setErrors({
@@ -82,7 +84,7 @@ const PluginFieldSettings = React.forwardRef((props: PluginFieldSettingsProps, r
 
         let targetValue;
 
-        if(event.target.value === null || event.target.value === undefined || event.target.value === "") {
+        if (event.target.value === null || event.target.value === undefined || event.target.value === "") {
             targetValue = null;
         } else {
             targetValue = event.target.value;
@@ -122,6 +124,24 @@ const PluginFieldSettings = React.forwardRef((props: PluginFieldSettingsProps, r
                 default: name === "default" ? targetValue : pluginField.default,
                 id: pluginField.id,
             }), index);
+        } else if (pluginField instanceof FloatField) {
+            context.handleEditPluginField(new FloatField({
+                type: pluginField.type,
+                name: name === "name" ? targetValue : pluginField.name,
+                label: name === "label" ? targetValue : pluginField.label,
+                min: name === "min" ? (targetValue ? +targetValue : targetValue) : pluginField.min,
+                max: name === "max" ? (targetValue ? +targetValue : targetValue) : pluginField.max,
+                default: name === "default" ? (targetValue ? +targetValue : targetValue) : pluginField.default,
+                id: pluginField.id,
+            }), index);
+        } else if (pluginField instanceof BooleanField) {
+            context.handleEditPluginField(new BooleanField({
+                type: pluginField.type,
+                name: name === "name" ? targetValue : pluginField.name,
+                label: name === "label" ? targetValue : pluginField.label,
+                default: name === "default" ? event.target.checked : pluginField.default,
+                id: pluginField.id,
+            }), index);
         }
     };
 
@@ -150,7 +170,7 @@ const PluginFieldSettings = React.forwardRef((props: PluginFieldSettingsProps, r
                 }));
             }
         }
-        if (pluginField instanceof IntegerField || pluginField instanceof StringField) {
+        if (pluginField instanceof IntegerField || pluginField instanceof StringField || pluginField instanceof FloatField) {
             if (event.target.name === "min") {
                 if (!pluginField.min || pluginField.min < 0) {
                     setErrors(prev => ({
@@ -188,8 +208,7 @@ const PluginFieldSettings = React.forwardRef((props: PluginFieldSettingsProps, r
                             ...prev, "defaultError": false
                         }));
                     }
-                } else if(pluginField instanceof IntegerField)
-                {
+                } else if (pluginField instanceof IntegerField || pluginField instanceof FloatField) {
                     if (!pluginField.default || pluginField.min && pluginField.default < pluginField.min || pluginField.max && pluginField.default > pluginField.max) {
                         setErrors(prev => ({
                             ...prev, "defaultError": true
@@ -266,7 +285,10 @@ const PluginFieldSettings = React.forwardRef((props: PluginFieldSettingsProps, r
                                 }}
                             />
                         </Grid>
-                        {(typeIS && (pluginField instanceof IntegerField || pluginField instanceof StringField)) &&
+                        {(typeIS && (
+                            pluginField instanceof IntegerField ||
+                            pluginField instanceof StringField ||
+                            pluginField instanceof FloatField)) &&
                         <React.Fragment>
                             <Grid item xs={12} className={classes.gridPadding}>
                                 <TextField
@@ -317,6 +339,17 @@ const PluginFieldSettings = React.forwardRef((props: PluginFieldSettingsProps, r
                                 />
                             </Grid>
                         </React.Fragment>
+                        }
+                        {pluginField instanceof BooleanField &&
+                        <Grid item xs={12} className={classes.gridPadding}>
+                            <Typography>
+                                Default
+                                <Switch
+                                    checked={pluginField.default}
+                                    onChange={handleInputField("default")}
+                                />
+                            </Typography>
+                        </Grid>
                         }
                     </Grid>
 

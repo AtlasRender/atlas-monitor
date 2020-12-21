@@ -104,6 +104,8 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
 
     const [pluginFields, setPluginFields] = useState<BasicPluginField[]>([]);
 
+    console.log(pluginFields);
+
     const [plugin, setPlugin] = useState<Plugin>({
         name: "",
         version: "",
@@ -334,15 +336,15 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
                     <List component="nav" aria-label="secondary mailbox folders">
                         <ListItem className={classes.paddingNone}>
                             <ListItemText primary="Settings" primaryTypographyProps={{variant: "h6"}}/>
-                            <ListItemSecondaryAction>
-                                <IconButton
-                                    edge="end"
-                                    aria-label="delete"
-                                    onClick={handleSetIsDialogPluginButtonActive}
-                                >
-                                    <AddIcon/>
-                                </IconButton>
-                            </ListItemSecondaryAction>
+                            {/*<ListItemSecondaryAction>*/}
+                            {/*    <IconButton*/}
+                            {/*        edge="end"*/}
+                            {/*        aria-label="delete"*/}
+                            {/*        onClick={handleSetIsDialogPluginButtonActive}*/}
+                            {/*    >*/}
+                            {/*        <AddIcon/>*/}
+                            {/*    </IconButton>*/}
+                            {/*</ListItemSecondaryAction>*/}
                         </ListItem>
                         <Divider/>
                     </List>
