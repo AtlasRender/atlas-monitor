@@ -104,7 +104,9 @@ const TokensViewer = React.forwardRef((props: TokensViewerProps, ref: Ref<any>) 
             .catch(err => {
                 const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
                 errorHandler
-                    .on(401, () => {logout()})
+                    .on(401, () => {
+                        logout();
+                    })
                     .handle(err);
             });
     }
@@ -129,7 +131,9 @@ const TokensViewer = React.forwardRef((props: TokensViewerProps, ref: Ref<any>) 
                     const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
                     errorHandler
                         .on(400, "Can not add token")
-                        .on(401, () => {logout()})
+                        .on(401, () => {
+                            logout();
+                        })
                         .handle(err);
                 });
         } else {
@@ -148,7 +152,9 @@ const TokensViewer = React.forwardRef((props: TokensViewerProps, ref: Ref<any>) 
                 const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
                 errorHandler
                     .on(400, "Can not add token")
-                    .on(401, () => {logout()})
+                    .on(401, () => {
+                        logout();
+                    })
                     .on(404, "You have no permissions to delete this token")
                     .handle(err);
             });
@@ -243,7 +249,8 @@ const TokensViewer = React.forwardRef((props: TokensViewerProps, ref: Ref<any>) 
                         {isButtonActive &&
                         <ListItem className={classes.newToken}>
                             <Grid container>
-                                <Grid item className={clsx(classes.tokenAdd, classes.spacingInNewToken, classes.spacingBetweenButtonFix)}>
+                                <Grid item
+                                      className={clsx(classes.tokenAdd, classes.spacingInNewToken, classes.spacingBetweenButtonFix)}>
                                     <TextField
                                         error={errors.nameError}
                                         variant="standard"
@@ -327,6 +334,12 @@ const TokensViewer = React.forwardRef((props: TokensViewerProps, ref: Ref<any>) 
                                     </ListItemSecondaryAction>
                                 </ListItem>
                             )}
+                            {
+                                tokens?.length === 0 &&
+                                <ListItem>
+                                    <ListItemText primary="No tokens were added, please create some"/>
+                                </ListItem>
+                            }
                         </Collapse>
                     </List>
                 </Grid>
@@ -375,7 +388,8 @@ const TokensViewer = React.forwardRef((props: TokensViewerProps, ref: Ref<any>) 
                                             onChange={handleInputToken}
                                         />
                                     </Grid>
-                                    <Grid item xs={12} className={clsx(classes.tokenAdd, classes.topMargin, classes.spacingBetweenButtonFix)}>
+                                    <Grid item xs={12}
+                                          className={clsx(classes.tokenAdd, classes.topMargin, classes.spacingBetweenButtonFix)}>
                                         <TextField
                                             variant="standard"
                                             fullWidth
