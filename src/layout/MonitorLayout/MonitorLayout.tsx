@@ -273,18 +273,18 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<HTML
                                 changeRoute({page: "jobs", panel: null});
                                 handleClose();
                             }}>Render Jobs</MenuItem>
-                            <MenuItem onClick={() => {
-                                changeRoute({page: `organization/${organizations[0].id}`});
-                                handleClose();
-                            }}>{organizations[0].name}</MenuItem>
-                            <MenuItem onClick={() => {
-                                changeRoute({page: `organization/${organizations[1].id}`});
-                                handleClose();
-                            }}>{organizations[1].name}</MenuItem>
-                            <MenuItem onClick={() => {
-                                changeRoute({page: `organization/${organizations[2].id}`});
-                                handleClose();
-                            }}>{organizations[2].name}</MenuItem>
+                            {organizations.length > 0 && organizations.map((organization, index) => {
+                                if(index < 3) {
+                                    return(
+                                        <MenuItem onClick={() => {
+                                            changeRoute({page: `organization/${organization.id}`});
+                                            handleClose();
+                                        }}>{organization.name}</MenuItem>
+                                    );
+                                } else {
+                                    return;
+                                }
+                            })}
                             <MenuItem onClick={handleLogout}>Logout</MenuItem>
 
                         </Menu>
