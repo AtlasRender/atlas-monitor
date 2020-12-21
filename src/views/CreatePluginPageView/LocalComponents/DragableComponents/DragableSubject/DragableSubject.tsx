@@ -39,7 +39,7 @@ const DragableSubject: React.FC<DragableSubjectProps> = ({classes, className, st
                     {type === "string" &&
                     <TextFieldsIcon/>
                     }
-                    {type === "divider" &&
+                    {type === "separator" &&
                     <RemoveIcon/>
                     }
                     {type === "boolean" &&

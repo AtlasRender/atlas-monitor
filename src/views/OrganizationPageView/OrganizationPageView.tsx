@@ -133,6 +133,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
 
 
     useEffect(() => {
+        setLoaded(false);
         Promise.all([
             handleGetOrganization(),
             handleGetAllUsers(),
@@ -143,7 +144,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
         ]).then(() => {
             setLoaded(true);
         });
-    }, []);
+    }, [id]);
 
     //basic
     // function handleSetLoaded() {

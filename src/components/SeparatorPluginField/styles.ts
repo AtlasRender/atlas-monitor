@@ -12,7 +12,7 @@ import {grey} from "@material-ui/core/colors";
 const styles = (theme: Theme) => createStyles({
     container: {
         width: "100%",
-        padding: theme.spacing(1),
+        padding: theme.spacing(1, 0),
     },
     separator: {
         background: grey[500],
@@ -20,7 +20,8 @@ const styles = (theme: Theme) => createStyles({
     },
     text: {
         textAlign: "center",
-        fontSize: 14,
+        fontSize: 13    ,
+        color: theme.palette.text.secondary,
     }
 });
 

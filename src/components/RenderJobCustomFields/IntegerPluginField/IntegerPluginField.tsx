@@ -63,7 +63,7 @@ const IntegerPluginField = React.forwardRef((props: IntegerPluginFieldProps, ref
 
     return (
         <Grid container spacing={1}>
-            <Grid item xs={3}>
+            <Grid item xs={3} style={{display: "flex", alignItems: "center"}}>
                 <Button
                     fullWidth
                     onClick={() => setSlider(prev => !prev)}
@@ -80,6 +80,7 @@ const IntegerPluginField = React.forwardRef((props: IntegerPluginFieldProps, ref
                     size="small"
                     fullWidth
                     className={classes.field}
+                    style={slider ? {paddingRight: 16,} : {}}
                     onChange={(event) => setValue(event.target.value)}
                     onBlur={() => {
                         if (isNaN(+value))

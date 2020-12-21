@@ -6,7 +6,7 @@
  * All rights reserved.
  */
 
-import React, {Ref, useState} from "react";
+import React, {Ref, useEffect, useState} from "react";
 import {Button, Grid, TextField, withStyles} from "@material-ui/core";
 import Stylable from "../../../interfaces/Stylable";
 import styles from "./styles";
@@ -30,7 +30,11 @@ const StringPluginField = React.forwardRef((props: StringPluginFieldProps, ref: 
         // value,
     } = props;
 
-    const [value, setValue] = useState<string>("");
+    const [value, setValue] = useState<string>(field.default);
+
+    useEffect(() => {
+        setPluginSetting(field, value);
+    }, [value])
 
     function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
         setValue(event.target.value);
@@ -38,7 +42,7 @@ const StringPluginField = React.forwardRef((props: StringPluginFieldProps, ref: 
 
     return (
         <Grid container spacing={1}>
-            <Grid item xs={3}>
+            <Grid item xs={3} style={{display: "flex", alignItems: "center"}}>
                 <Button fullWidth>{field.name}</Button>
             </Grid>
             <Grid item xs={9}>

@@ -159,7 +159,7 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
         setJob((prev) => ({...prev, plugin: chosenPlugin?.id}));
     }, [chosenPlugin]);
 
-    function setPluginSetting(field: PluginSetting, value: number | string | null) {
+    function setPluginSetting(field: PluginSetting, value: number | string | boolean | null ) {
         setJob((prev) => ({...prev, pluginSettings: {...prev.pluginSettings, [field.name]: value}}));
         console.log("plugin setting", job.pluginSettings);
     }
@@ -264,6 +264,8 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
         event.persist();
         setJob(prev => ({...prev, [event.target.name]: event.target.value}));
     }
+
+    console.log(job);
 
     function handleSubmission() {
         if (!errors.noInputError && !errors.errorName && !errors.errorDescription && !errors.errorAttempts) {

@@ -11,6 +11,10 @@ import {createStyles, Theme} from "@material-ui/core";
 const styles = (theme: Theme) => createStyles({
     header: {
         textAlign: "center"
+    },
+    headerSettings: {
+        textAlign: "center",
+        padding: theme.spacing(1),
     }
 });
 

@@ -10,7 +10,6 @@ import {createStyles, Theme} from "@material-ui/core";
 
 const styles = (theme: Theme) => createStyles({
     field: {
-        paddingRight: theme.spacing(2),
         "& input::-webkit-clear-button, & input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button": {
             display: "none"
         }
@@ -20,10 +19,10 @@ const styles = (theme: Theme) => createStyles({
     },
     thumb: {
         height: 24,
-        width: 24,
-        marginTop: -10,
-        marginLeft: -12,
-        borderRadius: 4,
+        width: 10,
+        marginTop: -11,
+        marginLeft: -9,
+        borderRadius: 2,
     },
     rail: {
         height: 10,

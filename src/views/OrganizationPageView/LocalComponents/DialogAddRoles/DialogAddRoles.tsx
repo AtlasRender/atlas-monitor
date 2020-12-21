@@ -114,9 +114,6 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
         });
     }, [role]);
 
-    console.log("id counter", counterId);
-    console.log("role id", addRole.id);
-
     const handleSwitch = (event: React.ChangeEvent<HTMLInputElement>) => {
         setAddRole((prev) => (
             {...prev, [event.target.name]: event.target.checked}

@@ -124,7 +124,7 @@ const DragableListItem: React.FC<DragableListItemProps> = ({
                     {field.type === "string" &&
                     <TextFieldsIcon/>
                     }
-                    {field.type === "divider" &&
+                    {field.type === "separator" &&
                     <RemoveIcon/>
                     }
                     {field.type === "boolean" &&

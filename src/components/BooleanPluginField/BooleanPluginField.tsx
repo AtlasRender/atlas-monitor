@@ -6,17 +6,18 @@
  * All rights reserved.
  */
 
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {Box, Grid, Switch, Typography, withStyles} from "@material-ui/core";
 import Stylable from "../../interfaces/Stylable";
 import styles from "./styles";
+import {BooleanField, IntegerField, PluginSetting} from "@atlasrender/render-plugin";
 
 
 interface BooleanPluginFieldProps extends Stylable {
-    value: boolean;
-    label?: string;
+    field: BooleanField;
+    valueD?: number,
 
-    onChange(): void;
+    setPluginSetting(field: PluginSetting, value: number | string | boolean | null): void,
 }
 
 const BooleanPluginField = React.forwardRef((props: BooleanPluginFieldProps, ref) => {
@@ -24,26 +25,36 @@ const BooleanPluginField = React.forwardRef((props: BooleanPluginFieldProps, ref
         classes,
         className,
         style,
-        onChange,
-        value,
-        label,
+        field,
+        setPluginSetting,
     } = props;
 
+    const [value, setValue] = useState(field.default);
+
+
+    useEffect(() => {
+        setPluginSetting(field, value);
+    }, [value]);
+
+
+    function handleChange() {
+        setValue(!value);
+    }
 
     return (
-        <Grid container className={classes.container}>
+        <Grid container spacing={1} className={classes.container}>
 
-            {label ?
+            {field.label ?
                 <React.Fragment>
-                    <Grid item xs={3} style={{display: "flex", justifyContent: "center"}}>
-                        <Typography className={classes.text}>
-                            {label}
+                    <Grid item xs={3} style={{display: "flex", justifyContent: "center", margin: 1}}>
+                        <Typography className={classes.text} variant="button" style={{height: 36, width: "100%"}}>
+                            {field.label.toUpperCase()}
                         </Typography>
                     </Grid>
-                    <Grid item xs={9}>
+                    <Grid item xs={2}>
                         <Switch
                             checked={value}
-                            onChange={onChange}
+                            onChange={handleChange}
                             name="checkedA"
                             inputProps={{"aria-label": "secondary checkbox"}}
                         />
@@ -52,7 +63,7 @@ const BooleanPluginField = React.forwardRef((props: BooleanPluginFieldProps, ref
                 :
                 <Switch
                     checked={value}
-                    onChange={onChange}
+                    onChange={handleChange}
                     name="checkedA"
                     inputProps={{"aria-label": "secondary checkbox"}}
                 />
@@ -60,7 +71,6 @@ const BooleanPluginField = React.forwardRef((props: BooleanPluginFieldProps, ref
 
         </Grid>
     );
-}
-);
+});
 
 export default withStyles(styles)(BooleanPluginField);

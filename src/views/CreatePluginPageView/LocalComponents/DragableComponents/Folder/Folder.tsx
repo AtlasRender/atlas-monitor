@@ -29,7 +29,7 @@ const Folder: React.FC<FolderProps> = ({classes, className, children, id, style}
     const context = useContext(PluginContext);
 
     const [{isOver, isOverCurrent}, drop] = useDrop({
-        accept: ["integer", "folder", "divider", "string", "boolean", "float"],
+        accept: ["integer", "folder", "separator", "string", "boolean", "float"],
         drop(item, monitor) {
             const didDrop = monitor.didDrop();
             if (didDrop) {
@@ -56,9 +56,9 @@ const Folder: React.FC<FolderProps> = ({classes, className, children, id, style}
                     default: null,
                     id: context.idGenerator(),
                 }), id);
-            } else if (item.type === "divider") {
+            } else if (item.type === "separator") {
                 context.handleAddPluginField(new SeparatorField({
-                    type: "divider",
+                    type: "separator",
                     name: "Divider",
                     label: "Divider",
                     id: context.idGenerator(),

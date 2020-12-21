@@ -12,12 +12,12 @@ const styles = (theme: Theme) => createStyles({
     container: {
         display: "flex",
         width: "100%",
-        padding: theme.spacing(1),
     },
     text: {
         display: "flex",
-        justifyContent: "space-between",
+        textAlign: "center",
         alignItems: "center",
+        justifyContent: "center",
     }
 });
 
