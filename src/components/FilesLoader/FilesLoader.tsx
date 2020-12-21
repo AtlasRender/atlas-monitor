@@ -205,6 +205,7 @@ const FilesLoader = React.forwardRef((props: FilesLoaderProps, ref) => {
 
     return (
         <Box>
+            {tempFiles.length === 0 &&
             <Box
                 {...getRootProps()}
                 className={clsx(
@@ -229,6 +230,7 @@ const FilesLoader = React.forwardRef((props: FilesLoaderProps, ref) => {
                     inputProps={{...getInputProps(), color: "primary", multiple: !!multiple}}
                 />
             </Box>
+            }
             {!!tempFiles.length &&
             <List>
                 {tempFiles.map((file: UploadedFile) =>

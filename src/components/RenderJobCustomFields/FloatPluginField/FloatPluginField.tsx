@@ -7,16 +7,16 @@
  */
 
 import React, {Ref} from "react";
-import {Button, Grid, InputBase, Slider, withStyles} from "@material-ui/core";
+import {Button, Grid, InputBase, Slider, TextField, withStyles} from "@material-ui/core";
 import Stylable from "../../../interfaces/Stylable";
 import styles from "./styles";
-import {IntegerField} from "@atlasrender/render-plugin";
+import {FloatField, IntegerField, PluginSetting} from "@atlasrender/render-plugin";
 
 interface IntegerPluginFieldProps extends Stylable {
-    field: IntegerField;
+    field: FloatField;
     value?: number,
 
-    onChange?(value: number | null): void;
+    setPluginSetting(field: PluginSetting, value: number | string | null): void;
 }
 
 const FloatPluginField = React.forwardRef((props: IntegerPluginFieldProps, ref: Ref<HTMLElement>) => {
@@ -25,7 +25,7 @@ const FloatPluginField = React.forwardRef((props: IntegerPluginFieldProps, ref: 
         className,
         style,
         field,
-        onChange,
+        setPluginSetting,
         value: inputValue,
     } = props;
 
@@ -39,7 +39,7 @@ const FloatPluginField = React.forwardRef((props: IntegerPluginFieldProps, ref: 
 
     React.useEffect(() => {
         setValue(String(finalValue));
-        onChange && onChange(finalValue);
+        setPluginSetting(field, finalValue)
     }, [finalValue]);
 
 
@@ -63,8 +63,8 @@ const FloatPluginField = React.forwardRef((props: IntegerPluginFieldProps, ref: 
     // }
 
     return (
-        <Grid container>
-            <Grid item xs={3}>
+        <Grid container spacing={1}>
+            <Grid item xs={3} style={{display: "flex", alignItems: "center"}}>
                 <Button
                     fullWidth
                     onClick={() => setSlider(prev => !prev)}
@@ -73,11 +73,15 @@ const FloatPluginField = React.forwardRef((props: IntegerPluginFieldProps, ref: 
                 </Button>
             </Grid>
             <Grid item xs={slider ? 2 : 9}>
-                <InputBase
+                <TextField
                     ref={inputRef}
                     value={value}
                     fullWidth
+                    variant="outlined"
+                    type="number"
+                    size="small"
                     className={classes.field}
+                    style={slider ? {paddingRight: 16,} : {}}
                     onChange={(event) => setValue(event.target.value)}
                     onBlur={() => {
                         if (isNaN(+value))
@@ -92,8 +96,9 @@ const FloatPluginField = React.forwardRef((props: IntegerPluginFieldProps, ref: 
                 />
             </Grid>
             {slider &&
-            <Grid item xs={7}>
+            <Grid item xs={7} style={{display: "flex", alignItems: "center"}}>
                 <Slider
+                    className={classes.sliderStyles}
                     defaultValue={30}
                     value={finalValue || 0}
                     onChange={(event, newValue) => {
@@ -102,9 +107,12 @@ const FloatPluginField = React.forwardRef((props: IntegerPluginFieldProps, ref: 
                     }}
                     aria-labelledby="discrete-slider"
                     valueLabelDisplay="off"
-                    marks
+                    step={1}
                     min={field.min}
                     max={field.max}
+                    classes={{
+                        thumb: classes.thumb,
+                    }}
                 />
             </Grid>
             }

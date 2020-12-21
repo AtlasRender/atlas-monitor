@@ -52,11 +52,11 @@ import CoreEventDispatcher from "../../core/CoreEventDispatcher";
 import User from "../../entities/User";
 import {WS_RENDER_JOB_UPDATE, WS_RENDER_TASK_UPDATE} from "../../globals";
 import MenuElement from "../../components/MenuElement";
-import PersonIcon from '@material-ui/icons/Person';
-import AddIcon from '@material-ui/icons/Add';
-import WorkIcon from '@material-ui/icons/Work';
-import CheckIcon from '@material-ui/icons/Check';
-import GroupIcon from '@material-ui/icons/Group';
+import PersonIcon from "@material-ui/icons/Person";
+import AddIcon from "@material-ui/icons/Add";
+import WorkIcon from "@material-ui/icons/Work";
+import CheckIcon from "@material-ui/icons/Check";
+import GroupIcon from "@material-ui/icons/Group";
 import useCoreRequest from "../../hooks/useCoreRequest";
 import Organization from "../../interfaces/Organization";
 import ErrorHandler from "../../utils/ErrorHandler";
@@ -84,9 +84,11 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<HTML
         className,
     } = props;
 
+
     const coreRequest = useCoreRequest();
     const {changeRoute} = useChangeRoute();
     const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
+
 
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
@@ -95,16 +97,17 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<HTML
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const [userId, setUserId] = useState(-1);
     const [organizations, setOrganizations] = useState<Organization[]>([]);
+    const [loaded, setLoaded] = useState(false);
+
 
     const openPopper = Boolean(anchorEl);
     const id = openPopper ? "simple-popper" : undefined;
     const location = useLocation();
 
-    console.log(organizations);
 
     useEffect(() => {
         const user: User | null = getUser();
-        if (user){
+        if (user) {
             CoreEventDispatcher.connect(user.bearer);
             setUserId(user.id);
         }
@@ -116,7 +119,7 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<HTML
 
         const updateListener = (message: any) => {
             console.log("UPDATE TASK EVENT:", message);
-        }
+        };
 
         CoreEventDispatcher.getInstance().addListener(WS_RENDER_JOB_UPDATE, listener);
 
@@ -132,6 +135,7 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<HTML
         };
     }, []);
 
+
     useEffect(() => {
         if (!isLogged) {
             changeRoute({page: `authorization`, panel: null});
@@ -139,26 +143,29 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<HTML
     }, [isLogged]);
 
     useEffect(() => {
-        if(isLogged && userId >= 0) {
+        if (isLogged && userId >= 0) {
             handleGetUserOrganizations();
         }
-    }, [userId]);
+    }, [userId, isLogged]);
 
 
     const handleGetUserOrganizations = () => {
         coreRequest()
             .get(`users/${userId}/organizations`)
             .then(response => {
-                setOrganizations(response.body)
+                setOrganizations(response.body);
+                setLoaded(true);
             })
             .catch(err => {
                 const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
                 errorHandler
-                    .on(401, () => {logout()})
+                    .on(401, () => {
+                        logout();
+                    })
                     .on(404, "User not found")
                     .handle(err);
-            })
-    }
+            });
+    };
 
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(anchorEl ? null : event.currentTarget);
@@ -249,6 +256,7 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<HTML
                         >
                             <Avatar/>
                         </IconButton>
+                        {loaded &&
                         <Menu
                             id="simple-menu"
                             anchorEl={anchorEl}
@@ -266,19 +274,21 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<HTML
                                 handleClose();
                             }}>Render Jobs</MenuItem>
                             <MenuItem onClick={() => {
-                                changeRoute({page: "organization/1"});
+                                changeRoute({page: `organization/${organizations[0].id}`});
                                 handleClose();
-                            }}>Organization 1</MenuItem>
+                            }}>{organizations[0].name}</MenuItem>
                             <MenuItem onClick={() => {
-                                changeRoute({page: "organization/2"});
+                                changeRoute({page: `organization/${organizations[1].id}`});
                                 handleClose();
-                            }}>Organization 2</MenuItem>
+                            }}>{organizations[1].name}</MenuItem>
                             <MenuItem onClick={() => {
-                                changeRoute({page: "organization/3"});
+                                changeRoute({page: `organization/${organizations[2].id}`});
                                 handleClose();
-                            }}>Organization 3</MenuItem>
+                            }}>{organizations[2].name}</MenuItem>
                             <MenuItem onClick={handleLogout}>Logout</MenuItem>
+
                         </Menu>
+                        }
 
                     </Toolbar>
                 </AppBar>
@@ -354,6 +364,7 @@ const MonitorLayout = React.forwardRef((props: MonitorLayoutProps, ref: Ref<HTML
     let {path} = useRouteMatch();
 
     return (
+
         <Box className={classes.root}>
 
             {drawer}

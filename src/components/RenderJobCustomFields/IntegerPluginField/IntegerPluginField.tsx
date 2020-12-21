@@ -7,7 +7,7 @@
  */
 
 import React, {Ref} from "react";
-import {Button, Grid, InputBase, Slider, withStyles} from "@material-ui/core";
+import {Button, Grid, InputBase, Slider, TextField, withStyles} from "@material-ui/core";
 import Stylable from "../../../interfaces/Stylable";
 import styles from "./styles";
 import {IntegerField, PluginSetting} from "@atlasrender/render-plugin";
@@ -63,7 +63,7 @@ const IntegerPluginField = React.forwardRef((props: IntegerPluginFieldProps, ref
 
     return (
         <Grid container spacing={1}>
-            <Grid item xs={3}>
+            <Grid item xs={3} style={{display: "flex", alignItems: "center"}}>
                 <Button
                     fullWidth
                     onClick={() => setSlider(prev => !prev)}
@@ -72,11 +72,15 @@ const IntegerPluginField = React.forwardRef((props: IntegerPluginFieldProps, ref
                 </Button>
             </Grid>
             <Grid item xs={slider ? 2 : 9}>
-                <InputBase
+                <TextField
                     ref={inputRef}
                     value={value}
+                    variant="outlined"
+                    type="number"
+                    size="small"
                     fullWidth
                     className={classes.field}
+                    style={slider ? {paddingRight: 16,} : {}}
                     onChange={(event) => setValue(event.target.value)}
                     onBlur={() => {
                         if (isNaN(+value))
@@ -91,8 +95,9 @@ const IntegerPluginField = React.forwardRef((props: IntegerPluginFieldProps, ref
                 />
             </Grid>
             {slider &&
-            <Grid item xs={7}>
+            <Grid item xs={7} style={{display: "flex", alignItems: "center"}}>
                 <Slider
+                    className={classes.sliderStyles}
                     defaultValue={30}
                     value={finalValue || 0}
                     onChange={(event, newValue) => {
@@ -104,6 +109,9 @@ const IntegerPluginField = React.forwardRef((props: IntegerPluginFieldProps, ref
                     step={1}
                     min={field.min}
                     max={field.max}
+                    classes={{
+                        thumb: classes.thumb,
+                    }}
                 />
             </Grid>
             }

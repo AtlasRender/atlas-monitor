@@ -6,17 +6,18 @@
  * All rights reserved.
  */
 
-import React from "react";
-import {Box, Switch, Typography, withStyles} from "@material-ui/core";
+import React, {useEffect, useState} from "react";
+import {Box, Grid, Switch, Typography, withStyles} from "@material-ui/core";
 import Stylable from "../../interfaces/Stylable";
 import styles from "./styles";
+import {BooleanField, IntegerField, PluginSetting} from "@atlasrender/render-plugin";
 
 
 interface BooleanPluginFieldProps extends Stylable {
-    value: boolean;
-    label?: string;
+    field: BooleanField;
+    valueD?: number,
 
-    onChange(): void;
+    setPluginSetting(field: PluginSetting, value: number | string | boolean | null): void,
 }
 
 const BooleanPluginField = React.forwardRef((props: BooleanPluginFieldProps, ref) => {
@@ -24,33 +25,51 @@ const BooleanPluginField = React.forwardRef((props: BooleanPluginFieldProps, ref
         classes,
         className,
         style,
-        onChange,
-        value,
-        label,
+        field,
+        setPluginSetting,
     } = props;
 
+    const [value, setValue] = useState(field.default);
+
+
+    useEffect(() => {
+        setPluginSetting(field, value);
+    }, [value]);
+
+
+    function handleChange() {
+        setValue(!value);
+    }
 
     return (
-        <Box className={classes.container}>
-            {label ?
-                <Typography className={classes.text}>
-                    {label}
-                    <Switch
-                        checked={value}
-                        onChange={onChange}
-                        name="checkedA"
-                        inputProps={{"aria-label": "secondary checkbox"}}
-                    />
-                </Typography>
+        <Grid container spacing={1} className={classes.container}>
+
+            {field.label ?
+                <React.Fragment>
+                    <Grid item xs={3} style={{display: "flex", justifyContent: "center", margin: 1}}>
+                        <Typography className={classes.text} variant="button" style={{height: 36, width: "100%"}}>
+                            {field.label.toUpperCase()}
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={2}>
+                        <Switch
+                            checked={value}
+                            onChange={handleChange}
+                            name="checkedA"
+                            inputProps={{"aria-label": "secondary checkbox"}}
+                        />
+                    </Grid>
+                </React.Fragment>
                 :
                 <Switch
                     checked={value}
-                    onChange={onChange}
+                    onChange={handleChange}
                     name="checkedA"
                     inputProps={{"aria-label": "secondary checkbox"}}
                 />
             }
-        </Box>
+
+        </Grid>
     );
 });
 

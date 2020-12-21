@@ -42,6 +42,7 @@ import {IntegerField, PluginSetting} from "@atlasrender/render-plugin";
 import validate from "validate.js";
 import {useChangeRoute} from "routing-manager";
 import ErrorHandler from "../../utils/ErrorHandler";
+import DialogAddFrameRange from "./LocalComponents/DialogAddFrameRange";
 
 /**
  * SubmitPagePropsStyled - interface for SubmitPageView function
@@ -71,6 +72,13 @@ interface Job {
     pluginSettings: object,
 }
 
+interface ErrorValidation {
+    errorName: boolean,
+    errorAttempts: boolean,
+    errorDescription: boolean,
+    noInputError: boolean,
+}
+
 /**
  * SubmitPageView - function for displaying Submit page
  * @function
@@ -83,6 +91,7 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
         className,
     } = props;
 
+
     const {logout} = useAuth();
     const enqueueSuccessSnackbar = useEnqueueSuccessSnackbar();
     const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
@@ -90,16 +99,17 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
     const {changeRoute} = useChangeRoute();
     const coreRequest = useCoreRequest();
 
+
     const user = getUser();
     const [userOrgs, setUserOrgs] = useState<Organization[]>([]);
     const [loaded, setLoaded] = useState<boolean>(false);
     const [org, setOrg] = useState<string>();
     const [frame, setFrame] = useState<FrameRange>({
         start: 0,
-        end: 0,
-        step: 0,
+        end: 10,
+        step: 1,
         renumberStart: 0,
-        renumberStep: 0,
+        renumberStep: 1,
     });
     const [frameRange, setFrameRange] = useState<FrameRange[]>([]);
     const [job, setJob] = useState<Job>({
@@ -116,8 +126,14 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
     const [chosenPluginName, setChosenPluginName] = useState<string>("");
     const [chosenPlugin, setChosenPlugin] = useState<PluginPreview | null>(null);
     const [openDialog, setOpenDialog] = useState(false);
+    const [openAddFrameDialog, setOpenAddFrameDialog] = useState(false);
+    const [errors, setErrors] = useState<ErrorValidation>({
+        errorName: false,
+        errorAttempts: false,
+        errorDescription: false,
+        noInputError: false,
+    });
 
-    console.log(job);
 
     useEffect(() => {
         Promise.all([
@@ -143,7 +159,7 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
         setJob((prev) => ({...prev, plugin: chosenPlugin?.id}));
     }, [chosenPlugin]);
 
-    function setPluginSetting(field: PluginSetting, value: number | string | null) {
+    function setPluginSetting(field: PluginSetting, value: number | string | boolean | null ) {
         setJob((prev) => ({...prev, pluginSettings: {...prev.pluginSettings, [field.name]: value}}));
         console.log("plugin setting", job.pluginSettings);
     }
@@ -166,7 +182,9 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
         } catch (err) {
             const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
             errorHandler
-                .on(401, () => {logout()})
+                .on(401, () => {
+                    logout();
+                })
                 .on(404, "User not found")
                 .handle(err);
         }
@@ -181,7 +199,9 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
         } catch (err) {
             const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
             errorHandler
-                .on(401, () => {logout()})
+                .on(401, () => {
+                    logout();
+                })
                 .on(404, "Organization not found")
                 .handle(err);
         }
@@ -197,7 +217,9 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
             .catch(err => {
                 const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
                 errorHandler
-                    .on(401, () => {logout()})
+                    .on(401, () => {
+                        logout();
+                    })
                     .on(404, "Plugin not found")
                     .handle(err);
             });
@@ -243,24 +265,32 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
         setJob(prev => ({...prev, [event.target.name]: event.target.value}));
     }
 
+    console.log(job);
+
     function handleSubmission() {
-        coreRequest()
-            .post("jobs")
-            .send(job)
-            .then(() => {
-                enqueueSuccessSnackbar("successfully submitted");
-                changeRoute({page: "jobs"});
-            })
-            .catch(err => {
-                const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
-                errorHandler
-                    .on(400, "Can not create job")
-                    .on(401, () => {logout()})
-                    .on(404, "Plugin with selected not found")
-                    .on(409, "Unavailable to queue job")
-                    .on(503, "Internal server error. Please, visit this resource later")
-                    .handle(err);
-            });
+        if (!errors.noInputError && !errors.errorName && !errors.errorDescription && !errors.errorAttempts) {
+            coreRequest()
+                .post("jobs")
+                .send(job)
+                .then(() => {
+                    enqueueSuccessSnackbar("successfully submitted");
+                    changeRoute({page: "jobs"});
+                })
+                .catch(err => {
+                    const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
+                    errorHandler
+                        .on(400, "Can not create job")
+                        .on(401, () => {
+                            logout();
+                        })
+                        .on(404, "Plugin with selected not found")
+                        .on(409, "Unavailable to queue job")
+                        .on(503, "Internal server error. Please, visit this resource later")
+                        .handle(err);
+                });
+        } else {
+            enqueueErrorSnackbar("Invalid input")
+        }
     }
 
     const handleDelete = (index: number) => {
@@ -277,10 +307,59 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
         setOpenDialog(false);
     };
 
+    const handleOpenAddFrameDialog = () => {
+        setOpenAddFrameDialog(true);
+    };
+
+    const handleCloseAddFrameDialog = () => {
+        setOpenAddFrameDialog(false);
+    };
+
     const handleAddFrame = (frame: FrameRange) => {
         setFrameRange(prev => ([...prev, frame]));
-    }
+    };
 
+    const handleValidation = (event: React.FocusEvent<HTMLInputElement>) => {
+        setErrors(prev => ({
+            ...prev, "noInputError": false
+        }));
+        if (event.target.name === "name") {
+            if (job.name.match(/[^A-Za-z0-9_ ]/) || !job.name || job.name.length < 3 || job.name.length > 100) {
+                setErrors(prev => ({
+                    ...prev, "errorName": true
+                }));
+
+            } else {
+                setErrors(prev => ({
+                    ...prev, "errorName": false
+                }));
+            }
+        }
+        if (event.target.name === "attempts_per_task_limit") {
+            if (job.attempts_per_task_limit< 0) {
+                setErrors(prev => ({
+                    ...prev, "errorAttempts": true
+                }));
+
+            } else {
+                setErrors(prev => ({
+                    ...prev, "errorAttempts": false
+                }));
+            }
+        }
+        if (event.target.name === "description") {
+            if (job.description.match(/[^A-Za-z0-9_ ]/) || job.description.length > 1000) {
+                setErrors(prev => ({
+                    ...prev, "errorDescription": true
+                }));
+
+            } else {
+                setErrors(prev => ({
+                    ...prev, "errorDescription": false
+                }));
+            }
+        }
+    }
 
     const matches = useMediaQuery("(min-width:800px)");
     let submitInfo;
@@ -292,20 +371,24 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
             <Grid container spacing={2}>
                 <Grid item xs={4}>
                     <TextField
+                        error={errors.errorName}
                         fullWidth
                         name="name"
                         required
                         label="Work title"
                         onChange={handleInput}
+                        onBlur={handleValidation}
                     />
                 </Grid>
                 <Grid item xs={2}>
                     <TextField
+                        error={errors.errorAttempts}
                         fullWidth
                         label="Attempts"
                         name="attempts_per_task_limit"
                         value={job.attempts_per_task_limit}
                         onChange={handleJobParametersChange}
+                        onBlur={handleValidation}
                     />
                 </Grid>
                 <Grid item xs={2}>
@@ -338,72 +421,35 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
                 </Grid>
                 <Grid item xs={12}>
                     <TextField
+                        error={errors.errorDescription}
                         fullWidth
                         InputLabelProps={{shrink: true}}
                         label="Description"
                         name="description"
                         value={job.description}
                         onChange={handleInput}
+                        onBlur={handleValidation}
                     />
                 </Grid>
             </Grid>
         );
         renderSettings = (
-            <Grid item xs={10}>
-                <Grid container spacing={2} className={clsx(classes.container, classes.flexNoWrap)}>
-                    <Grid item>
-                        <TextField
-                            fullWidth
-                            label="Frame start"
-                            name="start"
-                            value={frame.start}
-                            onChange={handleJobParametersChange}
-                        />
-                    </Grid>
-                    <Grid item>
-                        <TextField
-                            fullWidth
-                            label="Frame end"
-                            name="end"
-                            value={frame.end}
-                            onChange={handleJobParametersChange}
-                        />
-                    </Grid>
-                    <Grid item>
-                        <TextField
-                            fullWidth
-                            label="Step"
-                            name="step"
-                            value={frame.step}
-                            onChange={handleJobParametersChange}
-                        />
-                    </Grid>
-                    <Grid item>
-                        <TextField
-                            fullWidth
-                            label="Renumber Start"
-                            name="renumberStart"
-                            value={frame.renumberStart}
-                            onChange={handleJobParametersChange}
-                        />
-                    </Grid>
-                    <Grid item>
-                        <TextField
-                            fullWidth
-                            label="Renumber step"
-                            name="renumberStep"
-                            value={frame.renumberStep}
-                            onChange={handleJobParametersChange}/>
-                    </Grid>
-                    <Box>
-                        <IconButton
-                            onClick={() => handleAddFrame(frame)}
-                        >
-                            <AddIcon/>
-                        </IconButton>
-                    </Box>
+            <React.Fragment>
+                <Grid item xs={10}>
+                    <Button
+                        onClick={handleOpenAddFrameDialog}
+                        fullWidth
+                        variant="outlined"
+                    >
+                        Add new frame range
+                    </Button>
                 </Grid>
-            </Grid>
+                <DialogAddFrameRange
+                    open={openAddFrameDialog}
+                    onClose={handleCloseAddFrameDialog}
+                    onAddFrame={handleAddFrame}
+                />
+            </React.Fragment>
         );
         plugin = (
             <React.Fragment>
