@@ -243,7 +243,7 @@ const TokensViewer = React.forwardRef((props: TokensViewerProps, ref: Ref<any>) 
                         {isButtonActive &&
                         <ListItem className={classes.newToken}>
                             <Grid container>
-                                <Grid item xs={6} className={clsx(classes.tokenAdd, classes.spacingInNewToken)}>
+                                <Grid item className={clsx(classes.tokenAdd, classes.spacingInNewToken, classes.spacingBetweenButtonFix)}>
                                     <TextField
                                         error={errors.nameError}
                                         variant="standard"
@@ -255,11 +255,10 @@ const TokensViewer = React.forwardRef((props: TokensViewerProps, ref: Ref<any>) 
                                         onBlur={handleValidation}
                                     />
                                 </Grid>
-                                <Grid item xs={5} className={clsx(classes.tokenAdd, classes.spacingInNewToken)}>
+                                <Grid item className={clsx(classes.tokenAdd, classes.spacingBetweenButtonFix)}>
                                     <TextField
                                         error={errors.descriptionError}
                                         variant="standard"
-                                        required
                                         fullWidth
                                         name="description"
                                         label="Description"
@@ -267,7 +266,7 @@ const TokensViewer = React.forwardRef((props: TokensViewerProps, ref: Ref<any>) 
                                         onBlur={handleValidation}
                                     />
                                 </Grid>
-                                <Grid item xs={1} className={classes.createTokenControls}>
+                                <Grid item className={classes.createTokenControls}>
                                     <IconButton
                                         onClick={handleClose}
                                     >
@@ -376,10 +375,9 @@ const TokensViewer = React.forwardRef((props: TokensViewerProps, ref: Ref<any>) 
                                             onChange={handleInputToken}
                                         />
                                     </Grid>
-                                    <Grid item xs={12} className={clsx(classes.tokenAdd, classes.topMargin)}>
+                                    <Grid item xs={12} className={clsx(classes.tokenAdd, classes.topMargin, classes.spacingBetweenButtonFix)}>
                                         <TextField
                                             variant="standard"
-                                            required
                                             fullWidth
                                             name="description"
                                             label="Description"

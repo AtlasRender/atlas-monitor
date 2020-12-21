@@ -46,6 +46,7 @@ import ErrorHandler from "../../utils/ErrorHandler";
 import useEnqueueSuccessSnackbar from "../../utils/EnqueSuccessSnackbar";
 import DialogAddUsers from "../OrganizationPageView/LocalComponents/DialogAddUsers";
 import DemoRole from "../../interfaces/DemoRole";
+import {yellow} from "@material-ui/core/colors";
 
 
 interface CreateOrganizationPageProps extends Stylable {
@@ -102,6 +103,12 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
     const [users, setUsers] = useState<UserData[]>([]);
     const [members, setMembers] = useState<UserData[]>([]);
     const [addMemberButton, setAddMemberButton] = useState<boolean>(false);
+    const [defaultRoleId, setDefaultRoleId] = useState<number>(defaultRole.id);
+    const [isDefault, setIsDefault] = useState<boolean>(false);
+
+    useEffect(() => {
+        setDefaultRoleId(defaultRole.id);
+    }, [defaultRole]);
 
 
     //For dialog-----------------------------------------------------------------------------------------
@@ -173,7 +180,7 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
     function modifyRole(id: number, role: DemoRole, isDefault: boolean) {
         console.log("new role id", id);
         setAddRoleButton(!addRoleButton);
-        if(isDefault){
+        if (isDefault) {
             setDefaultRole(role);
         }
         setRoles((prev) => ([...prev.filter(elem => elem.id !== id)]));
@@ -254,7 +261,7 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
     }
 
     function createOrg() {
-        console.log('roles', roles);
+        console.log("roles", roles);
         const userIds = members.map((member) => member.id);
         const filteredRoles = roles.filter(elem => elem.id !== defaultRole.id);
         const sentRoles = filteredRoles.map((elem) => {
@@ -351,6 +358,7 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
                                 <ListItemText
                                     primary={item.name}
                                     secondary={item.description}
+                                    style={{color: defaultRole.id === item.id ? yellow[700] : undefined}}
                                 />
                                 <ListItemSecondaryAction>
                                     <IconButton
@@ -358,6 +366,9 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
                                         aria-label="edit"
                                         style={{marginRight: theme.spacing(0)}}
                                         onClick={() => {
+                                            if (defaultRoleId === item.id) {
+                                                setIsDefault(true);
+                                            }
                                             setModify(true);
                                             setAddRoleButton(!addRoleButton);
                                             setRoleToModify(item);
@@ -390,15 +401,18 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
                 <DialogAddRoles
                     open={addRoleButton}
                     onClose={() => {
-                        setAddRoleButton(!addRoleButton);
+                        setAddRoleButton(false);
+                    }}
+                    onExited={() => {
                         setRoleToModify(undefined);
                         setModify(false);
+                        setIsDefault(false);
                     }}
                     onAddRole={addRole}
                     role={roleToModify}
                     modify={modify}
                     onModifyRole={modifyRole}
-                    defaultId={defaultRole.id}
+                    isDefault={isDefault}
                 />
 
                 <List style={{marginTop: 16}}>
