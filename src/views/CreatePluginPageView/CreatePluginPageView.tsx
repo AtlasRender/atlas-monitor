@@ -101,6 +101,7 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
         style,
     } = props;
 
+    const {changeRoute} = useChangeRoute();
     const {logout} = useAuth();
     const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
     const coreRequest = useCoreRequest();
@@ -171,6 +172,7 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
             .send(plugin)
             .then(response => {
                 console.log("done");
+                changeRoute({page: `organization/${plugin.organization}`, create: null, id: null})
             })
             .catch(err => {
                 const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
