@@ -352,6 +352,7 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
             .send(roleToSent)
             .then((response) => {
                 handleGetRoles().then();
+                handleGetOrganizationUsers().then();
             })
             .catch(err => {
                 const errorHandler = new ErrorHandler(enqueueErrorSnackbar);

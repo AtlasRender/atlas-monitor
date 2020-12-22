@@ -35,19 +35,24 @@ import {useChangeRoute} from "routing-manager";
 import {PluginSetting, PluginSettingsSpec, ValidationError} from "@atlasrender/render-plugin";
 import useAuth from "../../hooks/useAuth";
 import ErrorHandler from "../../utils/ErrorHandler";
+import StringField from "../../entities/StringField";
+import FloatField from "../../entities/FloatField";
 
 
 interface PluginContextProps {
     pluginFields: (BasicPluginField)[];
+    errorIds: number[];
     handleAddPluginField: (field: BasicPluginField, id: number) => void,
     handleDeletePluginField: (field: BasicPluginField) => void,
     handleEditPluginField: (field: BasicPluginField, index: number) => void,
     idGenerator: () => number;
     moveField: (inputArray: BasicPluginField[], targetId: number, toId: number, objectToAdd: BasicPluginField, remove: boolean) => BasicPluginField[];
+    handleGetErrorIndexes: (index: number) => void;
 }
 
 export const PluginContext = React.createContext<PluginContextProps>({
     pluginFields: [],
+    errorIds: [],
     handleAddPluginField: (field: BasicPluginField, id: number) => {
     },
     handleDeletePluginField: (field: BasicPluginField) => {
@@ -59,6 +64,8 @@ export const PluginContext = React.createContext<PluginContextProps>({
     },
     moveField: (inputArray: BasicPluginField[], targetId: number, toId: number, objectToAdd: BasicPluginField, remove: boolean = false) => {
         return [];
+    },
+    handleGetErrorIndexes: (index: number) => {
     }
 });
 
@@ -103,6 +110,7 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
     const {id} = getRouteParams();
 
     const [pluginFields, setPluginFields] = useState<BasicPluginField[]>([]);
+    const [errorIds, setErrorIds] = useState<number[]>([]);
 
     console.log(pluginFields);
 
@@ -140,13 +148,16 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
             setPlugin((prev) => ({...prev, fields: validated}));
         } catch (err) {
             if (err instanceof ValidationError) {
+                handleCheckValidation();
                 enqueueErrorSnackbar(err.message);
-                console.log(err);
+                console.log(err.getNested());
             } else {
                 const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
                 errorHandler
                     .on(400, "Plugin settings validation error")
-                    .on(401, () => {logout()})
+                    .on(401, () => {
+                        logout();
+                    })
                     .on(404, "Temp file not found")
                     .on(409, "Plugin with this version already exists")
                     .handle(err);
@@ -165,7 +176,9 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
                 const errorHandler = new ErrorHandler(enqueueErrorSnackbar);
                 errorHandler
                     .on(400, "Plugin settings validation error")
-                    .on(401, () => {logout()})
+                    .on(401, () => {
+                        logout();
+                    })
                     .on(404, "Organization not found")
                     .on(409, "Plugin with this version already exists")
                     .handle(err);
@@ -282,6 +295,52 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
         setIsDialogPluginButtonActive(true);
     }
 
+    const handleGetErrorIds = (id: number) => {
+        setErrorIds(prev => ([...prev, id]));
+    };
+
+    const handleCheckValidation = () => {
+        pluginFields.forEach(field => {
+            const id = handleValidation(field);
+            if(id) {
+                handleGetErrorIds(id);
+            }
+        })
+    };
+
+    function handleValidation(pluginField: BasicPluginField) {
+        if (!pluginField.name || pluginField.name.length < 3 || pluginField.name.length > 50 || pluginFields.filter(field => field.name === pluginField.name).length > 1) {
+            return pluginField.id;
+        }
+        if (!pluginField.label || pluginField.label.length < 3 || pluginField.label.length > 50) {
+            return pluginField.id;
+        }
+        if (pluginField instanceof IntegerField || pluginField instanceof StringField || pluginField instanceof FloatField) {
+            if (!pluginField.min || pluginField.min < 0) {
+                return pluginField.id;
+            }
+            if (!pluginField.max || pluginField.max < 0) {
+                return pluginField.id;
+            }
+            if (pluginField instanceof StringField) {
+                if (!pluginField.default || pluginField.min && pluginField.default.length < pluginField.min || pluginField.max && pluginField.default.length > pluginField.max) {
+                    return pluginField.id;
+                }
+
+            } else if (pluginField instanceof IntegerField || pluginField instanceof FloatField) {
+                if (!pluginField.default || pluginField.min && pluginField.default < pluginField.min || pluginField.max && pluginField.default > pluginField.max) {
+                    return pluginField.id;
+                }
+
+            }
+            if (pluginField.min && pluginField.max) {
+                if (pluginField.min > pluginField.max) {
+                    return pluginField.id;
+                }
+            }
+        }
+    }
+
     return (
         <React.Fragment>
 
@@ -355,11 +414,13 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
                 <Grid item xs={12} md={10}>
                     <PluginContext.Provider value={{
                         pluginFields: pluginFields,
+                        errorIds: errorIds,
                         handleAddPluginField: handleAddPluginField,
                         handleDeletePluginField: handleDeletePluginField,
                         handleEditPluginField: handleEditPluginField,
                         idGenerator: getNextId,
                         moveField: moveField,
+                        handleGetErrorIndexes: handleGetErrorIds,
                     }}>
                         <PluginCreation
                             open={isDialogPluginButtonActive}

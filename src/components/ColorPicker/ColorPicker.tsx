@@ -18,6 +18,8 @@ interface ColorPickerProps extends Stylable {
     color?: string;
 
     onChange?(color: string): void;
+
+    handleGetInvalidColor?(color: string): void;
 }
 
 const ColorPicker = React.forwardRef((props: ColorPickerProps, ref: React.Ref<any>) => {
@@ -26,6 +28,7 @@ const ColorPicker = React.forwardRef((props: ColorPickerProps, ref: React.Ref<an
         className,
         onChange,
         color: inputColor,
+        handleGetInvalidColor,
     } = props;
 
     const theme = useTheme();
@@ -33,8 +36,14 @@ const ColorPicker = React.forwardRef((props: ColorPickerProps, ref: React.Ref<an
     const [color, setColor] = useState(inputColor || "FFF");
     const [error, setError] = useState(false);
 
+    console.log(color);
+
     useEffect(() => {
-        inputColor && setColor(inputColor);
+        if(inputColor && isValidHex(inputColor)) {
+            setColor(inputColor);
+        } else {
+            setColor("f44336");
+        }
     }, [inputColor]);
 
     function handleChangeColor(newColor: string, id: number) {
@@ -46,6 +55,12 @@ const ColorPicker = React.forwardRef((props: ColorPickerProps, ref: React.Ref<an
     function handleChangeColorInput(event: React.ChangeEvent<HTMLInputElement>) {
         !inputColor && setColor(event.target.value);
         onChange && onChange(event.target.value);
+        if(isValidHex("#" + event.target.value)) {
+            handleGetInvalidColor && handleGetInvalidColor("FFF");
+        } else {
+            handleGetInvalidColor && handleGetInvalidColor("f44336");
+        }
+
     }
 
     function isValidHex(color: string) {
@@ -109,8 +124,8 @@ const ColorPicker = React.forwardRef((props: ColorPickerProps, ref: React.Ref<an
                 <Box
                     className={classes.inputAdornment}
                     style={{
-                        background: `#${color}`, border: `1px solid #${color}`,
-                        color: theme.palette.getContrastText(`#${color}`)
+                        background: `#${color || "FFF"}`, border: `1px solid #${color || "FFF"}`,
+                        color: theme.palette.getContrastText(`#${color || "FFF"}`)
                     }}
                 >
                     #
@@ -118,7 +133,7 @@ const ColorPicker = React.forwardRef((props: ColorPickerProps, ref: React.Ref<an
                 <InputBase
                     onChange={handleChangeColorInput}
                     className={classes.input}
-                    value={color}
+                    value={inputColor}
                     classes={{
                         input: classes.paddingLeft,
                     }}
