@@ -301,7 +301,7 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
     }, []);
 
     info = (
-        <React.Fragment>
+        <Grid container xs={12} md={12} spacing={2} style={{display: "flex", alignItems: "flex-begin"}}>
             <Grid item xs={12} md={6}>
                 <TextField
                     margin="normal"
@@ -325,7 +325,7 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
                     onBlur={errorHandler}
                 />
             </Grid>
-        </React.Fragment>
+        </Grid>
     );
 
     return (
@@ -460,48 +460,11 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
                     onNewUserClick={handleNewUsersClick}
                     onAdduser={handleAddUser}
                 />
-
-                {/*<Dialog*/}
-                {/*    open={addMemberButton}*/}
-                {/*    onClose={() => setAddMemberButton(!addMemberButton)}*/}
-                {/*>*/}
-                {/*    <DialogTitle className={classes.container}>*/}
-                {/*        <Typography variant="h6" align="center">*/}
-                {/*            Add members*/}
-                {/*        </Typography>*/}
-                {/*    </DialogTitle>*/}
-                {/*    <Divider/>*/}
-                {/*    <List className={classes.minWidthList}>*/}
-                {/*        {users.map((user) => {*/}
-                {/*            if (user.id === owner?.id) {*/}
-                {/*                return;*/}
-                {/*            }*/}
-                {/*            return (*/}
-                {/*                <ListItem key={user.id}>*/}
-                {/*                    <ListItemAvatar><Avatar/></ListItemAvatar>*/}
-                {/*                    <ListItemText primary={user.username}/>*/}
-                {/*                    <ListItemSecondaryAction>*/}
-                {/*                        <IconButton*/}
-                {/*                            onClick={() => setMembers(prev => [...prev, user])}*/}
-                {/*                        >*/}
-                {/*                            <AddIcon/>*/}
-                {/*                        </IconButton>*/}
-                {/*                    </ListItemSecondaryAction>*/}
-                {/*                </ListItem>*/}
-                {/*            );*/}
-                {/*        })}*/}
-                {/*    </List>*/}
-                {/*    <Button*/}
-                {/*        fullWidth*/}
-                {/*        onClick={() => setAddMemberButton(!addMemberButton)}*/}
-                {/*    >*/}
-                {/*        Close*/}
-                {/*    </Button>*/}
-                {/*</Dialog>*/}
             </Grid>
+
             <Grid item xs={12} style={{display: "flex", justifyContent: "flex-end"}}>
                 <Grid item xs={3}>
-                    <Button fullWidth className={classes.button} onClick={createOrg}>
+                    <Button fullWidth onClick={createOrg}>
                         Create
                     </Button>
                 </Grid>
