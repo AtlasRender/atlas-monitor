@@ -301,7 +301,7 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
     }, []);
 
     info = (
-        <React.Fragment>
+        <Grid container xs={12} md={12} spacing={2} style={{display: "flex", alignItems: "flex-begin"}}>
             <Grid item xs={12} md={6}>
                 <TextField
                     margin="normal"
@@ -325,7 +325,7 @@ const CreateOrganizationPageView = React.forwardRef((props: CreateOrganizationPa
                     onBlur={errorHandler}
                 />
             </Grid>
-        </React.Fragment>
+        </Grid>
     );
 
     return (
