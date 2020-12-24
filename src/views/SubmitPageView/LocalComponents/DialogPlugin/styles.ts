@@ -66,7 +66,7 @@ const styles = (theme: Theme) => createStyles({
         alignItems: "center",
     },
     pluginContainer: {
-        height: 220,
+        maxHeight: 220,
         overflow: "auto"
     }
 });
