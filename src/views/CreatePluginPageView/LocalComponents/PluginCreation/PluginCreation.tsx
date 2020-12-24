@@ -99,7 +99,7 @@ const PluginCreation = React.forwardRef((props: PluginCreationProps, ref: Ref<an
                 return (
                     <DragableListItem
                         key={folder.id}
-                        error={context.errorIds.includes(index)}
+                        error={context.errorIds.includes(folder.id)}
                         field={folder}
                         index={index}
                         fieldIndex={fieldIndex}

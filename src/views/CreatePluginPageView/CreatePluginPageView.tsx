@@ -48,6 +48,7 @@ interface PluginContextProps {
     idGenerator: () => number;
     moveField: (inputArray: BasicPluginField[], targetId: number, toId: number, objectToAdd: BasicPluginField, remove: boolean) => BasicPluginField[];
     handleGetErrorIndexes: (index: number) => void;
+    handleDeleteErrorsIds: (index: number) => void;
 }
 
 export const PluginContext = React.createContext<PluginContextProps>({
@@ -66,6 +67,8 @@ export const PluginContext = React.createContext<PluginContextProps>({
         return [];
     },
     handleGetErrorIndexes: (index: number) => {
+    },
+    handleDeleteErrorsIds: (index: number) => {
     }
 });
 
@@ -301,9 +304,16 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
         setErrorIds(prev => ([...prev, id]));
     };
 
+    const handleDeleteErrorsIds = (id: number) => {
+        const copy = errorIds.filter(errorId => errorId !== id);
+        setErrorIds(copy);
+
+    }
+
     const handleCheckValidation = () => {
         pluginFields.forEach(field => {
             const id = handleValidation(field);
+            console.log(id);
             if(id) {
                 handleGetErrorIds(id);
             }
@@ -312,35 +322,36 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
 
     function handleValidation(pluginField: BasicPluginField) {
         if (!pluginField.name || pluginField.name.length < 3 || pluginField.name.length > 50 || pluginFields.filter(field => field.name === pluginField.name).length > 1) {
+            console.log("name");
             return pluginField.id;
         }
         if (!pluginField.label || pluginField.label.length < 3 || pluginField.label.length > 50) {
             return pluginField.id;
         }
-        if (pluginField instanceof IntegerField || pluginField instanceof StringField || pluginField instanceof FloatField) {
-            if (!pluginField.min || pluginField.min < 0) {
-                return pluginField.id;
-            }
-            if (!pluginField.max || pluginField.max < 0) {
-                return pluginField.id;
-            }
-            if (pluginField instanceof StringField) {
-                if (!pluginField.default || pluginField.min && pluginField.default.length < pluginField.min || pluginField.max && pluginField.default.length > pluginField.max) {
-                    return pluginField.id;
-                }
-
-            } else if (pluginField instanceof IntegerField || pluginField instanceof FloatField) {
-                if (!pluginField.default || pluginField.min && pluginField.default < pluginField.min || pluginField.max && pluginField.default > pluginField.max) {
-                    return pluginField.id;
-                }
-
-            }
-            if (pluginField.min && pluginField.max) {
-                if (pluginField.min > pluginField.max) {
-                    return pluginField.id;
-                }
-            }
-        }
+        // if (pluginField instanceof IntegerField || pluginField instanceof StringField || pluginField instanceof FloatField) {
+        //     if (!pluginField.min || pluginField.min < 0) {
+        //         return pluginField.id;
+        //     }
+        //     if (!pluginField.max || pluginField.max < 0) {
+        //         return pluginField.id;
+        //     }
+        //     if (pluginField instanceof StringField) {
+        //         if (!pluginField.default || pluginField.min && pluginField.default.length < pluginField.min || pluginField.max && pluginField.default.length > pluginField.max) {
+        //             return pluginField.id;
+        //         }
+        //
+        //     } else if (pluginField instanceof IntegerField || pluginField instanceof FloatField) {
+        //         if (!pluginField.default || pluginField.min && pluginField.default < pluginField.min || pluginField.max && pluginField.default > pluginField.max) {
+        //             return pluginField.id;
+        //         }
+        //
+        //     }
+        //     if (pluginField.min && pluginField.max) {
+        //         if (pluginField.min > pluginField.max) {
+        //             return pluginField.id;
+        //         }
+        //     }
+        // }
     }
 
     return (
@@ -423,6 +434,7 @@ const CreatePluginPageView = React.forwardRef((props: CreatePluginPageViewProps,
                         idGenerator: getNextId,
                         moveField: moveField,
                         handleGetErrorIndexes: handleGetErrorIds,
+                        handleDeleteErrorsIds: handleDeleteErrorsIds,
                     }}>
                         <PluginCreation
                             open={isDialogPluginButtonActive}

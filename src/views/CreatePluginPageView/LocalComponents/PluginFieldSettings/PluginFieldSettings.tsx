@@ -76,6 +76,16 @@ const PluginFieldSettings = React.forwardRef((props: PluginFieldSettingsProps, r
             "maxError": false,
             "defaultError": false,
         });
+        console.log(context.errorIds)
+        if(pluginField && context.errorIds.includes(pluginField.id)) {
+            handleValidation("name");
+            handleValidation("label");
+            if(pluginField instanceof IntegerField || pluginField instanceof FloatField || pluginField instanceof StringField) {
+                handleValidation("min");
+                handleValidation("max");
+                handleValidation("default");
+            }
+        }
     }, [pluginField]);
 
 
@@ -146,7 +156,6 @@ const PluginFieldSettings = React.forwardRef((props: PluginFieldSettingsProps, r
     };
 
     function handleValidation(name : string) {
-        console.log("############")
         setErrors(prev => ({
             ...prev, "noInputError": false
         }));
@@ -264,7 +273,10 @@ const PluginFieldSettings = React.forwardRef((props: PluginFieldSettingsProps, r
                                 label="Name"
                                 value={pluginField.name}
                                 onChange={handleInputField("name")}
-                                onBlur={() => handleValidation("name")}
+                                onBlur={() => {
+                                    handleValidation("name");
+                                    context.handleDeleteErrorsIds(pluginField.id);
+                                }}
                                 InputLabelProps={{
                                     shrink: true
                                 }}
