@@ -37,6 +37,7 @@ interface DragableListItemProps extends Stylable {
     moveCard: (dragIndex: number, hoverIndex: number, targetId: number, toId: number) => void
     index: number,
     fieldIndex: number;
+    error?: boolean;
 
     getIndex(index: number): void,
 }
@@ -54,7 +55,8 @@ const DragableListItem: React.FC<DragableListItemProps> = ({
                                                                moveCard,
                                                                index,
                                                                getIndex,
-                                                               fieldIndex
+                                                               fieldIndex,
+                                                               error
                                                            }) => {
 
     const context = useContext(PluginContext);
@@ -110,11 +112,16 @@ const DragableListItem: React.FC<DragableListItemProps> = ({
 
     const opacity = isDragging ? 0 : 1;
     const backgroundColor = fieldIndex === index ? "#3D3D3D" : grey[800];
+    let color = "white";
+    if(error) {
+        color = "red";
+    }
+
 
     return (
         <ListItem
             ref={refer}
-            style={{opacity, backgroundColor}}
+            style={{opacity, backgroundColor, color: color}}
             button
             onClick={() => getIndex(index)}
             className={classes.field}

@@ -6,7 +6,7 @@
  * All rights reserved.
  */
 
-import React, {Ref} from "react";
+import React, {Ref, useState} from "react";
 import {Button, Grid, InputBase, Slider, TextField, withStyles} from "@material-ui/core";
 import Stylable from "../../../interfaces/Stylable";
 import styles from "./styles";
@@ -33,6 +33,8 @@ const IntegerPluginField = React.forwardRef((props: IntegerPluginFieldProps, ref
     const [slider, setSlider] = React.useState<boolean>(true);
     const [finalValue, setFinalValue] = React.useState<number | null>(field.default || null);
     const inputRef = React.useRef<HTMLInputElement>(null);
+    const [min, setMin] = useState(0);
+    const [max, setMax] = useState(1000);
 
     //TODO: add update fdrom props value!
 
@@ -40,7 +42,6 @@ const IntegerPluginField = React.forwardRef((props: IntegerPluginFieldProps, ref
         setValue(String(finalValue));
         setPluginSetting(field, finalValue);
     }, [finalValue]);
-
 
     // function checkForValidation(){
     //     if(!validate.isInteger(+value)){
@@ -85,8 +86,15 @@ const IntegerPluginField = React.forwardRef((props: IntegerPluginFieldProps, ref
                     onBlur={() => {
                         if (isNaN(+value))
                             setValue(String(finalValue || ""));
-                        else
+                        else {
                             setFinalValue(+value);
+                            if(+value < min) {
+                                setMin(min - Math.abs(1.4 * +value));
+                            }
+                            if(+value > max) {
+                                setMax(max + 1.4 * +value);
+                            }
+                        }
                     }}
                     onKeyPress={(event) => {
                         if (event.key === "Enter" && inputRef.current)
@@ -104,11 +112,12 @@ const IntegerPluginField = React.forwardRef((props: IntegerPluginFieldProps, ref
                         if (typeof newValue === "number")
                             setFinalValue(newValue);
                     }}
+
                     aria-labelledby="discrete-slider"
                     valueLabelDisplay="off"
                     step={1}
-                    min={field.min}
-                    max={field.max}
+                    min={field.min != null ? field.min : min}
+                    max={field.max != null ? field.max : max}
                     classes={{
                         thumb: classes.thumb,
                     }}

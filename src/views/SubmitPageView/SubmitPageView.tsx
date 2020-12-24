@@ -150,6 +150,9 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
         // console.log(job.frameRange);
     }, [frameRange]);
 
+    useEffect(() => {
+        handleGetPlugins().then();
+    }, [job])
 
     useEffect(() => {
         setJob((prev) => ({...prev, organization: userOrgs[0]?.id}));
@@ -467,6 +470,7 @@ const SubmitPageView = React.forwardRef((props: SubmitPagePropsStyled, ref: Ref<
                         open={openDialog}
                         onClose={handleCloseDialog}
                         getPlugin={handleGetChosenPlugin}
+                        organizationId={job.organization}
                     />
 
                 </Grid>

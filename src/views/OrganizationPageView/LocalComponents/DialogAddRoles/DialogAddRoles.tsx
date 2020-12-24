@@ -77,6 +77,7 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
     const [willBeDefault, setWillBeDefault] = useState<boolean>(isDefault || false);
 
 
+    const [invalidColor, setInvalidColor] = useState("");
     const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
     const theme = useTheme();
     const [addRole, setAddRole] = useState<DemoRole | Role>({
@@ -139,12 +140,15 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
     };
 
     function handleGetColor(inputColor: string) {
-        if (inputColor) {
-            setAddRole((prev) => (prev && {...prev, color: inputColor}));
-        } else {
-            setAddRole((prev) => (prev && {...prev, color: "000"}));
-        }
+        setAddRole((prev) => (prev && {...prev, color: inputColor}));
     }
+
+    function handleGetInvalidColor(inputColor: string) {
+        console.log("###########", inputColor);
+        setInvalidColor(inputColor);
+    }
+
+    console.log("Invalid", invalidColor);
 
     const handleValidation = (event: React.FocusEvent<HTMLInputElement>) => {
         setErrors(prev => ({
@@ -188,7 +192,7 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
     };
 
     function handleClick() {
-        if (!errors.noInputError && !errors.nameError && !errors.descriptionError && !errors.permissionLevelError) {
+        if (!errors.noInputError && !errors.nameError && !errors.descriptionError && !errors.permissionLevelError && invalidColor !== "f44336") {
             modify ? onModifyRole && onModifyRole(role?.id, addRole, willBeDefault) : onAddRole(addRole, errors);
             handleOnClose();
         } else {
@@ -232,7 +236,8 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
         >
             <DialogTitle
                 className={classes.dialogRoles}
-                style={{background: `#${addRole.color}`, color: theme.palette.getContrastText(`#${addRole.color}`)}}
+                style={{background: `#${invalidColor !== "f44336" ? (addRole.color || "FFF") : invalidColor}`,
+                    color: theme.palette.getContrastText(`#${invalidColor !== "f44336" ? (addRole.color || "FFF") : invalidColor}`)}}
             >
                 {modify ? "Modify role" : "Add new role"}
             </DialogTitle>
@@ -297,6 +302,7 @@ const DialogAddRoles = React.forwardRef((props: DialogAddRolesProps, ref: Ref<an
                         <ColorPicker
                             onChange={handleGetColor}
                             color={addRole.color}
+                            handleGetInvalidColor={handleGetInvalidColor}
                         />
                     </Grid>
                     <Grid container className={classes.firstLine}>
