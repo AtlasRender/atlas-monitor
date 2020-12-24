@@ -15,6 +15,8 @@ const styles = (theme: Theme) => createStyles({
         [theme.breakpoints.down("xs")]: {
             minWidth: 300,
         },
+        height: 512,
+        overflow:"auto",
     },
     search: {
         position: "relative",
@@ -25,6 +27,9 @@ const styles = (theme: Theme) => createStyles({
         },
         marginLeft: 0,
         width: "100%",
+    },
+    searchBar:{
+        padding:theme.spacing(1,1.5,0,1.5)
     },
     searchIcon: {
         padding: theme.spacing(0, 2),

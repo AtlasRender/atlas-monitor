@@ -8,7 +8,7 @@
 
 import React, {Ref, useEffect, useState} from "react";
 import {
-    Avatar,
+    Avatar, Box,
     Button,
     Checkbox,
     Dialog,
@@ -66,26 +66,10 @@ const DialogAddUsers = React.forwardRef((props: DialogAddUsersProps, ref: Ref<an
             <DialogTitle className={classes.paddingNoneBottom}>
                 Choose users to add
             </DialogTitle>
+            <Box className={classes.searchBar}>
+                <SearchBar/>
+            </Box>
             <List className={classes.dialog}>
-                <ListItem>
-                    <SearchBar/>
-                    {/*<div className={classes.search}>*/}
-                    {/*    <div className={classes.searchIcon}>*/}
-                    {/*        <SearchIcon/>*/}
-                    {/*    </div>*/}
-                    {/*    <InputBase*/}
-                    {/*        placeholder="SearchBar…"*/}
-                    {/*        classes={{*/}
-                    {/*            root: classes.inputRoot,*/}
-                    {/*            input: classes.inputInput,*/}
-                    {/*        }}*/}
-                    {/*        inputProps={{"aria-label": "search"}}*/}
-                    {/*    />*/}
-                    {/*</div>*/}
-                    {/*<IconButton>*/}
-                    {/*    <CloseIcon/>*/}
-                    {/*</IconButton>*/}
-                </ListItem>
                 {availableUsers.map((user) => (
                     <ListItem
                         button
@@ -107,10 +91,8 @@ const DialogAddUsers = React.forwardRef((props: DialogAddUsersProps, ref: Ref<an
                         />
                     </ListItem>
                 ))}
-                <ListItem>
-                    <Button fullWidth onClick={() => onAdduser(newUsers)}>Add new users</Button>
-                </ListItem>
             </List>
+            <Button fullWidth onClick={() => onAdduser(newUsers)}>Add new users</Button>
         </Dialog>
     );
 });
