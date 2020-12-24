@@ -77,6 +77,7 @@ const DialogUser = React.forwardRef((props: DialogUserProps, ref: Ref<any>) => {
     const [isRemoveRoleFromUserButtonActive, setIsRemoveRoleFromUserButtonActive] = useState<null | HTMLElement>(null);
     const [filterRoles, setFilterRoles] = useState<Role[]>(roles);
     const [searchValue, setSearchValue] = useState("");
+    // const [newRoles, setNewRoles] = useState<Role[]>([]);
 
 
     useEffect(() => {
