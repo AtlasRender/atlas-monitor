@@ -429,6 +429,17 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
         }
     }
 
+    const handleDeleteOrganization = () => {
+        coreRequest()
+            .delete(`organizations/${id}`)
+            .then(() => {
+                changeRoute({page: "user", id: organizationData?.ownerUser.id});
+            })
+            .catch(err => {
+
+            });
+    };
+
     async function handleGetAllUsers() {
         try {
             const response = await coreRequest().get("users");
@@ -821,6 +832,32 @@ const OrganizationPageView = React.forwardRef((props: OrganizationPageViewProps,
                             open={dialogPluginButton}
                         />
                         }
+
+                        {user && user.id === organizationData?.ownerUser.id &&
+                        <React.Fragment>
+                            <TopicWithButton
+                                children="Danger Zone"
+                                can={false}
+                                color="#f50057"
+                            />
+
+                            <Grid container className={classes.firstLine}>
+                                <Grid item xs={10}>
+                                    <Button
+                                        fullWidth
+                                        variant="contained"
+                                        color="secondary"
+                                        onClick={() => confirm(async () => handleDeleteOrganization(),
+                                            {title: `are you sure to delete organization: ${organizationData.name} ?`})}
+                                    >
+                                        Delete organization
+                                    </Button>
+                                </Grid>
+                            </Grid>
+                        </React.Fragment>
+                        }
+
+
                     </Box>
                 </Route>
             </Switch>

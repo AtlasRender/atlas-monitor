@@ -31,6 +31,7 @@ import List from "@material-ui/core/List";
 interface TopicWithButtonProps extends Stylable {
     children?: string,
     can?: boolean;
+    color?: string;
 
     onClick?(): void,
 }
@@ -47,14 +48,15 @@ const TopicWithButton = React.forwardRef((props: TopicWithButtonProps, ref: Ref<
         className,
         children,
         onClick,
-        can = true
+        can = true,
+        color = "#FFF"
     } = props;
     return (
         <Grid container className={classes.firstLine}>
             <Grid item xs={12} md={10}>
                 <List component="nav" aria-label="secondary mailbox folders">
                     <ListItem className={classes.paddingNone}>
-                        <ListItemText primary={children} primaryTypographyProps={{variant: "h6"}}/>
+                        <ListItemText style={{color: color}} primary={children} primaryTypographyProps={{variant: "h6"}}/>
                         {can &&
                         <ListItemSecondaryAction>
                             <IconButton
