@@ -34,6 +34,7 @@ import ErrorHandler from "../../../../utils/ErrorHandler";
 
 interface DialogPluginProps extends Stylable {
     open: boolean;
+    organizationId: number;
 
     onClose(): void;
 
@@ -48,9 +49,9 @@ const DialogPlugin = React.forwardRef((props: DialogPluginProps, ref: Ref<any>) 
         className,
         open,
         onClose,
-        getPlugin
+        getPlugin,
+        organizationId
     } = props;
-
 
     const {logout} = useAuth();
     const enqueueErrorSnackbar = useEnqueueErrorSnackbar();
@@ -69,6 +70,9 @@ const DialogPlugin = React.forwardRef((props: DialogPluginProps, ref: Ref<any>) 
         setFilterPlugins(plugins.filter(plugin => plugin.name.toLowerCase().includes(searchValue)));
     }, [searchValue]);
 
+    useEffect(() => {
+        handleGetPlugins().then();
+    }, [organizationId])
 
     useEffect(() => {
         Promise.all([
@@ -83,7 +87,7 @@ const DialogPlugin = React.forwardRef((props: DialogPluginProps, ref: Ref<any>) 
         const id = getUser()?.id;
         try {
             const userOrganizations = await coreRequest().get(`users/${id}/organizations`);
-            const response = await coreRequest().get("plugins").query({organization: userOrganizations.body[0].id});
+            const response = await coreRequest().get("plugins").query({organization: organizationId});
             setPlugins(response.body);
             setFilterPlugins(response.body);
         } catch (err) {
