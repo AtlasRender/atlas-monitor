@@ -9825,10 +9825,10 @@ react-is@^16.13.1, react-is@^16.6.0, react-is@^16.7.0, react-is@^16.8.1, react-i
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-17.0.1.tgz#5b3531bd76a645a4c9fb6e693ed36419e3301339"
   integrity sha512-NAnt2iGDXohE5LI7uBnLnqvLQMtzhkiAOLXTmv+qnF9Ky7xAPcX8Up/xWIhxvLVGJvuLiNc4xQLtuqDRzb4fSA==
 
-react-number-format@^4.4.1:
-  version "4.4.1"
-  resolved "https://registry.yarnpkg.com/react-number-format/-/react-number-format-4.4.1.tgz#d5614dd25edfc21ed48b97356213440081437a94"
-  integrity sha512-ZGFMXZ0U7DcmQ3bSZY3FULOA1mfqreT9NIMYZNoa/ouiSgiTQiYA95Uj2KN8ge6BRr+ghA5vraozqWqsHZQw3Q==
+react-number-format@^4.4.3:
+  version "4.4.3"
+  resolved "https://registry.yarnpkg.com/react-number-format/-/react-number-format-4.4.3.tgz#bf5226acf08ad745b0455a47447fcbba642f89e0"
+  integrity sha512-9PNKWfLZVR4EMK9R1LkfXRmWqezSIeMOl7YFsuCcniZZxLiNxEX7ovvxZLXN8XNm6TGP8dZ31GnV5V64oDnkuA==
   dependencies:
     prop-types "^15.7.2"
 
