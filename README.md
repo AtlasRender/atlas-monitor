@@ -12,6 +12,13 @@
         <img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/AtlasRender/atlas-monitor/pathfinder-monitor-run-tests">
         <img alt="GitHub pull requests" src="https://img.shields.io/github/issues-pr/AtlasRender/atlas-monitor">
     </div>
+    <div align="center">
+        <img alt="Sonar bugs" src="https://sonarcloud.io/api/project_badges/measure?project=AtlasRender_atlas-monitor&metric=bugs"/>
+        <img alt="Sonar lines of code" src="https://sonarcloud.io/api/project_badges/measure?project=AtlasRender_atlas-monitor&metric=ncloc"/>
+        <img alt="Sonar maintainability raiting" src="https://sonarcloud.io/api/project_badges/measure?project=AtlasRender_atlas-monitor&metric=sqale_rating"/>
+        <img alt="Sonar security" src="https://sonarcloud.io/api/project_badges/measure?project=AtlasRender_atlas-monitor&metric=security_rating"/>
+        <img alt="Sonar reliability" src="https://sonarcloud.io/api/project_badges/measure?project=AtlasRender_atlas-monitor&metric=reliability_rating"/>
+    </div>   
 </a>
 
 ### Monitoring and management unit
