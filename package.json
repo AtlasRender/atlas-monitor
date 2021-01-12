@@ -37,7 +37,7 @@
     "type": "git",
     "url": "https://github.com/DanilAndreev/pathfinder-monitor.git"
   },
-  "proxy": "http://api.atlasrender.com:3002",
+  "proxy": "http://api.atlasrender.com:30022",
   "dependencies": {
     "@atlasrender/render-plugin": "^0.1.2",
     "@date-io/date-fns": "2.x",
