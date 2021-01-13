@@ -1,4 +1,4 @@
-# Pathfinder Monitor 
+# Atlas Monitor 
 ### Contributing guideline
 ## Overview
 Hello contibutor! Thank you for your interest in our system :)
