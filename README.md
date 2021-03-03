@@ -4,6 +4,7 @@
     </div>
     <div align="center">
         <h1>Atlas Monitor system</h1>
+        <h3>(LEGACY)</h3>
     </div>
     <div align="center">
         <img alt="GitHub" src="https://img.shields.io/github/license/AtlasRender/atlas-monitor"/>
