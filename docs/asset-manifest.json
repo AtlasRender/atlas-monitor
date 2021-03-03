@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "http://monitor.atlasrender.com/static/css/main.c8e5c233.chunk.css",
+    "main.js": "http://monitor.atlasrender.com/static/js/main.ee6a8a61.chunk.js",
+    "main.js.map": "http://monitor.atlasrender.com/static/js/main.ee6a8a61.chunk.js.map",
+    "runtime-main.js": "http://monitor.atlasrender.com/static/js/runtime-main.c3457224.js",
+    "runtime-main.js.map": "http://monitor.atlasrender.com/static/js/runtime-main.c3457224.js.map",
+    "static/js/2.a1464c65.chunk.js": "http://monitor.atlasrender.com/static/js/2.a1464c65.chunk.js",
+    "static/js/2.a1464c65.chunk.js.map": "http://monitor.atlasrender.com/static/js/2.a1464c65.chunk.js.map",
+    "index.html": "http://monitor.atlasrender.com/index.html",
+    "static/css/main.c8e5c233.chunk.css.map": "http://monitor.atlasrender.com/static/css/main.c8e5c233.chunk.css.map",
+    "static/js/2.a1464c65.chunk.js.LICENSE.txt": "http://monitor.atlasrender.com/static/js/2.a1464c65.chunk.js.LICENSE.txt",
+    "static/media/AtlasSystemsLogo.f20a4b33.svg": "http://monitor.atlasrender.com/static/media/AtlasSystemsLogo.f20a4b33.svg",
+    "static/media/githubAvatar.40a04447.jpg": "http://monitor.atlasrender.com/static/media/githubAvatar.40a04447.jpg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.c3457224.js",
+    "static/js/2.a1464c65.chunk.js",
+    "static/css/main.c8e5c233.chunk.css",
+    "static/js/main.ee6a8a61.chunk.js"
+  ]
+}
