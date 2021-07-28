@@ -4,6 +4,7 @@
     </div>
     <div align="center">
         <h1>Atlas Monitor system</h1>
+        <h3><i>Project closed</i><h3>
         <h3>(LEGACY)</h3>
     </div>
     <div align="center">
@@ -39,7 +40,7 @@ user can do all of this using GUI.
 ### Author
 Andreev Danil | danssg08@gmail.com | https://github.com/DanilAndreev
 ### Team
-* Demchyhsin Andrey | https://github.com/ZaykaNya
+* Demchishyn Andrey | https://github.com/ZaykaNya
 * Nesterov Nikita | https://github.com/Who1sthatdude
 ### Repository
 You can fin GitHub repository of this project [here](https://github.com/AtlasRender/atlas-monitor)
